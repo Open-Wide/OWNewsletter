@@ -40,12 +40,8 @@
         <translation>Aucune newsletter</translation>
     </message>
     <message>
-        <source>Edit newsletter</source>
-        <translation>Modifier la newsletter</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation>Modifier</translation>
+        <source>No action</source>
+        <translation>Aucune action</translation>
     </message>
 </context>
 </TS>
