@@ -50,7 +50,7 @@
 					</div>
 					{def $last_edition_node_list = fetch( 'content', 'tree', hash( 'parent_node_id', $newsletter_root_node_id,
 								'class_filter_type', 'include',
-								'class_filter_array', array( 'newsletter_edition' ),
+								'class_filter_array', fetch( 'newsletter', 'edition_class_identifer_list' ),
 								'limit', $limit,
 								'offset', $view_parameters.offset,
 								'sort_by', array( 'modified', false() )
@@ -58,7 +58,7 @@
 						 $last_edition_node_list_count = fetch( 'content', 'tree_count', hash( 
 								'parent_node_id', $newsletter_root_node_id,
 								'class_filter_type', 'include',
-								'class_filter_array', array( 'newsletter_edition' )
+								'class_filter_array', fetch( 'newsletter', 'edition_class_identifer_list' ),
 							) )}
 					<div class="content-view-children">
 						<div class="context-block">

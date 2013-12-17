@@ -15,7 +15,8 @@ $tpl->setVariable( 'view_parameters', $viewParameters );
 $tpl->setVariable( 'current_siteaccess', $viewParameters );
 $Result = array();
 $Result['content'] = $tpl->fetch( "design:newsletter/index.tpl" );
+    $Result['left_menu'] = 'design:parts/newsletter/menu.tpl';
 $Result['path'] = array( array( 'url'  => false,
-                                'text' => ezpI18n::tr( 'design/admin/parts/ownewletter/menu', 'Newsletter' ) ),
+                                'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Newsletter' ) ),
                          array( 'url'  => false,
-                                'text' => ezpI18n::tr( 'design/admin/parts/ownewletter/menu', 'Dashboard' ) ) );
+                                'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Dashboard' ) ) );
