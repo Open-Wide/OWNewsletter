@@ -46,7 +46,9 @@
             <ul>
                 {* subscription_list *}
                 {*def $subcription_user_statistic = $:newsletter_mailing_list_node.data_map.newsletter_list.content.user_count_statistic*}
-				{def $allSubcriptions = 0}
+				{def $allSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id
+							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_subscription_list">
                     <span class="openclose"></span>
                     <img src={'images/newsletter/icons/crystal-newsletter/16x16/newsletter_user.png'|ezdesign} />
@@ -55,7 +57,10 @@
                     </a>
                 </li>
 				
-				{def $pendingSubcriptions = 0}
+				{def $pendingSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
+								'status', 'pending'
+							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_pending_subscription_list">
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_pending" />
@@ -64,7 +69,10 @@
                     </a>
                 </li>
 				
-				{def $confirmedSubcriptions = 0}
+				{def $confirmedSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
+								'status', 'confirmed'
+							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_confirmed_subscription_list">
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_confirmed" />
@@ -73,7 +81,10 @@
                     </a>
                 </li>
 				
-				{def $approvedSubcriptions = 0}
+				{def $approvedSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
+								'status', 'approved'
+							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_approved_subscription_list">
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_approved" />
@@ -82,7 +93,10 @@
                     </a>
                 </li>
 				
-				{def $bouncedSubcriptions = 0}
+				{def $bouncedSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
+								'status', 'bounced'
+							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_bounced_subscription_list">
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_bounced" />
@@ -91,7 +105,10 @@
                     </a>
                 </li>
 				
-				{def $removedSubcriptions = 0}
+				{def $removedSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
+								'status', 'removed'
+							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_removed_subscription_list">
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_removed" />
@@ -100,7 +117,10 @@
                     </a>
                 </li>
 				
-				{def $blacklistedSubcriptions = 0}
+				{def $blacklistedSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
+								'status', 'blacklisted'
+							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_blacklisted_subscription_list">
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_blacklisted" />

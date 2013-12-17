@@ -144,16 +144,16 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	/**
 	 * Create new OWNewsletterSubscription object
 	 *
-	 * @param integer $listContentObjectId
+	 * @param integer $mailingListContentObjectId
 	 * @param integer $newsletterUserId
 	 * @param array $outputFormatArray
 	 * @param unknown_type $status
 	 * @return object
 	 */
-	static function create( $listContentObjectId, $newsletterUserId, $outputFormatArray, $status = self::STATUS_PENDING, $context = 'default' ) {
+	static function create( $mailingListContentObjectId, $newsletterUserId, $outputFormatArray, $status = self::STATUS_PENDING, $context = 'default' ) {
 		$rows = array(
 			'created' => time(),
-			'mailing_list_contentobject_id' => $listContentObjectId,
+			'mailing_list_contentobject_id' => $mailingListContentObjectId,
 			'newsletter_user_id' => $newsletterUserId,
 			'output_format_array_string' => self::arrayToString( $outputFormatArray ),
 			'creator_contentobject_id' => eZUser::currentUserID(),
@@ -605,12 +605,12 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 *
 	 * @see newsletter/configure
 	 *
-	 * @param integer $listContentObjectId
+	 * @param integer $mailingListContentObjectId
 	 * @param integer $newsletterUserId
 	 * @return object
 	 */
-	static function removeSubscriptionByNewsletterUserSelf( $listContentObjectId, $newsletterUserId ) {
-		$existingSubscriptionObject = self::fetchByListIdAndNewsletterUserId( $listContentObjectId, $newsletterUserId );
+	static function removeSubscriptionByNewsletterUserSelf( $mailingListContentObjectId, $newsletterUserId ) {
+		$existingSubscriptionObject = self::fetchByMailingListIdAndNewsletterUserId( $mailingListContentObjectId, $newsletterUserId );
 
 		if ( is_object( $existingSubscriptionObject ) ) {
 			$existingSubscriptionObject->unsubscribe();
@@ -622,12 +622,12 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * Remove subscription by admin
 	 *
 	 * @see newsletter/user_edit
-	 * @param integer $listContentObjectId
+	 * @param integer $mailingListContentObjectId
 	 * @param integer $newsletterUserId
 	 * @return object
 	 */
-	static function removeSubscriptionByAdmin( $listContentObjectId, $newsletterUserId ) {
-		$existingSubscriptionObject = self::fetchByListIdAndNewsletterUserId( $listContentObjectId, $newsletterUserId );
+	static function removeSubscriptionByAdmin( $mailingListContentObjectId, $newsletterUserId ) {
+		$existingSubscriptionObject = self::fetchByMailingListIdAndNewsletterUserId( $mailingListContentObjectId, $newsletterUserId );
 
 		if ( is_object( $existingSubscriptionObject ) ) {
 			$existingSubscriptionObject->removeByAdmin();
@@ -644,15 +644,15 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * create / update subscription
 	 * return newsletter_user_object
 	 *
-	 * @param integer $listContentObjectId
+	 * @param integer $mailingListContentObjectId
 	 * @param integer $newsletterUserId
 	 * @param array $outputFormatArray
 	 * @param integer $status
 	 * @param integer $dryRun if true changes will be not stored to db usefull for test runs @see user_edit
 	 * @return object
 	 */
-	static function createUpdateNewsletterSubscription( $listContentObjectId, $newsletterUserId, $outputFormatArray, $status = self::STATUS_PENDING, $dryRun = false, $context = 'default' ) {
-		$existingSubscriptionObject = self::fetchByListIdAndNewsletterUserId( $listContentObjectId, $newsletterUserId );
+	static function createUpdateNewsletterSubscription( $mailingListContentObjectId, $newsletterUserId, $outputFormatArray, $status = self::STATUS_PENDING, $dryRun = false, $context = 'default' ) {
+		$existingSubscriptionObject = self::fetchByMailingListIdAndNewsletterUserId( $mailingListContentObjectId, $newsletterUserId );
 		$newsletterUser = OWNewsletterUser::fetch( $newsletterUserId );
 
 		// if nl user status is confirmed set all nl subscription with status pending to confirmed
@@ -688,7 +688,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 		}
 		// create new object
 		else {
-			$object = self::create( $listContentObjectId, $newsletterUserId, $outputFormatArray, $status, $context );
+			$object = self::create( $mailingListContentObjectId, $newsletterUserId, $outputFormatArray, $status, $context );
 			if ( $dryRun === false ) {
 				$object->store();
 			}
@@ -698,14 +698,14 @@ class OWNewsletterSubscription extends eZPersistentObject {
 
 	/**
 	 *
-	 * @param integer $listContentObjectId
+	 * @param integer $mailingListContentObjectId
 	 * @param integer $newsletterUserId
 	 * @param boolean $asObject
 	 * @return array / boolean
 	 */
-	static function fetchByListIdAndNewsletterUserId( $listContentObjectId, $newsletterUserId, $asObject = true ) {
+	static function fetchByMailingListIdAndNewsletterUserId( $mailingListContentObjectId, $newsletterUserId, $asObject = true ) {
 		$objectList = eZPersistentObject::fetchObjectList( self::definition(), null, array(
-					'mailing_list_contentobject_id' => $listContentObjectId,
+					'mailing_list_contentobject_id' => $mailingListContentObjectId,
 					'newsletter_user_id' => $newsletterUserId ), null, null, $asObject );
 		$listCount = count( $objectList );
 		if ( $listCount == 1 ) {
@@ -721,14 +721,14 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	/**
 	 * Search alle user who subscript to ListId
 	 *
-	 * @param integer $listContentObjectId
+	 * @param integer $mailingListContentObjectId
 	 * @param mixed int|array $statusIds
 	 * @param integer $limit
 	 * @param integer $offset
 	 * @param boolean $asObject
 	 * @return array
 	 */
-	static function fetchSubscriptionListByListId( $listContentObjectId, $statusId = false, $limit = 50, $offset = 0, $asObject = true ) {
+	static function fetchSubscriptionListByMailingListId( $mailingListContentObjectId, $statusId = false, $limit = 50, $offset = 0, $asObject = true ) {
 		$sortArr = array(
 			'created' => 'desc' );
 		$limitArr = null;
@@ -740,7 +740,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 		}
 
 		$condArr = array(
-			'mailing_list_contentobject_id' => (int) $listContentObjectId );
+			'mailing_list_contentobject_id' => (int) $mailingListContentObjectId );
 		if ( $statusId !== false ) {
 			if ( is_array( $statusId ) ) {
 				$condArr['status'] = array(
@@ -758,13 +758,13 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	/**
 	 * Count all user who subscripe to list
 	 *
-	 * @param integer $listContentObjectId
+	 * @param integer $mailingListContentObjectId
 	 * @param mixed int|array $statusIds
 	 * @return integer
 	 */
-	static function fetchSubscriptionListByListIdCount( $listContentObjectId, $statusId = false ) {
+	static function fetchSubscriptionListByMailingListIdCount( $mailingListContentObjectId, $statusId = false ) {
 		$condArr = array(
-			'mailing_list_contentobject_id' => (int) $listContentObjectId );
+			'mailing_list_contentobject_id' => (int) $mailingListContentObjectId );
 		if ( $statusId !== false ) {
 			if ( is_array( $statusId ) ) {
 				$condArr['status'] = array(
@@ -970,14 +970,14 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	/**
 	 * Search all subsciptions to a list + status
 	 *
-	 * @param integer $listContentObjectId
+	 * @param integer $mailingListContentObjectId
 	 * @param integer $status
 	 * @param integer $limit
 	 * @param integer $offset
 	 * @param boolean $asObject
 	 * @return array
 	 */
-	static function fetchSubscriptionListByListIdAndStatus( $listContentObjectId, $status, $limit = 50, $offset = 0, $asObject = true ) {
+	static function fetchSubscriptionListByMailingListIdAndStatus( $mailingListContentObjectId, $status, $limit = 50, $offset = 0, $asObject = true ) {
 		$sortArr = array(
 			'created' => 'desc' );
 		$limitArr = null;
@@ -987,11 +987,15 @@ class OWNewsletterSubscription extends eZPersistentObject {
 				'limit' => $limit,
 				'offset' => $offset );
 		}
-
+		if ( is_array( $status ) ) {
+			$status = array( $status );
+		} else {
+			$status = (int) $status;
+		}
 		$objectList = eZPersistentObject::fetchObjectList(
 						self::definition(), null, array(
-					'mailing_list_contentobject_id' => (int) $listContentObjectId,
-					'status' => (int) $status ), $sortArr, $limitArr, $asObject, null, null, null, null );
+					'mailing_list_contentobject_id' => (int) $mailingListContentObjectId,
+					'status' => $status ), $sortArr, $limitArr, $asObject, null, null, null, null );
 
 
 		return $objectList;
@@ -1045,7 +1049,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	function remove( $conditions = null, $extraConditions = null ) {
 		// TODO: Fix remove method, cannot work
 		OWNewsletterLog::writeNotice(
-			'OWNewsletterSubscription::remove', 'subscription', 'remove', array(
+				'OWNewsletterSubscription::remove', 'subscription', 'remove', array(
 			'nl_user' => $this->attribute( 'newsletter_user_id' ),
 			'subscription_id' => $this->attribute( 'id' ),
 			'modifier' => eZUser::currentUserID() )

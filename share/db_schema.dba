@@ -2,7 +2,7 @@
 
 // This array contains the database schema
 $schema = array(
-	'cjwnl_subscription' =>
+	'ownl_subscription' =>
 	array(
 		'name' => 'ownl_subscription',
 		'fields' =>
@@ -129,12 +129,12 @@ $schema = array(
 					0 => 'import_id',
 				),
 			),
-			'list_contentobject_id' =>
+			'mailing_list_contentobject_id' =>
 			array(
 				'type' => 'non-unique',
 				'fields' =>
 				array(
-					0 => 'list_contentobject_id',
+					0 => 'mailing_list_contentobject_id',
 				),
 			),
 			'newsletter_user_id' =>
