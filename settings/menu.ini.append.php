@@ -1,13 +1,13 @@
 <?php /* #?ini charset="utf-8"?
 
 [NavigationPart]
-Part[ownewsletter]=Newsletter
+Part[eznewsletternavigationpart]=Newsletter
 
 [TopAdminMenu]
 Tabs[]=ownewsletter
 
 [Topmenu_ownewsletter]
-NavigationPartIdentifier=ownewsletter
+NavigationPartIdentifier=eznewsletternavigationpart
 URL[]
 URL[default]=newsletter/index
 Name=Newsletter

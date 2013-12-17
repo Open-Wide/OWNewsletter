@@ -7,7 +7,7 @@ $ViewList = array();
 $ViewList['index'] = array(
     'script' => 'index.php',
     'functions' => array( 'index' ),
-    'default_navigation_part' => 'ownesletter',
+    'default_navigation_part' => 'eznewsletternavigationpart',
     'params' => array( ) );
 
 
