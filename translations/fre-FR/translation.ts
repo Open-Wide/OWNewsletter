@@ -148,4 +148,23 @@
         <translation>En liste noire</translation>
     </message>
 </context>
+<context>
+	<name>design/admin/node/view/full</name>
+    <message>
+        <source>Subscriptions (%children_count)</source>
+        <translation>Souscriptions (%children_count)</translation>
+    </message>
+    <message>
+        <source>Create new subscription</source>
+        <translation>Créer une sousription</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation>All</translation>
+    </message>
+    <message>
+        <source>No subscription</source>
+        <translation>Aucune souscription</translation>
+    </message>
+</context>
 </TS>
