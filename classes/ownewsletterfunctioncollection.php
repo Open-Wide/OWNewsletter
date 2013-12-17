@@ -7,22 +7,38 @@
 class OWNewsletterFunctionCollection {
 
 	static function fetchEditionClassList() {
+		return array(
+			'result' => self::getEditionClassList() );
+	}
+
+	static function fetchEditionClassIdentifierList() {
+		$classList = self::getEditionClassList();
+		if ( !is_array( $classList ) ) {
+			return array(
+				'result' => false );
+		}
+		$result = array();
+		foreach ( $classList as $class ) {
+			$result[] = $class->attribute( 'identifier' );
+		}
+		return array(
+			'result' => $result );
+	}
+
+	static protected function getEditionClassList() {
 		$ini = eZINI::instance( 'newsletter.ini' );
 		if ( !$ini->hasVariable( 'NewsletterSettings', 'NewsletterEditionContentClassGroup' ) ) {
 			eZDebug::writeError( "[NewsletterSettings]NewsletterEditionContentClassGroup is missing in newsletter.ini" );
-			return $result = array(
-				'result' => false );
+			return false;
 		}
 		$classGroupName = $ini->variable( 'NewsletterSettings', 'NewsletterEditionContentClassGroup' );
 		$classGroup = eZContentClassGroup::fetchByName( $classGroupName );
 		if ( !$classGroup instanceof eZContentClassGroup ) {
 			eZDebug::writeError( "Class group $classGroupName not found." );
-			return $result = array(
-				'result' => false );
+			return false;
 		}
 		$classGroupID = $classGroup->attribute( 'id' );
-		return $result = array(
-			'result' => eZContentClassClassGroup::fetchClassList( 0, $classGroupID ) );
+		return eZContentClassClassGroup::fetchClassList( 0, $classGroupID );
 	}
 
 }
