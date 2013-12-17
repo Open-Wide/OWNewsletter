@@ -206,7 +206,7 @@
                              item_limit=$limit}
 							</div>
 							{else}
-								<p>{'No subscription'|i18n(  'design/admin/node/view/full'  )}</p>
+								<p>{'No subscriber'|i18n(  'design/admin/node/view/full'  )}</p>
 							{/if}
 						</div>
 					</div>

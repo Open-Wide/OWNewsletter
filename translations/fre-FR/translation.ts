@@ -151,8 +151,8 @@
 <context>
 	<name>design/admin/node/view/full</name>
     <message>
-        <source>Subscriptions (%children_count)</source>
-        <translation>Souscriptions (%children_count)</translation>
+        <source>Subscribers (%children_count)</source>
+        <translation>Souscripteurs (%children_count)</translation>
     </message>
     <message>
         <source>Create new subscription</source>
@@ -163,8 +163,8 @@
         <translation>All</translation>
     </message>
     <message>
-        <source>No subscription</source>
-        <translation>Aucune souscription</translation>
+        <source>No subscriber</source>
+        <translation>Aucune souscripteur</translation>
     </message>
 </context>
 </TS>
