@@ -38,14 +38,14 @@
 		'offset', $view_parameters.offset,
 		'as_object', false(),
 		'sort_by', hash('created', 'desc' ) ))|count
-		$page_uri = 'newsletter/user_list'*}
-		{def $user_list = fetch( 'newsletter', 'subscriptions_list', hash(
+		$page_uri = 'newsletter/user'*}
+		{def $user_list = fetch( 'newsletter', 'user_list', hash(
 					'mailing_list_contentobject_id', $node.contentobject_id
 				) )
-		  $user_list_count  = fetch( 'newsletter', 'subscriptions_count', hash(
+		  $user_list_count  = fetch( 'newsletter', 'user_count', hash(
 					'mailing_list_contentobject_id', $node.contentobject_id
 				) )
-		  $page_uri = 'newsletter/user_list'}
+		  $page_uri = 'newsletter/user'}
 
 		{*<div class="context-block">
 		<div class="box-header">
@@ -110,18 +110,12 @@
 
 							<table class="list" cellspacing="0">
 								<tr>
-									{*    <th class="tight">
-									<img src={'toggle-button-16x16.gif'|ezimage}  alt="{'Invert selection'|i18n(  'design/admin/node/view/full'  )}" title="{'Invert selection'|i18n(  'design/admin/node/view/full'  )}" onclick="ezjs_toggleCheckboxes( document.user_list, 'SubscriptionIDArray[]' ); return false;" />
-									</th>*}
 									<th class="tight">
-										{'UID'|i18n('cjw_newsletter/user_list')}</a>
+										{'UID'|i18n('cjw_newsletter/user')}
 									</th>
 									<th>
 										{'Email'|i18n(  'design/admin/node/view/full'  )}
-									</th>
-									{*      <th>
-									{'Name'|i18n(  'design/admin/node/view/full'  )}
-									</th> *}
+									</th
 									<th>
 										{'Lists'|i18n(  'design/admin/node/view/full'  )}
 									</th>
@@ -146,18 +140,12 @@
 								</tr>
 								{foreach $user_list as $newsletter_user sequence array( bglight, bgdark ) as $style}
 									<tr class="{$style}">
-										{*  <td>
-										<input type="checkbox" name="SubscriptionIDArray[]" value="{$newsletter_user.id}" title="{'Select subscriber for removal'|i18n(  'design/admin/node/view/full'  )}" />
-										</td> *}
 										<td class="number" align="right">
 											<a href={concat('newsletter/user_view/',$newsletter_user.id)|ezurl} title="{'Newsletter user id'|i18n(  'design/admin/node/view/full'  )}">{$newsletter_user.id} </a>
 										</td>
 										<td>
 											<a href={concat('newsletter/user_view/',$newsletter_user.id)|ezurl} title="{$newsletter_user.first_name} {$newsletter_user.last_name}">{$newsletter_user.email|wash}</a>
 										</td>
-										{*           <td>
-										{$newsletter_user.name|wash}
-										</td>*}
 										<td title="{'Approved'|i18n(  'design/admin/node/view/full'  )} / {'All'|i18n(  'design/admin/node/view/full'  )}">
 											{def $approved_subscribtion_count = 0
                                      $subscription_array = $newsletter_user.subscription_array}
@@ -187,7 +175,7 @@
 											{cond($newsletter_user.ez_user_id|gt(0), $newsletter_user.ez_user_id , '-' )}
 										</td>
 										<td>
-											<a href={concat( 'newsletter/user_edit/', $newsletter_user.id, '?RedirectUrl=newsletter/user_list/(offset)/', $view_parameters.offset )|ezurl}>
+											<a href={concat( 'newsletter/user_edit/', $newsletter_user.id, '?RedirectUrl=newsletter/user/(offset)/', $view_parameters.offset )|ezurl}>
 												<img title="{'Edit newsletter user'|i18n(  'design/admin/node/view/full'  )}" alt="{'Edit newsletter user'|i18n(  'design/admin/node/view/full'  )}" src={'edit.gif'|ezimage()} />
 											</a>
 										</td>

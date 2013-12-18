@@ -46,7 +46,7 @@
             <ul>
                 {* subscription_list *}
                 {*def $subcription_user_statistic = $:newsletter_mailing_list_node.data_map.newsletter_list.content.user_count_statistic*}
-				{def $allSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+				{def $allSubcriptions = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_subscription_list">
@@ -57,9 +57,9 @@
                     </a>
                 </li>
 				
-				{def $pendingSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+				{def $pendingSubcriptions = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'status', 'pending'
+								'subscription_status', 'pending'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_pending_subscription_list">
                     <span class="openclose"></span>
@@ -69,9 +69,9 @@
                     </a>
                 </li>
 				
-				{def $confirmedSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+				{def $confirmedSubcriptions = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'status', 'confirmed'
+								'subscription_status', 'confirmed'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_confirmed_subscription_list">
                     <span class="openclose"></span>
@@ -81,9 +81,9 @@
                     </a>
                 </li>
 				
-				{def $approvedSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+				{def $approvedSubcriptions = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'status', 'approved'
+								'subscription_status', 'approved'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_approved_subscription_list">
                     <span class="openclose"></span>
@@ -93,9 +93,9 @@
                     </a>
                 </li>
 				
-				{def $bouncedSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+				{def $bouncedSubcriptions = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'status', 'bounced'
+								'subscription_status', 'bounced'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_bounced_subscription_list">
                     <span class="openclose"></span>
@@ -105,9 +105,9 @@
                     </a>
                 </li>
 				
-				{def $removedSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+				{def $removedSubcriptions = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'status', 'removed'
+								'subscription_status', 'removed'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_removed_subscription_list">
                     <span class="openclose"></span>
@@ -117,9 +117,9 @@
                     </a>
                 </li>
 				
-				{def $blacklistedSubcriptions = fetch( 'newsletter', 'subscriptions_count', hash(
+				{def $blacklistedSubcriptions = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'status', 'blacklisted'
+								'subscription_status', 'blacklisted'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_blacklisted_subscription_list">
                     <span class="openclose"></span>

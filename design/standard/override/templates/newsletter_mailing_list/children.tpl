@@ -10,7 +10,7 @@
      $can_copy     = false()
      $current_path = first_set( $node.path_array[1], 1 )
      $admin_children_viewmode = ezpreference( 'admin_children_viewmode' )
-     $children_count = fetch( 'newsletter', 'subscriptions_count', hash(
+     $children_count = fetch( 'newsletter', 'user_count', hash(
 				'mailing_list_contentobject_id', $node.contentobject_id
 			) )
      $priority    = and( eq( $node.sort_array[0][0], 'priority' ), $node.can_edit, $children_count )
