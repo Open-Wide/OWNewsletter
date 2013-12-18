@@ -14,9 +14,16 @@
 		{/switch}
 	{/if}
 	{def $user_list_count = fetch('newsletter', 'user_count', hash( 
-					'status', $view_parameters.status
+					'user_status', $view_parameters.status
 				) )
-     $page_uri = 'newsletter/user'}
+		$base_uri = 'newsletter/user'
+		$page_uri = $base_uri}
+	{if $view_parameters.status|ne( '' )}
+		{set $page_uri = concat( $page_uri, '/(status)/', $view_parameters.status )}
+	{/if}
+	{if $view_parameters.offset|gt( 0 )}
+		{set $page_uri = concat( $page_uri, '/(offset)/', $view_parameters.offset )}
+	{/if}
 
     <div class="context-block">
 		{* DESIGN: Header START *}
@@ -40,7 +47,7 @@
 				<div class="box-content">
 					<div class="context-attributes">
 						<div class="block float-break">
-							<form action={$page_uri|ezurl()} name="UserList" method="post">
+							<form action={$base_uri|ezurl()} name="UserList" method="post">
 								<input type="text" name="SearchUserEmail" value="{if is_set($view_parameters['search_user_email'])}{$view_parameters['search_user_email']}{/if}">
 								<input type="submit" name="SubmitUserSearch" value="{'Search for existing user'|i18n( 'newsletter/user' )}">
 							</form>
@@ -58,6 +65,8 @@
 								<div class="box-br">
 									<div class="left">
 										<form method="post" style="display:inline;" action={'newsletter/user'|ezurl()}>
+											<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
+											<input type="hidden" name="RedirectUrlActionStore" value="{$page_uri}" />
                                             <input class="button" type="submit" name="NewSubscripterButton" value="{'Create newsletter user'|i18n( 'newsletter/user' )}" />
 										</form>
 									</div>
@@ -115,7 +124,7 @@
 										{'All'|i18n('design/admin/node/view/full')}
 									</span>
 								{else}
-									<a href={$page_uri|ezurl}>
+									<a href={$base_uri|ezurl}>
 										{'All'|i18n('design/admin/node/view/full')}
 									</a>
 								{/if}
@@ -125,7 +134,7 @@
 										<img src={'1x1.gif'|ezimage} alt="{'Pending'|i18n('newsletter/subscription/status')}" title="{'Pending'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_pending" /> {'Pending'|i18n('newsletter/subscription/status')}
 									</span>
 								{else}
-									<a href={concat($page_uri, '/(status)/pending' )|ezurl}>
+									<a href={concat($base_uri, '/(status)/pending' )|ezurl}>
 										<img src={'1x1.gif'|ezimage} alt="{'Pending'|i18n('newsletter/subscription/status')}" title="{'Pending'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_pending" /> {'Pending'|i18n('newsletter/subscription/status')}
 									</a>
 								{/if}
@@ -135,7 +144,7 @@
 										<img src={'1x1.gif'|ezimage} alt="{'Confirmed'|i18n('newsletter/subscription/status')}" title="{'Confirmed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_confirmed" /> {'Confirmed'|i18n('newsletter/subscription/status')}
 									</span>
 								{else}
-									<a href={concat($page_uri, '/(status)/confirmed' )|ezurl}>
+									<a href={concat($base_uri, '/(status)/confirmed' )|ezurl}>
 										<img src={'1x1.gif'|ezimage} alt="{'Confirmed'|i18n('newsletter/subscription/status')}" title="{'Confirmed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_confirmed" /> {'Confirmed'|i18n('newsletter/subscription/status')}
 									</a>
 								{/if}
@@ -144,7 +153,7 @@
 										<img src={'1x1.gif'|ezimage} alt="{'Approved'|i18n('newsletter/subscription/status')}" title="{'Approved'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_approved" /> {'Approved'|i18n('newsletter/subscription/status')}
 									</span>
 								{else}
-									<a href={concat($page_uri, '/(status)/approved' )|ezurl}>
+									<a href={concat($base_uri, '/(status)/approved' )|ezurl}>
 										<img src={'1x1.gif'|ezimage} alt="{'Approved'|i18n('newsletter/subscription/status')}" title="{'Approved'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_approved" /> {'Approved'|i18n('newsletter/subscription/status')}
 									</a>
 								{/if}
@@ -153,7 +162,7 @@
 										<img src={'1x1.gif'|ezimage} alt="{'Bounced'|i18n('newsletter/subscription/status')}" title="{'Bounced'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_bounced" /> {'Bounced'|i18n('newsletter/subscription/status')}
 									</span>
 								{else}
-									<a href={concat($page_uri, '/(status)/bounced' )|ezurl}>
+									<a href={concat($base_uri, '/(status)/bounced' )|ezurl}>
 										<img src={'1x1.gif'|ezimage} alt="{'Bounced'|i18n('newsletter/subscription/status')}" title="{'Bounced'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_bounced" /> {'Bounced'|i18n('newsletter/subscription/status')}
 									</a>
 								{/if}
@@ -162,7 +171,7 @@
 										<img src={'1x1.gif'|ezimage} alt="{'Removed'|i18n('newsletter/subscription/status')}" title="{'Removed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_removed" /> {'Removed'|i18n('newsletter/subscription/status')}
 									</span>
 								{else}
-									<a href={concat($page_uri, '/(status)/removed' )|ezurl}>
+									<a href={concat($base_uri, '/(status)/removed' )|ezurl}>
 										<img src={'1x1.gif'|ezimage} alt="{'Removed'|i18n('newsletter/subscription/status')}" title="{'Removed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_removed" /> {'Removed'|i18n('newsletter/subscription/status')}
 									</a>
 								{/if}
@@ -171,7 +180,7 @@
 										<img src={'1x1.gif'|ezimage} alt="{'Blacklisted'|i18n('newsletter/subscription/status')}" title="{'Blacklisted'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_blacklisted" /> {'Blacklisted'|i18n('newsletter/subscription/status')}
 									</span>
 								{else}
-									<a href={concat($page_uri, '/(status)/blacklisted' )|ezurl}>
+									<a href={concat($base_uri, '/(status)/blacklisted' )|ezurl}>
 										<img src={'1x1.gif'|ezimage} alt="{'Blacklisted'|i18n('newsletter/subscription/status')}" title="{'Blacklisted'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_blacklisted" /> {'Blacklisted'|i18n('newsletter/subscription/status')}
 									</a>
 								{/if}
@@ -181,7 +190,7 @@
 					</div>
 					{if $user_list_count}
 						{def $user_list = fetch('newsletter', 'user_list', hash( 
-							'status', $view_parameters.status,
+							'user_status', $view_parameters.status,
 							'offset', $view_parameters.offset,
 							'limit', $limit
 						) )}
@@ -236,7 +245,7 @@
 											{undef $approved_subscribtion_count $subscription_array}
 										</td>
 										<td {cond($newsletter_user.confirmed|gt(0), concat('title="',$newsletter_user.confirmed|l10n(  shortdatetime ),'"') ,  '' )}>
-											{cond($newsletter_user.confirmed|gt(0), 'x', '-')}{*$newsletter_user.confirmed|l10n(shortdatetime)*}
+											{cond($newsletter_user.confirmed|gt(0), 'x', '-')}
 										</td>
 										<td>
 											{cond($newsletter_user.blacklisted|gt(0),'x' , '-' )}
@@ -251,9 +260,13 @@
 											{cond($newsletter_user.ez_user_id|gt(0), $newsletter_user.ez_user_id , '-' )}
 										</td>
 										<td>
-											<a href={concat( 'newsletter/user_edit/', $newsletter_user.id, '?RedirectUrl=newsletter/user/(offset)/', $view_parameters.offset )|ezurl()}>
-												<img title="{'Edit newsletter user'|i18n( 'newsletter/user' )}" alt="{'Edit newsletter user'|i18n( 'newsletter/user' )}" src={'edit.gif'|ezimage()} />
-											</a>
+											<form method="post" style="display:inline;" action={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()}>
+												<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
+												<input type="hidden" name="RedirectUrlActionStore" value="{$page_uri}" />
+												<button class="button image-button" type="submit" name="EditSubscripterButton" value="{'Edit newsletter user'|i18n( 'newsletter/user' )}">
+													<img title="{'Edit newsletter user'|i18n( 'newsletter/user' )}" alt="{'Edit newsletter user'|i18n( 'newsletter/user' )}" src={'edit.gif'|ezimage()} />
+												</button>
+											</form>
 										</td>
 
 									</tr>
@@ -265,7 +278,7 @@
 						<div class="context-toolbar subitems-context-toolbar">
 							{include name='Navigator'
                              uri='design:navigator/google.tpl'
-                             page_uri=$page_uri
+                             page_uri=$base_uri
                              item_count=$user_list_count
                              view_parameters=$view_parameters
                              item_limit=$limit}

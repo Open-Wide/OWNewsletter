@@ -132,6 +132,10 @@
         <translation>Ajouter un utilisateur</translation>
     </message>
     <message>
+        <source>Edit newsletter user</source>
+        <translation>Modifier l'utilisateur</translation>
+    </message>
+    <message>
         <source>Users</source>
         <translation>Utilisateurs</translation>
     </message>
