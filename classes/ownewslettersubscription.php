@@ -238,7 +238,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * ********************** */
 
 	/**
-	 * Return userobject by id
+	 * Return object by id
 	 *
 	 * @param integer $id
 	 * @return object
@@ -249,7 +249,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	}
 
 	/**
-	 * Search all subsciptions with custom conditions
+	 * Search all objects with custom conditions
 	 *
 	 * @param array $conds
 	 * @param integer $limit
@@ -305,7 +305,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 		return eZPersistentObject::fetchObject( self::definition(), null, array(
 					'mailing_list_contentobject_id' => $mailingListContentObjectId,
 					'newsletter_user_id' => $newsletterUserId
-				) );
+				), $asObject );
 	}
 
 	/*	 * **********************

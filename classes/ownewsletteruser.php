@@ -38,16 +38,6 @@ class OWNewsletterUser extends eZPersistentObject {
 	const STATUS_BLACKLISTED = 8;
 
 	/**
-	 * Initializes a new GeoadressData alias
-	 *
-	 * @param unknown_type $row
-	 * @return void
-	 */
-	function __construct( $row ) {
-		$this->eZPersistentObject( $row );
-	}
-
-	/**
 	 * @return void
 	 */
 	static function definition() {
@@ -172,7 +162,7 @@ class OWNewsletterUser extends eZPersistentObject {
 					'name' => 'DateText',
 					'datatype' => 'string',
 					'default' => '',
-					'required' => false ),
+					'required' => false )
 			),
 			'keys' => array(
 				'id' ),
@@ -187,114 +177,389 @@ class OWNewsletterUser extends eZPersistentObject {
 				'creator' => 'getCreatorUserObject',
 				'modifier' => 'getModifierUserObject',
 				'ez_user' => 'getEzUserObject',
-				'status_string' => 'getStatusString',
-				'available_salutation_name_array' => 'getAvailableSalutationNameArray'
+				'status_string' => 'getStatusString'
 			),
 			'class_name' => 'OWNewsletterUser',
 			'name' => 'ownl_user' );
 	}
 
+	/*	 * **********************
+	 * FUNCTION ATTRIBUTES
+	 * ********************** */
+
 	/**
-	 * Create new OWNewsletterUser object
+	 * Get Name of NL User
+	 * use a tpl to have full flexebiltiy to render the name
 	 *
-	 * @param string $email
-	 * @param string $salutation
-	 * @param string $firstName
-	 * @param string $lastName
-	 * @param string $organisation
-	 * @param string $eZUserId
-	 * @param int $status
+	 * @return string
+	 */
+	function getName() {
+		$newsletterIni = eZINI::instance( 'newsletter.ini' );
+		$useTplForNameGeneration = $newsletterIni->variable( 'NewsletterUserSettings', 'UseTplForNameGeneration' );
+		if ( $useTplForNameGeneration === 'enabled' ) {
+			$tpl = eZTemplate::factory();
+			$tpl->setVariable( 'nl_user', $this );
+			$templateFile = 'design:newsletter/user/name.tpl';
+			$name = strip_tags( trim( $tpl->fetch( $templateFile ) ) );
+			unset( $tpl );
+			return $name;
+		} else {
+			$name = trim( $this->attribute( 'salutation_name' ) . ' ' . $this->attribute( 'first_name' ) . ' ' . $this->attribute( 'last_name' ) );
+			return $name;
+		}
+	}
+
+	/**
+	 * Get i18n for salutation id
+	 * user newsletter.ini
+	 * [NewsletterUserSettings]
+	 * SalutationMappingArray[value_1]=Mr.
+	 * SalutationMappingArray[value_2]=Mrs.
+	 *
+	 * so we can extent this
+	 * @return string
+	 */
+	function getSalutationName() {
+		$availableSalutationNameArray = self::getAvailablesSalutationsFromIni();
+		$salutationId = (int) $this->attribute( 'salutation' );
+		if ( array_key_exists( $salutationId, $availableSalutationNameArray ) ) {
+			return $availableSalutationNameArray[$salutationId];
+		} else {
+			return '';
+		}
+	}
+
+	/**
+	 * Check if current object has status confirmed
+	 *
+	 * @return boolean
+	 */
+	function isConfirmed() {
+		$status = $this->attribute( 'status' );
+		return $status == self::STATUS_CONFIRMED ? true : false;
+	}
+
+	/**
+	 * Check if current object has status blackisted
+	 *
+	 * @return boolean
+	 */
+	function isRemovedSelf() {
+		$status = $this->attribute( 'status' );
+		return $status == self::STATUS_REMOVED_SELF ? true : false;
+	}
+
+	/**
+	 * Returns all subcriptions for the current user, which hasn't a REMOVE status
+	 *
+	 * @return array
+	 */
+	function getSubscriptionArray() {
+		$listSubscriptionArray = array();
+		$subscriptionArray = OWNewsletterSubscription::fetchListByNewsletterUserId( $this->attribute( 'id' ) );
+		foreach ( $subscriptionArray as $subscriptionObject ) {
+			$listSubscriptionArray[$subscriptionObject->attribute( 'mailing_list_contentobject_id' )] = $subscriptionObject;
+		}
+		return $listSubscriptionArray;
+	}
+
+	/**
+	 * Return the name which will display in email  e.g. Max Mustermman
+	 *
+	 * @return string
+	 */
+	function getEmailName() {
+		$emailName = '';
+		$firstName = $this->attribute( 'first_name' );
+		$lastName = $this->attribute( 'last_name' );
+
+		if ( $firstName != '' ) {
+			$emailName .= $firstName . ' ';
+		}
+
+		if ( $lastName != '' ) {
+			$emailName .= $lastName;
+		}
+
+		return $emailName;
+	}
+
+	/**
+	 * Get Creator user object
+	 *
+	 * @return unknown_type
+	 */
+	function getCreatorUserObject() {
+		if ( $this->attribute( 'creator_contentobject_id' ) != 0 ) {
+			$user = eZContentObject::fetch( $this->attribute( 'creator_contentobject_id' ) );
+			return $user;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Get user object
+	 *
+	 * @return unknown_type
+	 */
+	function getModifierUserObject() {
+		$retVal = false;
+		if ( $this->attribute( 'modifier_contentobject_id' ) != 0 ) {
+			$retVal = eZContentObject::fetch( $this->attribute( 'modifier_contentobject_id' ) );
+		}
+		return $retVal;
+	}
+
+	/**
+	 * Get user object
+	 *
+	 * @return eZUser object
+	 */
+	function getEzUserObject() {
+		$retVal = false;
+		if ( $this->attribute( 'ez_user_id' ) != 0 ) {
+			$retVal = eZUser::fetch( $this->attribute( 'ez_user_id' ) );
+		}
+		return $retVal;
+	}
+
+	/**
+	 * get a translated string for the status code
+	 * @return unknown_type
+	 */
+	function getStatusString() {
+		$statusString = '-';
+		switch ( $this->attribute( 'status' ) ) {
+			case self::STATUS_PENDING_EZ_USER_REGISTER:
+				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Pending eZ User Register' );
+				break;
+			case self::STATUS_PENDING:
+				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Pending' );
+				break;
+			case self::STATUS_CONFIRMED:
+				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Confirmed' );
+				break;
+			case self::STATUS_REMOVED_SELF:
+				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Removed by user' );
+				break;
+			case self::STATUS_REMOVED_ADMIN:
+				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Removed by admin' );
+				break;
+			case self::STATUS_BOUNCED_SOFT:
+				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Bounced soft' );
+				break;
+			case self::STATUS_BOUNCED_HARD:
+				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Bounced hard' );
+				break;
+			case self::STATUS_BLACKLISTED:
+				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Blacklisted' );
+				break;
+		}
+		return $statusString;
+	}
+
+	/*	 * **********************
+	 * FETCH METHODS
+	 * ********************** */
+
+	/**
+	 * Return object by id
+	 *
+	 * @param integer $id
 	 * @return object
 	 */
-	static function create( $email, $salutation, $firstName, $lastName, $organisation, $eZUserId, $status = self::STATUS_PENDING, $context = 'default' ) {
-
-		$rows = array(
-			'created' => time(),
-			'creator_contentobject_id' => eZUser::currentUserID(),
-			'ez_user_id' => $eZUserId,
-			'email' => $email,
-			'first_name' => $firstName,
-			'last_name' => $lastName,
-			'organisation' => $organisation,
-			'salutation' => $salutation,
-			'hash' => OWNewsletterUtils::generateUniqueMd5Hash( $email ),
-			'remote_id' => 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash( $email ),
-			'status' => $status );
-
-		$object = new self( $rows );
+	static function fetch( $id ) {
+		$object = eZPersistentObject::fetchObject( self::definition(), null, array( 'id' => $id ), true );
 		return $object;
 	}
 
 	/**
-	 * Create or update Newsletter User identified by email
-	 * store the changes to Database
+	 * Search all objects with custom conditions
+	 *
+	 * @param array $conds
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @param boolean $asObject
+	 * @return array
+	 */
+	static function fetchList( $conds, $limit = false, $offset = false, $asObject = true ) {
+		$sortArr = array(
+			'created' => 'desc' );
+		$limitArr = null;
+
+		if ( (int) $limit != 0 ) {
+			$limitArr = array(
+				'limit' => $limit,
+				'offset' => $offset );
+		}
+		$objectList = eZPersistentObject::fetchObjectList( self::definition(), null, $conds, $sortArr, $limitArr, $asObject, null, null, null, null );
+		return $objectList;
+	}
+
+	/**
+	 * Count all object with custom conditions
+	 *
+	 * @param array $conds
+	 * @return interger
+	 */
+	static function countList( $conds ) {
+		$objectList = eZPersistentObject::count( self::definition(), $conds );
+		return $objectList;
+	}
+
+	/**
+	 * Used in datatype ownewsletter_list
 	 *
 	 * @param string $email
-	 * @param int $salutation
-	 * @param string $firstName
-	 * @param string $lastName
-	 * @param string $organisation,
-	 * @param int $eZUserId
-	 * @param int $newNewsletterUserStatus the status for new created Newsletter users OWNewsletterUser::STATUS_PENDING
-	 * @return object
+	 * @return array / boolean
 	 */
-	static function createUpdateNewsletterUser( $email, $salutation, $firstName, $lastName, $organisation, $eZUserId, $newNewsletterUserStatus = self::STATUS_PENDING, $context = 'default' ) {
+	static function fetchByEmail( $email ) {
+		$db = eZDB::instance();
+		$objectList = eZPersistentObject::fetchObjectList(
+						self::definition(), null, array(
+					'email' => $db->escapeString( $email ) ), null, null, true
+		);
 
-		/*
-		 * 1. exist a current newsletter user?
-		 *      yes -> register on lists with status PENDING
-		 *      no -> create new user with status PENDIG and than register
-		 */
-		$existingNewsletterUserObject = self::fetchByEmail( $email );
-
-		// update existing
-		if ( is_object( $existingNewsletterUserObject ) ) {
-			$userObject = $existingNewsletterUserObject;
-			$userObject->setAttribute( 'salutation', $salutation );
-			$userObject->setAttribute( 'first_name', $firstName );
-			$userObject->setAttribute( 'last_name', $lastName );
-			$userObject->setAttribute( 'organisation', $organisation );
-			$userObject->setAttribute( 'ez_user_id', (int) $eZUserId );
-			$userObject->setAttribute( 'modified', time() );
-			$userObject->store();
-			OWNewsletterLog::writeDebug(
-					'OWNewsletterUser::createUpdateNewsletterUser', 'user', 'update', array(
-				'nl_user' => $userObject->attribute( 'id' ),
-				'email' => $email,
-				'salutation' => $salutation,
-				'first_name' => $firstName,
-				'last_name' => $lastName,
-				'organisation' => $organisation,
-				'ez_user_id' => $userObject->attribute( 'ez_user_id' ),
-				'status' => $userObject->attribute( 'status' ),
-				'modifier' => eZUser::currentUserID(),
-				'context' => $context )
-			);
-		}
-		// create new object
-		else {
-			$userObject = self::create( $email, $salutation, $firstName, $lastName, $organisation, $eZUserId, (int) $newNewsletterUserStatus, $context );
-			if ( is_object( $userObject ) !== true ) {
-				// error creating the new user => user with same email already exists
-				return false;
+		$count = count( $objectList );
+		if ( $count == 1 ) {
+			return $objectList[0];
+		} elseif ( $count > 1 ) {
+			$userIdArray = array();
+			foreach ( $objectList as $nlUser ) {
+				$userIdArray[] = $nlUser->attribute( 'id' );
 			}
 
-			$userObject->store();
-			OWNewsletterLog::writeDebug(
-					'OWNewsletterUser::createUpdateNewsletterUser', 'user', 'create', array(
-				'nl_user' => $userObject->attribute( 'id' ),
-				'email' => $email,
-				'salutation' => $salutation,
-				'first_name' => $firstName,
-				'last_name' => $lastName,
-				'organisation' => $organisation,
-				'ez_user_id' => $userObject->attribute( 'ez_user_id' ),
-				'status' => $userObject->attribute( 'status' ),
-				'modifier' => eZUser::currentUserID(),
-				'context' => $context )
+			OWNewsletterLog::writeError( 'Email existing more than 1 time OWNewsletterUser::fetchByEmail', 'user', 'email', array(
+				'email' => $objectList[0]->attribute( 'email' ),
+				'email_count' => $count,
+				'nl_user_ids' => implode( ',', $userIdArray ),
+				'modifier' => eZUser::currentUserID() )
 			);
+			return $objectList;
+		} else {
+			return false;
 		}
-		return $userObject;
+	}
+
+	/**
+	 * fetch NewsletterUser Object by eZ User Id
+	 *
+	 * @param int $ezUserId
+	 * @return NewsletterUser / boolean
+	 */
+	static function fetchByEzUserId( $ezUserId ) {
+		if ( $ezUserId > 0 ) {
+
+			$db = eZDB::instance();
+			$objectList = eZPersistentObject::fetchObjectList(
+							self::definition(), null, array(
+						'ez_user_id' => $db->escapeString( $ezUserId ) ), null, null, true
+			);
+
+			if ( count( $objectList ) > 0 ) {
+				return $objectList[0];
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Fetch user by custom parameters and subscription custom parameters
+	 *
+	 * @param array $conds
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @param boolean $asObject
+	 * @return array
+	 */
+	static function fetchListWithSubsricption( $conds, $limit = false, $offset = false, $asObject = true ) {
+		$sortArr = array( 'last_name' => 'asc', 'first_name' => 'asc', );
+		$limitArr = null;
+
+		if ( (int) $limit != 0 ) {
+			$limitArr = array(
+				'limit' => $limit,
+				'offset' => $offset );
+		}
+		$def = self::definition();
+		$custom_fields = array_keys( $def['fields'] );
+		foreach ( $custom_fields as $index => $field ) {
+			$custom_fields[$index] = "ownl_user.$field as $field";
+		}
+		$custom_tables = null;
+		$custom_conds = null;
+		if ( isset( $conds['subscription'] ) ) {
+			$custom_tables = array( 'ownl_subscription' );
+			$custom_conds = ' AND ownl_user.id = ownl_subscription.newsletter_user_id';
+			foreach ( $conds['subscription'] as $field => $value ) {
+				$conds["ownl_subscription.$field"] = $value;
+			}
+			unset( $conds['subscription'] );
+		}
+		$objectList = eZPersistentObject::fetchObjectList( self::definition(), array(), $conds, $sortArr, $limitArr, $asObject, null, $custom_fields, $custom_tables, $custom_conds );
+		return $objectList;
+	}
+
+	/**
+	 * Count user by custom parameters and subscription custom parameters
+	 *
+	 * @param array $conds
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @param boolean $asObject
+	 * @return array
+	 */
+	static function countListWithSubsricption( $conds ) {
+		$custom_tables = null;
+		$custom_conds = null;
+		if ( isset( $conds['subscription'] ) ) {
+			$custom_tables = array( 'ownl_subscription' );
+			$custom_conds = ' AND ownl_user.id = ownl_subscription.newsletter_user_id';
+			foreach ( $conds['subscription'] as $field => $value ) {
+				$conds["ownl_subscription.$field"] = $value;
+			}
+			unset( $conds['subscription'] );
+		}
+		$field = '*';
+		$customFields = array( array( 'operation' => 'COUNT( ' . $field . ' )', 'name' => 'row_count' ) );
+		$rows = eZPersistentObject::fetchObjectList( self::definition(), array(), $conds, array(), null, false, false, $customFields, $custom_tables, $custom_conds );
+		return $rows[0]['row_count'];
+	}
+
+	/*	 * **********************
+	 * OBJECT METHODS
+	 * ********************** */
+
+	/**
+	 * set modified to current timestamp and set current User Id
+	 * if first version use created as modified timestamp
+	 */
+	public function setModified() {
+		if ( $this->attribute( 'id' ) > 1 ) {
+			$this->setAttribute( 'modified', time() );
+			$this->setAttribute( 'modifier_contentobject_id', eZUser::currentUserID() );
+		}
+		// first version created = modified
+		else {
+			$this->setAttribute( 'modified', $this->attribute( 'created' ) );
+			$this->setAttribute( 'modifier_contentobject_id', eZUser::currentUserID() );
+		}
+	}
+
+	/**
+	 * set Modifed data if somebody store content
+	 * (non-PHPdoc)
+	 * @see kernel/classes/eZPersistentObject#store($fieldFilters)
+	 */
+	public function store( $fieldFilters = null ) {
+		$this->setModified();
+		// find and set ez_user_id
+		$this->findAndSetRelatedEzUserId();
+		parent::store( $fieldFilters );
 	}
 
 	/**
@@ -411,575 +676,6 @@ class OWNewsletterUser extends eZPersistentObject {
 	}
 
 	/**
-	 * Check if current object has status confirmed
-	 *
-	 * @return boolean
-	 */
-	function isConfirmed() {
-		$status = $this->attribute( 'status' );
-		return $status == self::STATUS_CONFIRMED ? true : false;
-	}
-
-	/**
-	 * Check if current object has status blackisted
-	 *
-	 * @return boolean
-	 */
-	function isRemovedSelf() {
-		$status = $this->attribute( 'status' );
-		return $status == self::STATUS_REMOVED_SELF ? true : false;
-	}
-
-	/**
-	 * Check if current user object is on blacklist
-	 * and if status is blacklisted
-	 *
-	 * @return boolean
-	 */
-	function isOnBlacklist() {
-		$status = $this->attribute( 'status' );
-		$isOnBlacklist = OWNewsletterBlacklistItem::isEmailOnBlacklist( $this->attribute( 'email' ) );
-		if ( $isOnBlacklist ) {
-			// fix up status blacklisted if it is not set
-			if ( $status != self::STATUS_BLACKLISTED ) {
-				$this->setBlacklisted();
-				return true;
-			} else {
-				return true;
-			}
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Send confirmation email for the user is not confirmed
-	 *
-	 * @return unknown_type
-	 */
-	function sendSubcriptionConfirmationMail() {
-		return $this->sendSubcriptionMail( 'design:newsletter/mail/subscription_confirmation.tpl' );
-	}
-
-	/**
-	 * Send newsletter inromation email for the user is already exists
-	 *
-	 * @return unknown_type
-	 */
-	function sendSubcriptionInformationMail() {
-		return $this->sendSubcriptionMail( 'design:newsletter/mail/subscription_information.tpl' );
-	}
-
-	/**
-	 * This function is only a helpfunction
-	 *
-	 * @param $mailTemplate
-	 * @return unknown_type
-	 */
-	function sendSubcriptionMail( $mailTemplate ) {
-		$owNewsletterIni = eZINI::instance( 'ow_newsletter.ini' );
-		$hostName = eZSys::hostname();
-
-		// $template = 'design:newsletter/mail/subscription_confirmation.tpl';
-		$template = $mailTemplate;
-		$newsletterUser = $this;
-		$tpl = eZTemplate::factory();
-		$tpl->setVariable( 'newsletter_user', $newsletterUser );
-		$tpl->setVariable( 'hostname', $hostName );
-		$templateResult = $tpl->fetch( $template );
-
-		// get subject from template var definition
-		if ( $tpl->hasVariable( 'subject' ) ) {
-			$subject = $tpl->variable( 'subject' );
-		}
-
-		$emailSender = $owNewsletterIni->variable( 'NewsletterMailSettings', 'EmailSender' );
-		$emailSenderName = $owNewsletterIni->variable( 'NewsletterMailSettings', 'EmailSenderName' );
-		$emailReceiver = $newsletterUser->attribute( 'email' );
-
-		// TODO Namen extrahieren
-		$emailReceiverName = '';
-
-		$mailFormat = $owNewsletterIni->hasVariable( 'NewsletterMailSettings', 'MailFormat' ) ? $owNewsletterIni->variable( 'NewsletterMailSettings', 'MailFormat' ) : 'text';
-
-		$emailSubject = $subject;
-		$emailBody[$mailFormat] = $templateResult;
-
-		$owMail = new OWNewsletterMail();
-		// x header set for current user
-		$owMail->setExtraMailHeadersByNewsletterUser( $this );
-		$owMail->setTransportMethodDirectlyFromIni();
-
-		// trigger_error("test error", E_USER_ERROR);
-		$sendResult = $owMail->sendEmail( $emailSender, $emailSenderName, $emailReceiver, $emailReceiverName, $emailSubject, $emailBody );
-		return $sendResult;
-	}
-
-	/**
-	 * get a translated string for the status code
-	 * @return unknown_type
-	 */
-	function getStatusString() {
-		$statusString = '-';
-		switch ( $this->attribute( 'status' ) ) {
-			case self::STATUS_PENDING_EZ_USER_REGISTER:
-				$statusString = ezpI18n::tr( 'ow_newsletter/user/status', 'Pending eZ User Register' );
-				break;
-			case self::STATUS_PENDING:
-				$statusString = ezpI18n::tr( 'ow_newsletter/user/status', 'Pending' );
-				break;
-			case self::STATUS_CONFIRMED:
-				$statusString = ezpI18n::tr( 'ow_newsletter/user/status', 'Confirmed' );
-				break;
-			case self::STATUS_REMOVED_SELF:
-				$statusString = ezpI18n::tr( 'ow_newsletter/user/status', 'Removed by user' );
-				break;
-			case self::STATUS_REMOVED_ADMIN:
-				$statusString = ezpI18n::tr( 'ow_newsletter/user/status', 'Removed by admin' );
-				break;
-			case self::STATUS_BOUNCED_SOFT:
-				$statusString = ezpI18n::tr( 'ow_newsletter/user/status', 'Bounced soft' );
-				break;
-			case self::STATUS_BOUNCED_HARD:
-				$statusString = ezpI18n::tr( 'ow_newsletter/user/status', 'Bounced hard' );
-				break;
-			case self::STATUS_BLACKLISTED:
-				$statusString = ezpI18n::tr( 'ow_newsletter/user/status', 'Blacklisted' );
-				break;
-		}
-		return $statusString;
-	}
-
-	/**
-	 * Returns all subcriptions for the current user, which hasn't a REMOVE status
-	 *
-	 * @return array
-	 */
-	function getSubscriptionArray() {
-		$listSubscriptionArray = array();
-		$subscriptionArray = OWNewsletterSubscription::fetchSubscriptionListByNewsletterUserId( $this->attribute( 'id' ) );
-		foreach ( $subscriptionArray as $subscriptionObject ) {
-			$listSubscriptionArray[$subscriptionObject->attribute( 'list_contentobject_id' )] = $subscriptionObject;
-		}
-		return $listSubscriptionArray;
-	}
-
-	/**
-	 * Return the name which will display in email  e.g. Max Mustermman
-	 *
-	 * @return string
-	 */
-	function getEmailName() {
-		$emailName = '';
-		$firstName = $this->attribute( 'first_name' );
-		$lastName = $this->attribute( 'last_name' );
-
-		if ( $firstName != '' ) {
-			$emailName .= $firstName . ' ';
-		}
-
-		if ( $lastName != '' ) {
-			$emailName .= $lastName;
-		}
-
-		return $emailName;
-	}
-
-	/**
-	 * 1. Set user on status CONFIRMED
-	 * 2. Set all opened subcriptions on status CONFIRMED
-	 *
-	 * @return array
-	 */
-	function confirmAll() {
-		// user status
-		// only the first time set nl user confirmed timestamp
-		if ( $this->attribute( 'confirmed' ) == 0 ) {
-			$this->setAttribute( 'status', self::STATUS_CONFIRMED );
-		}
-		// all subscriptions
-		$subscriptionArray = $this->attribute( 'subscription_array' );
-		$confirmResultArray = array();
-		foreach ( $subscriptionArray as $subscriptionObject ) {
-			$confirmResultArray[] = array(
-				'confirm_result' => $subscriptionObject->confirm(),
-				'subscription_object' => $subscriptionObject );
-		}
-		$this->store();
-		return $confirmResultArray;
-	}
-
-	// fetch functions
-	// ######################################
-
-	/**
-	 * Fetch by hash
-	 *
-	 * @param array $hash
-	 * @param boolean $asObject
-	 * @return object
-	 */
-	static function fetchByHash( $hash, $asObject = true ) {
-		return eZPersistentObject::fetchObject( self::definition(), null, array(
-					'hash' => $hash ), $asObject );
-	}
-
-	/**
-	 * Used in datatype ownewsletter_list
-	 *
-	 * @param string $email
-	 * @return array / boolean
-	 */
-	static function fetchByEmail( $email ) {
-		$db = eZDB::instance();
-		$objectList = eZPersistentObject::fetchObjectList(
-						self::definition(), null, array(
-					'email' => $db->escapeString( $email ) ), null, null, true
-		);
-
-		$count = count( $objectList );
-		if ( $count == 1 ) {
-			return $objectList[0];
-		} elseif ( $count > 1 ) {
-			$userIdArray = array();
-			foreach ( $objectList as $nlUser ) {
-				$userIdArray[] = $nlUser->attribute( 'id' );
-			}
-
-			OWNewsletterLog::writeError(
-					'email existing more than 1 time OWNewsletterUser::fetchByEmail', 'user', 'email', array(
-				'email' => $objectList[0]->attribute( 'email' ),
-				'email_count' => $count,
-				'nl_user_ids' => implode( ',', $userIdArray ),
-				'modifier' => eZUser::currentUserID() )
-			);
-			return $objectList;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * fetch NewsletterUser Object by eZ User Id
-	 *
-	 * @param int $ezUserId
-	 * @return NewsletterUser / boolean
-	 */
-	static function fetchByEzUserId( $ezUserId ) {
-		if ( $ezUserId > 0 ) {
-
-			$db = eZDB::instance();
-			$objectList = eZPersistentObject::fetchObjectList(
-							self::definition(), null, array(
-						'ez_user_id' => $db->escapeString( $ezUserId ) ), null, null, true
-			);
-
-			if ( count( $objectList ) > 0 ) {
-				return $objectList[0];
-			} else {
-				return false;
-			}
-		}
-		else {
-			return false;
-		}
-	}
-
-	/**
-	 * Returns userobject by id
-	 *
-	 * @param integer $id
-	 * @return object
-	 */
-	static function fetch( $id ) {
-		$object = eZPersistentObject::fetchObject(
-						self::definition(), null, array(
-					'id' => (int) $id ), true
-		);
-		return $object;
-	}
-
-	/**
-	 * user search
-	 *
-	 * @param integer $limit
-	 * @param integer $offset
-	 * @param boolean $emailSearch
-	 * @param boolean $sortBy
-	 * @param boolean $asObject
-	 * @return array
-	 */
-	public static function fetchList( $limit, $offset, $emailSearch = false, $sortBy = false, $asObject = true ) {
-		if ( $sortBy == false && !is_array( $sortBy ) ) {
-			$sortArr = array(
-				'created' => 'desc' );
-		} else {
-			$sortArr = $sortBy;
-		}
-		$limitArr = null;
-		$customConds = null;
-		if ( $emailSearch != '' && $emailSearch != false ) {
-			$db = eZDB::instance();
-			$email = $db->escapeString( $emailSearch );
-			$customConds = " WHERE email like \"%$email%\"";
-		}
-
-		if ( (int) $limit != 0 ) {
-			$limitArr = array(
-				'limit' => $limit,
-				'offset' => $offset );
-		}
-		$objectList = eZPersistentObject::fetchObjectList(
-						self::definition(), null, array(), $sortArr, $limitArr, $asObject, null, null, null, $customConds );
-		return $objectList;
-	}
-
-	/**
-	 * user search count
-	 *
-	 * @param boolean $emailSearch
-	 * @return integer
-	 */
-	public static function fetchListCount( $emailSearch = false ) {
-		$db = eZDB::instance();
-		$customConds = null;
-		if ( $emailSearch != '' && $emailSearch != false ) {
-			$email = $db->escapeString( $emailSearch );
-			$customConds = " WHERE email like \"%$email%\"";
-		}
-		$query = 'SELECT COUNT(id) AS count FROM ownl_user' . $customConds;
-		$rows = $db->arrayQuery( $query );
-		return $rows[0]['count'];
-	}
-
-	/**
-	 * Fetch all Newsletter user with status
-	 *
-	 * @param integer $status
-	 * @param integer $limit
-	 * @param integer $offset
-	 * @param boolean $asObject
-	 * @return array with OWNewsletterUser objects
-	 */
-	static function fetchUserListByStatus( $status, $limit = 50, $offset = 0, $asObject = true ) {
-		$sortArr = null;
-		$limitArr = null;
-
-		if ( (int) $limit != 0 ) {
-			$limitArr = array(
-				'limit' => $limit,
-				'offset' => $offset );
-		}
-
-		$objectList = eZPersistentObject::fetchObjectList(
-						self::definition(), null, array(
-					'status' => (int) $status ), $sortArr, $limitArr, $asObject, null, null, null, null );
-		return $objectList;
-	}
-
-	/**
-	 * Search all user with importId
-	 *
-	 * @param integer $importId
-	 * @param integer $limit
-	 * @param integer $offset
-	 * @param boolean $asObject
-	 * @return array
-	 */
-	static function fetchUserListByImportId( $importId, $limit = 50, $offset = 0, $asObject = true ) {
-		$sortArr = array();
-		$limitArr = null;
-
-		if ( (int) $limit != 0 ) {
-			$limitArr = array(
-				'limit' => $limit,
-				'offset' => $offset );
-		}
-
-		$objectList = eZPersistentObject::fetchObjectList(
-						self::definition(), null, array(
-					'import_id' => (int) $importId ), $sortArr, $limitArr, $asObject, null, null, null, null );
-		return $objectList;
-	}
-
-	/**
-	 * Count all user who subscripe to list with importId
-	 *
-	 * @param integer $importId
-	 * @return integer
-	 */
-	static function fetchUserListByImportIdCount( $importId ) {
-		$count = eZPersistentObject::count(
-						self::definition(), array(
-					'import_id' => (int) $importId ), 'id' );
-		return $count;
-	}
-
-	/**
-	 * Count all user who subscripe to list with import id and status id
-	 *
-	 * @param integer $importId
-	 * @return integer
-	 */
-	static function fetchUserListByImportIdAndStatusCount( $importId, $status ) {
-		$count = eZPersistentObject::count(
-						self::definition(), array(
-					'import_id' => (int) $importId,
-					'status' => (int) $status ), 'id' );
-		return $count;
-	}
-
-	/**
-	 * Get user object
-	 *
-	 * @return eZUser object
-	 */
-	function getEzUserObject() {
-		$retVal = false;
-		if ( $this->attribute( 'ez_user_id' ) != 0 ) {
-			$retVal = eZUser::fetch( $this->attribute( 'ez_user_id' ) );
-		}
-		return $retVal;
-	}
-
-	/**
-	 * Get conteobject for userId
-	 *
-	 * @return eZContentObject object
-	 */
-	function getEzUserContentObject() {
-		$retVal = false;
-		if ( $this->attribute( 'ez_user_id' ) != 0 ) {
-			$retVal = eZContentObject::fetch( $this->attribute( 'ez_user_id' ) );
-		}
-		return $retVal;
-	}
-
-	/**
-	 * Get user object
-	 *
-	 * @return unknown_type
-	 */
-	function getModifierUserObject() {
-		$retVal = false;
-		if ( $this->attribute( 'modifier_contentobject_id' ) != 0 ) {
-			$retVal = eZContentObject::fetch( $this->attribute( 'modifier_contentobject_id' ) );
-		}
-		return $retVal;
-	}
-
-	/**
-	 * Get Creator user object
-	 *
-	 * @return unknown_type
-	 */
-	function getCreatorUserObject() {
-		if ( $this->attribute( 'creator_contentobject_id' ) != 0 ) {
-			$user = eZContentObject::fetch( $this->attribute( 'creator_contentobject_id' ) );
-			return $user;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Get Name of NL User
-	 * use a tpl to have full flexebiltiy to render the name
-	 *
-	 * @return string
-	 */
-	function getName() {
-		$owNewsletterIni = eZINI::instance( 'ow_newsletter.ini' );
-		$useTplForNameGeneration = $owNewsletterIni->variable( 'NewsletterUserSettings', 'UseTplForNameGeneration' );
-		if ( $useTplForNameGeneration === 'enabled' ) {
-			$tpl = eZTemplate::factory();
-			$tpl->setVariable( 'nl_user', $this );
-			$templateFile = 'design:newsletter/user/name.tpl';
-			$name = strip_tags( trim( $tpl->fetch( $templateFile ) ) );
-			unset( $tpl );
-			return $name;
-		} else {
-			$name = trim( $this->attribute( 'salutation_name' ) . ' ' . $this->attribute( 'first_name' ) . ' ' . $this->attribute( 'last_name' ) );
-			return $name;
-		}
-	}
-
-	/**
-	 * Get i18n for salutation id
-	 * user ow_newsletter.ini
-	 * [NewsletterUserSettings]
-	 * SalutationMappingArray[value_1]=Mr.
-	 * SalutationMappingArray[value_2]=Mrs.
-	 *
-	 * so we can extent this
-	 * @return string
-	 */
-	function getSalutationName() {
-		$availableSalutationNameArray = self::getAvailableSalutationNameArrayFromIni();
-		$salutationId = (int) $this->attribute( 'salutation' );
-		if ( array_key_exists( $salutationId, $availableSalutationNameArray ) ) {
-			return $availableSalutationNameArray[$salutationId];
-		} else {
-			return '';
-		}
-	}
-
-	/**
-	 * attribute( 'available_salutation_name_array' )
-	 * @return array[salutation_id]=>i18n
-	 */
-	public function getAvailableSalutationNameArray() {
-		return self::getAvailableSalutationNameArrayFromIni();
-	}
-
-	/**
-	 *
-	 * @return array[salutation_id]=>i18n
-	 */
-	static function getAvailableSalutationNameArrayFromIni() {
-		$owNewsletterIni = eZINI::instance( 'ow_newsletter.ini' );
-		$salutationMappingArray = $owNewsletterIni->variable( 'NewsletterUserSettings', 'SalutationMappingArray' );
-		$salutationNameArray = array();
-		foreach ( $salutationMappingArray as $salutationKey => $languageString ) {
-			// value_1
-			$salutationKeyExplode = explode( '_', $salutationKey );
-			if ( isSet( $salutationKeyExplode[1] ) ) {
-				$salutationId = (int) $salutationKeyExplode[1];
-				$salutationNameArray[$salutationId] = ezpI18n::tr( 'ow_newsletter/user/salutation', $languageString );
-			}
-		}
-		return $salutationNameArray;
-	}
-
-	/**
-	 * set modified to current timestamp and set current User Id
-	 * if first version use created as modified timestamp
-	 */
-	public function setModified() {
-		if ( $this->attribute( 'id' ) > 1 ) {
-			$this->setAttribute( 'modified', time() );
-			$this->setAttribute( 'modifier_contentobject_id', eZUser::currentUserID() );
-		}
-		// first version created = modified
-		else {
-			$this->setAttribute( 'modified', $this->attribute( 'created' ) );
-			$this->setAttribute( 'modifier_contentobject_id', eZUser::currentUserID() );
-		}
-	}
-
-	/**
-	 * set Modifed data if somebody store content
-	 * (non-PHPdoc)
-	 * @see kernel/classes/eZPersistentObject#store($fieldFilters)
-	 */
-	public function store( $fieldFilters = null ) {
-		$this->setModified();
-		// find and set ez_user_id
-		$this->findAndSetRelatedEzUserId();
-		parent::store( $fieldFilters );
-	}
-
-	/**
 	 * remove the current newlsetter user and all depending nl subscriptions
 	 * @see kernel/classes/eZPersistentObject#remove($conditions, $extraConditions)
 	 */
@@ -987,8 +683,7 @@ class OWNewsletterUser extends eZPersistentObject {
 		// remove subscriptions
 		$currentNewsletterSubscriptionObjects = $this->attribute( 'subscription_array' );
 
-		OWNewsletterLog::writeNotice(
-				'OWNewsletterUser::remove', 'user', 'remove', array(
+		OWNewsletterLog::writeNotice( 'OWNewsletterUser::remove', 'user', 'remove', array(
 			'nl_user' => $this->attribute( 'id' ),
 			'subscription_count' => count( $currentNewsletterSubscriptionObjects ),
 			'subscriptions_to_remove' => implode( '|', array_keys( $currentNewsletterSubscriptionObjects ) ),
@@ -1006,161 +701,111 @@ class OWNewsletterUser extends eZPersistentObject {
 		parent::remove( $conditions, $extraConditions );
 	}
 
-	/**
-	 * set current object blacklisted
-	 * Called from OWNewsletterBackListItem::store()
-	 * @return void
-	 */
-	public function setBlacklisted() {
-		OWNewsletterLog::writeDebug(
-				'OWNewsletterUser::setBlacklisted', 'user', 'blacklist', array(
-			'nl_user' => $this->attribute( 'id' ) )
-		);
-
-		$this->setAttribute( 'status', self::STATUS_BLACKLISTED );
-
-		// set all subscriptions and all open senditems to blacklisted
-		$this->setAllNewsletterUserRelatedItemsToStatus( OWNewsletterSubscription::STATUS_BLACKLISTED );
-
-		$this->store();
-	}
+	/*	 * **********************
+	 * PERSISTENT METHODS
+	 * ********************** */
 
 	/**
-	 * Set current object non-blacklisted
-	 * User and subscriptions will be set to confirmed
-	 * @return void
-	 */
-	public function setNonBlacklisted() {
-		OWNewsletterLog::writeDebug(
-				'OWNewsletterUser::setNonBlacklisted', 'user', 'blacklist', array(
-			'nl_user' => $this->attribute( 'id' ) )
-		);
-
-		// we determine the actual status by checking the various timestamps
-		if ( $this->attribute( 'confirmed' ) != 0 ) {
-			if ( $this->attribute( 'bounced' ) != 0 || $this->attribute( 'removed' ) != 0 ) {
-				if ( $this->attribute( 'removed' ) > $this->attribute( 'bounced' ) ) {
-					$this->setRemoved();
-				} else {
-					$this->setBounced();
-				}
-			}
-			// confirmed, and not deleted nor bounced
-			else {
-				$this->setAttribute( 'status', self::STATUS_CONFIRMED );
-			}
-		}
-		// not confirmed
-		else {
-			// might have been removed by admin
-			if ( $this->attribute( 'removed' ) != 0 ) {
-				$this->setRemoved( true );
-			} else {
-				$this->setAttribute( 'status', self::STATUS_PENDING );
-			}
-		}
-		$this->setAttribute( 'blacklisted', 0 );
-
-		// set all subscriptions and all open senditems to blacklisted
-		foreach ( OWNewsletterSubscription::fetchSubscriptionListByNewsletterUserId( $this->attribute( 'id' ) )
-		as $subscription ) {
-			$subscription->setNonBlacklisted();
-		}
-
-		$this->store();
-	}
-
-	/**
-	 * call this function if a bounce mail for current user is detected
-	 * if it is a hard bounce set
-	 * @param boolean $isHardBounce
-	 * @return unknown_type
-	 */
-	public function setBounced( $isHardBounce = false ) {
-		$owNewsletterIni = eZINI::instance( 'ow_newsletter.ini' );
-		$bounceThresholdValue = (int) $owNewsletterIni->variable( 'BounceSettings', 'BounceThresholdValue' );
-		$userBouncCount = $this->attribute( 'bounce_count' ) + 1;
-		$this->setAttribute( 'bounce_count', $userBouncCount );
-
-		OWNewsletterLog::writeDebug(
-				'OWNewsletterUser::setBounced', 'user', 'bounce_count', array(
-			'nl_user' => $this->attribute( 'id' ),
-			'bounce_count' => $userBouncCount ) );
-
-
-		// set all subscriptions and all open senditems to bounced
-		if ( $userBouncCount >= $bounceThresholdValue ) {
-			if ( $isHardBounce === true ) {
-				$this->setAttribute( 'status', self::STATUS_BOUNCED_HARD );
-				$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_BOUNCED_HARD );
-			} else {
-				$this->setAttribute( 'status', self::STATUS_BOUNCED_SOFT );
-				$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_BOUNCED_SOFT );
-			}
-		}
-		$this->store();
-	}
-
-	/**
-	 * call this function if a bounce mail for current user is detected
-	 * if it is a hard bounce set
-	 * @param boolean $isHardBounce
-	 * @return unknown_type
-	 */
-	public function setRemoved( $byAdmin = false ) {
-		OWNewsletterLog::writeDebug(
-				'OWNewsletterUser::setRemoved', 'user', 'bounce_count', array(
-			'nl_user' => $this->attribute( 'id' ),
-			'by_admin' => ( $byAdmin === true ? 1 : 0 ) ) );
-
-		if ( $byAdmin === true ) {
-			$this->setAttribute( 'status', self::STATUS_REMOVED_ADMIN );
-			$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_REMOVED_ADMIN );
-		} else {
-			$this->setAttribute( 'status', self::STATUS_REMOVED_SELF );
-			$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_REMOVED_SELF );
-		}
-	}
-
-	/**
-	 * This should be called if a user is bounced or blacklisted
-	 * all related subscriptions and active senditems will be updated
+	 * Create new OWNewsletterUser object
 	 *
-	 * @param $status
-	 * @return unknown_type
+	 * @param string $email
+	 * @param string $salutation
+	 * @param string $firstName
+	 * @param string $lastName
+	 * @param string $organisation
+	 * @param string $eZUserId
+	 * @param int $status
+	 * @return object
 	 */
-	private function setAllNewsletterUserRelatedItemsToStatus( $status ) {
-		$newsletterUserId = $this->attribute( 'id' );
+	static function create( $email, $salutation, $firstName, $lastName, $organisation, $eZUserId, $status = self::STATUS_PENDING, $context = 'default' ) {
 
-		switch ( $status ) {
-			case OWNewsletterSubscription::STATUS_BOUNCED_SOFT:
-			case OWNewsletterSubscription::STATUS_BOUNCED_HARD:
-			case OWNewsletterSubscription::STATUS_BLACKLISTED:
+		$rows = array(
+			'created' => time(),
+			'creator_contentobject_id' => eZUser::currentUserID(),
+			'ez_user_id' => $eZUserId,
+			'email' => $email,
+			'first_name' => $firstName,
+			'last_name' => $lastName,
+			'organisation' => $organisation,
+			'salutation' => $salutation,
+			'hash' => OWNewsletterUtils::generateUniqueMd5Hash( $email ),
+			'remote_id' => 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash( $email ),
+			'status' => $status );
 
-				// update active subscriptions
-				$activeSubscriptionList = OWNewsletterSubscription::fetchListNotRemovedOrBlacklistedByNewsletterUserId( $newsletterUserId, true );
-				foreach ( $activeSubscriptionList as $subscription ) {
-					if ( $subscription->attribute( 'status' ) == $status ) {
-						OWNewsletterLog::writeDebug(
-								'skip - already set this status - OWNewsletterUser::setAllNewsletterUserRelatedItemsToStatus', 'subscription', 'status', array(
-							'status' => $status,
-							'subscription_id' => $subscription->attribute( 'id' ),
-							'nl_user' => $newsletterUserId ) );
-					} else {
-						$subscription->setAttribute( 'status', $status );
-						$subscription->store();
-						/*    OWNewsletterLog::writeDebug(
-						  'set OWNewsletterUser::setAllNewsletterUserRelatedItemsToStatus',
-						  'subscription',
-						  'status',
-						  array( 'status' => $status,
-						  'subscription_id' => $subscription->attribute('id'),
-						  'nl_user' => $newsletterUserId ) );
-						 */
-					}
-				}
-				break;
+		$object = new self( $rows );
+		return $object;
+	}
+
+	/**
+	 * Create or update Newsletter User identified by email
+	 * store the changes to Database
+	 *
+	 * @param string $email
+	 * @param int $salutation
+	 * @param string $firstName
+	 * @param string $lastName
+	 * @param string $organisation,
+	 * @param int $eZUserId
+	 * @param int $newNewsletterUserStatus the status for new created Newsletter users OWNewsletterUser::STATUS_PENDING
+	 * @return object
+	 */
+	static function createUpdateNewsletterUser( $email, $salutation, $firstName, $lastName, $organisation, $eZUserId, $newNewsletterUserStatus = self::STATUS_PENDING, $context = 'default' ) {
+
+		/*
+		 * 1. exist a current newsletter user?
+		 *      yes -> register on lists with status PENDING
+		 *      no -> create new user with status PENDIG and than register
+		 */
+		$existingNewsletterUserObject = self::fetchByEmail( $email );
+
+		// update existing
+		if ( is_object( $existingNewsletterUserObject ) ) {
+			$userObject = $existingNewsletterUserObject;
+			$userObject->setAttribute( 'salutation', $salutation );
+			$userObject->setAttribute( 'first_name', $firstName );
+			$userObject->setAttribute( 'last_name', $lastName );
+			$userObject->setAttribute( 'organisation', $organisation );
+			$userObject->setAttribute( 'ez_user_id', (int) $eZUserId );
+			$userObject->setAttribute( 'modified', time() );
+			$userObject->store();
+			OWNewsletterLog::writeDebug(
+					'OWNewsletterUser::createUpdateNewsletterUser', 'user', 'update', array(
+				'nl_user' => $userObject->attribute( 'id' ),
+				'email' => $email,
+				'salutation' => $salutation,
+				'first_name' => $firstName,
+				'last_name' => $lastName,
+				'organisation' => $organisation,
+				'ez_user_id' => $userObject->attribute( 'ez_user_id' ),
+				'status' => $userObject->attribute( 'status' ),
+				'modifier' => eZUser::currentUserID(),
+				'context' => $context )
+			);
 		}
+		// create new object
+		else {
+			$userObject = self::create( $email, $salutation, $firstName, $lastName, $organisation, $eZUserId, (int) $newNewsletterUserStatus, $context );
+			if ( is_object( $userObject ) !== true ) {
+				// error creating the new user => user with same email already exists
+				return false;
+			}
+
+			$userObject->store();
+			OWNewsletterLog::writeDebug(
+					'OWNewsletterUser::createUpdateNewsletterUser', 'user', 'create', array(
+				'nl_user' => $userObject->attribute( 'id' ),
+				'email' => $email,
+				'salutation' => $salutation,
+				'first_name' => $firstName,
+				'last_name' => $lastName,
+				'organisation' => $organisation,
+				'ez_user_id' => $userObject->attribute( 'ez_user_id' ),
+				'status' => $userObject->attribute( 'status' ),
+				'modifier' => eZUser::currentUserID(),
+				'context' => $context )
+			);
+		}
+		return $userObject;
 	}
 
 	/**
@@ -1192,8 +837,7 @@ class OWNewsletterUser extends eZPersistentObject {
 			if ( $idNlUserEzUserId > 0 ) {
 				$idNlUserExists = true;
 			}
-		}
-		else {
+		} else {
 			if ( $ezUserId > 0 ) {
 				$idNlUserEzUserId = $ezUserId;
 			}
@@ -1249,22 +893,30 @@ class OWNewsletterUser extends eZPersistentObject {
 				$idNlUser->store();
 			}
 		}
-		/*
-		  echo "ezUserId = $ezUserId <br>
-		  idNlUserEmail = $idNlUserEmail <br>
-		  idNlUserId = $idNlUserId <br>
-		  idNlUserEzUserId = $idNlUserEzUserId <br>
-		  idNlUserExists = $idNlUserExists <br><hr>
-
-		  email = $email<br>
-		  emailNlUserEmail = $emailNlUserEmail<br>
-		  emailNlUserId = $emailNlUserId <br>
-		  emailNlUserEzUserId = $emailNlUserEzUserId<br>
-		  emailNlUserExists = $emailNlUserExists<br>
-		  <hr> return stratus = $returnStatus <hr>";
-		 */
-		//
 		return $returnStatus;
+	}
+
+	/*	 * **********************
+	 * OTHER METHODS
+	 * ********************** */
+
+	/**
+	 *
+	 * @return array[salutation_id]=>i18n
+	 */
+	static function getAvailablesSalutationsFromIni() {
+		$newsletterIni = eZINI::instance( 'newsletter.ini' );
+		$salutationMappingArray = $newsletterIni->variable( 'NewsletterUserSettings', 'SalutationMappingArray' );
+		$salutationNameArray = array();
+		foreach ( $salutationMappingArray as $salutationKey => $languageString ) {
+			// value_1
+			$salutationKeyExplode = explode( '_', $salutationKey );
+			if ( isSet( $salutationKeyExplode[1] ) ) {
+				$salutationId = (int) $salutationKeyExplode[1];
+				$salutationNameArray[$salutationId] = ezpI18n::tr( 'newsletter/user/salutation', $languageString );
+			}
+		}
+		return $salutationNameArray;
 	}
 
 }

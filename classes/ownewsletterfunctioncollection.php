@@ -78,7 +78,7 @@ class OWNewsletterFunctionCollection {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
 		}
-		return array( 'result' => OWNewsletterUser::fetchUserListWithSubsricption( $conds, $limit, $offset ) );
+		return array( 'result' => OWNewsletterUser::fetchListWithSubsricption( $conds, $limit, $offset ) );
 	}
 
 	/**
@@ -101,7 +101,7 @@ class OWNewsletterFunctionCollection {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
 		}
-		return array( 'result' => OWNewsletterUser::countUserListWithSubsricption( $conds ) );
+		return array( 'result' => OWNewsletterUser::countListWithSubsricption( $conds ) );
 	}
 
 	/**

@@ -212,7 +212,7 @@ if ( $module->hasActionParameter( 'NewsletterUser' ) ) { /* Submit a newsletter 
 }
 if ( $module->isCurrentAction( 'NewSubscripter' ) ) { /* Press new subscriber button */
 	$tpl->setVariable( 'newsletter_user', $newsletterUserRow );
-	$tpl->setVariable( 'available_salutation_array', OWNewsletterUser::getAvailableSalutationNameArrayFromIni() );
+	$tpl->setVariable( 'available_salutation_array', OWNewsletterUser::getAvailablesSalutationsFromIni() );
 	$Result['content'] = $tpl->fetch( 'design:newsletter/user/new.tpl' );
 	$Result['path'][] = array(
 		'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'New' ) );
