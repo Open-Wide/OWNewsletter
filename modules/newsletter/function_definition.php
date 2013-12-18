@@ -3,8 +3,7 @@
 $FunctionList = array();
 $FunctionList['edition_class_list'] = array(
 	'name' => 'list',
-	'operation_types' => array(
-		'read' ),
+	'operation_types' => array( 'read' ),
 	'call_method' => array(
 		'class' => 'OWNewsletterFunctionCollection',
 		'method' => 'fetchEditionClassList' ),
@@ -23,44 +22,72 @@ $FunctionList['edition_class_identifer_list'] = array(
 	'parameters' => array()
 );
 
-$FunctionList['subscription_list'] = array(
+$FunctionList['user_list'] = array(
 	'name' => 'list',
-	'operation_types' => array(
-		'read' ),
+	'operation_types' => array( 'read' ),
 	'call_method' => array(
 		'class' => 'OWNewsletterFunctionCollection',
-		'method' => 'fetchSubscriptions' ),
+		'method' => 'fetchUsers' ),
 	'parameter_type' => 'standard',
 	'parameters' => array(
 		array(
 			'name' => 'mailing_list_contentobject_id',
 			'type' => 'integer',
-			'required' => true,
+			'required' => false,
 			'default' => false ),
 		array(
-			'name' => 'status',
+			'name' => 'user_status',
 			'type' => 'string',
+			'required' => false,
+			'default' => false ),
+		array(
+			'name' => 'subscription_status',
+			'type' => 'string',
+			'required' => false,
+			'default' => false ),
+		array(
+			'name' => 'limit',
+			'type' => 'integer',
+			'required' => false,
+			'default' => false ),
+		array(
+			'name' => 'offset',
+			'type' => 'integer',
 			'required' => false,
 			'default' => false ) )
 );
 
-$FunctionList['subscriptions_count'] = array(
+$FunctionList['user_count'] = array(
 	'name' => 'list',
-	'operation_types' => array(
-		'read' ),
+	'operation_types' => array( 'read' ),
 	'call_method' => array(
 		'class' => 'OWNewsletterFunctionCollection',
-		'method' => 'countSubscriptions' ),
+		'method' => 'countUsers' ),
 	'parameter_type' => 'standard',
 	'parameters' => array(
 		array(
 			'name' => 'mailing_list_contentobject_id',
 			'type' => 'integer',
-			'required' => true,
+			'required' => false,
 			'default' => false ),
 		array(
-			'name' => 'status',
+			'name' => 'user_status',
 			'type' => 'string',
 			'required' => false,
-			'default' => false ) )
+			'default' => false ),
+		array(
+			'name' => 'subscription_status',
+			'type' => 'string',
+			'required' => false,
+			'default' => false ), )
+);
+
+$FunctionList['available_subscription_status'] = array(
+	'name' => 'list',
+	'operation_types' => array( 'read' ),
+	'call_method' => array(
+		'class' => 'OWNewsletterFunctionCollection',
+		'method' => 'fetchAvailableSubscriptionStatus' ),
+	'parameter_type' => 'standard',
+	'parameters' => array( )
 );
