@@ -40,13 +40,6 @@ $schema = array(
 				'not_null' => '1',
 				'default' => '0',
 			),
-			'output_format_array_string' =>
-			array(
-				'length' => 255,
-				'type' => 'varchar',
-				'not_null' => '1',
-				'default' => '',
-			),
 			'creator_contentobject_id' =>
 			array(
 				'length' => 11,
