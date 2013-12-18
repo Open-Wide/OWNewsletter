@@ -16,6 +16,14 @@
         <source>Dashboard</source>
         <translation>Tableau de bord</translation>
     </message>
+    <message>
+        <source>Users</source>
+        <translation>Utilisateurs</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>Nouveau</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/menu</name>
@@ -103,6 +111,240 @@
     </message>
 </context>
 <context>
+	<name>newsletter/warning_message</name>
+    <message>
+        <source>Input did not validate</source>
+        <translation>Saisie incorrecte</translation>
+    </message>
+</context>
+<context>
+    <name>newsletter/user</name>
+    <message>
+        <source>Manage users</source>
+        <translation>Gérer les utilisateurs</translation>
+    </message>
+    <message>
+        <source>Search for existing user</source>
+        <translation>Rechercher</translation>
+    </message>
+    <message>
+        <source>Create newsletter user</source>
+        <translation>Ajouter un utilisateur</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation>Utilisateurs</translation>
+    </message>
+    <message>
+        <source>Newsletter user</source>
+        <translation>Souscripteur</translation>
+    </message>
+    <message>
+        <source>UID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Email</source>
+        <translation>Email</translation>
+    </message>
+    <message>
+        <source>Email</source>
+        <translation>Email</translation>
+    </message>
+    <message>
+        <source>Mailing lists</source>
+        <translation>Listes de diffusion</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Approuvé</translation>
+    </message>
+    <message>
+        <source>Conf</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blacklisted</source>
+        <translation>En liste noire</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bounce</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Statut</translation>
+    </message>
+    <message>
+        <source>eZ user id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subscriptions</source>
+        <translation>Souscriptions</translation>
+    </message>
+    <message>
+        <source>No user</source>
+        <translation>Aucun utilisateur</translation>
+    </message>
+    <message>
+        <source>Store and exit</source>
+        <translation>Enregistrer</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <source>Create</source>
+        <translation>Créer</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>Nouveau</translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation>Identifiant</translation>
+    </message>
+    <message>
+        <source>Salutation</source>
+        <translation>Titre</translation>
+    </message>
+    <message>
+        <source>First name</source>
+        <translation>Prénom</translation>
+    </message>
+    <message>
+        <source>Last name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <source>Organisation</source>
+        <translation>Organisation</translation>
+    </message>
+    <message>
+        <source>Creator</source>
+        <translation>Créateur</translation>
+    </message>
+    <message>
+        <source>Created</source>
+        <translation>Créé</translation>
+    </message>
+    <message>
+        <source>Modifier</source>
+        <translation>Modifier</translation>
+    </message>
+    <message>
+        <source>Modified</source>
+        <translation>Modifié</translation>
+    </message>
+    <message>
+        <source>Hash</source>
+        <translation>Hash</translation>
+    </message>
+    <message>
+        <source>Bounce count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remote id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation>Note</translation>
+    </message>
+    <message>
+        <source>Data xml</source>
+        <translation>Données XML</translation>
+    </message>
+    <message>
+        <source>Data text</source>
+        <translation>Données texte</translation>
+    </message>
+    <message>
+        <source>Processed</source>
+        <translation>Traité</translation>
+    </message>
+    <message>
+        <source>Newsletter user</source>
+        <translation>Souscripteur</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <source>enabled</source>
+        <translation>activé</translation>
+    </message>
+    <message>
+        <source>disabled</source>
+        <translation>Désactivé</translation>
+    </message>
+    <message>
+        <source>Ez user with id %ez_user_id does not exist anymore!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Removed</source>
+        <translation>Supprimé</translation>
+    </message>
+    <message>
+        <source>Edit by admin</source>
+        <translation>Editer par admin</translation>
+    </message>
+    <message>
+        <source>Delete newsletter user and all subscriptions from database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation>Editer</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Supprimer</translation>
+    </message>
+    <message>
+        <source>Add to blacklist</source>
+        <translation>Ajouter à la liste noire</translation>
+    </message>
+    <message>
+        <source>Newsletter subscriptions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Newsletter received</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edition sent id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Format</source>
+        <translation type="unfinished">Format</translation>
+    </message>
+    <message>
+        <source>Opened</source>
+        <translation type="unfinished">Ouvert</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation type="obsolete">Utilisateur</translation>
+    </message>
+</context>
+<context>
     <name>newsletter/edition/status</name>
     <message>
         <source>Draft</source>
@@ -140,12 +382,43 @@
         <translation>Supprimé</translation>
     </message>
     <message>
+        <source>Removed by user</source>
+        <translation>Supprimé par un utilisateur</translation>
+    </message>
+    <message>
+        <source>Removed by admin</source>
+        <translation>Supprimé par un administrateur</translation>
+    </message>
+    <message>
+        <source>Bounced soft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bounced hard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Bounced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Blacklisted</source>
         <translation>En liste noire</translation>
+    </message>
+</context>
+<context>
+    <name>newsletter/user/salutation</name>
+    <message>
+        <source>Mr</source>
+        <translation>Mr</translation>
+    </message>
+    <message>
+        <source>Mrs</source>
+        <translation>Mlle</translation>
+    </message>
+    <message>
+        <source>Ms</source>
+        <translation>Mme</translation>
     </message>
 </context>
 <context>
