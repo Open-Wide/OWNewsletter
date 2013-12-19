@@ -45,19 +45,19 @@
 
             <ul>
                 {* subscription_list *}
-                {*def $subcription_user_statistic = $:newsletter_mailing_list_node.data_map.newsletter_list.content.user_count_statistic*}
-				{def $allSubcriptions = fetch( 'newsletter', 'user_count', hash(
+                {def $subcriptions_count = 0}
+				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_subscription_list">
                     <span class="openclose"></span>
                     <img src={'images/newsletter/icons/crystal-newsletter/16x16/newsletter_user.png'|ezdesign} />
                     <a class="nodetext" href={$newsletter_mailing_list_node.url_alias|ezurl}>
-                        <span class="node-name-normal">{'Subscriptions'|i18n('newsletter/contentstructuremenu')} ({$allSubcriptions})</span>
+                        <span class="node-name-normal">{'Subscriptions'|i18n('newsletter/contentstructuremenu')} ({$subcriptions_count})</span>
                     </a>
                 </li>
 				
-				{def $pendingSubcriptions = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'pending'
 							) )}
@@ -65,11 +65,11 @@
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_pending" />
                     <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/pending')|ezurl}>
-                        <span class="node-name-normal">{'Pending'|i18n('newsletter/subscription/status')} ({$pendingSubcriptions})</span>
+                        <span class="node-name-normal">{'Pending'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
                     </a>
                 </li>
 				
-				{def $confirmedSubcriptions = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'confirmed'
 							) )}
@@ -77,11 +77,11 @@
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_confirmed" />
                     <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/confirmed')|ezurl}>
-                        <span class="node-name-normal">{'Confirmed'|i18n('newsletter/subscription/status')} ({$confirmedSubcriptions})</span>
+                        <span class="node-name-normal">{'Confirmed'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
                     </a>
                 </li>
 				
-				{def $approvedSubcriptions = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'approved'
 							) )}
@@ -89,11 +89,11 @@
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_approved" />
                     <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/approved')|ezurl}>
-                        <span class="node-name-normal">{'Approved'|i18n('newsletter/subscription/status')} ({$approvedSubcriptions})</span>
+                        <span class="node-name-normal">{'Approved'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
                     </a>
                 </li>
 				
-				{def $bouncedSubcriptions = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'bounced'
 							) )}
@@ -101,11 +101,11 @@
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_bounced" />
                     <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/bounced')|ezurl}>
-                        <span class="node-name-normal">{'Bounced'|i18n('newsletter/subscription/status')} ({$bouncedSubcriptions})</span>
+                        <span class="node-name-normal">{'Bounced'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
                     </a>
                 </li>
 				
-				{def $removedSubcriptions = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'removed'
 							) )}
@@ -113,11 +113,11 @@
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_removed" />
                     <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/removed')|ezurl}>
-                        <span class="node-name-normal">{'Removed'|i18n('newsletter/subscription/status')} ({$removedSubcriptions})</span>
+                        <span class="node-name-normal">{'Removed'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
                     </a>
                 </li>
 				
-				{def $blacklistedSubcriptions = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'blacklisted'
 							) )}
@@ -125,7 +125,7 @@
                     <span class="openclose"></span>
                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_blacklisted" />
                     <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/blacklisted')|ezurl}>
-                        <span class="node-name-normal">{'Blacklisted'|i18n('newsletter/subscription/status')} ({$blacklistedSubcriptions})</span>
+                        <span class="node-name-normal">{'Blacklisted'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
                     </a>
                 </li>
                 {undef}
