@@ -67,7 +67,7 @@
 										<form method="post" style="display:inline;" action={'newsletter/user'|ezurl()}>
 											<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
 											<input type="hidden" name="RedirectUrlActionStore" value="{$page_uri}" />
-                                            <input class="button" type="submit" name="NewSubscripterButton" value="{'Create newsletter user'|i18n( 'newsletter/user' )}" />
+                                            <input class="button" type="submit" name="SubmitNewsletterUserButton" value="{'Create newsletter user'|i18n( 'newsletter/user' )}" />
 										</form>
 									</div>
 								</div>
@@ -263,7 +263,7 @@
 											<form method="post" style="display:inline;" action={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()}>
 												<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
 												<input type="hidden" name="RedirectUrlActionStore" value="{$page_uri}" />
-												<button class="button image-button" type="submit" name="EditSubscripterButton" value="{'Edit newsletter user'|i18n( 'newsletter/user' )}">
+												<button class="button image-button" type="submit" name="SubmitNewsletterUserButton" value="{'Edit newsletter user'|i18n( 'newsletter/user' )}">
 													<img title="{'Edit newsletter user'|i18n( 'newsletter/user' )}" alt="{'Edit newsletter user'|i18n( 'newsletter/user' )}" src={'edit.gif'|ezimage()} />
 												</button>
 											</form>

@@ -22,17 +22,15 @@ $ViewList['user'] = array(
 		'user_remove' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
 	'ui_context' => 'admin',
-	'params' => array(),
+	'params' => array( 'newsletterUserID' ),
 	'single_post_actions' => array(
-		'NewSubscripterButton' => 'NewSubscripter',
-		'EditSubscripterButton' => 'EditSubscripter',
+		'SubmitNewsletterUserButton' => 'SubmitNewsletterUser',
 		'RemoveSubscripterButton' => 'RemoveSubscripter',
 		'RemoveSubscripterListButton' => 'RemoveSubscripterList'
 	),
 	 'post_action_parameters' => array(
-		 'NewSubscripter'=> array(
+		 'SubmitNewsletterUser'=> array(
 			 'NewsletterUser' => 'NewsletterUser',
-			 'StoreButton' => 'Store',
 			 'CancelButton' => 'Cancel',
 			 'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
 			 'RedirectUrlActionStore' => 'RedirectUrlActionStore'

@@ -164,7 +164,6 @@ if ( $module->hasActionParameter( 'Cancel' ) ) { /* Press Cancel button */
 	$module->redirectTo( $redirectUrlCancel );
 }
 
-
 $newsletterUserRow = array(
 	'first_name' => '',
 	'last_name' => '',
@@ -175,6 +174,9 @@ $newsletterUserRow = array(
 	'id_array' => array(),
 	'mailing_list_array' => array()
 );
+if ( $Params['newsletterUserID'] ) {
+	$newsletterUserRow['id'] = $Params['newsletterUserID'];
+}
 
 if ( $module->hasActionParameter( 'NewsletterUser' ) ) { /* Submit a newsletter user */
 	$newsletterUserData = $module->actionParameter( 'NewsletterUser' );
@@ -199,23 +201,35 @@ if ( $module->hasActionParameter( 'NewsletterUser' ) ) { /* Submit a newsletter 
 			$newsletterUserRow['status_id'][$listId] = $newsletterUserData["status_id_$listId"];
 		}
 	}
-	$result = OWNewsletterSubscription::createSubscriptionByArray( $newsletterUserRow, OWNewsletterUser::STATUS_CONFIRMED, false, 'user_edit' );
-	$newsletterUserObject = $result['newsletter_user_object'];
-	if ( $newsletterUserObject instanceof OWNewsletterUser ) {
-		$tpl->setVariable( 'subscription_array', $newsletterUserObject->attribute( 'subscription_array' ) );
+	try {
+		$newsletterUserObject = OWNewsletterUser::createOrUpdate( $newsletterUserRow, 'user_edit' );
+		if ( $newsletterUserObject instanceof OWNewsletterUser ) {
+			$tpl->setVariable( 'subscription_array', $newsletterUserObject->attribute( 'subscription_array' ) );
+		}
+	} catch ( Exception $e ) {
+		$error = $e->getMessage();
 	}
-	if ( empty( $result['errors'] ) ) {
-		$module->redirectTo( $redirectUrlStore );
+	if ( isset( $error ) ) {
+		$tpl->setVariable( 'warning_array', array( $error ) );
 	} else {
-		$tpl->setVariable( 'warning_array', $result['errors'] );
+		$module->redirectTo( $redirectUrlStore );
 	}
 }
-if ( $module->isCurrentAction( 'NewSubscripter' ) ) { /* Press new subscriber button */
-	$tpl->setVariable( 'newsletter_user', $newsletterUserRow );
+if ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) { /* Press new ou edit subscriber button */
+	if ( is_numeric( $Params['newsletterUserID'] ) ) {
+		$newsletterUserID = $Params['newsletterUserID'];
+		$newsletterUser = OWNewsletterUser::fetch( $newsletterUserID );
+		$tpl->setVariable( 'newsletter_user', $newsletterUser );
+		$tpl->setVariable( 'subscription_array', $newsletterUser->attribute( 'subscription_array' ) );
+		$Result['path'][] = array(
+			'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Edit' ) );
+	} else {
+		$tpl->setVariable( 'newsletter_user', $newsletterUserRow );
+		$Result['path'][] = array(
+			'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'New' ) );
+	}
 	$tpl->setVariable( 'available_salutation_array', OWNewsletterUser::getAvailablesSalutationsFromIni() );
-	$Result['content'] = $tpl->fetch( 'design:newsletter/user/new.tpl' );
-	$Result['path'][] = array(
-		'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'New' ) );
+	$Result['content'] = $tpl->fetch( 'design:newsletter/user/form.tpl' );
 } else {
 	$Result['content'] = $tpl->fetch( 'design:newsletter/user/list.tpl' );
 }

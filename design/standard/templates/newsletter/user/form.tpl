@@ -11,19 +11,17 @@
 			<div class="message-warning">
 				<h2>{'Input did not validate'|i18n('newsletter/warning_message')}</h2>
 				<ul>
-					{foreach $warning_array as $index => $messageArrayItem}
-						<li><span class="key">{$messageArrayItem.field_key|wash}: </span><span class="text">{$messageArrayItem.message|wash()}</span></li>
-						{/foreach}
+					{foreach $warning_array as $message}
+						<li><span class="text">{$message|i18n('newsletter/warning_message')}</span></li>
+					{/foreach}
 				</ul>
 			</div>
 		</div>
     {/if}
 
-	<form action={'newsletter/user'|ezurl()} method="post">
-
+	<form action={concat( 'newsletter/user/', $newsletter_user.id )|ezurl()} method="post">
 		<input type="hidden" name="RedirectUrlActionCancel" value="{$redirect_url_action_cancel}" />
 		<input type="hidden" name="RedirectUrlActionStore" value="{$redirect_url_action_store}" />
-
 		<div class="context-block">
 			<div class="box-header">
 				<div class="box-tc">
@@ -32,7 +30,7 @@
 							<div class="box-tl">
 								<div class="box-tr">
 									<h1 class="context-title">
-										{if $newsletter_user}
+										{if $newsletter_user.id}
 											{$newsletter_user.name|wash} &lt;{$newsletter_user.email|wash}&gt;
 										{else}
 											{'New'|i18n( 'newsletter/user' )}
@@ -145,7 +143,7 @@
 															'sort_by', array( 'name', true() ),
 															'limitation', hash( ) 
 														) )
-												$available_subscription_status_id_name_array = fetch( 'newsletter', 'available_subscription_status' )
+												$available_subscription_status_list = fetch( 'newsletter', 'available_subscription_status' )
 												$status_id_array_enabled =  array()}
 											{* set available status id for status selection list *}
 											{if $newsletter_user.status|eq( 8 )}
@@ -175,15 +173,12 @@
 																	$approved = 0
 																	$removed = 0
 																	$subscription = null
-
 																	$status = -1
 																	$is_removed = false()
-																	$subscription_hash = ''
 																	$td_counter = 0
 																	$modified = 0}
 																{if is_set( $subscription_array[ $mailing_list_id ] )}
 																	{set $subscription = $subscription_array[ $mailing_list_id ]
-
 																		$created = $subscription.created
 																		$confirmed = $subscription.confirmed
 																		$removed = $subscription.removed
@@ -192,7 +187,6 @@
 																		$blacklisted = $subscription.blacklisted
 																		$status = $subscription.status
 																		$is_removed = $subscription.is_removed
-																		$subscription_hash = $subscription.hash
 																		$modified = $subscription.modified
 																		$status_id_array_enabled = $status_id_array_enabled|append( $status )|unique}
 																{/if}
@@ -204,7 +198,7 @@
 																	<select name="NewsletterUser[status_id_{$mailing_list_id}]">
 																		{if $status|eq(-1)}<option value="-1">-</option>{/if}
 																		{def $status_already_selected = false()}
-																		{foreach $available_subscription_status_id_name_array as $status_id => $status_name}
+																		{foreach $available_subscription_status_list as $status_id => $status_name}
 																			{def $status_timestamp = 0
 																				$extra_string = false()
 																				$status_is_disabled = false()
@@ -250,7 +244,7 @@
 																<td>
 																	{if $modified|ne(0)}{'Modified'|i18n( 'newsletter/user' )}: {$modified|datetime( 'custom', '%j.%m.%Y %H:%i' )}{/if}
 																</td>
-																{undef $mailing_list_id $list_content $subscription_array $subscription $created $confirmed $subscription $removed $approved $bounced $blacklisted $status $is_removed $subscription_hash $td_counter $modified}
+																{undef $mailing_list_id $list_content $subscription_array $subscription $created $confirmed $subscription $removed $approved $bounced $blacklisted $status $is_removed $td_counter $modified}
 															</tr>
 														{/foreach}
 													</table>
@@ -275,7 +269,7 @@
 												{if $newsletter_user.status|eq(8)}
 													<input class="button-disabled" type="button" value="{'Store and exit'|i18n( 'newsletter/user' )}" />
 												{else}
-													<input class="button" type="submit" name="NewSubscripterButton" value="{'Store and exit'|i18n( 'newsletter/user' )}" />
+													<input class="button" type="submit" name="SubmitNewsletterUserButton" value="{'Store and exit'|i18n( 'newsletter/user' )}" />
 												{/if}
 												<input class="button" type="submit" name="CancelButton" value="{'Cancel'|i18n( 'newsletter/user' )}" />
 											</div>
