@@ -116,6 +116,14 @@
         <source>Input did not validate</source>
         <translation>Saisie incorrecte</translation>
     </message>
+    <message>
+        <source>User email is missing</source>
+        <translation>Veuillez l'email de l'utilisateur</translation>
+    </message>
+    <message>
+        <source>A user with this email already exists</source>
+        <translation>Un utilisateur avec cet email existe déjà</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/user</name>
