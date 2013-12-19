@@ -24,9 +24,7 @@ $ViewList['user'] = array(
 	'ui_context' => 'admin',
 	'params' => array( 'newsletterUserID' ),
 	'single_post_actions' => array(
-		'SubmitNewsletterUserButton' => 'SubmitNewsletterUser',
-		'RemoveSubscripterButton' => 'RemoveSubscripter',
-		'RemoveSubscripterListButton' => 'RemoveSubscripterList'
+		'SubmitNewsletterUserButton' => 'SubmitNewsletterUser'
 	),
 	 'post_action_parameters' => array(
 		 'SubmitNewsletterUser'=> array(
