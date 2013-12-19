@@ -543,12 +543,19 @@ class OWNewsletterUser extends eZPersistentObject {
 		foreach ( $newSubscriptionList as $newSubscription ) {
 			if ( $newSubscription['status'] > -1 ) {
 				$newSubscription['newsletter_user_id'] = $this->attribute( 'id' );
-				OWNewsletterSubscription::createOrUpdate( $newSubscription, $context );
+				try {
+					OWNewsletterSubscription::createOrUpdate( $newSubscription, $context );
+				} catch ( Exception $e ) {
+					$error = 'Failed to create or update subscription';
+				}
 			}
 			unset( $currentSubscriptionList[$newSubscription['mailing_list_contentobject_id']] );
 		}
 		foreach ( $currentSubscriptionList as $currentSubscription ) {
 			$currentSubscription->remove();
+		}
+		if ( isset( $error ) ) {
+			throw new InvalidArgumentException( $error );
 		}
 	}
 

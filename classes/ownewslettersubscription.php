@@ -29,11 +29,6 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	static function definition() {
 		return array(
 			'fields' => array(
-				'id' => array(
-					'name' => 'Id',
-					'datatype' => 'integer',
-					'default' => 0,
-					'required' => true ),
 				'mailing_list_contentobject_id' => array(
 					'name' => 'ListContentObjectId',
 					'datatype' => 'integer',
@@ -111,10 +106,8 @@ class OWNewsletterSubscription extends eZPersistentObject {
 				'modifier' => 'getModifierUserObject',
 				'status_string' => 'getStatusString',
 			),
-			'set_functions' => array( 'status' => 'setStatus' ),
-			'keys' => array( 'id' ),
-			'increment_key' => 'id',
-			'sort' => array( 'id' => 'asc' ),
+			'keys' => array( 'mailing_list_contentobject_id', 'newsletter_user_id' ),
+			'sort' => array( 'created' => 'asc' ),
 			'class_name' => 'OWNewsletterSubscription',
 			'name' => 'ownl_subscription' );
 	}
@@ -241,11 +234,14 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	/**
 	 * Return object by id
 	 *
-	 * @param integer $id
+	 * @param integer $mailing_list_contentobject_id
+	 * @param integer $newsletter_user_id
 	 * @return object
 	 */
-	static function fetch( $id ) {
-		$object = eZPersistentObject::fetchObject( self::definition(), null, array( 'id' => $id ), true );
+	static function fetch( $mailing_list_contentobject_id, $newsletter_user_id ) {
+		$object = eZPersistentObject::fetchObject( self::definition(), null, array(
+					'mailing_list_contentobject_id' => $mailing_list_contentobject_id,
+					'newsletter_user_id' => $newsletter_user_id ), true );
 		return $object;
 	}
 
@@ -314,22 +310,6 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * ********************** */
 
 	/**
-	 * set modified to current timestamp and set current User Id
-	 * if first version use created as modified timestamp
-	 */
-	public function setModified() {
-		if ( $this->attribute( 'id' ) > 1 ) {
-			$this->setAttribute( 'modified', time() );
-			$this->setAttribute( 'modifier_contentobject_id', eZUser::currentUserID() );
-		}
-		// first version created = modified
-		else {
-			$this->setAttribute( 'modified', $this->attribute( 'created' ) );
-			$this->setAttribute( 'modifier_contentobject_id', eZUser::currentUserID() );
-		}
-	}
-
-	/**
 	 * Unsubscribe subscription only if not blacklisted or if not removed self
 	 *
 	 * @return boolean
@@ -346,82 +326,70 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	}
 
 	/**
-	 * set Modifed data if somebody store content
-	 * (non-PHPdoc)
-	 * @see kernel/classes/eZPersistentObject#store($fieldFilters)
-	 */
-	public function store( $fieldFilters = null ) {
-		$this->setModified();
-		parent::store( $fieldFilters );
-	}
-
-	/**
 	 * (non-PHPdoc)
 	 * @see kernel/classes/eZPersistentObject#setAttribute($attr, $val)
 	 */
-	function setStatus( $status ) {
-		var_dump( $status );
-		die();
-		// only update timestamp and status if status id is changed
-		if ( $this->attribute( 'status' ) == $status ) {
-			return;
+	function setAttribute( $attr, $val ) {
+		switch ( $attr ) {
+			case 'status':
+				// only update timestamp and status if status id is changed
+				if ( $this->attribute( 'status' ) == $val ) {
+					return;
+				}
+				$currentTimeStamp = time();
+				// set status timestamps
+				switch ( $val ) {
+					case self::STATUS_CONFIRMED : {
+							$this->setAttribute( 'removed', 0 );
+							$this->setAttribute( 'confirmed', $currentTimeStamp );
+							$newsletterListAttributeContent = $this->attribute( 'newsletter_list_attribute_content' );
+
+							// set approve automatically if defined in list config
+							if ( is_object( $newsletterListAttributeContent ) and (int) $newsletterListAttributeContent->attribute( 'auto_approve_registered_user' ) == 1 ) {
+								$this->setAttribute( 'approved', $currentTimeStamp );
+								$val = self::STATUS_APPROVED;
+							} else {
+								// if subscription status is changed from approved to confirmed the approved timestamp should be removed
+								$this->setAttribute( 'approved', 0 );
+							}
+						} break;
+
+					case self::STATUS_APPROVED: {
+							$this->setAttribute( 'approved', $currentTimeStamp );
+							$this->setAttribute( 'removed', 0 );
+						} break;
+
+					case self::STATUS_REMOVED_ADMIN:
+					case self::STATUS_REMOVED_SELF: {
+							$this->setAttribute( 'removed', $currentTimeStamp );
+						} break;
+				}
+				$this->setAttribute( 'modified', $currentTimeStamp );
+
+				$statusOld = $this->attribute( 'status' );
+				$statusNew = $val;
+
+				if ( $statusOld != $statusNew ) {
+					OWNewsletterLog::writeNotice( 'OWNewsletterSubscription::setAttribute', 'subscription', 'status', array(
+						'status_old' => $statusOld,
+						'status_new' => $statusNew,
+						'list_id' => $this->attribute( 'mailing_list_contentobject_id' ),
+						'nl_user' => $this->attribute( 'newsletter_user_id' ),
+						'modifier' => eZUser::currentUserID() ) );
+				} else {
+					OWNewsletterLog::writeDebug( 'OWNewsletterSubscription::setAttribute', 'subscription', 'status', array(
+						'status_old' => $statusOld,
+						'status_new' => $statusNew,
+						'list_id' => $this->attribute( 'mailing_list_contentobject_id' ),
+						'nl_user' => $this->attribute( 'newsletter_user_id' ),
+						'modifier' => eZUser::currentUserID() ) );
+				}
+				parent::setAttribute( $attr, $val );
+				break;
+			default:
+				parent::setAttribute( $attr, $val );
+				break;
 		}
-
-		$currentTimeStamp = time();
-		// set status timestamps
-		switch ( $status ) {
-			case self::STATUS_CONFIRMED : {
-					$this->setAttribute( 'removed', 0 );
-					$this->setAttribute( 'confirmed', $currentTimeStamp );
-					$newsletterListAttributeContent = $this->attribute( 'newsletter_list_attribute_content' );
-
-					// set approve automatically if defined in list config
-					if ( is_object( $newsletterListAttributeContent ) and (int) $newsletterListAttributeContent->attribute( 'auto_approve_registered_user' ) == 1 ) {
-						$this->setAttribute( 'approved', $currentTimeStamp );
-						$value = self::STATUS_APPROVED;
-					} else {
-						// if subscription status is changed from approved to confirmed the approved timestamp should be removed
-						$this->setAttribute( 'approved', 0 );
-					}
-				} break;
-
-			case self::STATUS_APPROVED: {
-					$this->setAttribute( 'approved', $currentTimeStamp );
-					$this->setAttribute( 'removed', 0 );
-				} break;
-
-			case self::STATUS_REMOVED_ADMIN:
-			case self::STATUS_REMOVED_SELF: {
-					$this->setAttribute( 'removed', $currentTimeStamp );
-				} break;
-		}
-		$this->setAttribute( 'modified', $currentTimeStamp );
-
-		$statusOld = $this->attribute( 'status' );
-		$statusNew = $value;
-
-		if ( $statusOld != $statusNew ) {
-
-			OWNewsletterLog::writeNotice(
-					'OWNewsletterSubscription::setAttribute', 'subscription', 'status', array(
-				'status_old' => $statusOld,
-				'status_new' => $statusNew,
-				'subscription_id' => $this->attribute( 'id' ),
-				'list_id' => $this->attribute( 'mailing_list_contentobject_id' ),
-				'nl_user' => $this->attribute( 'newsletter_user_id' ),
-				'modifier' => eZUser::currentUserID() ) );
-		} else {
-			OWNewsletterLog::writeDebug(
-					'OWNewsletterSubscription::setAttribute', 'subscription', 'status', array(
-				'status_old' => $statusOld,
-				'status_new' => $statusNew,
-				'subscription_id' => $this->attribute( 'id' ),
-				'list_id' => $this->attribute( 'mailing_list_contentobject_id' ),
-				'nl_user' => $this->attribute( 'newsletter_user_id' ),
-				'modifier' => eZUser::currentUserID() ) );
-		}
-
-		eZPersistentObject::setAttribute( $attr, $value );
 	}
 
 	/*	 * **********************
@@ -437,15 +405,23 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 */
 	static function createOrUpdate( $dataArray, $context = 'default' ) {
 		self::validateSubscriptionData( $dataArray );
+		if ( isset( $dataArray['status'] ) ) {
+			$status = $dataArray['status'];
+			unset( $dataArray['status'] );
+		}
 		$newsletterUserId = $dataArray['newsletter_user_id'];
-		$rows = array_merge( array(
-			'created' => time(),
-			'creator_contentobject_id' => eZUser::currentUserID(),
-			'hash' => OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ),
-			'remote_id' => 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ) ), $dataArray );
-		$object = new OWNewsletterSubscription( $rows );
-		if ( isset( $rows['status'] ) ) {
-			$object->setAttribute( 'status', $rows['status'] );
+		$row = array_merge( array(
+			'modified' => time(),
+			'modifier_contentobject_id' => eZUser::currentUserID() ), $dataArray );
+		$object = new OWNewsletterSubscription( $row );
+		if ( $object->attribute( 'created' ) == 0 ) {
+			$object->setAttribute( 'created', time() );
+			$object->setAttribute( 'creator_contentobject_id', eZUser::currentUserID() );
+			$object->setAttribute( 'hash', OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ) );
+			$object->setAttribute( 'remote_id', 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ) );
+		}
+		if ( isset( $status ) ) {
+			$object->setAttribute( 'status', $status );
 		}
 		$object->store();
 		return $object;

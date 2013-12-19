@@ -7,11 +7,6 @@ $schema = array(
 		'name' => 'ownl_subscription',
 		'fields' =>
 		array(
-			'id' =>
-			array(
-				'type' => 'auto_increment',
-				'default' => false,
-			),
 			'mailing_list_contentobject_id' =>
 			array(
 				'length' => 11,
@@ -109,34 +104,22 @@ $schema = array(
 			'PRIMARY' =>
 			array(
 				'type' => 'primary',
-				'fields' =>
-				array(
-					0 => 'id',
-				),
+				'fields' => array( 'mailing_list_contentobject_id', 'newsletter_user_id' ),
 			),
 			'import_id' =>
 			array(
 				'type' => 'non-unique',
-				'fields' =>
-				array(
-					0 => 'import_id',
-				),
+				'fields' => array( 'import_id' ),
 			),
 			'mailing_list_contentobject_id' =>
 			array(
 				'type' => 'non-unique',
-				'fields' =>
-				array(
-					0 => 'mailing_list_contentobject_id',
-				),
+				'fields' => array( 'mailing_list_contentobject_id' ),
 			),
 			'newsletter_user_id' =>
 			array(
 				'type' => 'non-unique',
-				'fields' =>
-				array(
-					0 => 'newsletter_user_id',
-				),
+				'fields' => array( 'newsletter_user_id' )
 			),
 		),
 	),

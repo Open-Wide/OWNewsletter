@@ -124,6 +124,10 @@
         <source>A user with this email already exists</source>
         <translation>Un utilisateur avec cet email existe déjà</translation>
     </message>
+    <message>
+        <source>Failed to create or update subscription</source>
+        <translation>La mise à jour des souscriptions a échoué</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/user</name>
