@@ -61,7 +61,7 @@
     </message>
     <message>
         <source>Subscription form</source>
-        <translation>Formulaire de souscription</translation>
+        <translation>Formulaire de abonnement</translation>
     </message>
     <message>
         <source>INI Settings</source>
@@ -111,7 +111,7 @@
     </message>
     <message>
         <source>Subscriptions</source>
-        <translation>Souscriptions</translation>
+        <translation>Abonnements</translation>
     </message>
 </context>
 <context>
@@ -130,14 +130,14 @@
     </message>
     <message>
         <source>Failed to create or update subscription</source>
-        <translation>La mise à jour des souscriptions a échoué</translation>
+        <translation>La mise à jour des abonnements a échoué</translation>
     </message>
 </context>
 <context>
     <name>newsletter/user</name>
     <message>
         <source>Newsletter user id</source>
-        <translation>Souscripteur ID</translation>
+        <translation>Abonné ID</translation>
     </message>
     <message>
         <source>All</source>
@@ -165,7 +165,7 @@
     </message>
     <message>
         <source>Newsletter user</source>
-        <translation>Souscripteur</translation>
+        <translation>Abonné</translation>
     </message>
     <message>
         <source>UID</source>
@@ -213,7 +213,7 @@
     </message>
     <message>
         <source>Subscriptions</source>
-        <translation>Souscriptions</translation>
+        <translation>Abonnements</translation>
     </message>
     <message>
         <source>No user</source>
@@ -305,7 +305,7 @@
     </message>
     <message>
         <source>Newsletter user</source>
-        <translation>Souscripteur</translation>
+        <translation>Abonné</translation>
     </message>
     <message>
         <source>Name</source>
@@ -500,7 +500,7 @@
 	<name>design/admin/node/view/full</name>
     <message>
         <source>Subscribers (%children_count)</source>
-        <translation>Souscripteurs (%children_count)</translation>
+        <translation>Abonnés (%children_count)</translation>
     </message>
     <message>
         <source>Create new subscription</source>
@@ -512,7 +512,7 @@
     </message>
     <message>
         <source>No subscriber</source>
-        <translation>Aucune souscripteur</translation>
+        <translation>Aucune abonné</translation>
     </message>
 </context>
 </TS>
