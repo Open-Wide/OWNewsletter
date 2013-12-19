@@ -164,8 +164,7 @@ class OWNewsletterUser extends eZPersistentObject {
 					'default' => '',
 					'required' => false )
 			),
-			'keys' => array(
-				'id' ),
+			'keys' => array( 'id' ),
 			'increment_key' => 'id',
 			'function_attributes' => array(
 				'name' => 'getName',
@@ -598,8 +597,7 @@ class OWNewsletterUser extends eZPersistentObject {
 					$currentEmail = $this->attribute( 'email' );
 					$newEmail = $value;
 					if ( $currentEmail != $newEmail ) {
-						OWNewsletterLog::writeNotice(
-								'set new email OWNewsletterUser::setAttribute', 'user', 'email', array(
+						OWNewsletterLog::writeNotice( 'set new email OWNewsletterUser::setAttribute', 'user', 'email', array(
 							'nl_user' => $this->attribute( 'id' ),
 							'email_old' => $currentEmail,
 							'email_new' => $newEmail,
@@ -708,192 +706,49 @@ class OWNewsletterUser extends eZPersistentObject {
 	/**
 	 * Create new OWNewsletterUser object
 	 *
-	 * @param string $email
-	 * @param string $salutation
-	 * @param string $firstName
-	 * @param string $lastName
-	 * @param string $organisation
-	 * @param string $eZUserId
+	 * @param array $dataArray
 	 * @param int $status
 	 * @return object
 	 */
-	static function create( $email, $salutation, $firstName, $lastName, $organisation, $eZUserId, $status = self::STATUS_PENDING, $context = 'default' ) {
-
-		$rows = array(
+	static function createOrUpdate( $dataArray, $context = 'default' ) {
+		self::validateNewsletterUserData( $dataArray );
+		$email = $dataArray['email'];
+		$row = array_merge( array(
 			'created' => time(),
 			'creator_contentobject_id' => eZUser::currentUserID(),
-			'ez_user_id' => $eZUserId,
-			'email' => $email,
-			'first_name' => $firstName,
-			'last_name' => $lastName,
-			'organisation' => $organisation,
-			'salutation' => $salutation,
 			'hash' => OWNewsletterUtils::generateUniqueMd5Hash( $email ),
 			'remote_id' => 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash( $email ),
-			'status' => $status );
-
-		$object = new self( $rows );
+			'status' => self::STATUS_PENDING ), $dataArray );
+		$object = new self( $row );
+		$object->store();
 		return $object;
 	}
 
 	/**
-	 * Create or update Newsletter User identified by email
-	 * store the changes to Database
-	 *
-	 * @param string $email
-	 * @param int $salutation
-	 * @param string $firstName
-	 * @param string $lastName
-	 * @param string $organisation,
-	 * @param int $eZUserId
-	 * @param int $newNewsletterUserStatus the status for new created Newsletter users OWNewsletterUser::STATUS_PENDING
-	 * @return object
+	 * Check if the data passed to create or update a newsletter user are correct
+	 * 
+	 * @param array $dataArray
+	 * @throw InvalidArgumentException
 	 */
-	static function createUpdateNewsletterUser( $email, $salutation, $firstName, $lastName, $organisation, $eZUserId, $newNewsletterUserStatus = self::STATUS_PENDING, $context = 'default' ) {
-
-		/*
-		 * 1. exist a current newsletter user?
-		 *      yes -> register on lists with status PENDING
-		 *      no -> create new user with status PENDIG and than register
-		 */
-		$existingNewsletterUserObject = self::fetchByEmail( $email );
-
-		// update existing
-		if ( is_object( $existingNewsletterUserObject ) ) {
-			$userObject = $existingNewsletterUserObject;
-			$userObject->setAttribute( 'salutation', $salutation );
-			$userObject->setAttribute( 'first_name', $firstName );
-			$userObject->setAttribute( 'last_name', $lastName );
-			$userObject->setAttribute( 'organisation', $organisation );
-			$userObject->setAttribute( 'ez_user_id', (int) $eZUserId );
-			$userObject->setAttribute( 'modified', time() );
-			$userObject->store();
-			OWNewsletterLog::writeDebug(
-					'OWNewsletterUser::createUpdateNewsletterUser', 'user', 'update', array(
-				'nl_user' => $userObject->attribute( 'id' ),
-				'email' => $email,
-				'salutation' => $salutation,
-				'first_name' => $firstName,
-				'last_name' => $lastName,
-				'organisation' => $organisation,
-				'ez_user_id' => $userObject->attribute( 'ez_user_id' ),
-				'status' => $userObject->attribute( 'status' ),
-				'modifier' => eZUser::currentUserID(),
-				'context' => $context )
-			);
+	public static function validateNewsletterUserData( $dataArray ) {
+		if ( !isset( $dataArray['email'] ) || empty( $dataArray['email'] ) ) {
+			throw new InvalidArgumentException( 'User email is missing' );
 		}
-		// create new object
-		else {
-			$userObject = self::create( $email, $salutation, $firstName, $lastName, $organisation, $eZUserId, (int) $newNewsletterUserStatus, $context );
-			if ( is_object( $userObject ) !== true ) {
-				// error creating the new user => user with same email already exists
-				return false;
-			}
+		$email = $dataArray['email'];
+		$emailUser = self::fetchByEmail( $email );
 
-			$userObject->store();
-			OWNewsletterLog::writeDebug(
-					'OWNewsletterUser::createUpdateNewsletterUser', 'user', 'create', array(
-				'nl_user' => $userObject->attribute( 'id' ),
-				'email' => $email,
-				'salutation' => $salutation,
-				'first_name' => $firstName,
-				'last_name' => $lastName,
-				'organisation' => $organisation,
-				'ez_user_id' => $userObject->attribute( 'ez_user_id' ),
-				'status' => $userObject->attribute( 'status' ),
-				'modifier' => eZUser::currentUserID(),
-				'context' => $context )
-			);
-		}
-		return $userObject;
-	}
-
-	/**
-	 * check if $email and $ezUserId can update/create
-	 * negative value fail
-	 * @see OWNewsletterSubscription::createSubscriptionByArray
-	 */
-	public static function checkIfUserCanBeUpdated( $email, $ezUserId, $updateNewEmail = false ) {
-
-		// TODO cache fetches
-		// check if new email exists in the system
-		$idNlUser = self::fetchByEzUserId( $ezUserId );
-		$emailNlUser = self::fetchByEmail( $email );
-
-		$idNlUserEmail = false;
-		$idNlUserEzUserId = 0;
-		$idNlUserId = 0;
-		$idNlUserExists = false;
-
-		$emailNlUserEmail = false;
-		$emailNlUserEzUserId = 0;
-		$emailNlUserId = 0;
-		$emailNlUserExists = false;
-
-		if ( is_object( $idNlUser ) ) {
-			$idNlUserEmail = strtolower( trim( $idNlUser->attribute( 'email' ) ) );
-			$idNlUserEzUserId = $idNlUser->attribute( 'ez_user_id' );
-			$idNlUserId = $idNlUser->attribute( 'id' );
-			if ( $idNlUserEzUserId > 0 ) {
-				$idNlUserExists = true;
-			}
+		if ( !$emailUser instanceof self ) {
+			// no user have this email => data are OK
+			return true;
 		} else {
-			if ( $ezUserId > 0 ) {
-				$idNlUserEzUserId = $ezUserId;
+			if ( isset( $dataArray['id'] ) ) {
+				if ( $dataArray['id'] == $emailUser->attribute( 'id' ) ) {
+					// edit the user with the same mail and the same id
+					return true;
+				}
 			}
+			throw new InvalidArgumentException( 'A user with this email already exists' );
 		}
-
-		if ( is_object( $emailNlUser ) ) {
-			$emailNlUserEmail = strtolower( trim( $emailNlUser->attribute( 'email' ) ) );
-			$emailNlUserEzUserId = $emailNlUser->attribute( 'ez_user_id' );
-			$emailNlUserId = $emailNlUser->attribute( 'id' );
-			$emailNlUserExists = true;
-		} else {
-			$emailNlUserEmail = $email;
-		}
-
-		// new user => email + ezUserId not found in any nl user objects  => 40
-		// update user => ezUserId == 0 or found + email not found + email1 == email2 => 41
-		// update user with new email => ez_user_id found + email1 != email2 => 42
-
-		$returnStatus = -1;
-
-		// email is already used by an other nl_user with other ez_user_id
-		if ( $emailNlUserExists &&
-				$emailNlUserEmail != $idNlUserEmail &&
-				$emailNlUserEzUserId != $idNlUserEzUserId ) {
-			$returnStatus = -20;
-		}
-		// email is not valid because it is empty
-		elseif ( !$idNlUserExists && !$emailNlUserExists &&
-				$emailNlUserEmail == '' ) {
-			$returnStatus = -21;
-		}
-
-		// create new nl user
-		elseif ( !$idNlUserExists && !$emailNlUserExists &&
-				$emailNlUserEmail != '' ) {
-			$returnStatus = 40;
-		}
-		// update user  email1 = email2 id1 = id2
-		elseif ( $idNlUserExists && $emailNlUserExists &&
-				$idNlUserId == $emailNlUserId ) {
-			$returnStatus = 41;
-		}
-		// update user => set new email
-		elseif ( $idNlUserExists && !$emailNlUserExists &&
-				$emailNlUserEmail != '' ) {
-			$returnStatus = 42;
-			if ( $updateNewEmail === true ) {
-				// check if email has is not set by an other user
-				// this could happend when the nl user is imported
-				// check this in where the user can change the email address
-				// for example in datatype validation
-				$idNlUser->setAttribute( 'email', $emailNlUserEmail );
-				$idNlUser->store();
-			}
-		}
-		return $returnStatus;
 	}
 
 	/*	 * **********************
