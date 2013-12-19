@@ -94,7 +94,7 @@ class OWNewsletterFunctionCollection {
 			$conds['subscription']['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
 		}
 		if ( $user_status !== FALSE ) {
-			$user_status = self::getSubscriptionStatus( $user_status );
+			$user_status = self::getUserStatus( $user_status );
 			$conds['status'] = is_array( $user_status ) ? array( $user_status ) : (int) $user_status;
 		}
 		if ( $subscription_status !== FALSE ) {
@@ -102,6 +102,40 @@ class OWNewsletterFunctionCollection {
 			$conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
 		}
 		return array( 'result' => OWNewsletterUser::countListWithSubsricption( $conds ) );
+	}
+
+	/**
+	 * Transform subscription status string in system status value
+	 * @param string $status
+	 * @return integer
+	 */
+	static protected function getUserStatus( $status ) {
+		switch ( $status ) {
+			case 'pending':
+				return OWNewsletterUser::STATUS_PENDING;
+			case 'confirmed':
+				return OWNewsletterUser::STATUS_CONFIRMED;
+			case 'bounced':
+				return array(
+					OWNewsletterUser::STATUS_BOUNCED_SOFT,
+					OWNewsletterUser::STATUS_BOUNCED_HARD );
+			case 'bounced_soft':
+				return OWNewsletterUser::STATUS_BOUNCED_SOFT;
+			case 'bounced_hard':
+				return OWNewsletterUser::STATUS_BOUNCED_HARD;
+			case 'removed':
+				return array(
+					OWNewsletterUser::STATUS_REMOVED_SELF,
+					OWNewsletterUser::STATUS_REMOVED_ADMIN );
+			case 'removed_self':
+				return OWNewsletterUser::STATUS_REMOVED_SELF;
+			case 'removed_admin':
+				return OWNewsletterUser::STATUS_REMOVED_ADMIN;
+			case 'blacklisted':
+				return OWNewsletterUser::STATUS_BLACKLISTED;
+			default:
+				return false;
+		}
 	}
 
 	/**
