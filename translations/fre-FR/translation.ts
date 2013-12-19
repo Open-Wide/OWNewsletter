@@ -404,15 +404,15 @@
     </message>
     <message>
         <source>Confirmed</source>
-        <translation>Confirmée</translation>
+        <translation>Confirmé</translation>
     </message>
     <message>
         <source>Approved</source>
-        <translation>Approuvée</translation>
+        <translation>Approuvé</translation>
     </message>
     <message>
         <source>Removed</source>
-        <translation>Supprimée</translation>
+        <translation>Supprimé</translation>
     </message>
     <message>
         <source>n/a</source>
