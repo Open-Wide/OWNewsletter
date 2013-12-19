@@ -128,6 +128,10 @@
 <context>
     <name>newsletter/user</name>
     <message>
+        <source>All</source>
+        <translation>Tout</translation>
+    </message>
+    <message>
         <source>Manage users</source>
         <translation>Gérer les utilisateurs</translation>
     </message>
@@ -154,10 +158,6 @@
     <message>
         <source>UID</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Email</source>
-        <translation>Email</translation>
     </message>
     <message>
         <source>Email</source>
@@ -445,7 +445,7 @@
     </message>
     <message>
         <source>All</source>
-        <translation>All</translation>
+        <translation>Tout</translation>
     </message>
     <message>
         <source>No subscriber</source>

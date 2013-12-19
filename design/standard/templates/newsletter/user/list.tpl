@@ -206,11 +206,11 @@
 									<th>
 										{'Mailing lists'|i18n( 'newsletter/user' )}
 									</th>
-									<th title="{'Confirmed'|i18n( 'newsletter/user' )}">
-										{'Conf'|i18n( 'newsletter/user' )}
+									<th>
+										{'Confirmed'|i18n( 'newsletter/user' )}
 									</th>
-									<th title="{'Blacklisted'|i18n( 'newsletter/user' )}">
-										{'Black'|i18n( 'newsletter/user' )}
+									<th>
+										{'Blacklisted'|i18n( 'newsletter/user' )}
 									</th>
 									<th>
 										{'Bounce'|i18n( 'newsletter/user' )}
@@ -232,9 +232,9 @@
 										<td>
 											<a href={concat('newsletter/user/',$newsletter_user.id)|ezurl()} title="{$newsletter_user.first_name} {$newsletter_user.last_name}">{$newsletter_user.email|wash}</a>
 										</td>
-										<td title="{'Approved'|i18n( 'newsletter/user' )} / {'All'|i18n( 'newsletter/user' )}">
+										<td title="{'Approved'|i18n( 'newsletter/subscription/status' )} / {'All'|i18n( 'newsletter/user' )}">
 											{def $approved_subscribtion_count = 0
-                                     $subscription_array = $newsletter_user.subscription_array}
+												 $subscription_array = $newsletter_user.subscription_array}
 											{foreach $subscription_array as $subscription}
 												{if $subscription.status|eq( 2 )}
 													{set $approved_subscribtion_count = $approved_subscribtion_count|inc}
@@ -250,7 +250,7 @@
 										<td>
 											{cond($newsletter_user.blacklisted|gt(0),'x' , '-' )}
 										</td>
-										<td title="{'Bounced'|i18n( 'newsletter/user' )} / {'Bounce count'|i18n( 'newsletter/user' )}">
+										<td title="{'Bounced'|i18n( 'newsletter/subscription/status' )} / {'Bounce count'|i18n( 'newsletter/user' )}">
 											{cond($newsletter_user.bounced|gt(0),'x' , '-' )} / {$newsletter_user.bounce_count|wash}
 										</td>
 										<td title="{$newsletter_user.status|wash}">

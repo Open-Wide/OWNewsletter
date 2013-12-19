@@ -534,6 +534,25 @@ class OWNewsletterUser extends eZPersistentObject {
 	 * ********************** */
 
 	/**
+	 * Update subscription list
+	 * 
+	 * @param array $newSubscriptionList
+	 */
+	public function updateSubscriptionList( $newSubscriptionList, $context = 'default' ) {
+		$currentSubscriptionList = $this->attribute( 'subscription_array' );
+		foreach ( $newSubscriptionList as $newSubscription ) {
+			if ( $newSubscription['status'] > -1 ) {
+				$newSubscription['newsletter_user_id'] = $this->attribute( 'id' );
+				OWNewsletterSubscription::createOrUpdate( $newSubscription, $context );
+			}
+			unset( $currentSubscriptionList[$newSubscription['mailing_list_contentobject_id']] );
+		}
+		foreach ( $currentSubscriptionList as $currentSubscription ) {
+			$currentSubscription->remove();
+		}
+	}
+
+	/**
 	 * set modified to current timestamp and set current User Id
 	 * if first version use created as modified timestamp
 	 */
@@ -542,7 +561,7 @@ class OWNewsletterUser extends eZPersistentObject {
 			$this->setAttribute( 'modified', time() );
 			$this->setAttribute( 'modifier_contentobject_id', eZUser::currentUserID() );
 		}
-		// first version created = modified
+// first version created = modified
 		else {
 			$this->setAttribute( 'modified', $this->attribute( 'created' ) );
 			$this->setAttribute( 'modifier_contentobject_id', eZUser::currentUserID() );
@@ -556,7 +575,7 @@ class OWNewsletterUser extends eZPersistentObject {
 	 */
 	public function store( $fieldFilters = null ) {
 		$this->setModified();
-		// find and set ez_user_id
+// find and set ez_user_id
 		$this->findAndSetRelatedEzUserId();
 		parent::store( $fieldFilters );
 	}
@@ -567,7 +586,7 @@ class OWNewsletterUser extends eZPersistentObject {
 	 */
 	public function findAndSetRelatedEzUserId() {
 		$currentEzUserId = $this->attribute( 'ez_user_id' );
-		// if not set
+// if not set
 		if ( $currentEzUserId == 0 ) {
 			$email = $this->attribute( 'email' );
 			if ( $email != '' ) {
@@ -590,23 +609,9 @@ class OWNewsletterUser extends eZPersistentObject {
 	 * @see kernel/classes/eZPersistentObject#setAttribute($attr, $val)
 	 */
 	function setAttribute( $attr, $value ) {
-		// TODO check if modified should be update every time a attribute is set
-		// may be in store method better place to do this
+// TODO check if modified should be update every time a attribute is set
+// may be in store method better place to do this
 		switch ( $attr ) {
-			case 'email': {
-					$currentEmail = $this->attribute( 'email' );
-					$newEmail = $value;
-					if ( $currentEmail != $newEmail ) {
-						OWNewsletterLog::writeNotice( 'set new email OWNewsletterUser::setAttribute', 'user', 'email', array(
-							'nl_user' => $this->attribute( 'id' ),
-							'email_old' => $currentEmail,
-							'email_new' => $newEmail,
-							'status' => $this->attribute( 'status' ),
-							'modifier' => eZUser::currentUserID() )
-						);
-					}
-					return eZPersistentObject::setAttribute( $attr, $value );
-				} break;
 			case 'status': {
 					$currentTimeStamp = time();
 					switch ( $value ) {
@@ -678,7 +683,7 @@ class OWNewsletterUser extends eZPersistentObject {
 	 * @see kernel/classes/eZPersistentObject#remove($conditions, $extraConditions)
 	 */
 	function remove( $conditions = null, $extraConditions = null ) {
-		// remove subscriptions
+// remove subscriptions
 		$currentNewsletterSubscriptionObjects = $this->attribute( 'subscription_array' );
 
 		OWNewsletterLog::writeNotice( 'OWNewsletterUser::remove', 'user', 'remove', array(
@@ -720,6 +725,7 @@ class OWNewsletterUser extends eZPersistentObject {
 			'remote_id' => 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash( $email ),
 			'status' => self::STATUS_PENDING ), $dataArray );
 		$object = new self( $row );
+		$object->setAttribute( 'status', $row['status'] );
 		$object->store();
 		return $object;
 	}
@@ -738,7 +744,7 @@ class OWNewsletterUser extends eZPersistentObject {
 		$emailUser = self::fetchByEmail( $email );
 
 		if ( !$emailUser instanceof self ) {
-			// no user have this email => data are OK
+// no user have this email => data are OK
 			return true;
 		} else {
 			if ( isset( $dataArray['id'] ) ) {
@@ -764,7 +770,7 @@ class OWNewsletterUser extends eZPersistentObject {
 		$salutationMappingArray = $newsletterIni->variable( 'NewsletterUserSettings', 'SalutationMappingArray' );
 		$salutationNameArray = array();
 		foreach ( $salutationMappingArray as $salutationKey => $languageString ) {
-			// value_1
+// value_1
 			$salutationKeyExplode = explode( '_', $salutationKey );
 			if ( isSet( $salutationKeyExplode[1] ) ) {
 				$salutationId = (int) $salutationKeyExplode[1];

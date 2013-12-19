@@ -52,7 +52,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 				'status' => array(
 					'name' => 'Status',
 					'datatype' => 'integer',
-					'default' => 0,
+					'default' => self::STATUS_PENDING,
 					'required' => true ),
 				'creator_contentobject_id' => array(
 					'name' => 'CreatorContentObjectId',
@@ -111,6 +111,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 				'modifier' => 'getModifierUserObject',
 				'status_string' => 'getStatusString',
 			),
+			'set_functions' => array( 'status' => 'setStatus' ),
 			'keys' => array( 'id' ),
 			'increment_key' => 'id',
 			'sort' => array( 'id' => 'asc' ),
@@ -305,7 +306,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 		return eZPersistentObject::fetchObject( self::definition(), null, array(
 					'mailing_list_contentobject_id' => $mailingListContentObjectId,
 					'newsletter_user_id' => $newsletterUserId
-				), $asObject );
+						), $asObject );
 	}
 
 	/*	 * **********************
@@ -358,74 +359,69 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * (non-PHPdoc)
 	 * @see kernel/classes/eZPersistentObject#setAttribute($attr, $val)
 	 */
-	function setAttribute( $attr, $value ) {
-		switch ( $attr ) {
-			case 'status': {
-					// only update timestamp and status if status id is changed
-					if ( $this->attribute( 'status' ) == $value ) {
-						return;
-					}
+	function setStatus( $status ) {
+		var_dump( $status );
+		die();
+		// only update timestamp and status if status id is changed
+		if ( $this->attribute( 'status' ) == $status ) {
+			return;
+		}
 
-					$currentTimeStamp = time();
-					// set status timestamps
-					switch ( $value ) {
-						case self::STATUS_CONFIRMED : {
-								$this->setAttribute( 'removed', 0 );
-								$this->setAttribute( 'confirmed', $currentTimeStamp );
-								$newsletterListAttributeContent = $this->attribute( 'newsletter_list_attribute_content' );
+		$currentTimeStamp = time();
+		// set status timestamps
+		switch ( $status ) {
+			case self::STATUS_CONFIRMED : {
+					$this->setAttribute( 'removed', 0 );
+					$this->setAttribute( 'confirmed', $currentTimeStamp );
+					$newsletterListAttributeContent = $this->attribute( 'newsletter_list_attribute_content' );
 
-								// set approve automatically if defined in list config
-								if ( is_object( $newsletterListAttributeContent ) and (int) $newsletterListAttributeContent->attribute( 'auto_approve_registered_user' ) == 1 ) {
-									$this->setAttribute( 'approved', $currentTimeStamp );
-									$value = self::STATUS_APPROVED;
-								} else {
-									// if subscription status is changed from approved to confirmed the approved timestamp should be removed
-									$this->setAttribute( 'approved', 0 );
-								}
-							} break;
-
-						case self::STATUS_APPROVED: {
-								$this->setAttribute( 'approved', $currentTimeStamp );
-								$this->setAttribute( 'removed', 0 );
-							} break;
-
-						case self::STATUS_REMOVED_ADMIN:
-						case self::STATUS_REMOVED_SELF: {
-								$this->setAttribute( 'removed', $currentTimeStamp );
-							} break;
-					}
-					$this->setAttribute( 'modified', $currentTimeStamp );
-
-					$statusOld = $this->attribute( 'status' );
-					$statusNew = $value;
-
-					if ( $statusOld != $statusNew ) {
-
-						OWNewsletterLog::writeNotice(
-								'OWNewsletterSubscription::setAttribute', 'subscription', 'status', array(
-							'status_old' => $statusOld,
-							'status_new' => $statusNew,
-							'subscription_id' => $this->attribute( 'id' ),
-							'list_id' => $this->attribute( 'mailing_list_contentobject_id' ),
-							'nl_user' => $this->attribute( 'newsletter_user_id' ),
-							'modifier' => eZUser::currentUserID() ) );
+					// set approve automatically if defined in list config
+					if ( is_object( $newsletterListAttributeContent ) and (int) $newsletterListAttributeContent->attribute( 'auto_approve_registered_user' ) == 1 ) {
+						$this->setAttribute( 'approved', $currentTimeStamp );
+						$value = self::STATUS_APPROVED;
 					} else {
-						OWNewsletterLog::writeDebug(
-								'OWNewsletterSubscription::setAttribute', 'subscription', 'status', array(
-							'status_old' => $statusOld,
-							'status_new' => $statusNew,
-							'subscription_id' => $this->attribute( 'id' ),
-							'list_id' => $this->attribute( 'mailing_list_contentobject_id' ),
-							'nl_user' => $this->attribute( 'newsletter_user_id' ),
-							'modifier' => eZUser::currentUserID() ) );
+						// if subscription status is changed from approved to confirmed the approved timestamp should be removed
+						$this->setAttribute( 'approved', 0 );
 					}
-
-					eZPersistentObject::setAttribute( $attr, $value );
 				} break;
-			default: {
-					eZPersistentObject::setAttribute( $attr, $value );
+
+			case self::STATUS_APPROVED: {
+					$this->setAttribute( 'approved', $currentTimeStamp );
+					$this->setAttribute( 'removed', 0 );
+				} break;
+
+			case self::STATUS_REMOVED_ADMIN:
+			case self::STATUS_REMOVED_SELF: {
+					$this->setAttribute( 'removed', $currentTimeStamp );
 				} break;
 		}
+		$this->setAttribute( 'modified', $currentTimeStamp );
+
+		$statusOld = $this->attribute( 'status' );
+		$statusNew = $value;
+
+		if ( $statusOld != $statusNew ) {
+
+			OWNewsletterLog::writeNotice(
+					'OWNewsletterSubscription::setAttribute', 'subscription', 'status', array(
+				'status_old' => $statusOld,
+				'status_new' => $statusNew,
+				'subscription_id' => $this->attribute( 'id' ),
+				'list_id' => $this->attribute( 'mailing_list_contentobject_id' ),
+				'nl_user' => $this->attribute( 'newsletter_user_id' ),
+				'modifier' => eZUser::currentUserID() ) );
+		} else {
+			OWNewsletterLog::writeDebug(
+					'OWNewsletterSubscription::setAttribute', 'subscription', 'status', array(
+				'status_old' => $statusOld,
+				'status_new' => $statusNew,
+				'subscription_id' => $this->attribute( 'id' ),
+				'list_id' => $this->attribute( 'mailing_list_contentobject_id' ),
+				'nl_user' => $this->attribute( 'newsletter_user_id' ),
+				'modifier' => eZUser::currentUserID() ) );
+		}
+
+		eZPersistentObject::setAttribute( $attr, $value );
 	}
 
 	/*	 * **********************
@@ -439,172 +435,34 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * @param unknown_type $status
 	 * @return object
 	 */
-	static function create( $mailingListContentObjectId, $newsletterUserId, $status = self::STATUS_PENDING, $context = 'default' ) {
-		$rows = array(
+	static function createOrUpdate( $dataArray, $context = 'default' ) {
+		self::validateSubscriptionData( $dataArray );
+		$newsletterUserId = $dataArray['newsletter_user_id'];
+		$rows = array_merge( array(
 			'created' => time(),
-			'mailing_list_contentobject_id' => $mailingListContentObjectId,
-			'newsletter_user_id' => $newsletterUserId,
 			'creator_contentobject_id' => eZUser::currentUserID(),
 			'hash' => OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ),
-			'remote_id' => 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ),
-			'status' => 0 );
-
+			'remote_id' => 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ) ), $dataArray );
 		$object = new OWNewsletterSubscription( $rows );
-		// set status again so automatic status change is working
-		$object->setAttribute( 'status', $status );
+		if ( isset( $rows['status'] ) ) {
+			$object->setAttribute( 'status', $rows['status'] );
+		}
+		$object->store();
 		return $object;
 	}
 
 	/**
-	 * Synchronous registration / deregistration for several lists with an array
-	 * if id_array has more elements than list_array, than is a deregistration defined
-	 * the difference of id_array and list_array means that these elements shouldn't
-	 * has subscriptions
-	 *
-	 * $subscriptionDataArr = array();
-	 * $subscriptionDataArr['ez_user_id']
-	 * $subscriptionDataArr['salutation']
-	 * $subscriptionDataArr['first_name'] = $http->postVariable( 'Subscription[first_name]' );
-	 * $subscriptionDataArr['name'] = $http->postVariable( 'Subscription[last_name]' );
-	 * $subscriptionDataArr['organisation'] = $http->postVariable( 'Subscription[organisation]' );
-	 * $subscriptionDataArr['email'] = $http->postVariable( 'Subscription[email]' );
-	 * $subscriptionDataArr['note'] = $http->postVariable( 'Subscription[note]' );
-	 *
-	 * $subscriptionDataArr['id_array'] = $http->postVariable( 'Subscription[id_array]' );
-	 * $subscriptionDataArr['mailing_list_array'] = $http->postVariable( 'Subscription[mailing_list_array]' );
-	 *
-	 * @param array $subscriptionDataArr
-	 * @param $newNewsletterUserStatus status for new created nl users e.g. OWNewsletterUser::STATUS_PENDING
-	 * @param $subscribeOnlyMode if true than no subscription will be removed used if subscription is done as ez_user
-	 * @param $context subscribe | configure | user_edit | datatype_edit | datatype_collect | csvimport from which context the function is called
-	 * @return array
+	 * Check if the data passed to create or update a subscription are correct
+	 * 
+	 * @param array $dataArray
+	 * @throw InvalidArgumentException
 	 */
-	static function createSubscriptionByArray( $subscriptionDataArr, $newNewsletterUserStatus = OWNewsletterUser::STATUS_PENDING, $subscribeOnlyMode = false, $context = 'default' ) {
-		$resultArray = array();
-		$resultArray['list_subscribe'] = array();
-		$resultArray['list_remove'] = array();
-		$resultArray['errors'] = array();
-
-		if ( empty( $subscriptionDataArr['email'] ) ) {
-			return $resultArray['errors'] = "Email is empty";
+	public static function validateSubscriptionData( $dataArray ) {
+		if ( !isset( $dataArray['newsletter_user_id'] ) || empty( $dataArray['newsletter_user_id'] ) ) {
+			throw new InvalidArgumentException( 'User ID is missing' );
 		}
-		$email = $subscriptionDataArr['email'];
-		if ( isset( $subscriptionDataArr['salutation'] ) ) {
-			$salutation = $subscriptionDataArr['salutation'];
-		} else {
-			$salutation = null;
-		}
-
-		$firstName = $subscriptionDataArr['first_name'];
-		$lastName = $subscriptionDataArr['last_name'];
-		$organisation = $subscriptionDataArr['organisation'];
-		$eZUserId = isset( $subscriptionDataArr['ez_user_id'] ) ? (int) $subscriptionDataArr['ez_user_id'] : 0;
-
-		// TODO return here the nl user object for update + status
-		$checkResult = OWNewsletterUser::checkIfUserCanBeUpdated( $email, $eZUserId, $updateNewEmail = true );
-		switch ( $checkResult ) {
-			// create new user
-			case 40:
-				break;
-			// update user
-			case 41:
-				break;
-			// update user with new mail
-			case 42:
-
-				break;
-			case -20:
-			case -1:
-				if ( $context == 'subscribe' ) {
-					eZDebug::writeDebug( "checkResult[$checkResult] - OWNewsletterSubscription::createSubscriptionByArray return false because email already exists" );
-					// break because a newsletter user with email exists
-					return false;
-				}
-				break;
-		}
-
-		$idArray = $subscriptionDataArr['id_array'];
-		$mailingListArray = $subscriptionDataArr['mailing_list_array'];
-
-		$newsletterUserObject = OWNewsletterUser::createUpdateNewsletterUser( $email, $salutation, $firstName, $lastName, $organisation, $eZUserId, (int) $newNewsletterUserStatus, $context );
-		$newsletterUserObject->setAttribute( 'note', $subscriptionDataArr['note'] );
-
-		$resultArray['newsletter_user_object'] = $newsletterUserObject;
-
-		if ( is_object( $newsletterUserObject ) === false ) {
-			return $resultArray['errors'] = "Can not create new newsletter user with $email";
-		}
-
-		$newsletterUserId = $newsletterUserObject->attribute( 'id' );
-
-		// list_subscribe
-		foreach ( $idArray as $listId ) {
-			$status = isset( $subscriptionDataArr['status_id'][$listId] ) ? (int) $subscriptionDataArr['status_id'][$listId] : self::STATUS_PENDING;
-			$dryRun = false;
-			$resultArray['list_subscribe'][$listId] = self::createUpdateNewsletterSubscription( $listId, $newsletterUserId, $status, $dryRun, $context );
-		}
-
-		if ( $subscribeOnlyMode === false ) {
-			$listRemoveArray = array_diff( $idArray, $mailingListArray );
-			// list_remove by user self
-			foreach ( $listRemoveArray as $listId ) {
-				$resultArray['list_remove'][$listId] = self::removeSubscriptionByNewsletterUserSelf( $listId, $newsletterUserId );
-			}
-		}
-		return $resultArray;
-	}
-
-	/**
-	 * create / update subscription
-	 * return newsletter_user_object
-	 *
-	 * @param integer $mailingListContentObjectId
-	 * @param integer $newsletterUserId
-	 * @param integer $status
-	 * @param integer $dryRun if true changes will be not stored to db usefull for test runs @see user_edit
-	 * @return object
-	 */
-	static function createUpdateNewsletterSubscription( $mailingListContentObjectId, $newsletterUserId, $status = self::STATUS_PENDING, $dryRun = false, $context = 'default' ) {
-		$existingSubscriptionObject = self::fetchByMailingListIdAndNewsletterUserId( $mailingListContentObjectId, $newsletterUserId );
-		$newsletterUser = OWNewsletterUser::fetch( $newsletterUserId );
-
-		// if nl user status is confirmed set all nl subscription with status pending to confirmed
-		if ( is_object( $newsletterUser ) && (int) $newsletterUser->attribute( 'status' ) == OWNewsletterUser::STATUS_CONFIRMED && $status == self::STATUS_PENDING ) {
-			$status = self::STATUS_CONFIRMED;
-		}
-
-		// update existing
-		if ( is_object( $existingSubscriptionObject ) ) {
-
-			if ( $context == 'configure' ) {
-				// if nl list autoapprove is disabled + admin has approved the nl subscription
-				// + the nl subscription should be get status approved when update confirmstatus,
-				if ( $existingSubscriptionObject->attribute( 'status' ) == self::STATUS_APPROVED ) {
-					// set confirmed timestamp if emty - could be possible if admin has approved subscription before user has confirm his email address
-					if ( $existingSubscriptionObject->attribute( 'confirmed' ) == 0 ) {
-						$existingSubscriptionObject->setAttribute( 'confirmed', time() );
-					}
-					// else nothing
-				} else {
-					$existingSubscriptionObject->setAttribute( 'status', $status );
-				}
-			} else {
-				$existingSubscriptionObject->setAttribute( 'status', $status );
-			}
-
-			if ( $dryRun === false ) {
-				$existingSubscriptionObject->sync();
-			}
-
-			return $existingSubscriptionObject;
-		}
-		// create new object
-		else {
-			$object = self::create( $mailingListContentObjectId, $newsletterUserId, $status, $context );
-			if ( $dryRun === false ) {
-				$object->store();
-			}
-			return $object;
+		if ( !isset( $dataArray['mailing_list_contentobject_id'] ) || empty( $dataArray['mailing_list_contentobject_id'] ) ) {
+			throw new InvalidArgumentException( 'Mailing list ID is missing' );
 		}
 	}
 

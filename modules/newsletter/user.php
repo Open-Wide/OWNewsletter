@@ -171,6 +171,7 @@ $newsletterUserRow = array(
 	'email' => '',
 	'salutation' => '',
 	'note' => '',
+	'status' => OWNewsletterUser::STATUS_CONFIRMED,
 	'id_array' => array(),
 	'mailing_list_array' => array()
 );
@@ -190,24 +191,19 @@ if ( $module->hasActionParameter( 'NewsletterUser' ) ) { /* Submit a newsletter 
 				$newsletterUserRow[$data] = trim( $value );
 				break;
 			case 'note' :
-			case 'mailing_list_array':
+			case 'subscription_list':
 				$newsletterUserRow[$data] = $value;
 				break;
 		}
 	}
-	foreach ( $newsletterUserData['id_array'] as $listId ) {
-		if ( isset( $newsletterUserData["status_id_$listId"] ) && $newsletterUserData["status_id_$listId"] > 0 ) {
-			$newsletterUserRow['id_array'][] = $listId;
-			$newsletterUserRow['status_id'][$listId] = $newsletterUserData["status_id_$listId"];
-		}
-	}
 	try {
 		$newsletterUserObject = OWNewsletterUser::createOrUpdate( $newsletterUserRow, 'user_edit' );
-		if ( $newsletterUserObject instanceof OWNewsletterUser ) {
-			$tpl->setVariable( 'subscription_array', $newsletterUserObject->attribute( 'subscription_array' ) );
-		}
+		$newsletterUserObject->updateSubscriptionList( $newsletterUserRow['subscription_list'], 'user_edit' );
 	} catch ( Exception $e ) {
 		$error = $e->getMessage();
+	}
+	if ( $newsletterUserObject instanceof OWNewsletterUser ) {
+		$tpl->setVariable( 'subscription_array', $newsletterUserObject->attribute( 'subscription_array' ) );
 	}
 	if ( isset( $error ) ) {
 		$tpl->setVariable( 'warning_array', array( $error ) );

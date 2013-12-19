@@ -163,11 +163,10 @@
                                                 <div class="newsletter-system-design">
                                                     <h2>{$system_node.data_map.title.content|wash}</h2>
                                                     <table border="0" width="100%" class="list">
-														{foreach $mailing_list_node_list as $mailing_list_node sequence array( bglight, bgdark ) as $style}
+														{foreach $mailing_list_node_list as $index => $mailing_list_node sequence array( bglight, bgdark ) as $style}
 															<tr class="{$style}">
 																{def $mailing_list_id = $mailing_list_node.contentobject_id
 																	$list_content = $mailing_list_node.data_map.newsletter_list.content
-																	$subscription_array = $newsletter_user_subscription_array
 																	$created = 0
 																	$confirmed = 0
 																	$approved = 0
@@ -191,11 +190,11 @@
 																		$status_id_array_enabled = $status_id_array_enabled|append( $status )|unique}
 																{/if}
 																<td width="300">
-																	<input type="hidden" name="NewsletterUser[id_array][]" value="{$mailing_list_id}" title="" />
-																	<input type="checkbox" name="NewsletterUser[mailing_list_array][]" value="{$mailing_list_id}"{if and( $is_removed|not , is_set( $subscription_array[ $mailing_list_id ] ) )} checked="checked"{/if} title="{$mailing_list_node.data_map.title.content|wash}" disabled="disabled" /> {$mailing_list_node.data_map.title.content|wash}
+																	<input type="hidden" name="NewsletterUser[subscription_list][{$index}][mailing_list_contentobject_id]" value="{$mailing_list_id}" title="" />
+																	{$mailing_list_node.data_map.title.content|wash}
 																</td>
 																<td>
-																	<select name="NewsletterUser[status_id_{$mailing_list_id}]">
+																	<select name="NewsletterUser[subscription_list][{$index}][status]">
 																		{if $status|eq(-1)}<option value="-1">-</option>{/if}
 																		{def $status_already_selected = false()}
 																		{foreach $available_subscription_status_list as $status_id => $status_name}
