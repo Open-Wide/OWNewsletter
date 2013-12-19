@@ -24,14 +24,18 @@ $ViewList['user'] = array(
 	'ui_context' => 'admin',
 	'params' => array( 'newsletterUserID' ),
 	'single_post_actions' => array(
-		'SubmitNewsletterUserButton' => 'SubmitNewsletterUser'
+		'SubmitNewsletterUserButton' => 'SubmitNewsletterUser',
+		'RemoveNewsletterUserButton' => 'RemoveNewsletterUser'
 	),
 	 'post_action_parameters' => array(
 		 'SubmitNewsletterUser'=> array(
 			 'NewsletterUser' => 'NewsletterUser',
 			 'CancelButton' => 'Cancel',
 			 'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
-			 'RedirectUrlActionStore' => 'RedirectUrlActionStore'
+			 'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		 ),
+		 'RemoveNewsletterUser'=> array(
+			 'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
 		 )
 	)
 );

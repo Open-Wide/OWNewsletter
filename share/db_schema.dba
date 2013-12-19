@@ -2,6 +2,67 @@
 
 // This array contains the database schema
 $schema = array(
+	'ownl_blacklist_item' =>
+	array(
+		'name' => 'ownl_blacklist_item',
+		'fields' =>
+		array(
+			'id' =>
+			array(
+				'type' => 'auto_increment',
+				'default' => false,
+			),
+			'email_hash' =>
+			array(
+				'length' => 255,
+				'type' => 'varchar',
+				'default' => NULL,
+			),
+			'email' =>
+			array(
+				'length' => 255,
+				'type' => 'varchar',
+				'default' => NULL,
+			),
+			'newsletter_user_id' =>
+			array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => 0,
+			),
+			'created' =>
+			array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+			'creator_contentobject_id' =>
+			array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+			'note' =>
+			array(
+				'type' => 'text',
+				'default' => false,
+			),
+		),
+		'indexes' =>
+		array(
+			'PRIMARY' =>
+			array(
+				'type' => 'primary',
+				'fields' => array( 'id' ),
+			),
+			'newsletter_user_id' =>
+			array(
+				'type' => 'non-unique',
+				'fields' => array( 'newsletter_user_id' ),
+			),
+		),
+	),
 	'ownl_subscription' =>
 	array(
 		'name' => 'ownl_subscription',

@@ -21,7 +21,7 @@ $tpl = eZTemplate::factory();
 
   $warningArr = array();
 
-  $redirectUrlCancel = $redirectUrlStore = 'newsletter/user_list';
+  $redirectUrlCancel = $redirectUrlSuccess = 'newsletter/user_list';
 
   if ( $http->hasVariable( 'RedirectUrlActionCancel' ) ) {
   $redirectUrlCancel = $http->variable( 'RedirectUrlActionCancel' );
@@ -29,10 +29,10 @@ $tpl = eZTemplate::factory();
   $redirectUrlCancel = $http->variable( 'RedirectUrl' );
   }
 
-  if ( $http->hasVariable( 'RedirectUrlActionStore' ) ) {
-  $redirectUrlStore = $http->variable( 'RedirectUrlActionStore' );
+  if ( $http->hasVariable( 'RedirectUrlActionSuccess' ) ) {
+  $redirectUrlSuccess = $http->variable( 'RedirectUrlActionSuccess' );
   } elseif ( $http->hasVariable( 'RedirectUrl' ) ) {
-  $redirectUrlStore = $http->variable( 'RedirectUrl' );
+  $redirectUrlSuccess = $http->variable( 'RedirectUrl' );
   }
 
 
@@ -131,7 +131,7 @@ $tpl = eZTemplate::factory();
 
 
   $tpl->setVariable( 'redirect_url_action_cancel', $redirectUrlCancel );
-  $tpl->setVariable( 'redirect_url_action_store', $redirectUrlStore );
+  $tpl->setVariable( 'redirect_url_action_success', $redirectUrlSuccess );
   $tpl->setVariable( 'subscription_data', $subscriptionDataArr );
  */
 
@@ -152,16 +152,16 @@ $Result['path'] = array(
 		'url' => 'newsletter/user',
 		'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Users' ) ) );
 
-/* Retrieval of cancal and store redirect URLs */
-$redirectUrlCancel = $redirectUrlStore = 'newsletter/user';
+/* Retrieval of cancal and success redirect URLs */
+$redirectUrlCancel = $redirectUrlSuccess = 'newsletter/user';
 if ( $module->hasActionParameter( 'RedirectUrlActionCancel' ) ) {
 	$redirectUrlCancel = $module->actionParameter( 'RedirectUrlActionCancel' );
 }
-if ( $module->hasActionParameter( 'RedirectUrlActionStore' ) ) {
-	$redirectUrlStore = $module->actionParameter( 'RedirectUrlActionStore' );
+if ( $module->hasActionParameter( 'RedirectUrlActionSuccess' ) ) {
+	$redirectUrlSuccess = $module->actionParameter( 'RedirectUrlActionSuccess' );
 }
 $tpl->setVariable( 'redirect_url_action_cancel', $redirectUrlCancel );
-$tpl->setVariable( 'redirect_url_action_store', $redirectUrlStore );
+$tpl->setVariable( 'redirect_url_action_success', $redirectUrlSuccess );
 
 /* If press Cancel button */
 if ( $module->hasActionParameter( 'Cancel' ) ) {
@@ -215,7 +215,7 @@ if ( $module->hasActionParameter( 'NewsletterUser' ) ) {
 	if ( isset( $error ) ) {
 		$tpl->setVariable( 'warning_array', array( $error ) );
 	} else {
-		$module->redirectTo( $redirectUrlStore );
+		$module->redirectTo( $redirectUrlSuccess );
 	}
 }
 /* If press SubmitNewsletterUser button to access or validate form */
@@ -232,6 +232,9 @@ if ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) {
 	}
 	$tpl->setVariable( 'available_salutation_array', OWNewsletterUser::getAvailablesSalutationsFromIni() );
 	$Result['content'] = $tpl->fetch( 'design:newsletter/user/form.tpl' );
+} elseif ( $module->isCurrentAction( 'RemoveNewsletterUser' ) && isset( $newsletterUser ) ) { /* remove user */
+	$newsletterUser->remove();
+	$module->redirectTo( $redirectUrlSuccess );
 } elseif ( isset( $newsletterUser ) ) { /* show user */
 	$tpl->setVariable( 'newsletter_user', $newsletterUser );
 	$Result['path'][] = array(

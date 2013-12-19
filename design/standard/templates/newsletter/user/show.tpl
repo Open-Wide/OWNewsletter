@@ -162,26 +162,25 @@
 											{if $newsletter_user.status|ne(8)}
 												<form id="submit_newsletter_user" method="post" style="display:inline;" action={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()}>
 													<input type="hidden" name="RedirectUrlActionCancel" value={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()} />
-													<input type="hidden" name="RedirectUrlActionStore" value={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()} />
+													<input type="hidden" name="RedirectUrlActionSuccess" value={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()} />
 													<input class="button" type="submit" name="SubmitNewsletterUserButton" value={'Edit'|i18n( 'newsletter/user' )} />
 												</form>
 											{else}
 												<input class="button-disabled" type="submit" value="{'Edit'|i18n( 'newsletter/user' )}" title="{'Edit'|i18n( 'newsletter/user' )}" />
 											{/if}
-											<form id="delete_newsletter_user" method="post" style="display:inline;" action={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()}>
+											<form id="delete_newsletter_user" method="post" style="display:inline;" action={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()}  onsubmit="return confirm('{'Do you really want to delete this user?'|i18n( 'newsletter/user' )|wash()}');">
 												<input type="hidden" name="RedirectUrlActionRemove" value={'newsletter/user'|ezurl()} />
-												<input type="hidden" name="RedirectUrlActionStore" value={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()} />
 												<input class="button" type="submit" name="RemoveNewsletterUserButton" value={'Remove'|i18n( 'newsletter/user' )} />
 											</form>
 											{if $newsletter_user.status|ne(8)}
 												<form id="blacklist_newsletter_user" method="post" style="display:inline;" action={'newsletter/blacklist_item_add'|ezurl}>
 													<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />
-													<input class="button" type="submit" name="BlacklistNewsletterUserButton" value="{'Add to blacklist'|i18n( 'newsletter/user' )}" title="{'Add to blacklist'|i18n( 'newsletter/user' )}" />
+													<input class="button" type="submit" name="BlacklistNewsletterUserButton" value="{'Add to blacklist'|i18n( 'newsletter/user' )}" />
 												</form>
 											{else}
 												<form id="unblacklist_newsletter_user" method="post" style="display:inline;" action={'newsletter/blacklist_item_remove'|ezurl}>
 													<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />
-													<input class="button" type="submit" name="UnblacklistNewsletterUserButton" value="{'Remove from blacklist'|i18n( 'newsletter/user' )}" title="{'Remove from blacklist'|i18n( 'newsletter/user' )}" />
+													<input class="button" type="submit" name="UnblacklistNewsletterUserButton" value="{'Remove from blacklist'|i18n( 'newsletter/user' )}" />
 												</form>
 											{/if}
 

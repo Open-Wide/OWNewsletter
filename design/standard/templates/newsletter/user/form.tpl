@@ -21,7 +21,7 @@
 
 	<form action={concat( 'newsletter/user/', $newsletter_user.id )|ezurl()} method="post">
 		<input type="hidden" name="RedirectUrlActionCancel" value="{$redirect_url_action_cancel}" />
-		<input type="hidden" name="RedirectUrlActionStore" value="{$redirect_url_action_store}" />
+		<input type="hidden" name="RedirectUrlActionSuccess" value="{$redirect_url_action_success}" />
 		<div class="context-block">
 			<div class="box-header">
 				<div class="box-tc">

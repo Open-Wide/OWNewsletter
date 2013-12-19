@@ -375,6 +375,10 @@
         <source>User</source>
         <translation type="obsolete">Utilisateur</translation>
     </message>
+    <message>
+        <source>Do you really want to delete this user?</source>
+        <translation>Voulez-vous vraiment supprimer cet utilisateur ?</translation>
+    </message>
 </context>
 <context>
 	<name>newsletter/subscription</name>

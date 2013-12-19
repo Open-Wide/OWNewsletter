@@ -4,7 +4,7 @@
 			<input type="hidden" name="Subscription_IdArray[]" value="{$node.contentobject_id}" />
 			<input type="hidden" name="Subscription_ListArray[]" value="{$node.contentobject_id}" />
 			<input type="hidden" name="RedirectUrlActionCancel" value="{$node.url_alias}" />
-			<input type="hidden" name="RedirectUrlActionStore" value="{$node.url_alias}" />
+			<input type="hidden" name="RedirectUrlActionSuccess" value="{$node.url_alias}" />
 			<input class="button" type="submit" name="NewSubscriptionButton" value="{'Create new subscription'|i18n( 'design/admin/node/view/full' )}" />
 		</form>
 	</div>
