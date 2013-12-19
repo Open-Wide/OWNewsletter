@@ -173,14 +173,14 @@
 												<input class="button" type="submit" name="RemoveNewsletterUserButton" value={'Remove'|i18n( 'newsletter/user' )} />
 											</form>
 											{if $newsletter_user.status|ne(8)}
-												<form id="blacklist_newsletter_user" method="post" style="display:inline;" action={'newsletter/blacklist_item_add'|ezurl}>
+												<form id="blacklist_newsletter_user" method="post" style="display:inline;" action={'newsletter/blacklist'|ezurl}>
 													<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />
-													<input class="button" type="submit" name="BlacklistNewsletterUserButton" value="{'Add to blacklist'|i18n( 'newsletter/user' )}" />
+													<input disabled="disabled" class="button" type="submit" name="AddToBlacklistButton" value="{'Add to blacklist'|i18n( 'newsletter/user' )}" />
 												</form>
 											{else}
-												<form id="unblacklist_newsletter_user" method="post" style="display:inline;" action={'newsletter/blacklist_item_remove'|ezurl}>
+												<form id="unblacklist_newsletter_user" method="post" style="display:inline;" action={'newsletter/blacklist'|ezurl}>
 													<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />
-													<input class="button" type="submit" name="UnblacklistNewsletterUserButton" value="{'Remove from blacklist'|i18n( 'newsletter/user' )}" />
+													<input disabled="disabled" class="button" type="submit" name="RemoveFromBlacklistButton" value="{'Remove from blacklist'|i18n( 'newsletter/user' )}" />
 												</form>
 											{/if}
 
