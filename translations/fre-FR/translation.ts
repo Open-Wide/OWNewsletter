@@ -24,6 +24,10 @@
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
+    <message>
+        <source>Edit</source>
+        <translation>Modifier</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/menu</name>
@@ -132,6 +136,10 @@
 <context>
     <name>newsletter/user</name>
     <message>
+        <source>Newsletter user id</source>
+        <translation>Souscripteur ID</translation>
+    </message>
+    <message>
         <source>All</source>
         <translation>Tout</translation>
     </message>
@@ -188,6 +196,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Bounced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Bounce</source>
         <translation type="unfinished"></translation>
     </message>
@@ -229,7 +241,7 @@
     </message>
     <message>
         <source>Salutation</source>
-        <translation>Titre</translation>
+        <translation>Civilité</translation>
     </message>
     <message>
         <source>First name</source>
@@ -316,6 +328,10 @@
         <translation>Supprimé</translation>
     </message>
     <message>
+        <source>Confirmed</source>
+        <translation>Confirmé</translation>
+    </message>
+    <message>
         <source>Edit by admin</source>
         <translation>Editer par admin</translation>
     </message>
@@ -337,7 +353,7 @@
     </message>
     <message>
         <source>Newsletter subscriptions</source>
-        <translation type="unfinished"></translation>
+        <translation>Adhésions</translation>
     </message>
     <message>
         <source>Newsletter received</source>
@@ -358,6 +374,45 @@
     <message>
         <source>User</source>
         <translation type="obsolete">Utilisateur</translation>
+    </message>
+</context>
+<context>
+	<name>newsletter/subscription</name>
+    <message>
+        <source>Id</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <source>Mailing list</source>
+        <translation>Lsite de diffusion</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Statut</translation>
+    </message>
+    <message>
+        <source>Created</source>
+        <translation>Créé</translation>
+    </message>
+    <message>
+        <source>Modified</source>
+        <translation>Modifié</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Confirmée</translation>
+    </message>
+    <message>
+        <source>Approved</source>
+        <translation>Approuvée</translation>
+    </message>
+    <message>
+        <source>Removed</source>
+        <translation>Supprimée</translation>
+    </message>
+    <message>
+        <source>n/a</source>
+        <translation>n/a</translation>
     </message>
 </context>
 <context>

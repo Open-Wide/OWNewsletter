@@ -135,12 +135,14 @@ $tpl = eZTemplate::factory();
   $tpl->setVariable( 'subscription_data', $subscriptionDataArr );
  */
 
+/* Get views parameters */
 $viewParameters = array( 'status' => FALSE, 'offset' => 0 );
 if ( is_array( $Params['UserParameters'] ) ) {
 	$viewParameters = array_merge( $viewParameters, $Params['UserParameters'] );
 }
 $tpl->setVariable( 'view_parameters', $viewParameters );
 
+/* Initilize module result */
 $Result = array();
 $Result['path'] = array(
 	array(
@@ -150,6 +152,7 @@ $Result['path'] = array(
 		'url' => 'newsletter/user',
 		'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Users' ) ) );
 
+/* Retrieval of cancal and store redirect URLs */
 $redirectUrlCancel = $redirectUrlStore = 'newsletter/user';
 if ( $module->hasActionParameter( 'RedirectUrlActionCancel' ) ) {
 	$redirectUrlCancel = $module->actionParameter( 'RedirectUrlActionCancel' );
@@ -160,10 +163,12 @@ if ( $module->hasActionParameter( 'RedirectUrlActionStore' ) ) {
 $tpl->setVariable( 'redirect_url_action_cancel', $redirectUrlCancel );
 $tpl->setVariable( 'redirect_url_action_store', $redirectUrlStore );
 
-if ( $module->hasActionParameter( 'Cancel' ) ) { /* Press Cancel button */
+/* If press Cancel button */
+if ( $module->hasActionParameter( 'Cancel' ) ) {
 	$module->redirectTo( $redirectUrlCancel );
 }
 
+/* Initilize newsletter user row data */
 $newsletterUserRow = array(
 	'first_name' => '',
 	'last_name' => '',
@@ -175,11 +180,13 @@ $newsletterUserRow = array(
 	'id_array' => array(),
 	'mailing_list_array' => array()
 );
-if ( $Params['newsletterUserID'] ) {
+if ( $Params['newsletterUserID'] && is_numeric( $Params['newsletterUserID'] ) ) {
+	$newsletterUser = OWNewsletterUser::fetch( $Params['newsletterUserID'] );
 	$newsletterUserRow['id'] = $Params['newsletterUserID'];
 }
 
-if ( $module->hasActionParameter( 'NewsletterUser' ) ) { /* Submit a newsletter user */
+/* If submit a newsletter user form (new or edit) */
+if ( $module->hasActionParameter( 'NewsletterUser' ) ) {
 	$newsletterUserData = $module->actionParameter( 'NewsletterUser' );
 	foreach ( $newsletterUserData as $data => $value ) {
 		switch ( $data ) {
@@ -211,22 +218,26 @@ if ( $module->hasActionParameter( 'NewsletterUser' ) ) { /* Submit a newsletter 
 		$module->redirectTo( $redirectUrlStore );
 	}
 }
-if ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) { /* Press new ou edit subscriber button */
-	if ( is_numeric( $Params['newsletterUserID'] ) ) {
-		$newsletterUserID = $Params['newsletterUserID'];
-		$newsletterUser = OWNewsletterUser::fetch( $newsletterUserID );
+/* If press SubmitNewsletterUser button to access or validate form */
+if ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) {
+	if ( isset( $newsletterUser ) ) { /* edit user */
 		$tpl->setVariable( 'newsletter_user', $newsletterUser );
 		$tpl->setVariable( 'subscription_array', $newsletterUser->attribute( 'subscription_array' ) );
 		$Result['path'][] = array(
 			'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Edit' ) );
-	} else {
+	} else { /* new user */
 		$tpl->setVariable( 'newsletter_user', $newsletterUserRow );
 		$Result['path'][] = array(
 			'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'New' ) );
 	}
 	$tpl->setVariable( 'available_salutation_array', OWNewsletterUser::getAvailablesSalutationsFromIni() );
 	$Result['content'] = $tpl->fetch( 'design:newsletter/user/form.tpl' );
-} else {
+} elseif ( isset( $newsletterUser ) ) { /* show user */
+	$tpl->setVariable( 'newsletter_user', $newsletterUser );
+	$Result['path'][] = array(
+		'text' => $newsletterUser->attribute( 'name' ) );
+	$Result['content'] = $tpl->fetch( 'design:newsletter/user/show.tpl' );
+} else { /* all other case : list users */
 	$Result['content'] = $tpl->fetch( 'design:newsletter/user/list.tpl' );
 }
 
