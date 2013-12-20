@@ -10,6 +10,9 @@
      $can_copy     = false()
      $current_path = first_set( $node.path_array[1], 1 )
      $admin_children_viewmode = ezpreference( 'admin_children_viewmode' )
+     $all_children_count = fetch( 'newsletter', 'subscription_count', hash(
+			'mailing_list_contentobject_id', $node.contentobject_id
+		) )
      $children_count = fetch( 'newsletter', 'subscription_count', hash(
 			'mailing_list_contentobject_id', $node.contentobject_id,
 			'subscription_status', $view_parameters.status
@@ -29,7 +32,7 @@
 			<h2 class="context-title">
 				<a href={$node.depth|gt(1)|choose('/'|ezurl,$node.parent.url_alias|ezurl )} title="{'Up one level.'|i18n(  'design/admin/node/view/full'  )}">
 					<img src={'up-16x16-grey.png'|ezimage} width="16" height="16" alt="{'Up one level.'|i18n( 'design/admin/node/view/full' )}" title="{'Up one level.'|i18n( 'design/admin/node/view/full' )}" />
-				</a>&nbsp{'Subscribtions (%children_count)'|i18n( 'design/admin/node/view/full',, hash( '%children_count', $children_count ) )}
+				</a>&nbsp{'Subscribtions (%children_count/%all_children_count)'|i18n( 'design/admin/node/view/full',, hash( '%children_count', $children_count, '%all_children_count', $all_children_count ) )}
 			</h2>
 
 		</div>

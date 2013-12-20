@@ -527,8 +527,8 @@
 <context>
 	<name>design/admin/node/view/full</name>
     <message>
-        <source>Subscribtions (%children_count)</source>
-        <translation>Abonnements (%children_count)</translation>
+        <source>Subscribtions (%children_count/%all_children_count)</source>
+        <translation>Abonnements (%children_count/%all_children_count)</translation>
     </message>
     <message>
         <source>Create new subscription</source>
