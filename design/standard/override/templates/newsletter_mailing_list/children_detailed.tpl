@@ -1,3 +1,4 @@
+{set-block scope=global variable=cache_ttl}0{/set-block}
 {def $base_uri = $node.url_alias
 	 $page_uri = $base_uri}
 {if $view_parameters.status|ne( '' )}
@@ -52,12 +53,12 @@
 
 								<table class="list" cellspacing="0">
 									<tr>
-										<th class="tight">{'Id'|i18n('newsletter/subscription')}</th>
-										<th>{'Email'|i18n( 'newsletter/subscription' )}</th>
-										<th>{'Name'|i18n( 'newsletter/subscription' )}</th>
-										<th>{'eZ Publish User'|i18n('newsletter/subscription')}</th>
-										<th>{'Status'|i18n( 'newsletter/subscription' )}</th>
-										<th>{'Modified'|i18n( 'newsletter/subscription' )}</th>
+										<th class="tight">{'Id'|i18n('newsletter/user')}</th>
+										<th>{'Email'|i18n( 'newsletter/user' )}</th>
+										<th>{'Name'|i18n( 'newsletter/user' )}</th>
+										<th>{'eZ Publish User'|i18n('newsletter/user')}</th>
+										<th>{'Status'|i18n( 'newsletter/user' )}</th>
+										<th>{'Modified'|i18n( 'newsletter/user' )}</th>
 										<th class="tight">&nbsp;</th>
 									</tr>
 									{foreach $subscription_list as $subscription sequence array( bglight, bgdark ) as $style}
@@ -82,16 +83,15 @@
 												<img src={'16x16.gif'|ezimage} alt="{$subscription.status_name|wash}" class="icon12 icon_s_{$subscription.status_identifier}" title="{$subscription.status_name|wash} ({$subscription.status|wash})" />
 											</td>
 											<td>
-												{cond( $subscription.modified|gt(0), $subscription.modified|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/subscription' ) )}
+												{cond( $subscription.modified|gt(0), $subscription.modified|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}
 											</td>
 											<td class="tight" style="white-space: nowrap;">
-												<form class="inline" action={concat('newsletter/subscription/', $subscription.id )|ezurl()}>
-													<input class="button" type="submit" value="{'Details'|i18n( 'newsletter/subscription' )}" title="{'Subscription details'|i18n( 'newsletter/subscription' )}" name="ViewSubscriptionDetail" />
+												<form class="inline" action={concat('newsletter/user/', $subscription.id )|ezurl()} method="post">
+													<input class="button" type="submit" value="{'Details'|i18n( 'newsletter/user' )}" title="{'Subscription details'|i18n( 'newsletter/user' )}" name="ViewSubscriptionDetail" />
 												</form>
-												<form class="inline" action={concat( '/newsletter/subscription/', $subscription.id )|ezurl()} method="post">
-													<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
+												<form class="inline" action={concat( '/newsletter/user/', $subscription.id )|ezurl()} method="post">
 													<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
-													<input  {if or( $subscription.status|eq(2), $subscription.status|eq(3), $subscription.status|eq(8) )}class="button-disabled" disabled="disabled"{else}class="button"{/if} type="submit" value="{'Approve'|i18n( 'newsletter/subscription' )}" name="ApproveSubscriptionButton" title="{'Approve subscription'|i18n( 'newsletter/subscription' )}" />
+													<input  {if $subscription.can_be_approved|not()}class="button-disabled" disabled="disabled"{else}class="button"{/if} type="submit" value="{'Approve'|i18n( 'newsletter/user' )}" name="ApproveSubscriptionButton" title="{'Approve subscription'|i18n( 'newsletter/user' )}" />
 												</form>
 												<form class="inline" action={concat( 'newsletter/user/', $subscription.newsletter_user.id )|ezurl()} method="post">
 													<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />

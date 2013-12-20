@@ -198,7 +198,7 @@
 							<table class="list" cellspacing="0">
 								<tr>
 									<th class="tight">
-										{'UID'|i18n('newsletter/user')}</a>
+										{'Id'|i18n('newsletter/user')}</a>
 									</th>
 									<th>
 										{'Email'|i18n( 'newsletter/user' )}

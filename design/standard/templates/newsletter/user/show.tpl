@@ -1,9 +1,3 @@
-{literal}<style>
-	.block.float-break {
-		height: auto;
-	}
-</style>
-{/literal}
 <div class="newsletter newsletter-user_view">
     <div class="context-block">
         <div class="box-header">
@@ -135,10 +129,6 @@
                                     <td>{$newsletter_user.bounce_count|wash()}</td>
                                 </tr>
                                 <tr>
-                                    <th>{'Remote id'|i18n( 'newsletter/user' )}</th>
-                                    <td>{$newsletter_user.remote_id|wash()}</td>
-                                </tr>
-                                <tr>
                                     <th>{'Import id'|i18n( 'newsletter/user' )}</th>
                                     <td>{$newsletter_user.import_id|wash()}</td>
                                 </tr>
@@ -202,7 +192,7 @@
 						<div class="box-mr">
 							<div class="box-tl">
 								<div class="box-tr">
-									<h2 class="context-title">{'Newsletter subscriptions'|i18n( 'newsletter/user' )} [{$subscription_array_count}]</h2>
+									<h2 class="context-title">{'Subscriptions'|i18n( 'newsletter/user' )} [{$subscription_array_count}]</h2>
 									<div class="header-subline">
 									</div>
 								</div>
@@ -219,25 +209,25 @@
 								<table class="list" cellspacing="0">
 									<tr>
 										<th class="tight">
-											{'Mailing list'|i18n( 'newsletter/subscription' )}
+											{'Mailing list'|i18n( 'newsletter/user' )}
 										</th>
 										<th>
-											{'Status'|i18n( 'newsletter/subscription' )}
+											{'Status'|i18n( 'newsletter/user' )}
 										</th>
 										<th>
-											{'Created'|i18n( 'newsletter/subscription' )}
+											{'Created'|i18n( 'newsletter/user' )}
 										</th>
 										<th>
-											{'Modified'|i18n( 'newsletter/subscription' )}
+											{'Modified'|i18n( 'newsletter/user' )}
 										</th>
 										<th>
-											{'Confirmed'|i18n( 'newsletter/subscription' )}
+											{'Confirmed'|i18n( 'newsletter/user' )}
 										</th>
 										<th>
-											{'Approved'|i18n( 'newsletter/subscription' )}
+											{'Approved'|i18n( 'newsletter/user' )}
 										</th>
 										<th>
-											{'Removed'|i18n( 'newsletter/subscription' )}
+											{'Removed'|i18n( 'newsletter/user' )}
 										</th>
 										<th>
 											{* actions *}
@@ -246,25 +236,25 @@
 									{foreach $subscription_array as $subscription sequence array( bglight, bgdark ) as $style}
 										<tr class="{$style}">
 											<td>
-												<a href={$subscription.newsletter_list.main_node.url_alias|ezurl}>{$subscription.newsletter_list.name|wash()} </a>
+												<a href={$subscription.mailing_list.main_node.url_alias|ezurl}>{$subscription.mailing_list.name|wash()} </a>
 											</td>
 											<td title="{$subscription.status|wash()}">
 												{$subscription.status_name|wash()}
 											</td>
 											<td>
-												{cond( $subscription.created|gt(0), $subscription.created|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/subscription' ) )}
+												{cond( $subscription.created|gt(0), $subscription.created|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}
 											</td>
 											<td>
-												{cond( $subscription.modified|gt(0), $subscription.modified|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/subscription' ) )}
+												{cond( $subscription.modified|gt(0), $subscription.modified|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}
 											</td>
 											<td>
-												{cond( $subscription.confirmed|gt(0), $subscription.confirmed|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/subscription' ) )}
+												{cond( $subscription.confirmed|gt(0), $subscription.confirmed|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}
 											</td>
 											<td>
-												{cond( $subscription.approved|gt(0), $subscription.approved|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/subscription' ) )}
+												{cond( $subscription.approved|gt(0), $subscription.approved|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}
 											</td>
 											<td>
-												{cond( $subscription.removed|gt(0), $subscription.removed|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/subscription' ) )}
+												{cond( $subscription.removed|gt(0), $subscription.removed|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}
 											</td>
 											<td>
 												<span>Bouton pour approuver la souscription</span><br />

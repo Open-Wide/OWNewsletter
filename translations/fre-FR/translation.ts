@@ -1,4 +1,6 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="fr_FR">
 <context>
     <name>kernel/navigationpart</name>
     <message>
@@ -27,6 +29,10 @@
     <message>
         <source>Edit</source>
         <translation>Modifier</translation>
+    </message>
+    <message>
+        <source>Subscription</source>
+        <translation>Abonnement</translation>
     </message>
 </context>
 <context>
@@ -100,7 +106,7 @@
     </message>
 </context>
 <context>
-	<name>newsletter/contentstructuremenu</name>
+    <name>newsletter/contentstructuremenu</name>
     <message>
         <source>Newsletter systems</source>
         <translation>Systèmes de newsletter</translation>
@@ -115,14 +121,14 @@
     </message>
 </context>
 <context>
-	<name>newsletter/warning_message</name>
+    <name>newsletter/warning_message</name>
     <message>
         <source>Input did not validate</source>
         <translation>Saisie incorrecte</translation>
     </message>
     <message>
         <source>User email is missing</source>
-        <translation>Veuillez l'email de l'abonné</translation>
+        <translation>Veuillez l&apos;email de l&apos;abonné</translation>
     </message>
     <message>
         <source>A user with this email already exists</source>
@@ -157,7 +163,7 @@
     </message>
     <message>
         <source>Edit newsletter user</source>
-        <translation>Modifier l'abonné</translation>
+        <translation>Modifier l&apos;abonné</translation>
     </message>
     <message>
         <source>Users</source>
@@ -166,10 +172,6 @@
     <message>
         <source>Newsletter user</source>
         <translation>Abonné</translation>
-    </message>
-    <message>
-        <source>UID</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Email</source>
@@ -210,6 +212,10 @@
     <message>
         <source>eZ user id</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subscription</source>
+        <translation>Abonnement</translation>
     </message>
     <message>
         <source>Subscriptions</source>
@@ -304,10 +310,6 @@
         <translation>Traité</translation>
     </message>
     <message>
-        <source>Newsletter user</source>
-        <translation>Abonné</translation>
-    </message>
-    <message>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
@@ -328,10 +330,6 @@
         <translation>Supprimé</translation>
     </message>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmé</translation>
-    </message>
-    <message>
         <source>Edit by admin</source>
         <translation>Editer par admin</translation>
     </message>
@@ -348,12 +346,12 @@
         <translation>Supprimer</translation>
     </message>
     <message>
-        <source>Add to blacklist</source>
-        <translation>Ajouter à la liste noire</translation>
+        <source>Remove subscription</source>
+        <translation>Supprimer l'abonnement</translation>
     </message>
     <message>
-        <source>Newsletter subscriptions</source>
-        <translation>Adhésions</translation>
+        <source>Add to blacklist</source>
+        <translation>Ajouter à la liste noire</translation>
     </message>
     <message>
         <source>Newsletter received</source>
@@ -379,52 +377,17 @@
         <source>Do you really want to delete this user?</source>
         <translation>Voulez-vous vraiment supprimer cet abonné ?</translation>
     </message>
-</context>
-<context>
-	<name>newsletter/subscription</name>
-    <message>
-        <source>Id</source>
-        <translation>Identifiant</translation>
-    </message>
-    <message>
-        <source>Email</source>
-        <translation>Email</translation>
-    </message>
     <message>
         <source>Mailing list</source>
         <translation>Liste de diffusion</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Nom</translation>
     </message>
     <message>
         <source>eZ Publish User</source>
         <translation>Utilisateur eZ Publish</translation>
     </message>
     <message>
-        <source>Status</source>
-        <translation>Statut</translation>
-    </message>
-    <message>
-        <source>Created</source>
-        <translation>Créé</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation>Modifié</translation>
-    </message>
-    <message>
-        <source>Confirmed</source>
-        <translation>Confirmé</translation>
-    </message>
-    <message>
         <source>Approved</source>
         <translation>Approuvé</translation>
-    </message>
-    <message>
-        <source>Removed</source>
-        <translation>Supprimé</translation>
     </message>
     <message>
         <source>n/a</source>
@@ -436,7 +399,7 @@
     </message>
     <message>
         <source>Subscription details</source>
-        <translation>Détails de l'abonnement</translation>
+        <translation>Détails de l&apos;abonnement</translation>
     </message>
     <message>
         <source>Approve</source>
@@ -444,7 +407,7 @@
     </message>
     <message>
         <source>Approve subscription</source>
-        <translation>Approuver l'abonnement</translation>
+        <translation>Approuver l&apos;abonnement</translation>
     </message>
 </context>
 <context>
@@ -486,7 +449,7 @@
     </message>
     <message>
         <source>Removed by user</source>
-        <translation>Supprimé l'abonné</translation>
+        <translation>Supprimé l&apos;abonné</translation>
     </message>
     <message>
         <source>Removed by admin</source>
@@ -525,7 +488,7 @@
     </message>
 </context>
 <context>
-	<name>design/admin/node/view/full</name>
+    <name>design/admin/node/view/full</name>
     <message>
         <source>Subscribtions (%children_count/%all_children_count)</source>
         <translation>Abonnements (%children_count/%all_children_count)</translation>

@@ -22,11 +22,13 @@ $ViewList['user'] = array(
 		'user_remove' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
 	'ui_context' => 'admin',
-	'params' => array( 'newsletterUserID' ),
+	'params' => array( 'newsletterUserID', 'mailingListContentobjectID' ),
 	'single_post_actions' => array(
 		'CancelButton' => 'Cancel',
 		'SubmitNewsletterUserButton' => 'SubmitNewsletterUser',
-		'RemoveNewsletterUserButton' => 'RemoveNewsletterUser'
+		'RemoveNewsletterUserButton' => 'RemoveNewsletterUser',
+		'ApproveSubscriptionButton' => 'ApproveSubscription',
+		'RemoveSubscriptionButton' => 'RemoveSubscription'
 	),
 	 'post_action_parameters' => array(
 		 'Cancel'=> array(
@@ -38,6 +40,12 @@ $ViewList['user'] = array(
 			 'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
 		 ),
 		 'RemoveNewsletterUser'=> array(
+			 'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		 ),
+		 'ApproveSubscription'=> array(
+			 'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		 ),
+		 'RemoveSubscription'=> array(
 			 'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
 		 )
 	)

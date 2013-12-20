@@ -29,13 +29,13 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	static function definition() {
 		return array(
 			'fields' => array(
-				'mailing_list_contentobject_id' => array(
-					'name' => 'ListContentObjectId',
+				'newsletter_user_id' => array(
+					'name' => 'NewsletterUserId',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
-				'newsletter_user_id' => array(
-					'name' => 'NewsletterUserId',
+				'mailing_list_contentobject_id' => array(
+					'name' => 'ListContentObjectId',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
@@ -98,11 +98,11 @@ class OWNewsletterSubscription extends eZPersistentObject {
 			'function_attributes' => array(
 				'id' => 'getId',
 				'newsletter_user' => 'getNewsletterUserObject',
-				'newsletter_list' => 'getNewsletterMailingListObject',
-				'newsletter_list_attribute_content' => 'getNewsletterMailingListAttributeContent',
+				'mailing_list' => 'getMailingListObject',
 				'is_removed' => 'isRemoved',
 				'is_removed_self' => 'isRemovedSelf',
 				'is_blacklisted' => 'isBlacklisted',
+				'can_be_approved' => 'canBeApproved',
 				'creator' => 'getCreatorUserObject',
 				'modifier' => 'getModifierUserObject',
 				'status_name' => 'getStatusName',
@@ -124,7 +124,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * @return string ID
 	 */
 	function getId() {
-		return $this->attribute( 'mailing_list_contentobject_id' ) . '/' . $this->attribute( 'newsletter_user_id' );
+		return $this->attribute( 'newsletter_user_id' ) . '/' . $this->attribute( 'mailing_list_contentobject_id' );
 	}
 
 	/**
@@ -142,31 +142,9 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 *
 	 * @return object
 	 */
-	function getNewsletterMailingListObject() {
+	function getMailingListObject() {
 		$object = eZContentObject::fetch( $this->attribute( 'mailing_list_contentobject_id' ) );
 		return $object;
-	}
-
-	/**
-	 * Return user newsletterListObject
-	 *
-	 * @return object / boolean
-	 */
-	function getNewsletterMailingListAttributeContent() {
-		$object = eZContentObject::fetch( $this->attribute( 'mailing_list_contentobject_id' ) );
-		if ( is_object( $object ) ) {
-			$dataMap = $object->attribute( 'data_map' );
-
-			if ( array_key_exists( 'newsletter_list', $dataMap ) ) {
-				$newsletterListAttribute = $dataMap['newsletter_list'];
-				$newsletterListAttributeContent = $newsletterListAttribute->attribute( 'content' );
-				return $newsletterListAttributeContent;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
 	}
 
 	/**
@@ -197,6 +175,13 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	function isBlacklisted() {
 		$subscriptionStatus = $this->attribute( 'status' );
 		return $subscriptionStatus == self::STATUS_BLACKLISTED ? true : false;
+	}
+	
+	/**
+	 * 
+	 */
+	function canBeApproved() {
+		return !in_array( $this->attribute('status'), array( self::STATUS_APPROVED, self::STATUS_REMOVED_SELF, self::STATUS_BLACKLISTED ) );
 	}
 
 	/**
@@ -265,7 +250,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * @param integer $newsletter_user_id
 	 * @return object
 	 */
-	static function fetch( $mailing_list_contentobject_id, $newsletter_user_id ) {
+	static function fetch( $newsletter_user_id, $mailing_list_contentobject_id ) {
 		$object = eZPersistentObject::fetchObject( self::definition(), null, array(
 					'mailing_list_contentobject_id' => $mailing_list_contentobject_id,
 					'newsletter_user_id' => $newsletter_user_id ), true );
@@ -317,21 +302,6 @@ class OWNewsletterSubscription extends eZPersistentObject {
 		return self::fetchList( array( 'newsletter_user_id' => (int) $newsletterUserId ), false, false, $asObject );
 	}
 
-	/**
-	 * Fetch the subscription of a user to a mailling list
-	 * 
-	 * @param integer $mailingListContentObjectId
-	 * @param integer $newsletterUserId
-	 * @param boolean $asObject
-	 * @return array / boolean
-	 */
-	static function fetchByMailingListIdAndNewsletterUserId( $mailingListContentObjectId, $newsletterUserId, $asObject = true ) {
-		return eZPersistentObject::fetchObject( self::definition(), null, array(
-					'mailing_list_contentobject_id' => $mailingListContentObjectId,
-					'newsletter_user_id' => $newsletterUserId
-						), $asObject );
-	}
-
 	/*	 * **********************
 	 * OBJECT METHODS
 	 * ********************** */
@@ -350,6 +320,17 @@ class OWNewsletterSubscription extends eZPersistentObject {
 			$this->store();
 			return true;
 		}
+	}
+
+	/**
+	 * approve subscription
+	 *
+	 * @return void
+	 */
+	public function approve() {
+		$this->setAttribute( 'status', self::STATUS_APPROVED );
+		$this->sync();
+		$this->store();
 	}
 
 	/**
@@ -479,7 +460,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * @return object
 	 */
 	static function removeSubscriptionByNewsletterUserSelf( $mailingListContentObjectId, $newsletterUserId ) {
-		$existingSubscriptionObject = self::fetchByMailingListIdAndNewsletterUserId( $mailingListContentObjectId, $newsletterUserId );
+		$existingSubscriptionObject = self::fetch( $newsletterUserId, $mailingListContentObjectId );
 
 		if ( is_object( $existingSubscriptionObject ) ) {
 			$existingSubscriptionObject->unsubscribe();
