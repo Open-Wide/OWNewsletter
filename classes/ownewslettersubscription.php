@@ -96,6 +96,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 					'required' => false ),
 			),
 			'function_attributes' => array(
+				'id' => 'getId',
 				'newsletter_user' => 'getNewsletterUserObject',
 				'newsletter_list' => 'getNewsletterMailingListObject',
 				'newsletter_list_attribute_content' => 'getNewsletterMailingListAttributeContent',
@@ -116,6 +117,15 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	/*	 * **********************
 	 * FUNCTION ATTRIBUTES
 	 * ********************** */
+
+	/**
+	 * Return ID of the subscription
+	 * 
+	 * @return string ID
+	 */
+	function getId() {
+		return $this->attribute( 'mailing_list_contentobject_id' ) . '/' . $this->attribute( 'newsletter_user_id' );
+	}
 
 	/**
 	 * Return user newsletterUserObject

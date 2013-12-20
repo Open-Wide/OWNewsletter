@@ -71,11 +71,11 @@ class OWNewsletterFunctionCollection {
 		if ( $mailing_list_contentobject_id !== FALSE ) {
 			$conds['subscription']['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
 		}
-		if ( is_numeric( $user_status ) ) {
+		if ( is_string( $user_status ) ) {
 			$user_status = self::getUserStatus( $user_status );
 			$conds['status'] = is_array( $user_status ) ? array( $user_status ) : (int) $user_status;
 		}
-		if ( is_numeric( $subscription_status ) ) {
+		if ( is_string( $subscription_status ) ) {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
 		}
@@ -95,11 +95,11 @@ class OWNewsletterFunctionCollection {
 		if ( $mailing_list_contentobject_id !== FALSE ) {
 			$conds['subscription']['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
 		}
-		if ( is_numeric( $user_status ) ) {
+		if ( is_string( $user_status ) ) {
 			$user_status = self::getUserStatus( $user_status );
 			$conds['status'] = is_array( $user_status ) ? array( $user_status ) : (int) $user_status;
 		}
-		if ( is_numeric( $subscription_status ) ) {
+		if ( is_string( $subscription_status ) ) {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
 		}
@@ -120,7 +120,7 @@ class OWNewsletterFunctionCollection {
 		if ( $mailing_list_contentobject_id !== FALSE ) {
 			$conds['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
 		}
-		if ( is_numeric( $subscription_status ) ) {
+		if ( is_string( $subscription_status ) ) {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
 		}
@@ -139,7 +139,7 @@ class OWNewsletterFunctionCollection {
 		if ( $mailing_list_contentobject_id !== FALSE ) {
 			$conds['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
 		}
-		if ( is_numeric( $subscription_status ) ) {
+		if ( is_string( $subscription_status ) ) {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
 		}

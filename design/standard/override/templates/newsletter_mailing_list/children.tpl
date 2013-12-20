@@ -11,10 +11,11 @@
      $current_path = first_set( $node.path_array[1], 1 )
      $admin_children_viewmode = ezpreference( 'admin_children_viewmode' )
      $children_count = fetch( 'newsletter', 'subscription_count', hash(
-				'mailing_list_contentobject_id', $node.contentobject_id
-			) )
+			'mailing_list_contentobject_id', $node.contentobject_id,
+			'subscription_status', $view_parameters.status
+		) )
      $priority    = and( eq( $node.sort_array[0][0], 'priority' ), $node.can_edit, $children_count )
-	 $status = $view_parameters.status}
+	 $subscription_status = $view_parameters.status}
 
 
 	<!-- Children START -->
@@ -59,7 +60,7 @@
 				<div class="button-right">
 					{* newsletter list selection *}
 					<p class="table-preferences">
-						{if $status|eq('')}
+						{if $subscription_status|eq('')}
 							<span class="current">
 								{'All'|i18n('design/admin/node/view/full')}
 							</span>
@@ -69,7 +70,7 @@
 							</a>
 						{/if}
 
-						{if $status|eq('pending')}
+						{if $subscription_status|eq('pending')}
 							<span class="current">
 								<img src={'1x1.gif'|ezimage} alt="{'Pending'|i18n('newsletter/subscription/status')}" title="{'Pending'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_pending" /> {'Pending'|i18n('newsletter/subscription/status')}
 							</span>
@@ -79,7 +80,7 @@
 							</a>
 						{/if}
 
-						{if $status|eq('confirmed')}
+						{if $subscription_status|eq('confirmed')}
 							<span class="current">
 								<img src={'1x1.gif'|ezimage} alt="{'Confirmed'|i18n('newsletter/subscription/status')}" title="{'Confirmed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_confirmed" /> {'Confirmed'|i18n('newsletter/subscription/status')}
 							</span>
@@ -88,7 +89,7 @@
 								<img src={'1x1.gif'|ezimage} alt="{'Confirmed'|i18n('newsletter/subscription/status')}" title="{'Confirmed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_confirmed" /> {'Confirmed'|i18n('newsletter/subscription/status')}
 							</a>
 						{/if}
-						{if $status|eq('approved')}
+						{if $subscription_status|eq('approved')}
 							<span class="current">
 								<img src={'1x1.gif'|ezimage} alt="{'Approved'|i18n('newsletter/subscription/status')}" title="{'Approved'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_approved" /> {'Approved'|i18n('newsletter/subscription/status')}
 							</span>
@@ -97,7 +98,7 @@
 								<img src={'1x1.gif'|ezimage} alt="{'Approved'|i18n('newsletter/subscription/status')}" title="{'Approved'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_approved" /> {'Approved'|i18n('newsletter/subscription/status')}
 							</a>
 						{/if}
-						{if $status|eq('bounced')}
+						{if $subscription_status|eq('bounced')}
 							<span class="current">
 								<img src={'1x1.gif'|ezimage} alt="{'Bounced'|i18n('newsletter/subscription/status')}" title="{'Bounced'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_bounced" /> {'Bounced'|i18n('newsletter/subscription/status')}
 							</span>
@@ -106,7 +107,7 @@
 								<img src={'1x1.gif'|ezimage} alt="{'Bounced'|i18n('newsletter/subscription/status')}" title="{'Bounced'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_bounced" /> {'Bounced'|i18n('newsletter/subscription/status')}
 							</a>
 						{/if}
-						{if $status|eq('removed')}
+						{if $subscription_status|eq('removed')}
 							<span class="current">
 								<img src={'1x1.gif'|ezimage} alt="{'Removed'|i18n('newsletter/subscription/status')}" title="{'Removed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_removed" /> {'Removed'|i18n('newsletter/subscription/status')}
 							</span>
@@ -115,7 +116,7 @@
 								<img src={'1x1.gif'|ezimage} alt="{'Removed'|i18n('newsletter/subscription/status')}" title="{'Removed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_removed" /> {'Removed'|i18n('newsletter/subscription/status')}
 							</a>
 						{/if}
-						{if $status|eq('blacklisted')}
+						{if $subscription_status|eq('blacklisted')}
 							<span class="current">
 								<img src={'1x1.gif'|ezimage} alt="{'Blacklisted'|i18n('newsletter/subscription/status')}" title="{'Blacklisted'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_blacklisted" /> {'Blacklisted'|i18n('newsletter/subscription/status')}
 							</span>

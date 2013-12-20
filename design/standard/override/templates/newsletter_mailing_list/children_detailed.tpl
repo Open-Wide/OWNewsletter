@@ -32,14 +32,6 @@
 			{/case}
 			{/switch}
 		{/if}
-		{def $subscription_list = fetch( 'newsletter', 'subscription_list', hash(
-					'mailing_list_contentobject_id', $node.contentobject_id,
-					'subscription_status', $view_parameters.status
-				) )
-		  $subscription_list_count  = fetch( 'newsletter', 'subscription_count', hash(
-					'mailing_list_contentobject_id', $node.contentobject_id,
-					'subscription_status', $view_parameters.status
-				) )}
 		<div class="context-block">
 			<div class="box-ml">
 				<div class="box-mr">
@@ -49,7 +41,13 @@
 						</div>
 						<div class="break float-break">
 						</div>
-						{if $subscription_list_count|gt(0)}
+						{if $children_count|gt(0)}
+							{def $subscription_list = fetch( 'newsletter', 'subscription_list', hash(
+									'mailing_list_contentobject_id', $node.contentobject_id,
+									'subscription_status', $view_parameters.status,
+									'limit', $limit,
+									'offset', $view_parameters.offset
+								) )}
 							<div class="content-navigation-childlist overflow-table">
 
 								<table class="list" cellspacing="0">
@@ -87,10 +85,10 @@
 												{cond( $subscription.modified|gt(0), $subscription.modified|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/subscription' ) )}
 											</td>
 											<td class="tight" style="white-space: nowrap;">
-												<form class="inline" action={concat('newsletter/subscription/', $subscription.mailing_list_contentobject_id, '/', $subscription.newsletter_user_id )|ezurl()}>
+												<form class="inline" action={concat('newsletter/subscription/', $subscription.id )|ezurl()}>
 													<input class="button" type="submit" value="{'Details'|i18n( 'newsletter/subscription' )}" title="{'Subscription details'|i18n( 'newsletter/subscription' )}" name="ViewSubscriptionDetail" />
 												</form>
-												<form class="inline" action={concat( '/newsletter/subscription/', $subscription.mailing_list_contentobject_id, '/', $subscription.newsletter_user_id )|ezurl()} method="post">
+												<form class="inline" action={concat( '/newsletter/subscription/', $subscription.id )|ezurl()} method="post">
 													<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
 													<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
 													<input  {if or( $subscription.status|eq(2), $subscription.status|eq(3), $subscription.status|eq(8) )}class="button-disabled" disabled="disabled"{else}class="button"{/if} type="submit" value="{'Approve'|i18n( 'newsletter/subscription' )}" name="ApproveSubscriptionButton" title="{'Approve subscription'|i18n( 'newsletter/subscription' )}" />
