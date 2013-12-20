@@ -164,7 +164,7 @@ $tpl->setVariable( 'redirect_url_action_cancel', $redirectUrlCancel );
 $tpl->setVariable( 'redirect_url_action_success', $redirectUrlSuccess );
 
 /* If press Cancel button */
-if ( $module->hasActionParameter( 'Cancel' ) ) {
+if ( $module->isCurrentAction( 'Cancel' ) ) {
 	$module->redirectTo( $redirectUrlCancel );
 }
 
