@@ -82,6 +82,56 @@ $FunctionList['user_count'] = array(
 			'default' => false ), )
 );
 
+$FunctionList['subscription_list'] = array(
+	'name' => 'list',
+	'operation_types' => array( 'read' ),
+	'call_method' => array(
+		'class' => 'OWNewsletterFunctionCollection',
+		'method' => 'fetchSubscriptions' ),
+	'parameter_type' => 'standard',
+	'parameters' => array(
+		array(
+			'name' => 'mailing_list_contentobject_id',
+			'type' => 'integer',
+			'required' => false,
+			'default' => false ),
+		array(
+			'name' => 'subscription_status',
+			'type' => 'string',
+			'required' => false,
+			'default' => false ),
+		array(
+			'name' => 'limit',
+			'type' => 'integer',
+			'required' => false,
+			'default' => false ),
+		array(
+			'name' => 'offset',
+			'type' => 'integer',
+			'required' => false,
+			'default' => false ) )
+);
+
+$FunctionList['subscription_count'] = array(
+	'name' => 'list',
+	'operation_types' => array( 'read' ),
+	'call_method' => array(
+		'class' => 'OWNewsletterFunctionCollection',
+		'method' => 'countSubscriptions' ),
+	'parameter_type' => 'standard',
+	'parameters' => array(
+		array(
+			'name' => 'mailing_list_contentobject_id',
+			'type' => 'integer',
+			'required' => false,
+			'default' => false ),
+		array(
+			'name' => 'subscription_status',
+			'type' => 'string',
+			'required' => false,
+			'default' => false ), )
+);
+
 $FunctionList['available_subscription_status'] = array(
 	'name' => 'list',
 	'operation_types' => array( 'read' ),

@@ -1,11 +1,18 @@
+{def $base_uri = $node.url_alias
+	 $page_uri = $base_uri}
+{if $view_parameters.status|ne( '' )}
+	{set $page_uri = concat( $page_uri, '/(status)/', $view_parameters.status )}
+{/if}
+{if $view_parameters.offset|gt( 0 )}
+	{set $page_uri = concat( $page_uri, '/(offset)/', $view_parameters.offset )}
+{/if}
+
 <div id="action-controls-container">
 	<div id="action-controls">
-		<form name="CreateNewNewsletterUser" method="post" style="display:inline;" action={'newsletter/user_create'|ezurl}>
-			<input type="hidden" name="Subscription_IdArray[]" value="{$node.contentobject_id}" />
-			<input type="hidden" name="Subscription_ListArray[]" value="{$node.contentobject_id}" />
-			<input type="hidden" name="RedirectUrlActionCancel" value="{$node.url_alias}" />
-			<input type="hidden" name="RedirectUrlActionSuccess" value="{$node.url_alias}" />
-			<input class="button" type="submit" name="NewSubscriptionButton" value="{'Create new subscription'|i18n( 'design/admin/node/view/full' )}" />
+		<form name="CreateNewNewsletterUser" method="post" style="display:inline;" action={'newsletter/user'|ezurl}>
+			<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
+			<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
+			<input class="button" type="submit" name="SubmitNewsletterUserButton" value="{'Create new subscription'|i18n( 'design/admin/node/view/full' )}" />
 		</form>
 	</div>
 </div>
@@ -25,77 +32,14 @@
 			{/case}
 			{/switch}
 		{/if}
-		{*def $user_list = fetch('newsletter', 'user_list_search',
-		hash( 'search_str', $view_parameters.search_user_email,
-		'logic', 'AND',
-		'offset', $view_parameters.offset,
-		'limit', $limit,
-		
-		'sort_by', hash('created', 'desc' ) ))
-		$user_list_count = fetch('newsletter', 'user_list_search',
-		hash( 'search_str', $view_parameters.search_user_email,
-		'logic', 'AND',
-		'offset', $view_parameters.offset,
-		'as_object', false(),
-		'sort_by', hash('created', 'desc' ) ))|count
-		$page_uri = 'newsletter/user'*}
-		{def $user_list = fetch( 'newsletter', 'user_list', hash(
-					'mailing_list_contentobject_id', $node.contentobject_id
+		{def $subscription_list = fetch( 'newsletter', 'subscription_list', hash(
+					'mailing_list_contentobject_id', $node.contentobject_id,
+					'subscription_status', $view_parameters.status
 				) )
-		  $user_list_count  = fetch( 'newsletter', 'user_count', hash(
-					'mailing_list_contentobject_id', $node.contentobject_id
-				) )
-		  $page_uri = 'newsletter/user'}
-
-		{*<div class="context-block">
-		<div class="box-header">
-		<div class="box-tc">
-		<div class="box-ml">
-		<div class="box-mr">
-		<div class="box-tl">
-		<div class="box-tr">
-		<h1 class="context-title">{'Manage users'|i18n(  'design/admin/node/view/full' ,, hash() )|wash}</h1>
-		<div class="header-mainline">
-		</div>
-		</div>
-		</div>
-		</div>
-		</div>
-		</div>
-		</div>
-		<div class="box-ml">
-		<div class="box-mr">
-		<div class="box-content">
-		<div class="context-attributes">
-		<div class="block float-break">
-		<form action={$page_uri|ezurl} name="UserList" method="post">
-		<input type="text" name="SearchUserEmail" value="{if is_set($view_parameters['search_user_email'])}{$view_parameters['search_user_email']}{/if}"><input type="submit" name="SubmitUserSearch" value="{'Search for existing user'|i18n(  'design/admin/node/view/full'  )}">
-		</form>
-		</div>
-		</div>
-		</div>
-		</div>
-		</div>
-		<div class="controlbar">
-		<div class="box-bc">
-		<div class="box-ml">
-		<div class="box-mr">
-		<div class="box-tc">
-		<div class="box-bl">
-		<div class="box-br">
-		<div class="left">
-		<form method="post" style="display:inline;" action={'newsletter/user_create/-1'|ezurl}>
-		<input class="button" type="submit" name="CreateNewsletterUserButton" value="{'Create Newsletter user'|i18n(  'design/admin/node/view/full'  )}" />
-		</form>
-		</div>
-		</div>
-		</div>
-		</div>
-		</div>
-		</div>
-		</div>
-		</div>
-		</div>*}
+		  $subscription_list_count  = fetch( 'newsletter', 'subscription_count', hash(
+					'mailing_list_contentobject_id', $node.contentobject_id,
+					'subscription_status', $view_parameters.status
+				) )}
 		<div class="context-block">
 			<div class="box-ml">
 				<div class="box-mr">
@@ -105,82 +49,60 @@
 						</div>
 						<div class="break float-break">
 						</div>
-						{if $user_list_count}
-						<div class="content-navigation-childlist overflow-table">
+						{if $subscription_list_count|gt(0)}
+							<div class="content-navigation-childlist overflow-table">
 
-							<table class="list" cellspacing="0">
-								<tr>
-									<th class="tight">
-										{'UID'|i18n('cjw_newsletter/user')}
-									</th>
-									<th>
-										{'Email'|i18n(  'design/admin/node/view/full'  )}
-									</th
-									<th>
-										{'Lists'|i18n(  'design/admin/node/view/full'  )}
-									</th>
-									<th title="{'Confirmed'|i18n(  'design/admin/node/view/full'  )}">
-										{'Conf'|i18n(  'design/admin/node/view/full'  )}
-									</th>
-									<th title="{'Blacklisted'|i18n(  'design/admin/node/view/full'  )}">
-										{'Black'|i18n(  'design/admin/node/view/full'  )}
-									</th>
-									<th>
-										{'Bounce'|i18n(  'design/admin/node/view/full'  )}
-									</th>
-									<th>
-										{'Status'|i18n(  'design/admin/node/view/full'  )}
-									</th>
-									<th>
-										{'eZ user id'|i18n(  'design/admin/node/view/full'  )}
-									</th>
-									<th class="edit">
-										{* user_edit *}
-									</th>
-								</tr>
-								{foreach $user_list as $newsletter_user sequence array( bglight, bgdark ) as $style}
-									<tr class="{$style}">
-										<td class="number" align="right">
-											<a href={concat('newsletter/user_view/',$newsletter_user.id)|ezurl} title="{'Newsletter user id'|i18n(  'design/admin/node/view/full'  )}">{$newsletter_user.id} </a>
-										</td>
-										<td>
-											<a href={concat('newsletter/user_view/',$newsletter_user.id)|ezurl} title="{$newsletter_user.first_name} {$newsletter_user.last_name}">{$newsletter_user.email|wash}</a>
-										</td>
-										<td title="{'Approved'|i18n(  'design/admin/node/view/full'  )} / {'All'|i18n(  'design/admin/node/view/full'  )}">
-											{def $approved_subscribtion_count = 0
-                                     $subscription_array = $newsletter_user.subscription_array}
-											{foreach $subscription_array as $subscription}
-												{*if approved*}
-												{if $subscription.status|eq( 2 )}
-													{set $approved_subscribtion_count = $approved_subscribtion_count|inc}
+								<table class="list" cellspacing="0">
+									<tr>
+										<th class="tight">{'Id'|i18n('newsletter/subscription')}</th>
+										<th>{'Email'|i18n( 'newsletter/subscription' )}</th>
+										<th>{'Name'|i18n( 'newsletter/subscription' )}</th>
+										<th>{'eZ Publish User'|i18n('newsletter/subscription')}</th>
+										<th>{'Status'|i18n( 'newsletter/subscription' )}</th>
+										<th>{'Modified'|i18n( 'newsletter/subscription' )}</th>
+										<th class="tight">&nbsp;</th>
+									</tr>
+									{foreach $subscription_list as $subscription sequence array( bglight, bgdark ) as $style}
+										<tr class="{$style}">
+											<td>{$subscription.id|wash}</td>
+											<td>
+												<a href={concat('newsletter/user/',$subscription.newsletter_user.id)|ezurl}>{$subscription.newsletter_user.email|wash}</a>
+											</td>
+											<td>
+												{$subscription.newsletter_user.name}
+											</td>
+											<td>
+												{if $subscription.newsletter_user.ez_user_id|gt( '0' )}
+													{def $user_object = fetch( 'content', 'object', hash( 'object_id', $subscription.newsletter_user.ez_user_id ) )}
+													{if $user_object}
+														<a href="{$user_object.main_node.url_alias|ezurl( 'no' )}">{$user_object.name|wash}</a>
+													{/if}
+													{undef $user_object}
 												{/if}
-
-											{/foreach}
-											<b>{$approved_subscribtion_count}</b> / {$subscription_array|count}
-											{undef $approved_subscribtion_count $subscription_array}
-										</td>
-										<td {cond($newsletter_user.confirmed|gt(0), concat('title="',$newsletter_user.confirmed|l10n(  shortdatetime ),'"') ,  '' )}>
-											{cond($newsletter_user.confirmed|gt(0), 'x', '-')}{*$newsletter_user.confirmed|l10n(shortdatetime)*}
-										</td>
-										<td>
-											{cond($newsletter_user.blacklisted|gt(0),'x' , '-' )}
-										</td>
-										<td title="{'Bounced'|i18n(  'design/admin/node/view/full'  )} / {'Bounce count'|i18n(  'design/admin/node/view/full'  )}">
-											{cond($newsletter_user.bounced|gt(0),'x' , '-' )} / {$newsletter_user.bounce_count|wash}
-										</td>
-										<td title="{$newsletter_user.status|wash}">
-											{$newsletter_user.status_string|wash}
-										</td>
-										<td>
-											{cond($newsletter_user.ez_user_id|gt(0), $newsletter_user.ez_user_id , '-' )}
-										</td>
-										<td>
-											<a href={concat( 'newsletter/user_edit/', $newsletter_user.id, '?RedirectUrl=newsletter/user/(offset)/', $view_parameters.offset )|ezurl}>
-												<img title="{'Edit newsletter user'|i18n(  'design/admin/node/view/full'  )}" alt="{'Edit newsletter user'|i18n(  'design/admin/node/view/full'  )}" src={'edit.gif'|ezimage()} />
-											</a>
-										</td>
-
-									</tr>{/foreach}
+											</td>
+											<td>
+												<img src={'16x16.gif'|ezimage} alt="{$subscription.status_name|wash}" class="icon12 icon_s_{$subscription.status_identifier}" title="{$subscription.status_name|wash} ({$subscription.status|wash})" />
+											</td>
+											<td>
+												{cond( $subscription.modified|gt(0), $subscription.modified|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/subscription' ) )}
+											</td>
+											<td class="tight" style="white-space: nowrap;">
+												<form class="inline" action={concat('newsletter/subscription/', $subscription.mailing_list_contentobject_id, '/', $subscription.newsletter_user_id )|ezurl()}>
+													<input class="button" type="submit" value="{'Details'|i18n( 'newsletter/subscription' )}" title="{'Subscription details'|i18n( 'newsletter/subscription' )}" name="ViewSubscriptionDetail" />
+												</form>
+												<form class="inline" action={concat( '/newsletter/subscription/', $subscription.mailing_list_contentobject_id, '/', $subscription.newsletter_user_id )|ezurl()} method="post">
+													<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
+													<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
+													<input  {if or( $subscription.status|eq(2), $subscription.status|eq(3), $subscription.status|eq(8) )}class="button-disabled" disabled="disabled"{else}class="button"{/if} type="submit" value="{'Approve'|i18n( 'newsletter/subscription' )}" name="ApproveSubscriptionButton" title="{'Approve subscription'|i18n( 'newsletter/subscription' )}" />
+												</form>
+												<form class="inline" action={concat( 'newsletter/user/', $subscription.newsletter_user.id )|ezurl()} method="post">
+													<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
+													<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
+													<input class="button" type="submit" value="{'Edit'|i18n( 'newsletter/user' )}" title="{'Edit newsletter user'|i18n( 'newsletter/user' )}" name="SubmitNewsletterUserButton" />
+												</form>
+											</td>
+										</tr>
+									{/foreach}
 								</table>
 							</div>
 
@@ -189,23 +111,22 @@
 								{include name='Navigator'
                              uri='design:navigator/google.tpl'
                              page_uri=$page_uri
-                             item_count=$user_list_count
+                             item_count=$subscription_list_count
                              view_parameters=$view_parameters
                              item_limit=$limit}
 							</div>
-							{else}
-								<p>{'No subscriber'|i18n(  'design/admin/node/view/full'  )}</p>
-							{/if}
-						</div>
+						{else}
+							<p>{'No subscribtion'|i18n(  'design/admin/node/view/full'  )}</p>
+						{/if}
 					</div>
-					<div class="controlbar">
-						<div class="box-bc">
-							<div class="box-ml">
-								<div class="box-mr">
-									<div class="box-tc">
-										<div class="box-bl">
-											<div class="box-br">
-											</div>
+				</div>
+				<div class="controlbar">
+					<div class="box-bc">
+						<div class="box-ml">
+							<div class="box-mr">
+								<div class="box-tc">
+									<div class="box-bl">
+										<div class="box-br">
 										</div>
 									</div>
 								</div>
@@ -216,5 +137,6 @@
 			</div>
 		</div>
 	</div>
-	<div id="bpg"></div>
-	<div id="to-dialog-container"></div>
+</div>
+<div id="bpg"></div>
+<div id="to-dialog-container"></div>

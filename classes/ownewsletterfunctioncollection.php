@@ -60,7 +60,8 @@ class OWNewsletterFunctionCollection {
 	 * Fetch users with custom parameter
 	 * 
 	 * @param integer $mailing_list_contentobject_id
-	 * @param string $status
+	 * @param string $user_status
+	 * @param string $subscription_status
 	 * @param integer $limit
 	 * @param integer $offset
 	 * @return array of OWNewsletterSubscription
@@ -70,11 +71,11 @@ class OWNewsletterFunctionCollection {
 		if ( $mailing_list_contentobject_id !== FALSE ) {
 			$conds['subscription']['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
 		}
-		if ( $user_status !== FALSE ) {
-			$user_status = self::getSubscriptionStatus( $user_status );
+		if ( is_numeric( $user_status ) ) {
+			$user_status = self::getUserStatus( $user_status );
 			$conds['status'] = is_array( $user_status ) ? array( $user_status ) : (int) $user_status;
 		}
-		if ( $subscription_status !== FALSE ) {
+		if ( is_numeric( $subscription_status ) ) {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
 		}
@@ -85,7 +86,8 @@ class OWNewsletterFunctionCollection {
 	 * Count subscriptions with custom parameter
 	 * 
 	 * @param integer $mailing_list_contentobject_id
-	 * @param string $status
+	 * @param string $user_status
+	 * @param string $subscription_status
 	 * @return integer
 	 */
 	static function countUsers( $mailing_list_contentobject_id, $user_status, $subscription_status ) {
@@ -93,15 +95,55 @@ class OWNewsletterFunctionCollection {
 		if ( $mailing_list_contentobject_id !== FALSE ) {
 			$conds['subscription']['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
 		}
-		if ( $user_status !== FALSE ) {
+		if ( is_numeric( $user_status ) ) {
 			$user_status = self::getUserStatus( $user_status );
 			$conds['status'] = is_array( $user_status ) ? array( $user_status ) : (int) $user_status;
 		}
-		if ( $subscription_status !== FALSE ) {
+		if ( is_numeric( $subscription_status ) ) {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
 		}
 		return array( 'result' => OWNewsletterUser::countListWithSubsricption( $conds ) );
+	}
+
+	/**
+	 * Fetch subscriptions with custom parameter
+	 * 
+	 * @param integer $mailing_list_contentobject_id
+	 * @param string $subscription_status
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @return array of OWNewsletterSubscription
+	 */
+	static function fetchSubscriptions( $mailing_list_contentobject_id, $subscription_status, $limit, $offset ) {
+		$conds = array();
+		if ( $mailing_list_contentobject_id !== FALSE ) {
+			$conds['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
+		}
+		if ( is_numeric( $subscription_status ) ) {
+			$subscription_status = self::getSubscriptionStatus( $subscription_status );
+			$conds['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
+		}
+		return array( 'result' => OWNewsletterSubscription::fetchList( $conds, $limit, $offset ) );
+	}
+
+	/**
+	 * Count subscriptions with custom parameter
+	 * 
+	 * @param integer $mailing_list_contentobject_id
+	 * @param string $status
+	 * @return integer
+	 */
+	static function countSubscriptions( $mailing_list_contentobject_id, $subscription_status ) {
+		$conds = array();
+		if ( $mailing_list_contentobject_id !== FALSE ) {
+			$conds['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
+		}
+		if ( is_numeric( $subscription_status ) ) {
+			$subscription_status = self::getSubscriptionStatus( $subscription_status );
+			$conds['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
+		}
+		return array( 'result' => OWNewsletterSubscription::countList( $conds ) );
 	}
 
 	/**

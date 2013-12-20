@@ -254,7 +254,7 @@
 											{cond($newsletter_user.bounced|gt(0),'x' , '-' )} / {$newsletter_user.bounce_count|wash}
 										</td>
 										<td title="{$newsletter_user.status|wash}">
-											{$newsletter_user.status_string|wash}
+											{$newsletter_user.status_name|wash}
 										</td>
 										<td>
 											{cond($newsletter_user.ez_user_id|gt(0), $newsletter_user.ez_user_id , '-' )}

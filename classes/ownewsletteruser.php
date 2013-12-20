@@ -176,7 +176,7 @@ class OWNewsletterUser extends eZPersistentObject {
 				'creator' => 'getCreatorUserObject',
 				'modifier' => 'getModifierUserObject',
 				'ez_user' => 'getEzUserObject',
-				'status_string' => 'getStatusString'
+				'status_name' => 'getStatusString'
 			),
 			'class_name' => 'OWNewsletterUser',
 			'name' => 'ownl_user' );

@@ -58,7 +58,7 @@
                                 </tr>
                                 <tr>
                                     <th>{'Status'|i18n( 'newsletter/user' )}</th>
-                                    <td>{$newsletter_user.status_string|wash()}</td>
+                                    <td>{$newsletter_user.status_name|wash()}</td>
                                 </tr>
                                 <tr>
                                     <th>{'eZ user id'|i18n( 'newsletter/user' )}</th>
@@ -249,7 +249,7 @@
 												<a href={$subscription.newsletter_list.main_node.url_alias|ezurl}>{$subscription.newsletter_list.name|wash()} </a>
 											</td>
 											<td title="{$subscription.status|wash()}">
-												{$subscription.status_string|wash()}
+												{$subscription.status_name|wash()}
 											</td>
 											<td>
 												{cond( $subscription.created|gt(0), $subscription.created|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/subscription' ) )}
@@ -359,7 +359,7 @@
 		{$send_item.output_format_id|wash()}
 		</td>
 		<td title="{$send_item.status|wash()}">
-		{$send_item.status_string|wash()}
+		{$send_item.status_name|wash()}
 		</td>
 		<td>
 		{cond( $send_item.created|gt(0), $send_item.created|l10n( shortdatetime ), '-' )}

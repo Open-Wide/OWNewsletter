@@ -75,7 +75,7 @@
 												{'Status'|i18n( 'newsletter/user' )}
 											</th>
 											<td title="{$newsletter_user.status|wash}">
-												{$newsletter_user.status_string|wash}
+												{$newsletter_user.status_name|wash}
 											</td>
 										</tr>
 									{/if}

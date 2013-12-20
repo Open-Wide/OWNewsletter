@@ -104,7 +104,8 @@ class OWNewsletterSubscription extends eZPersistentObject {
 				'is_blacklisted' => 'isBlacklisted',
 				'creator' => 'getCreatorUserObject',
 				'modifier' => 'getModifierUserObject',
-				'status_string' => 'getStatusString',
+				'status_name' => 'getStatusName',
+				'status_identifier' => 'getStatusIdentifier',
 			),
 			'keys' => array( 'mailing_list_contentobject_id', 'newsletter_user_id' ),
 			'sort' => array( 'created' => 'asc' ),
@@ -215,10 +216,26 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * get a translated string for the status code
 	 * @return unknown_type
 	 */
-	function getStatusString() {
+	function getStatusName() {
 		$statusString = '-';
 
 		$availableStatusArray = self::getAvailableStatus();
+		$currentStatusId = $this->attribute( 'status' );
+
+		if ( array_key_exists( $currentStatusId, $availableStatusArray ) ) {
+			$statusString = $availableStatusArray[$currentStatusId];
+		}
+		return $statusString;
+	}
+
+	/**
+	 * get a translated string for the status code
+	 * @return unknown_type
+	 */
+	function getStatusIdentifier() {
+		$statusString = '-';
+
+		$availableStatusArray = self::getAvailableStatus( 'identifier' );
 		$currentStatusId = $this->attribute( 'status' );
 
 		if ( array_key_exists( $currentStatusId, $availableStatusArray ) ) {
@@ -468,17 +485,30 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * get an array of all available subscription status id with translated Names
 	 * @return array
 	 */
-	static function getAvailableStatus() {
-		return array(
-			self::STATUS_PENDING => ezpI18n::tr( 'newsletter/subscription/status', 'Pending' ),
-			self::STATUS_CONFIRMED => ezpI18n::tr( 'newsletter/subscription/status', 'Confirmed' ),
-			self::STATUS_APPROVED => ezpI18n::tr( 'newsletter/subscription/status', 'Approved' ),
-			self::STATUS_REMOVED_SELF => ezpI18n::tr( 'newsletter/subscription/status', 'Removed by user' ),
-			self::STATUS_REMOVED_ADMIN => ezpI18n::tr( 'newsletter/subscription/status', 'Removed by admin' ),
-			self::STATUS_BOUNCED_SOFT => ezpI18n::tr( 'newsletter/subscription/status', 'Bounced soft' ),
-			self::STATUS_BOUNCED_HARD => ezpI18n::tr( 'newsletter/subscription/status', 'Bounced hard' ),
-			self::STATUS_BLACKLISTED => ezpI18n::tr( 'newsletter/subscription/status', 'Blacklisted' )
-		);
+	static function getAvailableStatus( $arrayInfo = 'name' ) {
+		if ( $arrayInfo == 'name' ) {
+			return array(
+				self::STATUS_PENDING => ezpI18n::tr( 'newsletter/subscription/status', 'Pending' ),
+				self::STATUS_CONFIRMED => ezpI18n::tr( 'newsletter/subscription/status', 'Confirmed' ),
+				self::STATUS_APPROVED => ezpI18n::tr( 'newsletter/subscription/status', 'Approved' ),
+				self::STATUS_REMOVED_SELF => ezpI18n::tr( 'newsletter/subscription/status', 'Removed by user' ),
+				self::STATUS_REMOVED_ADMIN => ezpI18n::tr( 'newsletter/subscription/status', 'Removed by admin' ),
+				self::STATUS_BOUNCED_SOFT => ezpI18n::tr( 'newsletter/subscription/status', 'Bounced soft' ),
+				self::STATUS_BOUNCED_HARD => ezpI18n::tr( 'newsletter/subscription/status', 'Bounced hard' ),
+				self::STATUS_BLACKLISTED => ezpI18n::tr( 'newsletter/subscription/status', 'Blacklisted' )
+			);
+		} else {
+			return array(
+				self::STATUS_PENDING => 'pending',
+				self::STATUS_CONFIRMED => 'confirmed',
+				self::STATUS_APPROVED => 'approved',
+				self::STATUS_REMOVED_SELF => 'removed_by_user',
+				self::STATUS_REMOVED_ADMIN => 'removed_by_admin',
+				self::STATUS_BOUNCED_SOFT => 'bounced_soft',
+				self::STATUS_BOUNCED_HARD => 'bounced_hard',
+				self::STATUS_BLACKLISTED => 'blacklisted',
+			);
+		}
 	}
 
 }

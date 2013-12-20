@@ -46,7 +46,7 @@
             <ul>
                 {* subscription_list *}
                 {def $subcriptions_count = 0}
-				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_subscription_list">
@@ -57,7 +57,7 @@
                     </a>
                 </li>
 				
-				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'pending'
 							) )}
@@ -69,7 +69,7 @@
                     </a>
                 </li>
 				
-				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'confirmed'
 							) )}
@@ -81,7 +81,7 @@
                     </a>
                 </li>
 				
-				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'approved'
 							) )}
@@ -93,7 +93,7 @@
                     </a>
                 </li>
 				
-				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'bounced'
 							) )}
@@ -105,7 +105,7 @@
                     </a>
                 </li>
 				
-				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'removed'
 							) )}
@@ -117,7 +117,7 @@
                     </a>
                 </li>
 				
-				{set $subcriptions_count = fetch( 'newsletter', 'user_count', hash(
+				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'subscription_status', 'blacklisted'
 							) )}
