@@ -149,7 +149,7 @@
 								<div class="box-bl">
 									<div class="box-br">
 										<div class="left">
-											{if $newsletter_user.status|ne(8)}
+											{if $newsletter_user.status_identifier|ne('blacklisted')}
 												<form id="submit_newsletter_user" method="post" style="display:inline;" action={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()}>
 													<input type="hidden" name="RedirectUrlActionCancel" value={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()} />
 													<input type="hidden" name="RedirectUrlActionSuccess" value={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()} />
@@ -162,7 +162,7 @@
 												<input type="hidden" name="RedirectUrlActionRemove" value={'newsletter/user'|ezurl()} />
 												<input class="button" type="submit" name="RemoveNewsletterUserButton" value={'Remove'|i18n( 'newsletter/user' )} />
 											</form>
-											{if $newsletter_user.status|ne(8)}
+											{if $newsletter_user.status_identifier|ne('blacklisted')}
 												<form id="blacklist_newsletter_user" method="post" style="display:inline;" action={'newsletter/blacklist'|ezurl}>
 													<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />
 													<input disabled="disabled" class="button" type="submit" name="AddToBlacklistButton" value="{'Add to blacklist'|i18n( 'newsletter/user' )}" />
@@ -173,7 +173,6 @@
 													<input disabled="disabled" class="button" type="submit" name="RemoveFromBlacklistButton" value="{'Remove from blacklist'|i18n( 'newsletter/user' )}" />
 												</form>
 											{/if}
-
 										</div>
 									</div>
 								</div>

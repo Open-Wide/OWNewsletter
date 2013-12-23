@@ -171,12 +171,14 @@ class OWNewsletterUser extends eZPersistentObject {
 				'salutation_name' => 'getSalutationName',
 				'is_confirmed' => 'isConfirmed',
 				'is_removed_self' => 'isRemovedSelf',
+				'is_removed' => 'isRemoved',
 				'subscription_array' => 'getSubscriptionArray',
 				'email_name' => 'getEmailName',
 				'creator' => 'getCreatorUserObject',
 				'modifier' => 'getModifierUserObject',
 				'ez_user' => 'getEzUserObject',
-				'status_name' => 'getStatusString'
+				'status_name' => 'getStatusString',
+				'status_identifier' => 'getStatusIdentifier'
 			),
 			'class_name' => 'OWNewsletterUser',
 			'name' => 'ownl_user' );
@@ -239,13 +241,23 @@ class OWNewsletterUser extends eZPersistentObject {
 	}
 
 	/**
-	 * Check if current object has status blackisted
+	 * Check if current object has status self removed
 	 *
 	 * @return boolean
 	 */
 	function isRemovedSelf() {
 		$status = $this->attribute( 'status' );
 		return $status == self::STATUS_REMOVED_SELF ? true : false;
+	}
+
+	/**
+	 * Check if current object has status removed
+	 *
+	 * @return boolean
+	 */
+	function isRemoved() {
+		$status = $this->attribute( 'status' );
+		return $status == self::STATUS_REMOVED_SELF || $status == self::STATUS_REMOVED_ADMIN ? true : false;
 	}
 
 	/**
@@ -329,33 +341,30 @@ class OWNewsletterUser extends eZPersistentObject {
 	 */
 	function getStatusString() {
 		$statusString = '-';
-		switch ( $this->attribute( 'status' ) ) {
-			case self::STATUS_PENDING_EZ_USER_REGISTER:
-				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Pending eZ User Register' );
-				break;
-			case self::STATUS_PENDING:
-				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Pending' );
-				break;
-			case self::STATUS_CONFIRMED:
-				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Confirmed' );
-				break;
-			case self::STATUS_REMOVED_SELF:
-				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Removed by user' );
-				break;
-			case self::STATUS_REMOVED_ADMIN:
-				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Removed by admin' );
-				break;
-			case self::STATUS_BOUNCED_SOFT:
-				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Bounced soft' );
-				break;
-			case self::STATUS_BOUNCED_HARD:
-				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Bounced hard' );
-				break;
-			case self::STATUS_BLACKLISTED:
-				$statusString = ezpI18n::tr( 'newsletter/subscription/status', 'Blacklisted' );
-				break;
+
+		$availableStatusArray = self::getAvailableStatus();
+		$currentStatusId = $this->attribute( 'status' );
+
+		if ( array_key_exists( $currentStatusId, $availableStatusArray ) ) {
+			$statusString = $availableStatusArray[$currentStatusId];
 		}
 		return $statusString;
+	}
+
+	/**
+	 * get a translated string for the status code
+	 * @return unknown_type
+	 */
+	function getStatusIdentifier() {
+		$statusIdentifier = '-';
+
+		$availableStatusArray = self::getAvailableStatus( 'identifier' );
+		$currentStatusId = $this->attribute( 'status' );
+
+		if ( array_key_exists( $currentStatusId, $availableStatusArray ) ) {
+			$statusIdentifier = $availableStatusArray[$currentStatusId];
+		}
+		return $statusIdentifier;
 	}
 
 	/*	 * **********************
@@ -684,6 +693,24 @@ class OWNewsletterUser extends eZPersistentObject {
 	public function resetBounceCount() {
 		$this->setAttribute( 'bounce_count', 0 );
 	}
+	
+	/**
+	 * Mark user as removed by admin
+	 */
+	public function removeByAdmin() {
+		$this->setAttribute( 'status', self::STATUS_REMOVED_ADMIN );
+		$this->sync();
+		$this->store();
+	}
+	
+	/**
+	 * Mark user as confirmed
+	 */
+	public function confirm() {
+		$this->setAttribute( 'status', self::STATUS_CONFIRMED );
+		$this->sync();
+		$this->store();
+	}
 
 	/**
 	 * remove the current newlsetter user and all depending nl subscriptions
@@ -777,7 +804,6 @@ class OWNewsletterUser extends eZPersistentObject {
 		$salutationMappingArray = $newsletterIni->variable( 'NewsletterUserSettings', 'SalutationMappingArray' );
 		$salutationNameArray = array();
 		foreach ( $salutationMappingArray as $salutationKey => $languageString ) {
-// value_1
 			$salutationKeyExplode = explode( '_', $salutationKey );
 			if ( isSet( $salutationKeyExplode[1] ) ) {
 				$salutationId = (int) $salutationKeyExplode[1];
@@ -785,6 +811,34 @@ class OWNewsletterUser extends eZPersistentObject {
 			}
 		}
 		return $salutationNameArray;
+	}
+
+	/**
+	 * get an array of all available subscription status id with translated Names
+	 * @return array
+	 */
+	static function getAvailableStatus( $arrayInfo = 'name' ) {
+		if ( $arrayInfo == 'name' ) {
+			return array(
+				self::STATUS_PENDING => ezpI18n::tr( 'newsletter/user/status', 'Pending' ),
+				self::STATUS_CONFIRMED => ezpI18n::tr( 'newsletter/user/status', 'Confirmed' ),
+				self::STATUS_REMOVED_SELF => ezpI18n::tr( 'newsletter/user/status', 'Removed by user' ),
+				self::STATUS_REMOVED_ADMIN => ezpI18n::tr( 'newsletter/user/status', 'Removed by admin' ),
+				self::STATUS_BOUNCED_SOFT => ezpI18n::tr( 'newsletter/user/status', 'Bounced soft' ),
+				self::STATUS_BOUNCED_HARD => ezpI18n::tr( 'newsletter/user/status', 'Bounced hard' ),
+				self::STATUS_BLACKLISTED => ezpI18n::tr( 'newsletter/user/status', 'Blacklisted' )
+			);
+		} else {
+			return array(
+				self::STATUS_PENDING => 'pending',
+				self::STATUS_CONFIRMED => 'confirmed',
+				self::STATUS_REMOVED_SELF => 'removed_by_user',
+				self::STATUS_REMOVED_ADMIN => 'removed_by_admin',
+				self::STATUS_BOUNCED_SOFT => 'bounced_soft',
+				self::STATUS_BOUNCED_HARD => 'bounced_hard',
+				self::STATUS_BLACKLISTED => 'blacklisted',
+			);
+		}
 	}
 
 }

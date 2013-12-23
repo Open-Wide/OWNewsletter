@@ -1,4 +1,4 @@
-{def $page_uri = concat( 'newsletter/user/', $subscription.newsletter_user_id, '/', $subscription.mailing_list_contentobject_id )}
+{def	$page_uri = concat( 'newsletter/user/', $subscription.newsletter_user_id, '/', $subscription.mailing_list_contentobject_id )}
 <div class="newsletter newsletter-subscription_view">
     <div class="context-block">
         <div class="box-header">
@@ -169,23 +169,18 @@
 										<div class="left">
 											<form class="inline" action={concat( '/newsletter/user/', $subscription.id )|ezurl()} method="post">
 												<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
-												<input  {if $subscription.can_be_approved|not()}class="button-disabled" disabled="disabled"{else}class="button"{/if} type="submit" value="{'Approve'|i18n( 'newsletter/user' )}" name="ApproveSubscriptionButton" title="{'Approve subscription'|i18n( 'newsletter/user' )}" />
+												<input  {if $subscription.can_be_approved}class="button"{else}class="button-disabled" disabled="disabled"{/if} type="submit" value="{'Approve'|i18n( 'newsletter/user' )}" name="ApproveSubscriptionButton" title="{'Approve subscription'|i18n( 'newsletter/user' )}" />
 											</form>
 											<form class="inline" action={concat( 'newsletter/user/', $subscription.newsletter_user.id )|ezurl()} method="post">
 												<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
 												<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
 												<input class="button" type="submit" value="{'Edit'|i18n( 'newsletter/user' )}" title="{'Edit newsletter user'|i18n( 'newsletter/user' )}" name="SubmitNewsletterUserButton" />
 											</form>
-											{if or( $subscription.status|eq(3), $subscription.status|eq(4), $subscription.status|eq(8) )}
-												<input class="button-disabled" type="button" name="SubscriptionRemoveButton" value="{'Remove'|i18n( 'newsletter/user' )}" title="{'Remove subscription'|i18n( 'newsletter/user' )}" />
-											{else}
 												<form class="inline" action={concat( '/newsletter/user/', $subscription.id )|ezurl()} method="post">
 													<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
 													<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
-													<input class="button" type="submit" value="{'Remove'|i18n( 'newsletter/user' )}" title="{'Remove newsletter user'|i18n( 'newsletter/user' )}" name="RemoveSubscriptionButton" />
+													<input  {if $subscription.can_be_removed|not()}class="button-disabled" disabled="disabled"{else}class="button"{/if} type="submit" value="{'Remove'|i18n( 'newsletter/user' )}" title="{'Remove subscription'|i18n( 'newsletter/user' )}" name="RemoveSubscriptionButton" />
 												</form>
-											{/if}
-
 										</div>
 									</div>
 								</div>
@@ -196,5 +191,4 @@
 			</div>
 		</div>
 	</div>
-
 </div>

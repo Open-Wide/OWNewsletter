@@ -331,7 +331,7 @@
     </message>
     <message>
         <source>Edit by admin</source>
-        <translation>Editer par admin</translation>
+        <translation>Éditer par admin</translation>
     </message>
     <message>
         <source>Delete newsletter user and all subscriptions from database</source>
@@ -339,7 +339,7 @@
     </message>
     <message>
         <source>Edit</source>
-        <translation>Editer</translation>
+        <translation>Éditer</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -409,6 +409,10 @@
         <source>Approve subscription</source>
         <translation>Approuver l&apos;abonnement</translation>
     </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Confirmer</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/edition/status</name>
@@ -442,6 +446,45 @@
     <message>
         <source>Approved</source>
         <translation>Approuvé</translation>
+    </message>
+    <message>
+        <source>Removed</source>
+        <translation>Supprimé</translation>
+    </message>
+    <message>
+        <source>Removed by user</source>
+        <translation>Supprimé l&apos;abonné</translation>
+    </message>
+    <message>
+        <source>Removed by admin</source>
+        <translation>Supprimé par un administrateur</translation>
+    </message>
+    <message>
+        <source>Bounced soft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bounced hard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bounced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blacklisted</source>
+        <translation>En liste noire</translation>
+    </message>
+</context>
+<context>
+    <name>newsletter/user/status</name>
+    <message>
+        <source>Pending</source>
+        <translation>En attente</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Confirmé</translation>
     </message>
     <message>
         <source>Removed</source>

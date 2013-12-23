@@ -103,6 +103,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 				'is_removed_self' => 'isRemovedSelf',
 				'is_blacklisted' => 'isBlacklisted',
 				'can_be_approved' => 'canBeApproved',
+				'can_be_removed' => 'canBeRemoved',
 				'creator' => 'getCreatorUserObject',
 				'modifier' => 'getModifierUserObject',
 				'status_name' => 'getStatusName',
@@ -178,10 +179,21 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	}
 	
 	/**
+	 * Check if the subscription can be approved
 	 * 
+	 * @return booleean
 	 */
 	function canBeApproved() {
 		return !in_array( $this->attribute('status'), array( self::STATUS_APPROVED, self::STATUS_REMOVED_SELF, self::STATUS_BLACKLISTED ) );
+	}
+	
+	/**
+	 * Check if the subscription can be removed
+	 * 
+	 * @return booleean
+	 */
+	function canBeRemoved() {
+		return !in_array( $this->attribute('status'), array( self::STATUS_REMOVED_SELF, self::STATUS_REMOVED_ADMIN, self::STATUS_BLACKLISTED ) );
 	}
 
 	/**
@@ -228,15 +240,15 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * @return unknown_type
 	 */
 	function getStatusIdentifier() {
-		$statusString = '-';
+		$statusIdentifier = '-';
 
 		$availableStatusArray = self::getAvailableStatus( 'identifier' );
 		$currentStatusId = $this->attribute( 'status' );
 
 		if ( array_key_exists( $currentStatusId, $availableStatusArray ) ) {
-			$statusString = $availableStatusArray[$currentStatusId];
+			$statusIdentifier = $availableStatusArray[$currentStatusId];
 		}
-		return $statusString;
+		return $statusIdentifier;
 	}
 
 	/*	 * **********************
@@ -329,6 +341,17 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 */
 	public function approve() {
 		$this->setAttribute( 'status', self::STATUS_APPROVED );
+		$this->sync();
+		$this->store();
+	}
+
+	/**
+	 * rmove subscription
+	 *
+	 * @return void
+	 */
+	public function removeByAdmin() {
+		$this->setAttribute( 'status', self::STATUS_REMOVED_ADMIN );
 		$this->sync();
 		$this->store();
 	}
@@ -461,7 +484,6 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 */
 	static function removeSubscriptionByNewsletterUserSelf( $mailingListContentObjectId, $newsletterUserId ) {
 		$existingSubscriptionObject = self::fetch( $newsletterUserId, $mailingListContentObjectId );
-
 		if ( is_object( $existingSubscriptionObject ) ) {
 			$existingSubscriptionObject->unsubscribe();
 		}

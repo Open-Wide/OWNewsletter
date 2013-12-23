@@ -55,3 +55,11 @@ button.image-button {
 	padding: 0;
 	margin: 0;
 }
+
+div.user_search div.block div.right {
+	width: auto;
+}
+
+div.user_search form {
+	white-space: nowrap;
+}

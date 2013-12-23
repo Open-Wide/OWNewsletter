@@ -108,20 +108,31 @@ if ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) { /* If press SubmitNe
 	$tpl->setVariable( 'available_salutation_array', OWNewsletterUser::getAvailablesSalutationsFromIni() );
 	$Result['content'] = $tpl->fetch( 'design:newsletter/user/form.tpl' );
 } elseif ( $module->isCurrentAction( 'RemoveNewsletterUser' ) && isset( $newsletterUser ) ) { /* remove user */
-	$newsletterUser->remove();
-	$module->redirectTo( $redirectUrlSuccess );
+	
 } elseif ( isset( $newsletterUser ) ) { /* show user */
 	$tpl->setVariable( 'newsletter_user', $newsletterUser );
-	$Result['path'][] = array( 'text' => $newsletterUser->attribute( 'name' ) );
+	$Result['path'][] = array(
+		'url' => 'newsletter/user/' . $newsletterUser->attribute( 'id' ),
+		'text' => $newsletterUser->attribute( 'name' )
+	);
 	if ( isset( $subscription ) ) {
 		if ( $module->isCurrentAction( 'ApproveSubscription' ) ) { /* approve user subscription */
 			$subscription->approve();
+			$module->redirectTo( $redirectUrlSuccess );
+		} elseif ( $module->isCurrentAction( 'RemoveSubscription' ) ) { /* approve user subscription */
+			$subscription->removeByAdmin();
 			$module->redirectTo( $redirectUrlSuccess );
 		} else { /* show user subscription */
 			$tpl->setVariable( 'subscription', $subscription );
 			$Result['path'][] = array( 'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Subscription' ) );
 			$Result['content'] = $tpl->fetch( 'design:newsletter/user/subscription.tpl' );
 		}
+	} elseif ( $module->isCurrentAction( 'RemoveNewsletterUser' ) ) {
+		$newsletterUser->removeByAdmin();
+		$module->redirectTo( $redirectUrlSuccess );
+	} elseif ( $module->isCurrentAction( 'ConfirmNewsletterUser' ) ) {
+		$newsletterUser->confirm();
+		$module->redirectTo( $redirectUrlSuccess );
 	} else {
 		$Result['content'] = $tpl->fetch( 'design:newsletter/user/show.tpl' );
 	}
