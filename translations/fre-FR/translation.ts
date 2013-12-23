@@ -618,6 +618,45 @@
     </message>
 </context>
 <context>
+	<name>newsletter/datatypes</name>
+	<message>
+		<source>Newsletter mailing list</source>
+		<comment>Datatype name</comment>
+		<translation>Configuration de la mailing list</translation>
+	</message>
+</context>
+<context>
+	<name>newsletter/datatype/ownewslettermailinglist</name>
+	<message>
+		<source>List options</source>
+		<translation>Liste d&apos;options</translation>
+	</message>
+	<message>
+		<source>Can subscribe</source>
+		<translation>Peut s'abonner</translation>
+	</message>
+	<message>
+		<source>Siteaccess</source>
+		<translation>Siteaccess</translation>
+	</message>
+	<message>
+		<source>Automatically approve subscription after user registration?</source>
+		<translation>Approuver automatiquement l'abonnement après l'enregistrement de l'abonné ?</translation>
+	</message>
+	<message>
+		<source>No</source>
+		<translation>Non</translation>
+	</message>
+	<message>
+		<source>Yes</source>
+		<translation>Oui</translation>
+	</message>
+	<message>
+		<source>Show in siteaccess</source>
+		<translation>Afficher sur les siteaccess</translation>
+	</message>
+</context>
+<context>
     <name>design/admin/node/view/full</name>
     <message>
         <source>Subscribtions (%children_count/%all_children_count)</source>
