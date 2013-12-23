@@ -61,6 +61,11 @@ $schema = array(
 				'type' => 'non-unique',
 				'fields' => array( 'newsletter_user_id' ),
 			),
+			'email' =>
+			array(
+				'type' => 'unique',
+				'fields' => array( 'email' ),
+			),
 		),
 	),
 	'ownl_subscription' =>
