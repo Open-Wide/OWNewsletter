@@ -85,6 +85,51 @@ class OWNewsletterBlacklistItem extends eZPersistentObject {
 	 * ********************** */
 
 	/**
+	 * Return object by id
+	 *
+	 * @param integer $id
+	 * @return object
+	 */
+	static function fetch( $id ) {
+		$object = eZPersistentObject::fetchObject( self::definition(), null, array( 'id' => $id ), true );
+		return $object;
+	}
+
+	/**
+	 * Search all objects with custom conditions
+	 *
+	 * @param array $conds
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @param boolean $asObject
+	 * @return array
+	 */
+	static function fetchList( $conds = array(), $limit = false, $offset = false, $asObject = true ) {
+		$sortArr = array(
+			'email' => 'asc' );
+		$limitArr = null;
+
+		if ( (int) $limit != 0 ) {
+			$limitArr = array(
+				'limit' => $limit,
+				'offset' => $offset );
+		}
+		$objectList = eZPersistentObject::fetchObjectList( self::definition(), null, $conds, $sortArr, $limitArr, $asObject, null, null, null, null );
+		return $objectList;
+	}
+
+	/**
+	 * Count all object with custom conditions
+	 *
+	 * @param array $conds
+	 * @return interger
+	 */
+	static function countList( $conds = array() ) {
+		$objectList = eZPersistentObject::count( self::definition(), $conds );
+		return $objectList;
+	}
+
+	/**
 	 * fetch OWNewsletterBlacklistItem object by email
 	 * generae hash from email and look for existing hash
 	 * => so it is possible to delete the email make the user anonym
@@ -104,9 +149,58 @@ class OWNewsletterBlacklistItem extends eZPersistentObject {
 	 * OBJECT METHODS
 	 * ********************** */
 
+	/**
+	 * if nl user exists update this data to
+	 * (non-PHPdoc)
+	 * @see kernel/classes/eZPersistentObject#store($fieldFilters)
+	 */
+	public function store( $fieldFilters = null ) {
+		$newsletterUserObject = $this->getNewsletterUserObject();
+		if ( is_object( $newsletterUserObject ) ) {
+			$newsletterUserObject->setBlacklisted();
+		}
+		parent::store( $fieldFilters );
+	}
+
+	/**
+	 * When a blacklist item is removed, remove the blacklist entries for the user
+	 */
+	public function remove( $conditions = null, $extraConditions = null ) {
+		$newsletterUserObject = $this->getNewsletterUserObject();
+		if ( is_object( $newsletterUserObject ) ) {
+			$newsletterUserObject->setNonBlacklisted();
+		}
+		return parent::remove( $conditions = null, $extraConditions = null );
+	}
+
 	/*	 * **********************
 	 * PERSISTENT METHODS
 	 * ********************** */
+
+	static function addToBlacklist( $email ) {
+
+		$newsletterUserObject = OWNewsletterUser::fetchByEmail( $email );
+		$newsletterUserId = 0;
+		if ( is_object( $newsletterUserObject ) ) {
+			$newsletterUserId = $newsletterUserObject->attribute( 'id' );
+		}
+		$row = array( 'email' => strtolower( $email ),
+			'created' => time(),
+			'creator_contentobject_id' => eZUser::currentUserID(),
+			'email_hash' => self::generateEmailHash( $email ),
+			'newsletter_user_id' => $newsletterUserId
+		);
+		$object = new self( $row );
+		$object->store();
+		return $object;
+	}
+
+	static function removeFromBlacklist( $email ) {
+		$blacklistItem = self::fetchByEmail( $email );
+		if ( is_object( $blacklistItem ) ) {
+			$blacklistItem->remove();
+		}
+	}
 
 	/*	 * **********************
 	 * OTHER METHODS

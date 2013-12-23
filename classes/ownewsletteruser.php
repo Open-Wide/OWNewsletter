@@ -391,7 +391,7 @@ class OWNewsletterUser extends eZPersistentObject {
 	 * @param boolean $asObject
 	 * @return array
 	 */
-	static function fetchList( $conds, $limit = false, $offset = false, $asObject = true ) {
+	static function fetchList( $conds = array(), $limit = false, $offset = false, $asObject = true ) {
 		$sortArr = array(
 			'created' => 'desc' );
 		$limitArr = null;
@@ -411,7 +411,7 @@ class OWNewsletterUser extends eZPersistentObject {
 	 * @param array $conds
 	 * @return interger
 	 */
-	static function countList( $conds ) {
+	static function countList( $conds = array() ) {
 		$objectList = eZPersistentObject::count( self::definition(), $conds );
 		return $objectList;
 	}
@@ -576,12 +576,64 @@ class OWNewsletterUser extends eZPersistentObject {
 		if ( $this->attribute( 'id' ) > 1 ) {
 			$this->setAttribute( 'modified', time() );
 			$this->setAttribute( 'modifier_contentobject_id', eZUser::currentUserID() );
-		}
-// first version created = modified
-		else {
+		} else {
 			$this->setAttribute( 'modified', $this->attribute( 'created' ) );
 			$this->setAttribute( 'modifier_contentobject_id', eZUser::currentUserID() );
 		}
+	}
+
+	/**
+	 * set current object blacklisted
+	 * @return void
+	 */
+	public function setBlacklisted() {
+		$this->setAttribute( 'status', self::STATUS_BLACKLISTED );
+		// set all subscriptions and all open senditems to blacklisted
+		$this->setAllNewsletterUserRelatedItemsToStatus( OWNewsletterSubscription::STATUS_BLACKLISTED );
+		$this->store();
+	}
+
+	/**
+	 * Set current object non-blacklisted
+	 * User and subscriptions will be set to confirmed
+	 * @return void
+	 */
+	public function setNonBlacklisted() {
+		OWNewsletterLog::writeDebug(
+				'OWNewsletterUser::setNonBlacklisted', 'user', 'blacklist', array( 'nl_user' => $this->attribute( 'id' ) )
+		);
+
+		// we determine the actual status by checking the various timestamps
+		if ( $this->attribute( 'confirmed' ) != 0 ) {
+			if ( $this->attribute( 'bounced' ) != 0 || $this->attribute( 'removed' ) != 0 ) {
+				if ( $this->attribute( 'removed' ) > $this->attribute( 'bounced' ) ) {
+					$this->setRemoved();
+				} else {
+					$this->setBounced();
+				}
+			}
+			// confirmed, and not deleted nor bounced
+			else {
+				$this->setAttribute( 'status', self::STATUS_CONFIRMED );
+			}
+		}
+		// not confirmed
+		else {
+			// might have been removed by admin
+			if ( $this->attribute( 'removed' ) != 0 ) {
+				$this->setRemoved( true );
+			} else {
+				$this->setAttribute( 'status', self::STATUS_PENDING );
+			}
+		}
+		$this->setAttribute( 'blacklisted', 0 );
+
+		// set all subscriptions and all open senditems to blacklisted
+		foreach ( OWNewsletterSubscription::fetchListByNewsletterUserId( $this->attribute( 'id' ) ) as $subscription ) {
+			$subscription->setNonBlacklisted();
+		}
+
+		$this->store();
 	}
 
 	/**
@@ -693,16 +745,23 @@ class OWNewsletterUser extends eZPersistentObject {
 	public function resetBounceCount() {
 		$this->setAttribute( 'bounce_count', 0 );
 	}
-	
+
 	/**
-	 * Mark user as removed by admin
+	 * call this function if a bounce mail for current user is detected
+	 * if it is a hard bounce set
+	 * @param boolean $isHardBounce
+	 * @return unknown_type
 	 */
-	public function removeByAdmin() {
-		$this->setAttribute( 'status', self::STATUS_REMOVED_ADMIN );
-		$this->sync();
-		$this->store();
+	public function setRemoved( $byAdmin = false ) {
+		if ( $byAdmin === true ) {
+			$this->setAttribute( 'status', self::STATUS_REMOVED_ADMIN );
+			$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_REMOVED_ADMIN );
+		} else {
+			$this->setAttribute( 'status', self::STATUS_REMOVED_SELF );
+			$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_REMOVED_SELF );
+		}
 	}
-	
+
 	/**
 	 * Mark user as confirmed
 	 */
@@ -838,6 +897,39 @@ class OWNewsletterUser extends eZPersistentObject {
 				self::STATUS_BOUNCED_HARD => 'bounced_hard',
 				self::STATUS_BLACKLISTED => 'blacklisted',
 			);
+		}
+	}
+
+	/**
+	 * This should be called if a user is bounced or blacklisted
+	 * all related subscriptions and active senditems will be updated
+	 *
+	 * @param $status
+	 * @return unknown_type
+	 */
+	private function setAllNewsletterUserRelatedItemsToStatus( $status ) {
+		$newsletterUserId = $this->attribute( 'id' );
+
+		switch ( $status ) {
+			case OWNewsletterSubscription::STATUS_BOUNCED_SOFT:
+			case OWNewsletterSubscription::STATUS_BOUNCED_HARD:
+			case OWNewsletterSubscription::STATUS_BLACKLISTED:
+
+				// update active subscriptions
+				$activeSubscriptionList = OWNewsletterSubscription::fetchActiveList( array( 'newsletter_user_id' => $newsletterUserId ) );
+				foreach ( $activeSubscriptionList as $subscription ) {
+					if ( $subscription->attribute( 'status' ) == $status ) {
+						OWNewsletterLog::writeDebug(
+								'skip - already set this status - OWNewsletterUser::setAllNewsletterUserRelatedItemsToStatus', 'subscription', 'status', array(
+							'status' => $status,
+							'subscription_id' => $subscription->attribute( 'id' ),
+							'nl_user' => $newsletterUserId ) );
+					} else {
+						$subscription->setAttribute( 'status', $status );
+						$subscription->store();
+					}
+				}
+				break;
 		}
 	}
 

@@ -177,23 +177,25 @@ class OWNewsletterSubscription extends eZPersistentObject {
 		$subscriptionStatus = $this->attribute( 'status' );
 		return $subscriptionStatus == self::STATUS_BLACKLISTED ? true : false;
 	}
-	
+
 	/**
 	 * Check if the subscription can be approved
 	 * 
 	 * @return booleean
 	 */
 	function canBeApproved() {
-		return !in_array( $this->attribute('status'), array( self::STATUS_APPROVED, self::STATUS_REMOVED_SELF, self::STATUS_BLACKLISTED ) );
+		return !in_array( $this->attribute( 'status' ), array( self::STATUS_APPROVED, self::STATUS_REMOVED_SELF,
+					self::STATUS_BLACKLISTED ) );
 	}
-	
+
 	/**
 	 * Check if the subscription can be removed
 	 * 
 	 * @return booleean
 	 */
 	function canBeRemoved() {
-		return !in_array( $this->attribute('status'), array( self::STATUS_REMOVED_SELF, self::STATUS_REMOVED_ADMIN, self::STATUS_BLACKLISTED ) );
+		return !in_array( $this->attribute( 'status' ), array( self::STATUS_REMOVED_SELF,
+					self::STATUS_REMOVED_ADMIN, self::STATUS_BLACKLISTED ) );
 	}
 
 	/**
@@ -278,7 +280,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * @param boolean $asObject
 	 * @return array
 	 */
-	static function fetchList( $conds, $limit = false, $offset = false, $asObject = true ) {
+	static function fetchList( $conds = array(), $limit = false, $offset = false, $asObject = true ) {
 		$sortArr = array(
 			'created' => 'desc' );
 		$limitArr = null;
@@ -298,7 +300,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 * @param array $conds
 	 * @return interger
 	 */
-	static function countList( $conds ) {
+	static function countList( $conds = array() ) {
 		$objectList = eZPersistentObject::count( self::definition(), $conds );
 		return $objectList;
 	}
@@ -312,6 +314,34 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 */
 	static function fetchListByNewsletterUserId( $newsletterUserId, $asObject = true ) {
 		return self::fetchList( array( 'newsletter_user_id' => (int) $newsletterUserId ), false, false, $asObject );
+	}
+
+	/**
+	 * Search all objects with custom conditions
+	 *
+	 * @param array $conds
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @param boolean $asObject
+	 * @return array
+	 */
+	static function fetchActiveList( $conds = array(), $limit = false, $offset = false, $asObject = true ) {
+		$sortArr = array(
+			'created' => 'desc' );
+		$limitArr = null;
+
+		if ( (int) $limit != 0 ) {
+			$limitArr = array(
+				'limit' => $limit,
+				'offset' => $offset );
+		}
+		$conds['status'] = array( array( self::STATUS_PENDING,
+				self::STATUS_CONFIRMED,
+				self::STATUS_APPROVED,
+				self::STATUS_BOUNCED_SOFT,
+				self::STATUS_BOUNCED_HARD ) );
+		$objectList = eZPersistentObject::fetchObjectList( self::definition(), null, $conds, $sortArr, $limitArr, $asObject, null, null, null, null );
+		return $objectList;
 	}
 
 	/*	 * **********************
@@ -421,6 +451,28 @@ class OWNewsletterSubscription extends eZPersistentObject {
 				parent::setAttribute( $attr, $val );
 				break;
 		}
+	}
+
+	/**
+	 * Reverts the blacklisted status by checking the various operation timestamps
+	 */
+	public function setNonBlacklisted() {
+		$status = self::STATUS_PENDING;
+		$lastActionDate = 0;
+		if ( $this->attribute( 'approved' ) > $lastActionDate ) {
+			$status = self::STATUS_APPROVED;
+			$lastActionDate = $this->attribute( 'approved' );
+		}
+		if ( $this->attribute( 'confirmed' ) > $lastActionDate ) {
+			$status = self::STATUS_CONFIRMED;
+			$lastActionDate = $this->attribute( 'confirmed' );
+		}
+		if ( $this->attribute( 'removed' ) > $lastActionDate ) {
+			$status = self::STATUS_REMOVED_ADMIN;
+			$lastActionDate = $this->attribute( 'removed' );
+		}
+		$this->setAttribute( 'status', $status );
+		$this->store();
 	}
 
 	/*	 * **********************

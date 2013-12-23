@@ -4,17 +4,35 @@
 			'module', 'newsletter',
 			'function', 'admin' ) )}
 {if $has_admin_access}
-
-    <div class="box-header"><div class="box-tc"><div class="box-ml"><div class="box-mr"><div class="box-tl"><div class="box-tr">
+    <div class="box-header">
+		<div class="box-tc">
+			<div class="box-ml">
+				<div class="box-mr">
+					<div class="box-tl">
+						<div class="box-tr">
 							<h4>{'Settings'|i18n( 'newsletter/menu' )}</h4>
 
-						</div></div></div></div></div></div>
-    <div class="box-bc"><div class="box-ml"><div class="box-mr"><div class="box-bl"><div class="box-br"><div class="box-content">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="box-bc">
+		<div class="box-ml">
+			<div class="box-mr"><div class="box-bl">
+					<div class="box-br">
+						<div class="box-content">
 							<ul>
 								<li><a href={'/newsletter/mailbox_list'|ezurl}>{'Mail accounts'|i18n( 'newsletter/menu' )}</a></li>
 								<li><a href={'/newsletter/import_list'|ezurl}>{'Imports'|i18n( 'newsletter/menu' )}</a></li>
-								<li><a href={'/newsletter/subscribe/'|ezurl}>{'Subscription form'|i18n( 'newsletter/menu' )}{*Newsletter Anmeldeformular*}</a></li>
-								<li><a href={'/newsletter/settings'|ezurl}>{'INI Settings'|i18n( 'newsletter/menu' )}{*Settings*}</a></li>
+								<li><a href={'/newsletter/subscribe/'|ezurl}>{'Subscription form'|i18n( 'newsletter/menu' )}</a></li>
+								<li><a href={'/newsletter/settings'|ezurl}>{'INI Settings'|i18n( 'newsletter/menu' )}</a></li>
 							</ul>
-						</div></div></div></div></div></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {/if}

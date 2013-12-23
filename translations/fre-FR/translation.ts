@@ -34,6 +34,10 @@
         <source>Subscription</source>
         <translation>Abonnement</translation>
     </message>
+    <message>
+        <source>Blacklist</source>
+        <translation>Liste noire</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/menu</name>
@@ -183,7 +187,7 @@
     </message>
     <message>
         <source>Confirmed</source>
-        <translation>Approuvé</translation>
+        <translation>Confirmé</translation>
     </message>
     <message>
         <source>Conf</source>
@@ -358,6 +362,10 @@
         <translation>Ajouter à la liste noire</translation>
     </message>
     <message>
+        <source>Remove from blacklist</source>
+        <translation>Supprimer de la liste noire</translation>
+    </message>
+    <message>
         <source>Newsletter received</source>
         <translation type="unfinished"></translation>
     </message>
@@ -387,7 +395,7 @@
     </message>
     <message>
         <source>eZ Publish User</source>
-        <translation>Utilisateur eZ Publish</translation>
+        <translation>Abonné eZ Publish</translation>
     </message>
     <message>
         <source>Approved</source>
@@ -420,6 +428,77 @@
     <message>
         <source>No subscription</source>
         <translation>Aucun abonnement</translation>
+    </message>
+</context>
+<context>
+    <name>newsletter/blacklist</name>
+    <message>
+        <source>Create a new blacklist entry.</source>
+        <translation>Créer une nouvelle entrée à la liste noire.</translation>
+    </message>
+    <message>
+        <source>Invert selection</source>
+        <translation>Inversér la sélection</translation>
+    </message>
+    <message>
+        <source>ID</source>
+        <translation>Identifiant</translation>
+    </message>
+    <message>
+        <source>Email hash</source>
+        <translation>Hash email</translation>
+    </message>
+    <message>
+        <source>Email</source>
+        <translation>Email</translation>
+    </message>
+    <message>
+        <source>Created</source>
+        <translation>Créé</translation>
+    </message>
+    <message>
+        <source>Creator</source>
+        <translation>Créateur</translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation>Note</translation>
+    </message>
+    <message>
+        <source>Select items for removal</source>
+        <translation>Sélectionner des éléments pour suppression</translation>
+    </message>
+    <message>
+        <source>Manage blacklist</source>
+        <translation>Gestion de la liste noire</translation>
+    </message>
+    <message>
+        <source>By adding an user to the blacklist, you can make sure that he will never get a newsletter again from this system.</source>
+        <translation>En ajoutant un abonné à la liste noire, vous pouvez être sûr qu&apos;il ne recevra plus jamais de lettre d&apos;information de ce système.</translation>
+    </message>
+    <message>
+        <source>Add this email address to blacklist</source>
+        <translation>Ajouter cette adresse mail à la liste noire</translation>
+    </message>
+    <message>
+        <source>Blacklisted users</source>
+        <translation>Abonnés de la liste noire</translation>
+    </message>
+    <message>
+        <source>Newsletter UID</source>
+        <translation>Abonné</translation>
+    </message>
+    <message>
+        <source>Blacklists</source>
+        <translation>Listes noires</translation>
+    </message>
+    <message>
+        <source>Remove from blacklist</source>
+        <translation>Supprimer de la liste noire</translation>
+    </message>
+    <message>
+        <source>No blacklist item</source>
+        <translation>Aucun élément dans la liste noire</translation>
     </message>
 </context>
 <context>

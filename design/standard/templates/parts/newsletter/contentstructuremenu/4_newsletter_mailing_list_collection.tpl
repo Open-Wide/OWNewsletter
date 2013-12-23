@@ -41,7 +41,6 @@
 			{* Text *}
 
 			{* icon *}
-			{*<img src={'/share/icons/crystal-admin/16x16_indexed/filesystems/folder_txt.png'|ezroot}>*}
 			{'newsletter_mailing_list_collection'|class_icon( small )}
 
 			{if or( eq($ui_context, 'browse')|not(), eq($:parentNode.object.is_container, true()))}

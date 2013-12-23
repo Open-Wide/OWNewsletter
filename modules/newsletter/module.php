@@ -32,30 +32,56 @@ $ViewList['user'] = array(
 		'ApproveSubscriptionButton' => 'ApproveSubscription',
 		'RemoveSubscriptionButton' => 'RemoveSubscription'
 	),
-	 'post_action_parameters' => array(
-		 'Cancel'=> array(
-			 'RedirectUrlActionCancel' => 'RedirectUrlActionCancel'
-		 ),
-		 'SubmitNewsletterUser'=> array(
-			 'NewsletterUser' => 'NewsletterUser',
-			 'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
-			 'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
-		 ),
-		 'ConfirmNewsletterUser'=> array(
-			 'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
-		 ),
-		 'RemoveNewsletterUser'=> array(
-			 'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
-		 ),
-		 'RemoveForGoodNewsletterUser'=> array(
-			 'RedirectUrlActionRemove' => 'RedirectUrlActionRemove'
-		 ),
-		 'ApproveSubscription'=> array(
-			 'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
-		 ),
-		 'RemoveSubscription'=> array(
-			 'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
-		 )
+	'post_action_parameters' => array(
+		'Cancel' => array(
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel'
+		),
+		'SubmitNewsletterUser' => array(
+			'NewsletterUser' => 'NewsletterUser',
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		),
+		'ConfirmNewsletterUser' => array(
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		),
+		'RemoveNewsletterUser' => array(
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		),
+		'RemoveForGoodNewsletterUser' => array(
+			'RedirectUrlActionRemove' => 'RedirectUrlActionRemove'
+		),
+		'ApproveSubscription' => array(
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		),
+		'RemoveSubscription' => array(
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		)
+	)
+);
+
+$ViewList['blacklist'] = array(
+	'script' => 'blacklist.php',
+	'functions' => array( 'blacklist' ),
+	'default_navigation_part' => 'eznewsletternavigationpart',
+	'ui_context' => 'admin',
+	'params' => array( ),
+	'single_post_actions' => array(
+		'CancelButton' => 'Cancel',
+		'AddBacklistItemButton' => 'AddBacklistItem',
+		'RemoveBacklistItemButton' => 'RemoveBacklistItem'
+	),
+	'post_action_parameters' => array(
+		'Cancel' => array(
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel'
+		),
+		'AddBacklistItem' => array(
+			'Email' => 'Email',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		),
+		'RemoveBacklistItem' => array(
+			'Email' => 'Email',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		)
 	)
 );
 
@@ -81,8 +107,7 @@ $FunctionList['mailbox_item_list'] = array();
 $FunctionList['mailbox_item_view'] = array();
 $FunctionList['mailbox_list'] = array();
 $FunctionList['mailbox_edit'] = array();
-$FunctionList['blacklist_item'] = array();
-$FunctionList['blacklist_item'] = array();
+$FunctionList['blacklist'] = array();
 $FunctionList['import_list'] = array();
 $FunctionList['import_view'] = array();
 

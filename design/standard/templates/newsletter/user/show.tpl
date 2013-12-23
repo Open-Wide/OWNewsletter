@@ -156,7 +156,6 @@
 												<input type="hidden" name="RedirectUrlActionCancel" value={$page_uri} />
 												<input type="hidden" name="RedirectUrlActionSuccess" value={$page_uri} />
 												<input type="hidden" name="RedirectUrlActionRemove" value={'newsletter/user'} />
-												<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />
 												<input {if $newsletter_user.status_identifier|eq('blacklisted')}class="button-disabled"{else}class="button"{/if} 
 																												type="submit" name="SubmitNewsletterUserButton" value="{'Edit'|i18n( 'newsletter/user' )}" />
 												<input {if $newsletter_user.is_confirmed}class="button-disabled"{else}class="button"{/if} 
@@ -165,10 +164,15 @@
 																					   type="submit" name="RemoveNewsletterUserButton" value="{'Remove'|i18n( 'newsletter/user' )}" />
 												<input {if $newsletter_user.is_removed|not()}class="button-disabled"{else}class="button"{/if} 
 																							 type="submit" name="RemoveForGoodNewsletterUserButton" value="{'Remove for good'|i18n( 'newsletter/user' )}" onclick="return confirm('{'Do you really want to delete this user?'|i18n( 'newsletter/user' )|wash()}');" />
+											</form>
+											
+											<form id="submit_blacklist_{$newsletter_user.id}}" method="post" style="display:inline;" action={'newsletter/blacklist'|ezurl()}>
+												<input type="hidden" name="RedirectUrlActionSuccess" value={$page_uri} />
+												<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />
 												{if $newsletter_user.status_identifier|ne('blacklisted')}
-													<input disabled="disabled" class="button" type="submit" name="AddToBlacklistButton" value="{'Add to blacklist'|i18n( 'newsletter/user' )}" />
+													<input class="button" type="submit" name="AddBacklistItemButton" value="{'Add to blacklist'|i18n( 'newsletter/user' )}" />
 												{else}
-													<input disabled="disabled" class="button" type="submit" name="RemoveFromBlacklistButton" value="{'Remove from blacklist'|i18n( 'newsletter/user' )}" />
+													<input class="button" type="submit" name="RemoveBacklistItemButton" value="{'Remove from blacklist'|i18n( 'newsletter/user' )}" />
 												{/if}
 											</form>
 										</div>

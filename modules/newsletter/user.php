@@ -126,7 +126,7 @@ if ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) { /* If press SubmitNe
 			$Result['content'] = $tpl->fetch( 'design:newsletter/user/subscription.tpl' );
 		}
 	} elseif ( $module->isCurrentAction( 'RemoveNewsletterUser' ) ) {
-		$newsletterUser->removeByAdmin();
+		$newsletterUser->setRemoved( true );
 		$module->redirectTo( $redirectUrlSuccess );
 	}elseif ( $module->isCurrentAction( 'RemoveForGoodNewsletterUser' ) ) {
 		$newsletterUser->remove();

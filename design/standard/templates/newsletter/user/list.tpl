@@ -164,9 +164,6 @@
 										{'Status'|i18n( 'newsletter/user' )}
 									</th>
 									<th>
-										{'Blacklisted'|i18n( 'newsletter/user' )}
-									</th>
-									<th>
 										{'Bounce'|i18n( 'newsletter/user' )}
 									</th>
 									<th>
@@ -195,9 +192,6 @@
 										<td>
 											<img src={'1x1.gif'|ezimage} alt="{$newsletter_user.status_name}" title="{$newsletter_user.status_name}" class="icon12 icon_s_{$newsletter_user.status_identifier}" />
 										</td>
-										<td>
-											{cond($newsletter_user.blacklisted|gt(0),'x' , '-' )}
-										</td>
 										<td title="{'Bounced'|i18n( 'newsletter/user/status' )} / {'Bounce count'|i18n( 'newsletter/user' )}">
 											{cond($newsletter_user.bounced|gt(0),'x' , '-' )} / {$newsletter_user.bounce_count|wash}
 										</td>
@@ -218,11 +212,6 @@
 																					   type="submit" name="RemoveNewsletterUserButton" value="{'Remove'|i18n( 'newsletter/user' )}" />
 												<input {if $newsletter_user.is_removed|not()}class="button-disabled"{else}class="button"{/if} 
 																							 type="submit" name="RemoveForGoodNewsletterUserButton" value="{'Remove for good'|i18n( 'newsletter/user' )}" onclick="return confirm('{'Do you really want to delete this user?'|i18n( 'newsletter/user' )|wash()}');" />
-												{if $newsletter_user.status_identifier|ne('blacklisted')}
-													<input disabled="disabled" class="button" type="submit" name="AddToBlacklistButton" value="{'Add to blacklist'|i18n( 'newsletter/user' )}" />
-												{else}
-													<input disabled="disabled" class="button" type="submit" name="RemoveFromBlacklistButton" value="{'Remove from blacklist'|i18n( 'newsletter/user' )}" />
-												{/if}
 											</form>
 										</td>
 									</tr>
