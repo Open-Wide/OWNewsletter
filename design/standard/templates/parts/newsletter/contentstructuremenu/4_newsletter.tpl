@@ -31,8 +31,7 @@
 
 
                 {* icon *}
-                {*<img src={'share/icons/crystal-admin/16x16_indexed/actions/view_tree.png'|ezroot} />*}
-                {'newsletter_list'|class_icon( small )}
+                {'newsletter'|class_icon( small )}
 
                 {* Text *}
                 {if or( eq($ui_context, 'browse')|not(), eq($:parentNode.object.is_container, true()))}
