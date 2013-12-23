@@ -344,26 +344,22 @@ $schema = array(
 			'PRIMARY' =>
 			array(
 				'type' => 'primary',
-				'fields' =>
-				array(
-					0 => 'id',
-				),
+				'fields' => array( 'id' ),
 			),
 			'ez_user_id' =>
 			array(
 				'type' => 'non-unique',
-				'fields' =>
-				array(
-					0 => 'ez_user_id',
-				),
+				'fields' => array( 'ez_user_id' ),
 			),
 			'import_id' =>
 			array(
 				'type' => 'non-unique',
-				'fields' =>
-				array(
-					0 => 'import_id',
-				),
+				'fields' => array( 'import_id' ),
+			),
+			'email' =>
+			array(
+				'type' => 'unique',
+				'fields' => array( 'email' ),
 			),
 		),
 	),
