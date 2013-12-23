@@ -346,6 +346,10 @@
         <translation>Supprimer</translation>
     </message>
     <message>
+        <source>Remove for good</source>
+        <translation>Supprimer définitivement</translation>
+    </message>
+    <message>
         <source>Remove subscription</source>
         <translation>Supprimer l'abonnement</translation>
     </message>
@@ -412,6 +416,10 @@
     <message>
         <source>Confirm</source>
         <translation>Confirmer</translation>
+    </message>
+    <message>
+        <source>No subscription</source>
+        <translation>Aucun abonnement</translation>
     </message>
 </context>
 <context>

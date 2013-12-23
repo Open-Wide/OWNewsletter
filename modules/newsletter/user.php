@@ -107,8 +107,6 @@ if ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) { /* If press SubmitNe
 	}
 	$tpl->setVariable( 'available_salutation_array', OWNewsletterUser::getAvailablesSalutationsFromIni() );
 	$Result['content'] = $tpl->fetch( 'design:newsletter/user/form.tpl' );
-} elseif ( $module->isCurrentAction( 'RemoveNewsletterUser' ) && isset( $newsletterUser ) ) { /* remove user */
-	
 } elseif ( isset( $newsletterUser ) ) { /* show user */
 	$tpl->setVariable( 'newsletter_user', $newsletterUser );
 	$Result['path'][] = array(
@@ -130,6 +128,13 @@ if ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) { /* If press SubmitNe
 	} elseif ( $module->isCurrentAction( 'RemoveNewsletterUser' ) ) {
 		$newsletterUser->removeByAdmin();
 		$module->redirectTo( $redirectUrlSuccess );
+	}elseif ( $module->isCurrentAction( 'RemoveForGoodNewsletterUser' ) ) {
+		$newsletterUser->remove();
+		$redirectUrlRemove = 'newsletter/user';
+		if ( $module->hasActionParameter( 'RedirectUrlActionRemove' ) ) {
+			$redirectUrlRemove = $module->actionParameter( 'RedirectUrlActionRemove' );
+		}
+		$module->redirectTo( $redirectUrlRemove );
 	} elseif ( $module->isCurrentAction( 'ConfirmNewsletterUser' ) ) {
 		$newsletterUser->confirm();
 		$module->redirectTo( $redirectUrlSuccess );

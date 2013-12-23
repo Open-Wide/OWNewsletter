@@ -208,27 +208,22 @@
 											<form id="submit_newsletter_user_{$newsletter_user.id}}" method="post" style="display:inline;" action={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()}>
 												<input type="hidden" name="RedirectUrlActionCancel" value={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()} />
 												<input type="hidden" name="RedirectUrlActionSuccess" value={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()} />
-												<input {if $newsletter_user.status_identifier|eq('blacklisted')}class="button-disabled"{else}class="button"{/if} type="submit" name="SubmitNewsletterUserButton" value={'Edit'|i18n( 'newsletter/user' )} />
-											</form>
-											<form id="confirm_newsletter_user_{$newsletter_user.id}" method="post" style="display:inline;" action={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()}>
-												<input type="hidden" name="RedirectUrlActionSuccess" value={'newsletter/user'|ezurl()} />
-												<input {if $newsletter_user.is_confirmed}class="button-disabled"{else}class="button"{/if} type="submit" name="ConfirmNewsletterUserButton" value={'Confirm'|i18n( 'newsletter/user' )} />
-											</form>
-											<form id="delete_newsletter_user_{$newsletter_user.id}" method="post" style="display:inline;" action={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()}  onsubmit="return confirm('{'Do you really want to delete this user?'|i18n( 'newsletter/user' )|wash()}');">
-												  <input type="hidden" name="RedirectUrlActionRemove" value={'newsletter/user'|ezurl()} />
-												<input {if $newsletter_user.is_removed}class="button-disabled"{else}class="button"{/if} type="submit" name="RemoveNewsletterUserButton" value={'Remove'|i18n( 'newsletter/user' )} />
-											</form>
-											{if $newsletter_user.status_identifier|ne('blacklisted')}
-												<form id="blacklist_newsletter_user_{$newsletter_user.id}" method="post" style="display:inline;" action={'newsletter/blacklist'|ezurl}>
-													<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />
+												<input type="hidden" name="RedirectUrlActionRemove" value={'newsletter/user'|ezurl()} />
+												<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />
+												<input {if $newsletter_user.status_identifier|eq('blacklisted')}class="button-disabled"{else}class="button"{/if} 
+																												type="submit" name="SubmitNewsletterUserButton" value="{'Edit'|i18n( 'newsletter/user' )}" />
+												<input {if $newsletter_user.is_confirmed}class="button-disabled"{else}class="button"{/if} 
+																						 type="submit" name="ConfirmNewsletterUserButton" value="{'Confirm'|i18n( 'newsletter/user' )}" />
+												<input {if $newsletter_user.is_removed}class="button-disabled"{else}class="button"{/if} 
+																					   type="submit" name="RemoveNewsletterUserButton" value="{'Remove'|i18n( 'newsletter/user' )}" />
+												<input {if $newsletter_user.is_removed|not()}class="button-disabled"{else}class="button"{/if} 
+																							 type="submit" name="RemoveForGoodNewsletterUserButton" value="{'Remove for good'|i18n( 'newsletter/user' )}" onclick="return confirm('{'Do you really want to delete this user?'|i18n( 'newsletter/user' )|wash()}');" />
+												{if $newsletter_user.status_identifier|ne('blacklisted')}
 													<input disabled="disabled" class="button" type="submit" name="AddToBlacklistButton" value="{'Add to blacklist'|i18n( 'newsletter/user' )}" />
-												</form>
-											{else}
-												<form id="unblacklist_newsletter_user_{$newsletter_user.id}" method="post" style="display:inline;" action={'newsletter/blacklist'|ezurl}>
-													<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />
+												{else}
 													<input disabled="disabled" class="button" type="submit" name="RemoveFromBlacklistButton" value="{'Remove from blacklist'|i18n( 'newsletter/user' )}" />
-												</form>
-											{/if}
+												{/if}
+											</form>
 										</td>
 									</tr>
 								{/foreach}
