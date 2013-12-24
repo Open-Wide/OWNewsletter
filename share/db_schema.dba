@@ -434,12 +434,128 @@ $schema = array(
 			'contentobject_attribute_version' =>
 			array(
 				'type' => 'non-unique',
-				'fields' =>array( 'contentobject_attribute_version' ),
+				'fields' => array( 'contentobject_attribute_version' ),
 			),
 			'contentobject_id' =>
 			array(
 				'type' => 'non-unique',
-				'fields' =>  array( 'contentobject_id' ),
+				'fields' => array( 'contentobject_id' ),
+			),
+		),
+	),
+	'ownl_newsletter' =>
+	array(
+		'name' => 'ownl_newsletter',
+		'fields' =>
+		array(
+			'contentobject_attribute_id' =>
+			array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => 0,
+			),
+			'contentobject_attribute_version' =>
+			array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => 0,
+			),
+			'contentobject_id' =>
+			array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => 0,
+			),
+			'contentclass_id' =>
+			array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => 0,
+			),
+			'main_siteaccess' =>
+			array(
+				'length' => 255,
+				'type' => 'varchar',
+				'not_null' => '1',
+				'default' => '',
+			),
+			'email_sender_name' =>
+			array(
+				'length' => 255,
+				'type' => 'varchar',
+				'not_null' => '1',
+				'default' => '',
+			),
+			'email_sender' =>
+			array(
+				'length' => 255,
+				'type' => 'varchar',
+				'not_null' => '1',
+				'default' => '',
+			),
+			'email_receiver_test' =>
+			array(
+				'length' => 255,
+				'type' => 'varchar',
+				'not_null' => '1',
+				'default' => '',
+			),
+			'skin_name' =>
+			array(
+				'length' => 255,
+				'type' => 'varchar',
+				'not_null' => '1',
+				'default' => 'default',
+			),
+			'personalize_content' =>
+			array(
+				'length' => 1,
+				'type' => 'tinyint',
+				'not_null' => '1',
+				'default' => '0',
+			),
+			'user_data_fields' =>
+			array(
+				'type' => 'text',
+				'not_null' => '1',
+				'default' => false,
+			),
+			'default_mailing_list_selection_string' =>
+			array(
+				'length' => 255,
+				'type' => 'varchar',
+				'not_null' => '1',
+				'default' => '',
+			),
+		),
+		'indexes' =>
+		array(
+			'PRIMARY' =>
+			array(
+				'type' => 'primary',
+				'fields' => array(
+					'contentobject_attribute_id',
+					'contentobject_attribute_version',
+				),
+			),
+			'contentobject_attribute_id' =>
+			array(
+				'type' => 'non-unique',
+				'fields' => array( 'contentobject_attribute_id' ),
+			),
+			'contentobject_attribute_version' =>
+			array(
+				'type' => 'non-unique',
+				'fields' => array( 'contentobject_attribute_version' ),
+			),
+			'contentobject_id' =>
+			array(
+				'type' => 'non-unique',
+				'fields' => array( 'contentobject_id' ),
 			),
 		),
 	),

@@ -1,17 +1,61 @@
 <?php
 
-class OWNewsletterMailingListType extends eZDataType {
+class OWNewsletterType extends eZDataType {
 
-	const DATA_TYPE_STRING = 'ownewslettermailinglist';
+	const DATA_TYPE_STRING = 'ownewsletter';
 
 	/**
 	 * Constructor
 	 *
 	 * @return void
 	 */
-	function __construct() {
-		$this->eZDataType( self::DATA_TYPE_STRING, ezpI18n::tr( 'newsletter/datatypes', 'Newsletter mailing list', 'Datatype name' ), array(
+	function OWNewsletterType() {
+		$this->eZDataType( self::DATA_TYPE_STRING, ezpI18n::tr( 'newsletter/datatypes', 'Newsletter', 'Datatype name' ), array(
 			'serialize_supported' => true, 'translation_allowed' => false ) );
+	}
+
+	/**
+	 * Validates input on content object level
+	 *
+	 * (non-PHPdoc)
+	 * @see kernel/classes/eZDataType#validateObjectAttributeHTTPInput($http, $base, $objectAttribute)
+	 * @return EZ_INPUT_VALIDATOR_STATE
+	 */
+	function validateObjectAttributeHTTPInput( $http, $base, $contentObjectAttribute ) {
+		$validationErrorMesssageArray = array();
+		$prefix = $base . '_ownewsletter_';
+		$postfix = '_' . $contentObjectAttribute->attribute( 'id' );
+
+		$mainSiteaccess = $http->postVariable( $prefix . 'MainSiteaccess' . $postfix );
+		if ( $mainSiteaccess == '' ) {
+			$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "Main Siteaccess must be set" );
+		}
+
+		$emailSender = $http->postVariable( $prefix . 'EmailSender' . $postfix );
+		if ( $emailSender == '' || !eZMail::validate( $emailSender ) ) {
+			$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid sender email adress" );
+		}
+
+		$emailReceiverTest = $http->postVariable( $prefix . 'EmailReceiverTest' . $postfix );
+		if ( $emailReceiverTest == '' ) {
+			$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid test reciever email" );
+		} else {
+			$recieverList = explode( ';', $emailReceiverTest );
+			foreach ( $recieverList as $reciever ) {
+				if ( eZMail::validate( $reciever ) == false ) {
+					$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid reciever email adress >> %email", null, array(
+								'%email' => $reciever ) );
+				}
+			}
+		}
+
+		if ( count( $validationErrorMesssageArray ) == 0 ) {
+			return eZInputValidator::STATE_ACCEPTED;
+		} else {
+			$validationErrorMessage = implode( '<br \>', $validationErrorMesssageArray );
+			$contentObjectAttribute->setValidationError( $validationErrorMessage );
+			return eZInputValidator::STATE_INVALID;
+		}
 	}
 
 	/**
@@ -22,26 +66,33 @@ class OWNewsletterMailingListType extends eZDataType {
 	 * @return boolean
 	 */
 	function fetchObjectAttributeHTTPInput( $http, $base, $contentObjectAttribute ) {
-
 		$contentclassAttribute = $contentObjectAttribute->attribute( 'contentclass_attribute' );
-
-		$prefix = $base . '_ownewslettermailinglist_';
+		$prefix = $base . '_ownewsletter_';
 		$postfix = '_' . $contentObjectAttribute->attribute( 'id' );
 
 		$postListData = array();
-		$postListData['siteaccess_list'] = $http->hasPostVariable( $prefix . 'SiteaccessList' . $postfix ) ? $http->postVariable( $prefix . 'SiteaccessList' . $postfix ) : array();
-		$postListData['auto_approve_registered_user'] = $http->postVariable( $prefix . 'AutoApproveRegisterdUser' . $postfix );
-		
+		$postListData['default_mailing_list_selection_string'] = (array) $http->postVariable( $prefix . 'DefaultMailingListSelection' . $postfix );
+		$postListData['main_siteaccess'] = $http->postVariable( $prefix . 'MainSiteaccess' . $postfix );
+		$postListData['email_sender'] = $http->postVariable( $prefix . 'EmailSender' . $postfix );
+		$postListData['email_sender_name'] = $http->postVariable( $prefix . 'EmailSenderName' . $postfix );
+		$postListData['email_receiver_test'] = explode( ';', $http->postVariable( $prefix . 'EmailReceiverTest' . $postfix ) );
+		$postListData['skin_name'] = $http->hasPostVariable( $prefix . 'SkinName' . $postfix ) ? $http->postVariable( $prefix . 'SkinName' . $postfix ) : '';
+		$postListData['personalize_content'] = (int) $http->postVariable( $prefix . 'PersonalizeContent' . $postfix );
 
-		$listObject = new OWNewsletterMailingList( array(
+		$newsletterObject = new OWNewsletter( array(
 			'contentobject_attribute_id' => $contentObjectAttribute->attribute( 'id' ),
 			'contentobject_attribute_version' => $contentObjectAttribute->attribute( 'version' ),
 			'contentobject_id' => $contentObjectAttribute->attribute( 'contentobject_id' ),
 			'contentclass_id' => $contentclassAttribute->attribute( 'contentclass_id' ),
-			'siteaccess_list_string' => OWNewsletterMailingList::arrayToString( $postListData['siteaccess_list'] ),
-			'auto_approve_registered_user' => $postListData['auto_approve_registered_user'],
+			'default_mailing_list_selection_string' => OWNewsletter::arrayToString( $postListData['default_mailing_list_selection_string'] ),
+			'main_siteaccess' => $postListData['main_siteaccess'],
+			'email_sender_name' => $postListData['email_sender_name'],
+			'email_sender' => $postListData['email_sender'],
+			'email_receiver_test' => OWNewsletter::arrayToString( $postListData['email_receiver_test'] ),
+			'skin_name' => $postListData['skin_name'],
+			'personalize_content' => $postListData['personalize_content']
 				) );
-		$contentObjectAttribute->setContent( $listObject );
+		$contentObjectAttribute->setContent( $newsletterObject );
 		return true;
 	}
 
@@ -55,7 +106,7 @@ class OWNewsletterMailingListType extends eZDataType {
 		if ( $currentVersion != false ) {
 			$data = $originalContentObjectAttribute->attribute( 'content' );
 
-			if ( $data instanceof OWNewsletterMailingList ) {
+			if ( $data instanceof OWNewsletter ) {
 				$data->setAttribute( 'contentobject_attribute_id', $contentObjectAttribute->attribute( 'id' ) );
 				$data->setAttribute( 'contentobject_attribute_version', $contentObjectAttribute->attribute( 'version' ) );
 				$data->setAttribute( 'contentobject_id', $contentObjectAttribute->attribute( 'contentobject_id' ) );
@@ -75,9 +126,9 @@ class OWNewsletterMailingListType extends eZDataType {
 		$id = $contentObjectAttribute->attribute( 'id' );
 		$version = $contentObjectAttribute->attribute( 'version' );
 
-		$dataObject = OWNewsletterMailingList::fetch( $id, $version );
+		$dataObject = OWNewsletter::fetch( $id, $version );
 		if ( !is_object( $dataObject ) ) {
-			$dataObject = new OWNewsletterMailingList();
+			$dataObject = new OWNewsletter();
 			$dataObject->setAttribute( 'contentobject_attribute_id', $contentObjectAttribute->attribute( 'id' ) );
 			$dataObject->setAttribute( 'contentobject_attribute_version', $contentObjectAttribute->attribute( 'version' ) );
 			$dataObject->setAttribute( 'contentobject_id', $contentObjectAttribute->attribute( 'contentobject_id' ) );
@@ -91,11 +142,10 @@ class OWNewsletterMailingListType extends eZDataType {
 	 * @return boolean
 	 */
 	function hasObjectAttributeContent( $contentObjectAttribute ) {
-		if ( self::objectAttributeContent( $contentObjectAttribute ) ) {
+		if ( OWNewsletterType::objectAttributeContent( $contentObjectAttribute ) )
 			return true;
-		} else {
+		else
 			return false;
-		}
 	}
 
 	/**
@@ -118,9 +168,20 @@ class OWNewsletterMailingListType extends eZDataType {
 	 */
 	function title( $contentObjectAttribute, $name = null ) {
 		$content = $contentObjectAttribute->attribute( 'content' );
+		$mainSiteAccess = $content->attribute( 'main_siteaccess' );
+
+		// enclose mainsiteaccess with '[]'
+		$newSiteAccessArray = $content->attribute( 'siteaccess_array' );
+		foreach ( $newSiteAccessArray as $index => $siteAccessName ) {
+			if ( $siteAccessName == $mainSiteAccess )
+				$newSiteAccessArray[$index] = '[' . $siteAccessName . ']';
+		}
+
 		$listTitle = $contentObjectAttribute->attribute( 'contentobject_id' )
+				. '; ' . implode( ', ', $content->attribute( 'output_format_array' ) )
 				. '; A' . $content->attribute( 'auto_approve_registered_user' )
-				. '; ' . implode( ', ', $content->attribute( 'siteaccess_list' ) );
+				. '; P' . $content->attribute( 'personalize_content' )
+				. '; ' . implode( ', ', $newSiteAccessArray );
 		return $listTitle;
 	}
 
@@ -154,10 +215,9 @@ class OWNewsletterMailingListType extends eZDataType {
 	 * @see kernel/classes/eZDataType#deleteStoredObjectAttribute($objectAttribute, $version)
 	 */
 	function deleteStoredObjectAttribute( $contentObjectAttribute, $version = null ) {
-		$object = OWNewsletterMailingList::fetch( $contentObjectAttribute->attribute( "id" ), $contentObjectAttribute->attribute( "version" ) );
-		if ( is_object( $object ) ) {
+		$object = OWNewsletter::fetch( $contentObjectAttribute->attribute( "id" ), $contentObjectAttribute->attribute( "version" ) );
+		if ( is_object( $object ) )
 			$object->remove();
-		}
 	}
 
 	/**
@@ -187,7 +247,7 @@ class OWNewsletterMailingListType extends eZDataType {
 		} else {
 			$cjwNewsletterContent = $objectAttribute->attribute( 'content' );
 			$cjwNewsletterContentSerialized = serialize( $cjwNewsletterContent );
-			$dataTextNode = $dom->createElement( 'ownewslettermailinglist' );
+			$dataTextNode = $dom->createElement( 'ownewsletter' );
 			$serializedNode = $dom->createCDATASection( $cjwNewsletterContentSerialized );
 			$dataTextNode->appendChild( $serializedNode );
 			$node->appendChild( $dataTextNode );
@@ -218,16 +278,16 @@ class OWNewsletterMailingListType extends eZDataType {
 				}
 			}
 		} else {
-			$oWNewsletterMailingListObjectSerialized = $attributeNode->getElementsByTagName( 'ownewslettermailinglist' )->item( 0 )->textContent;
-			$oWNewsletterMailingListObject = unserialize( $oWNewsletterMailingListObjectSerialized );
+			$oWNewsletterObjectSerialized = $attributeNode->getElementsByTagName( 'ownewsletter' )->item( 0 )->textContent;
+			$oWNewsletterObject = unserialize( $oWNewsletterObjectSerialized );
 
-			if ( is_object( $oWNewsletterMailingListObject ) ) {
-				$oWNewsletterMailingListObject->setAttribute( 'contentobject_attribute_id', $objectAttribute->attribute( 'id' ) );
-				$oWNewsletterMailingListObject->setAttribute( 'contentobject_attribute_version', $objectAttribute->attribute( 'version' ) );
-				$oWNewsletterMailingListObject->setAttribute( 'contentobject_id', $objectAttribute->attribute( 'contentobject_id' ) );
-				$oWNewsletterMailingListObject->setAttribute( 'contentclass_id', $contentclassAttribute->attribute( 'contentclass_id' ) );
-				$oWNewsletterMailingListObject->store();
-				$objectAttribute->setAttribute( 'content', $oWNewsletterMailingListObject );
+			if ( is_object( $oWNewsletterObject ) ) {
+				$oWNewsletterObject->setAttribute( 'contentobject_attribute_id', $objectAttribute->attribute( 'id' ) );
+				$oWNewsletterObject->setAttribute( 'contentobject_attribute_version', $objectAttribute->attribute( 'version' ) );
+				$oWNewsletterObject->setAttribute( 'contentobject_id', $objectAttribute->attribute( 'contentobject_id' ) );
+				$oWNewsletterObject->setAttribute( 'contentclass_id', $contentclassAttribute->attribute( 'contentclass_id' ) );
+				$oWNewsletterObject->store();
+				$objectAttribute->setAttribute( 'content', $oWNewsletterObject );
 			} else {
 				$objectAttribute->setAttribute( 'content', null );
 			}
@@ -249,5 +309,5 @@ class OWNewsletterMailingListType extends eZDataType {
 
 }
 
-eZDataType::register( OWNewsletterMailingListType::DATA_TYPE_STRING, 'OWNewsletterMailingListType' );
-
+eZDataType::register( OWNewsletterType::DATA_TYPE_STRING, 'OWNewsletterType' );
+?>

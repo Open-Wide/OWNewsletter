@@ -1,12 +1,23 @@
 <?php
 
-class OWNewsletterMailingList extends eZPersistentObject {
+class OWNewsletter extends eZPersistentObject {
+
+	/**
+	 * Initializes a new GeoadressData alias
+	 *
+	 * @param unknown_type $row
+	 * @return void
+	 */
+	function OWNewsletter( $row = array() ) {
+		$this->eZPersistentObject( $row );
+	}
 
 	/**
 	 * @return void
 	 */
 	static function definition() {
-		return array( 'fields' => array( 'contentobject_attribute_id' => array(
+		return array( 'fields' => array(
+				'contentobject_attribute_id' => array(
 					'name' => 'ContentObjectAttributeId',
 					'datatype' => 'integer',
 					'default' => 0,
@@ -26,24 +37,56 @@ class OWNewsletterMailingList extends eZPersistentObject {
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
-				'siteaccess_list_string' => array(
-					'name' => 'SiteAccessListString',
+				'main_siteaccess' => array(
+					'name' => 'MainSiteAccess',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
-				'auto_approve_registered_user' => array(
-					'name' => 'AutoApproveRegisterdUser',
+				'email_sender_name' => array(
+					'name' => 'EmailSenderName',
+					'datatype' => 'string',
+					'default' => '',
+					'required' => false ),
+				'email_sender' => array(
+					'name' => 'EmailSender',
+					'datatype' => 'string',
+					'default' => '',
+					'required' => true ),
+				'email_receiver_test' => array(
+					'name' => 'EmailReceiverTest',
+					'datatype' => 'string',
+					'default' => '',
+					'required' => false ),
+				'skin_name' => array(
+					'name' => 'SkinName',
+					'datatype' => 'string',
+					'default' => 'default',
+					'required' => true ),
+				'personalize_content' => array(
+					'name' => 'PersonalizeContent',
 					'datatype' => 'integer',
 					'default' => 0,
+					'required' => false ),
+				'user_data_fields' => array(
+					'name' => 'UserDataFields',
+					'datatype' => 'string',
+					'default' => '',
+					'required' => false ),
+				'default_mailing_list_selection_string' => array(
+					'name' => 'DefaultMailingListSelectionString',
+					'datatype' => 'string',
+					'default' => 'default',
 					'required' => true ),
 			),
 			'keys' => array( 'contentobject_attribute_id', 'contentobject_attribute_version' ),
 			'function_attributes' => array(
-				'siteaccess_list' => 'getSiteaccessList',
+				'default_mailing_list_selection' => 'getDefaultMailingListSelection',
+				'email_receiver_test_list' => 'getEmailReceiverTestList',
 				'available_siteaccess_list' => 'getAvailableSiteAccessList',
-			),
-			'class_name' => 'OWNewsletterMailingList',
-			'name' => 'ownl_mailing_list' );
+				'available_skin_list' => 'getAvailableSkinList',
+				'available_mailing_lists' => 'getAvailableMailingLists' ),
+			'class_name' => 'OWNewsletter',
+			'name' => 'ownl_newsletter' );
 	}
 
 	/*	 * **********************
@@ -51,12 +94,21 @@ class OWNewsletterMailingList extends eZPersistentObject {
 	 * ********************** */
 
 	/**
-	 * Transfert the siteaccess_list_string attribute in array
+	 * Transform string to array for default_mailing_list_selection attribute
 	 * 
 	 * @return array
 	 */
-	function getSiteaccessList() {
-		return self::stringToArray( eZPersistentObject::attribute( 'siteaccess_list_string' ) );
+	public function getDefaultMailingListSelection() {
+		return self::stringToArray( eZPersistentObject::attribute( 'default_mailing_list_selection_string' ) );
+	}
+
+	/**
+	 * Transform string to array for email_receiver_test_list attribute
+	 * 
+	 * @return array
+	 */
+	public function getEmailReceiverTestList() {
+		return self::stringToArray( eZPersistentObject::attribute( 'email_receiver_test' ) );
 	}
 
 	/**
@@ -85,6 +137,35 @@ class OWNewsletterMailingList extends eZPersistentObject {
 		return $availableSiteAccessListInfoArray;
 	}
 
+	/**
+	 * Returns the list of available skins
+	 *
+	 * @return array
+	 */
+	function getAvailableSkinList() {
+
+		$newsletterIni = eZINI::instance( 'newsletter.ini' );
+		$availableSkinList = $newsletterIni->variable( 'NewsletterSettings', 'AvailableSkinArray' );
+		return $availableSkinList;
+	}
+
+	/**
+	 * Returns the list of available mailing lists
+	 *
+	 * @return array
+	 */
+	function getAvailableMailingLists() {
+		$contentObject = eZContentObject::fetch( $this->attribute( 'contentobject_id' ) );
+		$contentObjectMainNode = $contentObject->attribute( 'main_node' );
+		$contentObjectParentNodeID = $contentObjectMainNode->attribute( 'parent_node_id' );
+		$mailingListList = eZFunctionHandler::execute( 'content', 'tree', array(
+					'parent_node_id' => $contentObjectParentNodeID,
+					'class_filter_type' => 'include',
+					'class_filter_array' => array( 'newsletter_mailing_list' ),
+					'sort_by' => array( 'name', false )
+				) );
+		return $mailingListList;
+	}
 	/*	 * **********************
 	 * FETCH METHODS
 	 * ********************** */
@@ -140,5 +221,3 @@ class OWNewsletterMailingList extends eZPersistentObject {
 	}
 
 }
-
-?>

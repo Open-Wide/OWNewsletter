@@ -355,7 +355,7 @@
     </message>
     <message>
         <source>Remove subscription</source>
-        <translation>Supprimer l'abonnement</translation>
+        <translation>Supprimer l&apos;abonnement</translation>
     </message>
     <message>
         <source>Add to blacklist</source>
@@ -624,6 +624,11 @@
 		<comment>Datatype name</comment>
 		<translation>Configuration de la mailing list</translation>
 	</message>
+	<message>
+		<source>Newsletter</source>
+		<comment>Datatype name</comment>
+		<translation>Configuration de la newsletter</translation>
+	</message>
 </context>
 <context>
 	<name>newsletter/datatype/ownewslettermailinglist</name>
@@ -633,7 +638,7 @@
 	</message>
 	<message>
 		<source>Can subscribe</source>
-		<translation>Peut s'abonner</translation>
+		<translation>Peut s&apos;abonner</translation>
 	</message>
 	<message>
 		<source>Siteaccess</source>
@@ -641,7 +646,7 @@
 	</message>
 	<message>
 		<source>Automatically approve subscription after user registration?</source>
-		<translation>Approuver automatiquement l'abonnement après l'enregistrement de l'abonné ?</translation>
+		<translation>Approuver automatiquement l&apos;abonnement après l&apos;enregistrement de l&apos;abonné ?</translation>
 	</message>
 	<message>
 		<source>No</source>
@@ -654,6 +659,81 @@
 	<message>
 		<source>Show in siteaccess</source>
 		<translation>Afficher sur les siteaccess</translation>
+	</message>
+</context>
+<context>
+	<name>newsletter/datatype/ownewsletter</name>
+	<message>
+		<source>Main siteaccess</source>
+		<translation>Siteaccess principal</translation>
+	</message>
+	<message>
+		<source>Main siteaccess site url</source>
+		<translation>URL du siteaccess principal</translation>
+	</message>
+	<message>
+		<source>Main siteaccess locale</source>
+		<translation>Langue du siteaccess principal</translation>
+	</message>
+	<message>
+		<source>Siteaccess</source>
+		<translation>Siteaccess</translation>
+	</message>
+	<message>
+		<source>Newsletter sender email</source>
+		<translation>Email de l&apos;expéditeur de la newsletter</translation>
+	</message>
+	<message>
+		<source>Newsletter sender name</source>
+		<translation>Nom de l&apos;expéditeur de la newsletter</translation>
+	</message>
+	<message>
+		<source>Newsletter default test receiver emails (separated by ;)</source>
+		<translation>Email des destinataires par défaut des envois de test (séparés par ;)</translation>
+	</message>
+    <message>
+        <source>Newsletter skin name</source>
+        <translation>Nom de l&apos;habillage de la newsletter</translation>
+    </message>
+    <message>
+        <source>Personalize newsletter if data are available?</source>
+        <translation>Personnaliser la newsletter si les données sont disponibles?</translation>
+    </message>
+    <message>
+        <source>Personalize content</source>
+        <translation>Personnaliser la newsletter</translation>
+    </message>
+    <message>
+        <source>Default mailing list selection</source>
+        <translation>Listes de diffusion sélectionnées par défaut</translation>
+    </message>
+    <message>
+        <source>Mailing list</source>
+        <translation>Liste de diffusion</translation>
+    </message>
+	<message>
+		<source>No</source>
+		<translation>Non</translation>
+	</message>
+	<message>
+		<source>Yes</source>
+		<translation>Oui</translation>
+	</message>
+	<message>
+		<source>Main Siteaccess must be set</source>
+		<translation>Le siteaccess principal doit être rempli</translation>
+	</message>
+	<message>
+		<source>You have to set a valid sender email adress</source>
+		<translation>L&apos;adresse email de l&apos;expéditeur doit être rempli et valide</translation>
+	</message>
+	<message>
+		<source>You have to set a valid test reciever email</source>
+		<translation>L&apos;adresse email du destinataire des tests doit être rempli et valide</translation>
+	</message>
+	<message>
+		<source>You have to set a valid reciever email adress >> %email</source>
+		<translation>L&apos;adresse email du destinataire %email n&apos;est pas valide</translation>
 	</message>
 </context>
 <context>
