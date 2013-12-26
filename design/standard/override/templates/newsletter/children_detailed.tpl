@@ -24,7 +24,7 @@ var icons = {ldelim}{*
 var vcols = {ldelim}
 
 {foreach $visible_columns as $index => $object}
-    {$index} : '{$object}'.split(';'){delimiter},
+    {$index} : '{$object|explode(';')|extract_right(-2)|implode(';')}'.split(';'){delimiter},
 
 {/delimiter}
 {/foreach}
@@ -58,8 +58,7 @@ var confObj = {ldelim}
     classesString: {$node.classes_js_array},
     flagIcons: icons
 
-{rdelim}
-
+{rdelim};
 
 var labelsObj = {ldelim}
 

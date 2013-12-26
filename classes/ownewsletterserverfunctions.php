@@ -114,6 +114,9 @@ class OWNewsletterServerFunctions extends ezjscServerFunctions {
 					$tpl, $operatorName, $operatorParameters, '', '', $operatorValue, $namedParameters, array()
 			);
 			$list[$index]['class_icon'] = '<img src="' . $operatorValue . '" width="16" height="16" alt="' . $object['class_name'] . ' [' . $statusName . ']" title="' . $object['class_name'] . ' [' . $statusName . ']" />';
+			if( $status != OWNewsletterEdition::STATUS_DRAFT ) {
+				$list[$index]['can_edit'] = false;
+			}
 		}
 		return $list;
 	}

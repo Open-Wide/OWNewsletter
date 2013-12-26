@@ -104,7 +104,7 @@ class OWNewsletterEdition extends eZPersistentObject {
 	 * @return string
 	 */
 	function getStatus() {
-		return self::STATUS_DRAFT;
+		return self::STATUS_PROCESS;
 	}
 	
 	/**
