@@ -737,6 +737,17 @@
 	</message>
 </context>
 <context>
+    <name>newsletter/datatype/ownewsletteredition</name>
+    <message>
+        <source>Send to mailing list</source>
+        <translation>Envoyer au listes de diffusion</translation>
+    </message>
+    <message>
+        <source>Mailing list</source>
+        <translation>Liste de diffusion</translation>
+    </message>
+</context>
+<context>
     <name>design/admin/node/view/full</name>
     <message>
         <source>Subscribtions (%children_count/%all_children_count)</source>

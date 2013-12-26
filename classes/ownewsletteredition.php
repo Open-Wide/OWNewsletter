@@ -1,0 +1,126 @@
+<?php
+
+class OWNewsletterEdition extends eZPersistentObject {
+
+	/**
+	 * @return void
+	 */
+	static function definition() {
+		return array( 'fields' => array(
+				'contentobject_attribute_id' => array(
+					'name' => 'ContentObjectAttributeId',
+					'datatype' => 'integer',
+					'default' => 0,
+					'required' => true ),
+				'contentobject_attribute_version' => array(
+					'name' => 'ContentObjectAttributeVersion',
+					'datatype' => 'integer',
+					'default' => 0,
+					'required' => true ),
+				'contentobject_id' => array(
+					'name' => 'ContentObjectId',
+					'datatype' => 'integer',
+					'default' => 0,
+					'required' => true ),
+				'contentclass_id' => array(
+					'name' => 'ContentClassId',
+					'datatype' => 'integer',
+					'default' => 0,
+					'required' => true ),
+				'mailing_list_sending_list_string' => array(
+					'name' => 'MailingListSendingListString',
+					'datatype' => 'string',
+					'default' => 'default',
+					'required' => true )
+			),
+			'keys' => array( 'contentobject_attribute_id', 'contentobject_attribute_version' ),
+			'function_attributes' => array(
+				'mailing_list_sending_list' => 'getMailingListSendingList',
+				'available_mailing_lists' => 'getAvailableMailingLists',
+				'default_mailing_list_sending_list' => 'getDefaultMailingListSendingList'
+			),
+			'class_name' => 'OWNewsletterEdition',
+			'name' => 'ownl_edition' );
+	}
+
+	/*	 * **********************
+	 * FUNCTION ATTRIBUTES
+	 * ********************** */
+
+	/**
+	 * Transform string to array for mailing_list_sending_list attribute
+	 * 
+	 * @return array
+	 */
+	public function getMailingListSendingList() {
+		return OWNewsletterUtils::stringToArray( $this->attribute( 'mailing_list_sending_list_string' ) );
+	}
+
+	/**
+	 * Returns the list of available mailing lists
+	 *
+	 * @return array
+	 */
+	function getAvailableMailingLists() {
+		$contentObject = eZContentObject::fetch( $this->attribute( 'contentobject_id' ) );
+		$contentObjectMainNode = $contentObject->attribute( 'main_node' );
+		$contentObjectParentNodeID = $contentObjectMainNode->attribute( 'parent' )->attribute( 'parent_node_id' );
+		$mailingListList = eZFunctionHandler::execute( 'content', 'tree', array(
+					'parent_node_id' => $contentObjectParentNodeID,
+					'class_filter_type' => 'include',
+					'class_filter_array' => array( 'newsletter_mailing_list' ),
+					'sort_by' => array( 'name', false )
+				) );
+		return $mailingListList;
+	}
+
+	/**
+	 * Returns the list of default mailing lists
+	 *
+	 * @return array
+	 */
+	function getDefaultMailingListSendingList() {
+		$contentObject = eZContentObject::fetch( $this->attribute( 'contentobject_id' ) );
+		$contentObjectMainNode = $contentObject->attribute( 'main_node' );
+		$contentObjectParentNode = $contentObjectMainNode->attribute( 'parent' );
+		$dataMap = $contentObjectParentNode->dataMap();
+		foreach ( $dataMap as $attribute ) {
+			if ( $attribute->attribute( 'data_type_string' ) == 'ownewsletter' ) {
+				return $attribute->content()->attribute( 'default_mailing_list_selection' );
+			}
+		}
+		return array();
+	}
+
+	/*	 * **********************
+	 * FETCH METHODS
+	 * ********************** */
+
+	/**
+	 * Return object by id
+	 *
+	 * @param integer $attributeId
+	 * @param integer $version
+	 * @return object or boolean
+	 */
+	static function fetch( $attributeId, $version ) {
+		$object = eZPersistentObject::fetchObject( self::definition(), null, array(
+					'contentobject_attribute_id' => $attributeId,
+					'contentobject_attribute_version' => $version ), true );
+		return $object;
+	}
+
+	/*	 * **********************
+	 * OBJECT METHODS
+	 * ********************** */
+
+	/*	 * **********************
+	 * PERSISTENT METHODS
+	 * ********************** */
+
+	/*	 * **********************
+	 * OTHER METHODS
+	 * ********************** */
+}
+
+?>

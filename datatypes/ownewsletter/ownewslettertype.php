@@ -84,11 +84,11 @@ class OWNewsletterType extends eZDataType {
 			'contentobject_attribute_version' => $contentObjectAttribute->attribute( 'version' ),
 			'contentobject_id' => $contentObjectAttribute->attribute( 'contentobject_id' ),
 			'contentclass_id' => $contentclassAttribute->attribute( 'contentclass_id' ),
-			'default_mailing_list_selection_string' => OWNewsletter::arrayToString( $postListData['default_mailing_list_selection_string'] ),
+			'default_mailing_list_selection_string' => OWNewsletterUtils::arrayToString( $postListData['default_mailing_list_selection_string'] ),
 			'main_siteaccess' => $postListData['main_siteaccess'],
 			'email_sender_name' => $postListData['email_sender_name'],
 			'email_sender' => $postListData['email_sender'],
-			'email_receiver_test' => OWNewsletter::arrayToString( $postListData['email_receiver_test'] ),
+			'email_receiver_test' => OWNewsletterUtils::arrayToString( $postListData['email_receiver_test'] ),
 			'skin_name' => $postListData['skin_name'],
 			'personalize_content' => $postListData['personalize_content']
 				) );

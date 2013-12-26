@@ -559,6 +559,74 @@ $schema = array(
 			),
 		),
 	),
+	'ownl_edition' =>
+	array(
+		'name' => 'ownl_edition',
+		'fields' =>
+		array(
+			'contentobject_attribute_id' =>
+			array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => 0,
+			),
+			'contentobject_attribute_version' =>
+			array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => 0,
+			),
+			'contentobject_id' =>
+			array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => 0,
+			),
+			'contentclass_id' =>
+			array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => 0,
+			),
+			'mailing_list_sending_list_string' =>
+			array(
+				'length' => 255,
+				'type' => 'varchar',
+				'not_null' => '1',
+				'default' => '',
+			),
+		),
+		'indexes' =>
+		array(
+			'PRIMARY' =>
+			array(
+				'type' => 'primary',
+				'fields' => array(
+					'contentobject_attribute_id',
+					'contentobject_attribute_version',
+				),
+			),
+			'contentobject_attribute_id' =>
+			array(
+				'type' => 'non-unique',
+				'fields' => array( 'contentobject_attribute_id' ),
+			),
+			'contentobject_attribute_version' =>
+			array(
+				'type' => 'non-unique',
+				'fields' => array( 'contentobject_attribute_version' ),
+			),
+			'contentobject_id' =>
+			array(
+				'type' => 'non-unique',
+				'fields' => array( 'contentobject_id' ),
+			),
+		),
+	),
 	'_info' =>
 	array(
 		'format' => 'generic',
