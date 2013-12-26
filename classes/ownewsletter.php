@@ -72,15 +72,15 @@ class OWNewsletter extends eZPersistentObject {
 					'datatype' => 'string',
 					'default' => '',
 					'required' => false ),
-				'default_mailing_list_selection_string' => array(
-					'name' => 'DefaultMailingListSelectionString',
+				'default_mailing_lists_string' => array(
+					'name' => 'DefaultMailingListsString',
 					'datatype' => 'string',
 					'default' => 'default',
 					'required' => true ),
 			),
 			'keys' => array( 'contentobject_attribute_id', 'contentobject_attribute_version' ),
 			'function_attributes' => array(
-				'default_mailing_list_selection' => 'getDefaultMailingListSelection',
+				'default_mailing_lists_ids' => 'getDefaultMailingListsIDs',
 				'email_receiver_test_list' => 'getEmailReceiverTestList',
 				'available_siteaccess_list' => 'getAvailableSiteAccessList',
 				'available_skin_list' => 'getAvailableSkinList',
@@ -94,12 +94,12 @@ class OWNewsletter extends eZPersistentObject {
 	 * ********************** */
 
 	/**
-	 * Transform string to array for default_mailing_list_selection attribute
+	 * Transform string to array for default_mailing_lists_ids attribute
 	 * 
 	 * @return array
 	 */
-	public function getDefaultMailingListSelection() {
-		return OWNewsletterUtils::stringToArray( $this->attribute( 'default_mailing_list_selection_string' ) );
+	public function getDefaultMailingListsIDs() {
+		return OWNewsletterUtils::stringToArray( $this->attribute( 'default_mailing_lists_string' ) );
 	}
 
 	/**

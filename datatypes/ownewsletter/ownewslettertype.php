@@ -71,7 +71,7 @@ class OWNewsletterType extends eZDataType {
 		$postfix = '_' . $contentObjectAttribute->attribute( 'id' );
 
 		$postListData = array();
-		$postListData['default_mailing_list_selection_string'] = (array) $http->postVariable( $prefix . 'DefaultMailingListSelection' . $postfix );
+		$postListData['default_mailing_lists_string'] = (array) $http->postVariable( $prefix . 'DefaultMailingListSelection' . $postfix );
 		$postListData['main_siteaccess'] = $http->postVariable( $prefix . 'MainSiteaccess' . $postfix );
 		$postListData['email_sender'] = $http->postVariable( $prefix . 'EmailSender' . $postfix );
 		$postListData['email_sender_name'] = $http->postVariable( $prefix . 'EmailSenderName' . $postfix );
@@ -84,7 +84,7 @@ class OWNewsletterType extends eZDataType {
 			'contentobject_attribute_version' => $contentObjectAttribute->attribute( 'version' ),
 			'contentobject_id' => $contentObjectAttribute->attribute( 'contentobject_id' ),
 			'contentclass_id' => $contentclassAttribute->attribute( 'contentclass_id' ),
-			'default_mailing_list_selection_string' => OWNewsletterUtils::arrayToString( $postListData['default_mailing_list_selection_string'] ),
+			'default_mailing_lists_string' => OWNewsletterUtils::arrayToString( $postListData['default_mailing_lists_string'] ),
 			'main_siteaccess' => $postListData['main_siteaccess'],
 			'email_sender_name' => $postListData['email_sender_name'],
 			'email_sender' => $postListData['email_sender'],

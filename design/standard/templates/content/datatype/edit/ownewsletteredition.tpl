@@ -7,19 +7,19 @@
      $newsletter_edition_object = $attribute.content}
 
 {def $available_mailing_lists = $newsletter_edition_object.available_mailing_lists
-	 $default_mailing_list_sending_list = $newsletter_edition_object.default_mailing_list_sending_list
-	 $mailing_list_sending_list = $newsletter_edition_object.mailing_list_sending_list
+	 $default_mailing_lists_ids = $newsletter_edition_object.newsletter.default_mailing_lists_ids
+	 $mailing_lists_ids = $newsletter_edition_object.mailing_lists_ids
 }
 <hr>
 <table class="list" cellspacing="0">
 	<tr>
-		<th>{'Send to mailing list'|i18n('newsletter/datatype/ownewsletteredition')}</th>
+		<th>{'Send to mailing lists'|i18n('newsletter/datatype/ownewsletteredition')}</th>
 		<th>{'Mailing list'|i18n('newsletter/datatype/ownewsletteredition')}</th>
 	</tr>
 	{foreach $available_mailing_lists as $available_mailing_list sequence array('bglight','bgdark') as $style}
 		<tr class="{$style}">
 			<td><input type="checkbox" name="{$attribute_base}_{$datatype_name}_MailingListSendingList_{$attribute.id}[]" value="{$available_mailing_list.contentobject_id}" 
-					   {if and( $mailing_list_sending_list|count(), $mailing_list_sending_list|contains( $available_mailing_list.contentobject_id ) )}checked{elseif $default_mailing_list_sending_list|contains( $available_mailing_list.contentobject_id )}checked{/if}></td>
+					   {if and( $mailing_lists_ids|count(), $mailing_lists_ids|contains( $available_mailing_list.contentobject_id ) )}checked{elseif $default_mailing_lists_ids|contains( $available_mailing_list.contentobject_id )}checked{/if}></td>
 			<td>{$available_mailing_list.name|wash( )}</td>
 		</tr>
 	{/foreach}

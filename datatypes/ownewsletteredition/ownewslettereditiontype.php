@@ -22,7 +22,6 @@ class OWNewsletterEditionType extends eZDataType {
 	 * @return EZ_INPUT_VALIDATOR_STATE
 	 */
 	function validateObjectAttributeHTTPInput( $http, $base, $contentObjectAttribute ) {
-		$validationErrorMesssageArray = array();
 		$prefix = $base . '_ownewsletteredition_';
 		$postfix = '_' . $contentObjectAttribute->attribute( 'id' );
 
@@ -52,7 +51,7 @@ class OWNewsletterEditionType extends eZDataType {
 			'contentobject_attribute_version' => $contentObjectAttribute->attribute( 'version' ),
 			'contentobject_id' => $contentObjectAttribute->attribute( 'contentobject_id' ),
 			'contentclass_id' => $contentclassAttribute->attribute( 'contentclass_id' ),
-			'mailing_list_sending_list_string' => OWNewsletterUtils::arrayToString( (array) $http->postVariable( $prefix . 'MailingListSendingList' . $postfix ) ),
+			'mailing_lists_string' => OWNewsletterUtils::arrayToString( (array) $http->postVariable( $prefix . 'MailingListSendingList' . $postfix ) ),
 				) );
 		$contentObjectAttribute->setContent( $newsletterEditionObject );
 		return true;

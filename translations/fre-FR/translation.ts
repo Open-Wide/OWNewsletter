@@ -739,12 +739,16 @@
 <context>
     <name>newsletter/datatype/ownewsletteredition</name>
     <message>
-        <source>Send to mailing list</source>
-        <translation>Envoyer au listes de diffusion</translation>
+        <source>Send to mailing lists</source>
+        <translation>Envoyer aux listes de diffusion</translation>
     </message>
     <message>
         <source>Mailing list</source>
         <translation>Liste de diffusion</translation>
+    </message>
+    <message>
+        <source>No mailing list</source>
+        <translation>Aucune liste de diffusion</translation>
     </message>
 </context>
 <context>

@@ -34,7 +34,8 @@ class OWNewsletterUtils {
 	 * @return unknown_type
 	 */
 	static function stringToArray( $string ) {
-		return explode( ';', substr( $string, 1, strlen( $string ) - 2 ) );
+		$string = substr( $string, 1, strlen( $string ) - 2 );
+		return empty( $string ) ? null : explode( ';', $string );
 	}
 
 }

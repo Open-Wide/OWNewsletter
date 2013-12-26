@@ -4,63 +4,62 @@
 
 {def $newsletter_object = $attribute.content}
 
-    <div class="block float-break">
-        {* siteaccess_array *}
-        <div class="element">
-            <label>{'Default mailing list selection'|i18n('newsletter/datatype/ownewsletter')}</label>
-			<ul>
+<div class="block float-break">
+	<div class="element">
+		<label>{'Default mailing list selection'|i18n('newsletter/datatype/ownewsletter')}</label>
+		<ul>
 			{def $default_mailing_list_object = null()}
-            {foreach $newsletter_object.default_mailing_list_selection as $default_mailing_list}
+            {foreach $newsletter_object.default_mailing_lists_ids as $default_mailing_list}
 				{set $default_mailing_list_object = fetch( 'content', 'object', hash( 
 							'object_id', $default_mailing_list
 						) )}
-						<li><a href={$default_mailing_list_object.main_node.url_alias|ezurl()} target="_blanck">{$default_mailing_list_object.name}</a></li>
-			{/foreach}
-			</ul>
-        </div>
-    </div>
+				<li><a href={$default_mailing_list_object.main_node.url_alias|ezurl()} target="_blanck">{$default_mailing_list_object.name}</a></li>
+				{/foreach}
+		</ul>
+	</div>
+</div>
 
-    {def $main_siteaccess_info = $newsletter_object.available_siteaccess_list[$newsletter_object.main_siteaccess]}
-    <div class="block float-break">
+{def $main_siteaccess_info = $newsletter_object.available_siteaccess_list[$newsletter_object.main_siteaccess]}
+<div class="block float-break">
     {* main_siteaccess *}
-        <div class="element">
-            <label>{'Main siteaccess'|i18n('newsletter/datatype/ownewsletter')}</label>
-            {$newsletter_object.main_siteaccess|wash}
-        </div>
-        <div class="element">
-            <label>{'Main siteaccess site url'|i18n('newsletter/datatype/ownewsletter')}</label>
-            {$main_siteaccess_info.site_url|wash}
-        </div>
-        <div class="element">
-            <label>{'Main siteaccess locale'|i18n('newsletter/datatype/ownewsletter')}</label>
-            {$main_siteaccess_info.locale|wash}
-        </div>
-    </div>
+	<div class="element">
+		<label>{'Main siteaccess'|i18n('newsletter/datatype/ownewsletter')}</label>
+		{$newsletter_object.main_siteaccess|wash}
+	</div>
+	<div class="element">
+		<label>{'Main siteaccess site url'|i18n('newsletter/datatype/ownewsletter')}</label>
+		{$main_siteaccess_info.site_url|wash}
+	</div>
+	<div class="element">
+		<label>{'Main siteaccess locale'|i18n('newsletter/datatype/ownewsletter')}</label>
+		{$main_siteaccess_info.locale|wash}
+	</div>
+</div>
 
 
 
 
-    <div class="block float-break">
+<div class="block float-break">
 
-        {* email data *}
-        <div class="element">
-            <label>{'Newsletter sender email'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.email_sender|wash}
-        </div>
-        <div class="element">
-            <label>{'Newsletter sender name'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.email_sender_name|wash}
-        </div>
-        <div class="element">
-            <label>{'Newsletter default test receiver emails (separated by ;)'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.email_receiver_test_list|implode(';')|wash}
-        </div>
-    </div>
+	{* email data *}
+	<div class="element">
+		<label>{'Newsletter sender email'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.email_sender|wash}
+	</div>
+	<div class="element">
+		<label>{'Newsletter sender name'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.email_sender_name|wash}
+	</div>
+	<div class="element">
+		<label>{'Newsletter default test receiver emails (separated by ;)'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.email_receiver_test_list|implode(';')|wash}
+	</div>
+</div>
 
-    <div class="block float-break">
-        <div class="element">
-            <label>{'Personalize content'|i18n('newsletter/datatype/ownewsletter')}:</label>
-            {$newsletter_object.personalize_content|choose( 'No'|i18n( 'newsletter/datatype/ownewsletter' ), 'Yes'|i18n( 'newsletter/datatype/ownewsletter' ) )}
-        </div>
-    </div>
+<div class="block float-break">
+	<div class="element">
+		<label>{'Personalize content'|i18n('newsletter/datatype/ownewsletter')}:</label>
+		{$newsletter_object.personalize_content|choose( 'No'|i18n( 'newsletter/datatype/ownewsletter' ), 'Yes'|i18n( 'newsletter/datatype/ownewsletter' ) )}
+	</div>
+</div>
 
-    <div class="break"></div>
+<div class="break"></div>
 
 {undef $newsletter_object}

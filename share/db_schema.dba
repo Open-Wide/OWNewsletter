@@ -524,7 +524,7 @@ $schema = array(
 				'not_null' => '1',
 				'default' => false,
 			),
-			'default_mailing_list_selection_string' =>
+			'default_mailing_lists_string' =>
 			array(
 				'length' => 255,
 				'type' => 'varchar',
@@ -592,7 +592,7 @@ $schema = array(
 				'not_null' => '1',
 				'default' => 0,
 			),
-			'mailing_list_sending_list_string' =>
+			'mailing_lists_string' =>
 			array(
 				'length' => 255,
 				'type' => 'varchar',

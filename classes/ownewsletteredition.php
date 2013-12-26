@@ -27,7 +27,7 @@ class OWNewsletterEdition extends eZPersistentObject {
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
-				'mailing_list_sending_list_string' => array(
+				'mailing_lists_string' => array(
 					'name' => 'MailingListSendingListString',
 					'datatype' => 'string',
 					'default' => 'default',
@@ -35,9 +35,9 @@ class OWNewsletterEdition extends eZPersistentObject {
 			),
 			'keys' => array( 'contentobject_attribute_id', 'contentobject_attribute_version' ),
 			'function_attributes' => array(
-				'mailing_list_sending_list' => 'getMailingListSendingList',
+				'mailing_lists_ids' => 'getMailingListIDs',
 				'available_mailing_lists' => 'getAvailableMailingLists',
-				'default_mailing_list_sending_list' => 'getDefaultMailingListSendingList'
+				'newsletter' => 'getNewsletter'
 			),
 			'class_name' => 'OWNewsletterEdition',
 			'name' => 'ownl_edition' );
@@ -48,12 +48,12 @@ class OWNewsletterEdition extends eZPersistentObject {
 	 * ********************** */
 
 	/**
-	 * Transform string to array for mailing_list_sending_list attribute
+	 * Transform string to array for mailing_lists_ids attribute
 	 * 
 	 * @return array
 	 */
-	public function getMailingListSendingList() {
-		return OWNewsletterUtils::stringToArray( $this->attribute( 'mailing_list_sending_list_string' ) );
+	public function getMailingListIDs() {
+		return OWNewsletterUtils::stringToArray( $this->attribute( 'mailing_lists_string' ) );
 	}
 
 	/**
@@ -79,17 +79,16 @@ class OWNewsletterEdition extends eZPersistentObject {
 	 *
 	 * @return array
 	 */
-	function getDefaultMailingListSendingList() {
+	function getNewsletter() {
 		$contentObject = eZContentObject::fetch( $this->attribute( 'contentobject_id' ) );
 		$contentObjectMainNode = $contentObject->attribute( 'main_node' );
 		$contentObjectParentNode = $contentObjectMainNode->attribute( 'parent' );
 		$dataMap = $contentObjectParentNode->dataMap();
 		foreach ( $dataMap as $attribute ) {
 			if ( $attribute->attribute( 'data_type_string' ) == 'ownewsletter' ) {
-				return $attribute->content()->attribute( 'default_mailing_list_selection' );
+				return $attribute->content();
 			}
 		}
-		return array();
 	}
 
 	/*	 * **********************

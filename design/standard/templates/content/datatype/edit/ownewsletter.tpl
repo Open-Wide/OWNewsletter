@@ -8,7 +8,7 @@
 
 {def $available_siteaccess_list = $newsletter_object.available_siteaccess_list
      $available_skin_list =  $newsletter_object.available_skin_list
-     $default_mailing_list_selection = $newsletter_object.default_mailing_list_selection
+     $default_mailing_lists_ids = $newsletter_object.default_mailing_lists_ids
      $main_siteaccess = $newsletter_object.main_siteaccess
      $email_sender_name = $newsletter_object.email_sender_name
      $email_sender = $newsletter_object.email_sender
@@ -40,7 +40,7 @@
 </tr>
 {foreach $available_mailing_lists as $available_mailing_list sequence array('bglight','bgdark') as $style}
 <tr class="{$style}">
-    <td><input type="checkbox" name="{$attribute_base}_{$datatype_name}_DefaultMailingListSelection_{$attribute.id}[]" value="{$available_mailing_list.contentobject_id}" {if $default_mailing_list_selection|contains( $available_mailing_list.contentobject_id )}checked{/if}></td>
+    <td><input type="checkbox" name="{$attribute_base}_{$datatype_name}_DefaultMailingListSelection_{$attribute.id}[]" value="{$available_mailing_list.contentobject_id}" {if $default_mailing_lists_ids|contains( $available_mailing_list.contentobject_id )}checked{/if}></td>
     <td>{$available_mailing_list.name|wash( )}</td>
 </tr>
 {/foreach}
