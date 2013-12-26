@@ -2,6 +2,11 @@
 
 class OWNewsletterEdition extends eZPersistentObject {
 
+	const STATUS_DRAFT = 'draft';
+    const STATUS_PROCESS = 'process';  // sending
+    const STATUS_ARCHIVE = 'archive';  // archived
+    const STATUS_ABORT = 'abort';      // aborted
+	
 	/**
 	 * @return void
 	 */
@@ -37,7 +42,8 @@ class OWNewsletterEdition extends eZPersistentObject {
 			'function_attributes' => array(
 				'mailing_lists_ids' => 'getMailingListIDs',
 				'available_mailing_lists' => 'getAvailableMailingLists',
-				'newsletter' => 'getNewsletter'
+				'newsletter' => 'getNewsletter',
+				'status' => 'getStatus'
 			),
 			'class_name' => 'OWNewsletterEdition',
 			'name' => 'ownl_edition' );
@@ -90,6 +96,16 @@ class OWNewsletterEdition extends eZPersistentObject {
 			}
 		}
 	}
+	
+	/**
+	 * Return status identifier of newsletter edition
+	 * 
+	 * @return string
+	 */
+	function getStatus() {
+		return self::STATUS_DRAFT;
+	}
+	
 
 	/*	 * **********************
 	 * FETCH METHODS
@@ -106,6 +122,18 @@ class OWNewsletterEdition extends eZPersistentObject {
 		$object = eZPersistentObject::fetchObject( self::definition(), null, array(
 					'contentobject_attribute_id' => $attributeId,
 					'contentobject_attribute_version' => $version ), true );
+		return $object;
+	}
+
+	/**
+	 * Return object by custom conditions
+	 *
+	 * @param integer $attributeId
+	 * @param integer $version
+	 * @return object or boolean
+	 */
+	static function fetchByCustomConditions( $conds ) {
+		$object = eZPersistentObject::fetchObject( self::definition(), null, $conds, true );
 		return $object;
 	}
 
