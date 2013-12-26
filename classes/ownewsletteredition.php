@@ -43,7 +43,8 @@ class OWNewsletterEdition extends eZPersistentObject {
 				'mailing_lists_ids' => 'getMailingListIDs',
 				'available_mailing_lists' => 'getAvailableMailingLists',
 				'newsletter' => 'getNewsletter',
-				'status' => 'getStatus'
+				'status' => 'getStatus',
+				'status_name' => 'getStatusName'
 			),
 			'class_name' => 'OWNewsletterEdition',
 			'name' => 'ownl_edition' );
@@ -104,6 +105,15 @@ class OWNewsletterEdition extends eZPersistentObject {
 	 */
 	function getStatus() {
 		return self::STATUS_DRAFT;
+	}
+	
+	/**
+	 * Return status identifier of newsletter edition
+	 * 
+	 * @return string
+	 */
+	function getStatusName() {
+		return ezpI18n::tr( 'newsletter/edition/status', 'Draft' );
 	}
 	
 

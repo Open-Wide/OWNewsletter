@@ -99,19 +99,21 @@ class OWNewsletterServerFunctions extends ezjscServerFunctions {
 					) );
 			if ( $newsletterEdition instanceof OWNewsletterEdition ) {
 				$status = $newsletterEdition->attribute( 'status' );
+				$statusName = $newsletterEdition->attribute( 'status_name' );
 			} else {
 				$status = OWNewsletterEdition::STATUS_DRAFT;
+				$statusName = ezpI18n::tr( 'newsletter/edition/status', 'Draft' );
 			}
 			$operator = new eZURLOperator();
 			$tpl = eZTemplate::instance();
-			$operatorValue = 'images/newsletter/icons/crystal-newsletter/16x16/newsletter_'.$status.'.png';
-			$operatorParameters = array( );
-			$namedParameters = array( 'quote_val' => 'no');
+			$operatorValue = 'images/newsletter/icons/crystal-newsletter/16x16/newsletter_' . $status . '.png';
+			$operatorParameters = array();
+			$namedParameters = array( 'quote_val' => 'no' );
 			$operatorName = 'ezdesign';
 			$operator->modify(
 					$tpl, $operatorName, $operatorParameters, '', '', $operatorValue, $namedParameters, array()
 			);
-			$list[$index]['class_icon'] = '<img src="' . $operatorValue . '" width="16" height="16" alt="' . $object['class_name'] . '" title="' . $object['class_name'] . '" />';
+			$list[$index]['class_icon'] = '<img src="' . $operatorValue . '" width="16" height="16" alt="' . $object['class_name'] . ' [' . $statusName . ']" title="' . $object['class_name'] . ' [' . $statusName . ']" />';
 		}
 		return $list;
 	}
