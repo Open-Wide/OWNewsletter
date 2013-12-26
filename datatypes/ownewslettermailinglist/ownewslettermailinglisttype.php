@@ -185,10 +185,10 @@ class OWNewsletterMailingListType extends eZDataType {
 				}
 			}
 		} else {
-			$cjwNewsletterContent = $objectAttribute->attribute( 'content' );
-			$cjwNewsletterContentSerialized = serialize( $cjwNewsletterContent );
+			$newsletterContent = $objectAttribute->attribute( 'content' );
+			$newsletterContentSerialized = serialize( $newsletterContent );
 			$dataTextNode = $dom->createElement( 'ownewslettermailinglist' );
-			$serializedNode = $dom->createCDATASection( $cjwNewsletterContentSerialized );
+			$serializedNode = $dom->createCDATASection( $newsletterContentSerialized );
 			$dataTextNode->appendChild( $serializedNode );
 			$node->appendChild( $dataTextNode );
 		}
