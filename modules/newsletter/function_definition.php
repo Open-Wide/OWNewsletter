@@ -22,6 +22,17 @@ $FunctionList['edition_class_identifer_list'] = array(
 	'parameters' => array()
 );
 
+$FunctionList['edition_class_goup_id'] = array(
+	'name' => 'list',
+	'operation_types' => array(
+		'read' ),
+	'call_method' => array(
+		'class' => 'OWNewsletterFunctionCollection',
+		'method' => 'fetchEditionClassGroupID' ),
+	'parameter_type' => 'standard',
+	'parameters' => array()
+);
+
 $FunctionList['user_list'] = array(
 	'name' => 'list',
 	'operation_types' => array( 'read' ),

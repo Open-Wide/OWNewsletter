@@ -57,6 +57,28 @@ class OWNewsletterFunctionCollection {
 	}
 
 	/**
+	 * Fetch all content classes in the newsletter edition class group
+	 * 
+	 * @return array of eZContentClass
+	 */
+	static function fetchEditionClassGroupID() {
+		$ini = eZINI::instance( 'newsletter.ini' );
+		if ( !$ini->hasVariable( 'NewsletterSettings', 'NewsletterEditionContentClassGroup' ) ) {
+			eZDebug::writeError( "[NewsletterSettings]NewsletterEditionContentClassGroup is missing in newsletter.ini" );
+			return false;
+		}
+		$classGroupName = $ini->variable( 'NewsletterSettings', 'NewsletterEditionContentClassGroup' );
+		$classGroup = eZContentClassGroup::fetchByName( $classGroupName );
+		if ( !$classGroup instanceof eZContentClassGroup ) {
+			eZDebug::writeError( "Class group $classGroupName not found." );
+			$classGroupID = false;
+		}
+		$classGroupID = $classGroup->attribute( 'id' );
+		return array(
+			'result' => $classGroupID );
+	}
+
+	/**
 	 * Fetch users with custom parameter
 	 * 
 	 * @param integer $mailing_list_contentobject_id

@@ -116,69 +116,53 @@ var labelsObj = {ldelim}
 
 
 {rdelim};
+	{if and( $node.is_container,  $node.can_create)}
+		{def $group_id = fetch( 'newsletter', 'edition_class_goup_id' )}
+		{def $can_create_classes = fetch( 'content', 'can_instantiate_class_list', hash( 'parent_node', $node,
+																						 'filter_type', 'include',
+																						 'group_id', $group_id,
+																						 'group_by_class_group', true() ) )}
+		var createGroups = [
 
-{if and( $node.is_container,  $node.can_create)}
-    {if $node.path_array|contains( ezini( 'NodeSettings', 'MediaRootNode', 'content.ini' ) )}
-        {def $group_id = array( ezini( 'ClassGroupIDs', 'Users', 'content.ini' ),
-                                ezini( 'ClassGroupIDs', 'Setup', 'content.ini' ) )}
-    {elseif $node.path_array|contains( ezini( 'NodeSettings', 'UserRootNode', 'content.ini' ) )}
-        {def $group_id = array( ezini( 'ClassGroupIDs', 'Setup', 'content.ini' ),
-                                ezini( 'ClassGroupIDs', 'Content', 'content.ini' ),
-                                ezini( 'ClassGroupIDs', 'Media', 'content.ini' ) )}
-    {else}
-        {def $group_id = false()}
-    {/if}
+			{foreach $can_create_classes as $group}
+		"{$group.group_name}"
+			{delimiter}
+		,
+			{/delimiter}
+		{/foreach}
 
-    {def $can_create_classes = fetch( 'content', 'can_instantiate_class_list', hash( 'parent_node', $node,
-                                                                                     'filter_type', 'exclude',
-                                                                                     'group_id', $group_id,
-                                                                                     'group_by_class_group', true() ) )}
+		];
+				var createOptions = [
 
-    var createGroups = [
+		{foreach $can_create_classes as $group}
+				[
+			{foreach $group.items as $can_create_class}
+				{if $can_create_class.can_instantiate_languages}
+					{ldelim} text: "{$can_create_class.name|wash()}", value: {$can_create_class.id} {rdelim}
 
-    {foreach $can_create_classes as $group}
-        "{$group.group_name}"
-        {delimiter}
-        ,
-        {/delimiter}
-    {/foreach}
+				{/if}
+				{delimiter}{if $can_create_class.can_instantiate_languages},{/if}{/delimiter}
+			{/foreach}
+							]
+			{delimiter}
+							,
+			{/delimiter}
+		{/foreach}
+							];
+	{else}
+					var createGroups = [];
+							var createOptions = [];
+	{/if}
 
-    ];
-
-    var createOptions = [
-
-    {foreach $can_create_classes as $group}
-        [
-        {foreach $group.items as $can_create_class}
-            {if $can_create_class.can_instantiate_languages}
-            {ldelim} text: "{$can_create_class.name|wash()}", value: {$can_create_class.id} {rdelim}
-
-            {/if}
-            {delimiter}{if $can_create_class.can_instantiate_languages},{/if}{/delimiter}
-        {/foreach}
-        ]
-        {delimiter}
-        ,
-        {/delimiter}
-    {/foreach}
-    ];
-
-{else}
-    var createGroups = [];
-    var createOptions = [];
-{/if}
-
-{literal}
-YUILoader.require(['datatable', 'button', 'container', 'cookie', 'element']);
-YUILoader.onSuccess = function() {
-    sortableSubitems.init(confObj, labelsObj, createGroups, createOptions);
-};
-var options = [];
-YUILoader.insert(options, 'js');
-
-})();
-{/literal}
-{undef $section $visible_columns $locales}
+	{literal}
+					YUILoader.require(['datatable', 'button', 'container', 'cookie', 'element']);
+							YUILoader.onSuccess = function() {
+							sortableSubitems.init(confObj, labelsObj, createGroups, createOptions);
+									};
+							var options = [];
+							YUILoader.insert(options, 'js');
+						})();	{/literal}
+	{undef $section $visible_columns $locales}
 </script>
 <div id="action-controls-container">
     <div id="action-controls"></div>
