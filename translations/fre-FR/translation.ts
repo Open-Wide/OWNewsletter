@@ -502,6 +502,21 @@
     </message>
 </context>
 <context>
+    <name>newsletter/send</name>
+    <message>
+        <source>Send Test Newsletter</source>
+        <translation>Envoyer la newsletter de test</translation>
+    </message>
+    <message>
+        <source>Send Newsletter</source>
+        <translation>Envoyer la newsletter</translation>
+    </message>
+    <message>
+        <source>Abort Newsletter</source>
+        <translation>Annuler l'envoi de la newsletter</translation>
+    </message>
+</context>
+<context>
     <name>newsletter/edition/status</name>
     <message>
         <source>Draft</source>

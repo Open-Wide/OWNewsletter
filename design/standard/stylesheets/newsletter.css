@@ -63,3 +63,7 @@ div.user_search div.block div.right {
 div.user_search form {
 	white-space: nowrap;
 }
+
+div#content-newsletter-actions div.block div.right {
+	width: auto;
+}

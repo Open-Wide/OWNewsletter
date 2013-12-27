@@ -126,9 +126,38 @@
 					</form>
 					{* DESIGN: Control bar END *}
 				</div>
-
-
 			</div>
+			{if or( $newsletter_edition.status|eq('draft'), $newsletter_edition.status|eq('process') )}
+				<div id="content-newsletter-actions">
+					<div class="context-block">
+						<div class="box-header"></div>
+						<div class="box-content">
+							<form action={'newsletter/send'|ezurl()}  method="post" style="display:inline;">
+								<input type="hidden" name="TopLevelNode" value="{$node.object.main_node_id}" />
+								<input type="hidden" name="ContentNodeID" value="{$node.node_id}" />
+								<input type="hidden" name="ContentObjectID" value="{$node.object.id}" />
+								<div class="block">
+									<div class="left">
+										<input type="text" name="EmailReseiverTestInput" value="{$email_receiver_test}"  title="test1@example.com;test2@example.com" />
+										<input type="submit" class="defaultbutton" name="SendNewsletterTestButton" value="{"Send Test Newsletter"|i18n("newsletter/send")}">
+									</div>
+									<div class="right">
+										{if $newsletter_edition.status|eq('draft')}
+											<input class="button" type="submit" name="SendNewsletterButton" value="{"Send Newsletter"|i18n("newsletter/send")}" />
+										{/if}
+										{if $newsletter_edition.status|eq('process')}
+											<input class="button" type="submit" name="AbortNewsletterButton" value="{"Abort Newsletter"|i18n("newsletter/send")}" />
+										{/if}
+									</div>
+									<div class="break">
+									</div>
+								</div>
+							</form>
+						</div>
+
+					</div>
+				</div>
+			{/if}
 
 			{* Children window.*}
 			<div id="content-view-children">
