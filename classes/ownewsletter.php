@@ -3,12 +3,12 @@
 class OWNewsletter extends eZPersistentObject {
 
 	/**
-	 * Initializes a new GeoadressData alias
+	 * Constructor
 	 *
-	 * @param unknown_type $row
+	 * @param array $row
 	 * @return void
 	 */
-	function OWNewsletter( $row = array() ) {
+	function __construct( $row = array() ) {
 		$this->eZPersistentObject( $row );
 	}
 

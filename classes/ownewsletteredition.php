@@ -8,6 +8,16 @@ class OWNewsletterEdition extends eZPersistentObject {
     const STATUS_ABORT = 'abort';      // aborted
 	
 	/**
+	 * Constructor
+	 *
+	 * @param array $row
+	 * @return void
+	 */
+	function __construct( $row = array() ) {
+		$this->eZPersistentObject( $row );
+	}
+	
+	/**
 	 * @return void
 	 */
 	static function definition() {

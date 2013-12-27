@@ -24,6 +24,16 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	const STATUS_BLACKLISTED = 8;
 
 	/**
+	 * Constructor
+	 *
+	 * @param array $row
+	 * @return void
+	 */
+	function __construct( $row = array() ) {
+		$this->eZPersistentObject( $row );
+	}
+
+	/**
 	 * @return void
 	 */
 	static function definition() {

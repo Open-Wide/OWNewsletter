@@ -3,6 +3,16 @@
 class OWNewsletterMailingList extends eZPersistentObject {
 
 	/**
+	 * Constructor
+	 *
+	 * @param array $row
+	 * @return void
+	 */
+	function __construct( $row = array() ) {
+		$this->eZPersistentObject( $row );
+	}
+
+	/**
 	 * @return void
 	 */
 	static function definition() {
