@@ -769,5 +769,9 @@
         <source>No subscribtion</source>
         <translation>Aucun abonnement</translation>
     </message>
+    <message>
+        <source>Newsletter preview</source>
+        <translation>Aperçu de la newsletter</translation>
+    </message>
 </context>
 </TS>

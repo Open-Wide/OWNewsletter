@@ -6,4 +6,7 @@ TranslationExtensions[]=ownewsletter
 [MigrationSettings]
 MigrationExtensions[]=ownewsletter
 
+[TemplateSettings]
+ExtensionAutoloadPath[]=ownewsletter
+
 */ ?>

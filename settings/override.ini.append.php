@@ -30,4 +30,22 @@ MatchFile=newsletter/popupmenu/popup_subitems_menu.tpl
 Subdir=templates
 Match[class_identifier]=newsletter
 
+[node/view/full.tpl#newsletter_edition]
+Source=node/view/full.tpl
+MatchFile=newsletter_edition/node/view/full.tpl
+Subdir=templates
+Match[parent_class_identifier]=newsletter
+
+[window_controls_extratabs.tpl#newsletter_edition]
+Source=window_controls_extratabs.tpl
+MatchFile=newsletter_edition/window_controls_extratabs.tpl
+Subdir=templates
+Match[parent_class_identifier]=newsletter
+
+[windows_extratabs.tpl#newsletter_edition]
+Source=windows_extratabs.tpl
+MatchFile=newsletter_edition/windows_extratabs.tpl
+Subdir=templates
+Match[parent_class_identifier]=newsletter
+
 */ ?>

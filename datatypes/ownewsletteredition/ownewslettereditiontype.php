@@ -89,7 +89,10 @@ class OWNewsletterEditionType extends eZDataType {
 
 		$dataObject = OWNewsletterEdition::fetch( $id, $version );
 		if ( !is_object( $dataObject ) ) {
-			$dataObject = null;
+			$dataObject = new OWNewsletterEdition();
+			$dataObject->setAttribute( 'contentobject_attribute_id', $contentObjectAttribute->attribute( 'id' ) );
+			$dataObject->setAttribute( 'contentobject_attribute_version', $contentObjectAttribute->attribute( 'version' ) );
+			$dataObject->setAttribute( 'contentobject_id', $contentObjectAttribute->attribute( 'contentobject_id' ) );
 		}
 		return $dataObject;
 	}
