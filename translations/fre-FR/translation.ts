@@ -773,5 +773,17 @@
         <source>Newsletter preview</source>
         <translation>Aperçu de la newsletter</translation>
     </message>
+    <message>
+        <source>Show newsletter preview.</source>
+        <translation>Voir l&apos;aperçu de la newsletter.</translation>
+    </message>
+    <message>
+        <source>Newsletter statistics</source>
+        <translation>Statistiques</translation>
+    </message>
+    <message>
+        <source>Show newsletter statistics.</source>
+        <translation>Voir les statistiques.</translation>
+    </message>
 </context>
 </TS>

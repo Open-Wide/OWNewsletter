@@ -20,5 +20,6 @@
 
     {undef $tab_title $tab_description $tab_header_template $last}
 {/foreach}
-{include uri='design:tabs/newsletter_edition/preview_header.tpl' last=true()}
+{include uri='design:tabs/newsletter_edition/preview_header.tpl' last=false()}
+{include uri='design:tabs/newsletter_edition/statistics_header.tpl' last=true()}
 {undef $counter}

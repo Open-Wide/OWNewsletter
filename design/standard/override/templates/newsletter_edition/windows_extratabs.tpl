@@ -13,3 +13,7 @@
     {include uri='design:tabs/newsletter_edition/preview.tpl'}
 <div class="break"></div>
 </div>
+<div id="node-tab-newsletter-statistics-content" class="tab-content{if $node_tab_index|ne( $tab )} hide{else} selected{/if}">
+    {include uri='design:tabs/newsletter_edition/statistics.tpl'}
+<div class="break"></div>
+</div>

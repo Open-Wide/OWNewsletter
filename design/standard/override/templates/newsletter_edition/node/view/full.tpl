@@ -36,107 +36,110 @@
 					<h1 class="context-title">
 						<a href={concat( '/class/view/', $node.object.contentclass_id )|ezurl} onclick="ezpopmenu_showTopLevel( event, 'ClassMenu', ez_createAArray( new Array( '%classID%', {$node.object.contentclass_id}, '%objectID%', {$node.contentobject_id}, '%nodeID%', {$node.node_id}, '%currentURL%', '{$node.url|wash( javascript )}', '%languages%', {$js_class_languages} ) ), '{$node.class_name|wash(javascript)}', {$disabled_sub_menu}, {$disable_another_language} ); return false;">{*
 						   *}<img class="transparent-png-icon" src={concat('images/newsletter/icons/crystal-newsletter/32x32/newsletter_', $newsletter_edition.status, '.png')|ezdesign()} width="32" height="32" alt="{$newsletter_edition.status_name|wash()}" title="{$newsletter_edition.status_name|wash()}" />{*
-						*}</a>&nbsp;{$node.name|wash}&nbsp;[{$node.class_name|wash}]&nbsp;{$hide_status}</h1>
+							*}</a>&nbsp;{$node.name|wash}&nbsp;[{$node.class_name|wash}]&nbsp;{$hide_status}</h1>
 
-							 {undef $js_class_languages $disable_another_language $disabled_sub_menu $hide_status}
+					{undef $js_class_languages $disable_another_language $disabled_sub_menu $hide_status}
 
-							 {* DESIGN: Mainline *}<div class="header-mainline"></div>
+					{* DESIGN: Mainline *}<div class="header-mainline"></div>
 
-							 {* DESIGN: Header END *}</div>
-
-
-							 {* DESIGN: Content START *}<div class="box-content">
-
-<div class="context-information">
-<p class="left modified">{'Last modified'|i18n( 'design/admin/node/view/full' )}: {$node.object.modified|l10n(shortdatetime)}, <a href={$node.object.current.creator.main_node.url_alias|ezurl}>{$node.object.current.creator.name|wash}</a> ({'Node ID'|i18n( 'design/admin/node/view/full' )}: {$node.node_id}, {'Object ID'|i18n( 'design/admin/node/view/full' )}: {$node.object.id})</p>
-<p class="right translation">{$node.object.current_language_object.locale_object.intl_language_name}&nbsp;<img src="{$node.object.current_language|flag_icon}" width="18" height="12" alt="{$language_code}" style="vertical-align: middle;" /></p>
-<div class="break"></div>
-</div>
-
-<div id="window-controls" class="tab-block">
-
-							 {include uri='design:window_controls.tpl'}
-
-</div>
-
-							 {* DESIGN: Content END *}</div>
-
-<div class="controlbar">
-							 {* DESIGN: Control bar START *}
-
-<form method="post" action={'content/action'|ezurl}>
-<input type="hidden" name="TopLevelNode" value="{$node.object.main_node_id}" />
-<input type="hidden" name="ContentNodeID" value="{$node.node_id}" />
-<input type="hidden" name="ContentObjectID" value="{$node.contentobject_id}" />
-
-<div class="button-left">
-<div class='block'>
-							 {* Edit button. *}
-							 {def $can_create_languages = $node.object.can_create_languages
-     $languages            = fetch( 'content', 'prioritized_languages' )}
-							 {if $node.can_edit}
-								 {if and(eq( $languages|count, 1 ), is_set( $languages[0] ) )}
-            <input name="ContentObjectLanguageCode" value="{$languages[0].locale}" type="hidden" />
-								 {else}
-            <select name="ContentObjectLanguageCode">
-									 {foreach $node.object.can_edit_languages as $language}
-                       <option value="{$language.locale}"{if $language.locale|eq($node.object.current_language)} selected="selected"{/if}>{$language.name|wash}</option>
-									 {/foreach}
-									 {if gt( $can_create_languages|count, 0 )}
-                <option value="">{'New translation'|i18n( 'design/admin/node/view/full')}</option>
-									 {/if}
-            </select>
-								 {/if}
-    <input class="button" type="submit" name="EditButton" value="{'Edit'|i18n( 'design/admin/node/view/full' )}" title="{'Edit the contents of this item.'|i18n( 'design/admin/node/view/full' )}" />
-							 {else}
-    <select name="ContentObjectLanguageCode" disabled="disabled">
-        <option value="">{'Not available'|i18n( 'design/admin/node/view/full')}</option>
-    </select>
-    <input class="button-disabled" type="submit" name="EditButton" value="{'Edit'|i18n( 'design/admin/node/view/full' )}" title="{'You do not have permission to edit this item.'|i18n( 'design/admin/node/view/full' )}" disabled="disabled" />
-							 {/if}
-							 {undef $can_create_languages}
-
-							 {* Move button. *}
-							 {if $node.can_move}
-    <input class="button" type="submit" name="MoveNodeButton" value="{'Move'|i18n( 'design/admin/node/view/full' )}" title="{'Move this item to another location.'|i18n( 'design/admin/node/view/full' )}" />
-							 {else}
-    <input class="button-disabled" type="submit" name="MoveNodeButton" value="{'Move'|i18n( 'design/admin/node/view/full' )}" title="{'You do not have permission to move this item to another location.'|i18n( 'design/admin/node/view/full' )}" disabled="disabled" />
-							 {/if}
-
-							 {* Remove button. *}
-							 {if $node.can_remove}
-    <input class="button" type="submit" name="ActionRemove" value="{'Remove'|i18n( 'design/admin/node/view/full' )}" title="{'Remove this item.'|i18n( 'design/admin/node/view/full' )}" />
-							 {else}
-    <input class="button-disabled" type="submit" name="ActionRemove" value="{'Remove'|i18n( 'design/admin/node/view/full' )}" title="{'You do not have permission to remove this item.'|i18n( 'design/admin/node/view/full' )}" disabled="disabled" />
-							 {/if}
-</div>
-</div>
-
-<div class="button-right">
-	<p class='versions'>
-							 {* Link to manage versions *}
-    <a href={concat("content/history/", $node.contentobject_id )|ezurl} title="{'View and manage (copy, delete, etc.) the versions of this object.'|i18n( 'design/admin/content/edit' )}">{'Manage versions'|i18n( 'design/admin/content/edit' )}</a>
-    </p>
-</div>
-
-<div class="float-break"></div>
-</form>
-							 {* DESIGN: Control bar END *}
-</div>
+					{* DESIGN: Header END *}</div>
 
 
-</div>
+				{* DESIGN: Content START *}<div class="box-content">
 
-							 {* Children window.*}
-<div id="content-view-children">
-							 {if $node.is_container}
-								 {include uri='design:children.tpl'}
-							 {else}
-								 {include uri='design:no_children.tpl'}
-							 {/if}
-</div>
+					<div class="context-information">
+						<p class="left modified">{'Last modified'|i18n( 'design/admin/node/view/full' )}: {$node.object.modified|l10n(shortdatetime)}, <a href={$node.object.current.creator.main_node.url_alias|ezurl}>{$node.object.current.creator.name|wash}</a> ({'Node ID'|i18n( 'design/admin/node/view/full' )}: {$node.node_id}, {'Object ID'|i18n( 'design/admin/node/view/full' )}: {$node.object.id})</p>
+						<p class="right translation">{$node.object.current_language_object.locale_object.intl_language_name}&nbsp;<img src="{$node.object.current_language|flag_icon}" width="18" height="12" alt="{$language_code}" style="vertical-align: middle;" /></p>
+						<div class="break"></div>
+					</div>
 
-</div>
+					<div id="window-controls" class="tab-block">
 
- </div>
+						{include uri='design:window_controls.tpl'}
+
+					</div>
+
+					{* DESIGN: Content END *}</div>
+
+				<div class="controlbar">
+					{* DESIGN: Control bar START *}
+
+					<form method="post" action={'content/action'|ezurl}>
+						<input type="hidden" name="TopLevelNode" value="{$node.object.main_node_id}" />
+						<input type="hidden" name="ContentNodeID" value="{$node.node_id}" />
+						<input type="hidden" name="ContentObjectID" value="{$node.contentobject_id}" />
+
+						<div class="button-left">
+							<div class='block'>
+								{* Edit button. *}
+								{def $can_create_languages = $node.object.can_create_languages
+									 $languages = fetch( 'content', 'prioritized_languages' )}
+								{if and( $node.can_edit, $newsletter_edition.status|eq('draft') )}
+									{if and(eq( $languages|count, 1 ), is_set( $languages[0] ) )}
+										<input name="ContentObjectLanguageCode" value="{$languages[0].locale}" type="hidden" />
+									{else}
+										<select name="ContentObjectLanguageCode">
+											{foreach $node.object.can_edit_languages as $language}
+												<option value="{$language.locale}"{if $language.locale|eq($node.object.current_language)} selected="selected"{/if}>{$language.name|wash}</option>
+											{/foreach}
+											{if gt( $can_create_languages|count, 0 )}
+												<option value="">{'New translation'|i18n( 'design/admin/node/view/full')}</option>
+											{/if}
+										</select>
+									{/if}
+									<input class="button" type="submit" name="EditButton" value="{'Edit'|i18n( 'design/admin/node/view/full' )}" title="{'Edit the contents of this item.'|i18n( 'design/admin/node/view/full' )}" />
+								{else}
+									<select name="ContentObjectLanguageCode" disabled="disabled">
+										<option value="">{'Not available'|i18n( 'design/admin/node/view/full')}</option>
+									</select>
+									<input class="button-disabled" type="submit" name="EditButton" value="{'Edit'|i18n( 'design/admin/node/view/full' )}" title="{'You do not have permission to edit this item.'|i18n( 'design/admin/node/view/full' )}" disabled="disabled" />
+								{/if}
+								{undef $can_create_languages}
+
+								{* Move button. *}
+								{if and( $node.can_move, $newsletter_edition.status|eq('draft') )}
+									<input class="button" type="submit" name="MoveNodeButton" value="{'Move'|i18n( 'design/admin/node/view/full' )}" title="{'Move this item to another location.'|i18n( 'design/admin/node/view/full' )}" />
+								{else}
+									<input class="button-disabled" type="submit" name="MoveNodeButton" value="{'Move'|i18n( 'design/admin/node/view/full' )}" title="{'You do not have permission to move this item to another location.'|i18n( 'design/admin/node/view/full' )}" disabled="disabled" />
+								{/if}
+
+								{* Remove button. *}
+								{if and( $node.can_remove, $newsletter_edition.status|eq('draft') )}
+									<input class="button" type="submit" name="ActionRemove" value="{'Remove'|i18n( 'design/admin/node/view/full' )}" title="{'Remove this item.'|i18n( 'design/admin/node/view/full' )}" />
+								{else}
+									<input class="button-disabled" type="submit" name="ActionRemove" value="{'Remove'|i18n( 'design/admin/node/view/full' )}" title="{'You do not have permission to remove this item.'|i18n( 'design/admin/node/view/full' )}" disabled="disabled" />
+								{/if}
+								<a href={concat( 'content/copysubtree/', $node.node_id )|ezurl()}><input type="button" class="button" value="{'Copy'|i18n( 'design/admin/node/view/full' )}" alt="{'Copy'|i18n( 'design/admin/node/view/full' )}" title="{'Create a copy of <%child_name>.'|i18n( 'design/admin/node/view/full',, hash( '%child_name', $node.name|wash ) )|wash}" /></a>
+							</div>
+						</div>
+
+						{if $newsletter_edition.status|eq('draft')}
+							<div class="button-right">
+								<p class='versions'>
+									{* Link to manage versions *}
+									<a href={concat("content/history/", $node.contentobject_id )|ezurl} title="{'View and manage (copy, delete, etc.) the versions of this object.'|i18n( 'design/admin/content/edit' )}">{'Manage versions'|i18n( 'design/admin/content/edit' )}</a>
+
+								</p>
+							</div>
+						{/if}
+						<div class="float-break"></div>
+					</form>
+					{* DESIGN: Control bar END *}
+				</div>
+
+
+			</div>
+
+			{* Children window.*}
+			<div id="content-view-children">
+				{if $node.is_container}
+					{include uri='design:children.tpl'}
+				{else}
+					{include uri='design:no_children.tpl'}
+				{/if}
+			</div>
+
+		</div>
+
+	</div>
 </div>
