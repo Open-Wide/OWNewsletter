@@ -800,5 +800,29 @@
         <source>Show newsletter statistics.</source>
         <translation>Voir les statistiques.</translation>
     </message>
+    <message>
+        <source>Sending history</source>
+        <translation>Historique de l'envoi</translation>
+    </message>
+    <message>
+        <source>Mail queue creation</source>
+        <translation>Création de la file d'attente de messagerie</translation>
+    </message>
+    <message>
+        <source>Mail queue process start</source>
+        <translation>Début du traitement de la file d'attente</translation>
+    </message>
+    <message>
+        <source>Mail queue process finish</source>
+        <translation>Fin du traitement de la file d'attente</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation>Annulation de l'envoi</translation>
+    </message>
+    <message>
+        <source>n/a</source>
+        <translation>n/a</translation>
+    </message>
 </context>
 </TS>
