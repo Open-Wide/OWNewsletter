@@ -247,8 +247,9 @@ class OWNewsletterSending extends eZPersistentObject {
 		$sendingObject = self::fetch( $editionContentObjectID );
 		if ( $sendingObject instanceof self ) {
 			if ( $sendingObject->attribute( 'can_abort' ) ) {
-				$this->setAttribute( 'status', self::STATUS_ABORT );
-				$this->abortSendingItems();
+				$sendingObject->setAttribute( 'status', self::STATUS_ABORT );
+				$sendingObject->abortSendingItems();
+				$sendingObject->store();
 			}
 		}
 	}
