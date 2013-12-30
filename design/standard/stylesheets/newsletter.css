@@ -50,6 +50,26 @@
 	background-repeat: no-repeat;
 }
 
+.icon_e_draft {
+	background-image: url(../images/newsletter/icons/crystal-newsletter/12x12/newsletter_draft.png);
+	background-repeat: no-repeat;
+}
+
+.icon_e_process {
+	background-image: url(../images/newsletter/icons/crystal-newsletter/12x12/newsletter_process.png);
+	background-repeat: no-repeat;
+}
+
+.icon_e_archive {
+	background-image: url(../images/newsletter/icons/crystal-newsletter/12x12/newsletter_archive.png);
+	background-repeat: no-repeat;
+}
+
+.icon_e_abort {
+	background-image: url(../images/newsletter/icons/crystal-newsletter/12x12/newsletter_abort.png);
+	background-repeat: no-repeat;
+}
+
 button.image-button {
 	border: none;
 	padding: 0;

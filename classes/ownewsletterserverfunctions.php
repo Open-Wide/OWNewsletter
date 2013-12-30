@@ -19,6 +19,7 @@ class OWNewsletterServerFunctions extends ezjscServerFunctions {
 		$sort = isset( $args[3] ) ? self::sortMap( $args[3] ) : 'published';
 		$order = isset( $args[4] ) ? $args[4] : false;
 		$objectNameFilter = isset( $args[5] ) ? $args[5] : '';
+		$objectStatusFilter = isset( $args[6] ) ? $args[6] : '';
 
 		if ( !$parentNodeID ) {
 			throw new ezcBaseFunctionalityNotSupportedException( 'Fetch node list', 'Parent node id is not valid' );
@@ -36,7 +37,11 @@ class OWNewsletterServerFunctions extends ezjscServerFunctions {
 			'DepthOperator' => 'eq',
 			'ObjectNameFilter' => $objectNameFilter,
 			'AsObject' => true );
-
+		if ( !empty( $objectStatusFilter ) ) {
+			$params['ExtendedAttributeFilter'] = array( 
+				'id' => 'OWNewsletterEditionFilter',
+				'params' => array( 'status' => $objectStatusFilter ) );
+		}
 		// fetch nodes and total node count
 		$count = $node->subTreeCount( $params );
 		if ( $count ) {
@@ -114,7 +119,7 @@ class OWNewsletterServerFunctions extends ezjscServerFunctions {
 					$tpl, $operatorName, $operatorParameters, '', '', $operatorValue, $namedParameters, array()
 			);
 			$list[$index]['class_icon'] = '<img src="' . $operatorValue . '" width="16" height="16" alt="' . $object['class_name'] . ' [' . $statusName . ']" title="' . $object['class_name'] . ' [' . $statusName . ']" />';
-			if( $status != OWNewsletterEdition::STATUS_DRAFT ) {
+			if ( $status != OWNewsletterEdition::STATUS_DRAFT ) {
 				$list[$index]['can_edit'] = false;
 			}
 		}

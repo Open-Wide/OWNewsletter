@@ -223,10 +223,11 @@ var sortableSubitems = function() {
 					"::" + state.sortedBy.key +
 					"::" + ((state.sortedBy.dir === YAHOO.widget.DataTable.CLASS_ASC) ? "1" : "0") +
 					"::" + confObj.nameFilter +
+					"::" + confObj.statusFilter +
 					"?ContentType=json";
 		};
 		var tableConfig = {
-			initialRequest: "::" + confObj.rowsPrPage + "::0" + "::" + confObj.sortKey + "::" + confObj.sortOrder + "::" + confObj.nameFilter + "?ContentType=json", // Initial request for first page of data
+			initialRequest: "::" + confObj.rowsPrPage + "::0" + "::" + confObj.sortKey + "::" + confObj.sortOrder + "::" + confObj.nameFilter + "::" + confObj.statusFilter + "?ContentType=json", // Initial request for first page of data
 			dynamicData: true, // Enables dynamic server-driven data
 			generateRequest: buildQueryString,
 			sortedBy: {key: confObj.sortKey,

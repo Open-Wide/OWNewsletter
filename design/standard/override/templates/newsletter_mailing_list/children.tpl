@@ -34,7 +34,6 @@
 					<img src={'up-16x16-grey.png'|ezimage} width="16" height="16" alt="{'Up one level.'|i18n( 'design/admin/node/view/full' )}" title="{'Up one level.'|i18n( 'design/admin/node/view/full' )}" />
 				</a>&nbsp{'Subscribtions (%children_count/%all_children_count)'|i18n( 'design/admin/node/view/full',, hash( '%children_count', $children_count, '%all_children_count', $all_children_count ) )}
 			</h2>
-
 		</div>
 
 		<div class="box-content">
