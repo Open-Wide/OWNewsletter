@@ -18,7 +18,7 @@ if ( $module->hasActionParameter( 'ContentNodeID' ) ) {
 				break;
 			}
 		}
-		$contentParentNode = $contentNode->attribute('parent');
+		$contentParentNode = $contentNode->attribute( 'parent' );
 		$contentParentNodeDataMap = $contentParentNode->dataMap();
 		foreach ( $contentParentNodeDataMap as $attribute ) {
 			if ( $attribute->attribute( 'data_type_string' ) == 'ownewsletter' ) {
@@ -62,8 +62,10 @@ if ( !empty( $errors ) ) {
 	}
 } elseif ( $module->isCurrentAction( 'SendNewsletter' ) ) {
 	OWNewsletterSending::create( $newsletter, $newsletterEdition );
+	eZContentCacheManager::clearContentCacheIfNeeded( $contentObjectID );
 } elseif ( $module->isCurrentAction( 'AbortNewsletter' ) ) {
 	OWNewsletterSending::abort( $newsletterEdition );
+	eZContentCacheManager::clearContentCacheIfNeeded( array( $contentObjectID ) );
 } elseif ( $module->isCurrentAction( 'SendNewsletterTest' ) ) {
 	OWNewsletterSending::sendTest( $newsletter, $newsletterEdition, $emailReceiverTest );
 }
