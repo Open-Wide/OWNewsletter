@@ -54,6 +54,7 @@ class OWNewsletterEdition extends eZPersistentObject {
 				'mailing_lists_ids' => 'getMailingListIDs',
 				'available_mailing_lists' => 'getAvailableMailingLists',
 				'newsletter' => 'getNewsletter',
+				'sending' => 'getSending',
 				'status' => 'getStatus',
 				'status_name' => 'getStatusName'
 			),
@@ -110,11 +111,28 @@ class OWNewsletterEdition extends eZPersistentObject {
 	}
 
 	/**
+	 * Returns OWNewsletterSending of the edition
+	 */
+	public function getSending() {
+		return OWNewsletterSending::fetch( $this->attribute( 'contentobject_id' ) );
+	}
+
+	/**
 	 * Return status identifier of newsletter edition
 	 * 
 	 * @return string
 	 */
 	public function getStatus() {
+		$sending = $this->attribute( 'sending' );
+		if ( $sending instanceof OWNewsletterSending ) {
+			if ( $sending->attribute( 'status' ) == OWNewsletterSending::STATUS_ABORT ) {
+				return self::STATUS_ABORT;
+			} elseif ( $sending->attribute( 'status' ) == OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_FINISHED ) {
+				return self::STATUS_ARCHIVE;
+			} else {
+				return self::STATUS_PROCESS;
+			}
+		}
 		return self::STATUS_DRAFT;
 	}
 
@@ -124,7 +142,19 @@ class OWNewsletterEdition extends eZPersistentObject {
 	 * @return string
 	 */
 	public function getStatusName() {
-		return ezpI18n::tr( 'newsletter/edition/status', 'Draft' );
+		switch ( $this->attribute( 'status' ) ) {
+			case self::STATUS_DRAFT:
+				return ezpI18n::tr( 'newsletter/edition/status', 'Draft' );
+			case self::STATUS_PROCESS:
+				return ezpI18n::tr( 'newsletter/edition/status', 'Sending' );
+			case self::STATUS_ARCHIVE:
+				return ezpI18n::tr( 'newsletter/edition/status', 'Archived' );
+			case self::STATUS_ABORT:
+				return ezpI18n::tr( 'newsletter/edition/status', 'Aborted');
+			default:
+				break;
+		}
+		
 	}
 
 	/*	 * **********************
