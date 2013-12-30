@@ -13,9 +13,9 @@
 				{* DESIGN: Header START *}<div class="box-header">
 
 					{def $js_class_languages = $node.object.content_class.prioritized_languages_js_array|explode( '"' )|implode( "'" )
-     $disable_another_language = cond( eq( 0, count( $node.object.content_class.can_create_languages ) ),"'edit-class-another-language'", '-1' )
-     $disabled_sub_menu = "['class-createnodefeed', 'class-removenodefeed']"
-     $hide_status = ''}
+						$disable_another_language = cond( eq( 0, count( $node.object.content_class.can_create_languages ) ),"'edit-class-another-language'", '-1' )
+						$disabled_sub_menu = "['class-createnodefeed', 'class-removenodefeed']"
+						$hide_status = ''}
 
 					{if $node.is_invisible}
 						{set $hide_status = concat( '(', $node.hidden_status_string, ')' )}
@@ -65,7 +65,7 @@
 					{* DESIGN: Control bar START *}
 
 					<form method="post" action={'content/action'|ezurl}>
-						<input type="hidden" name="TopLevelNode" value="{$node.object.main_node_id}" />
+						<input type="hidden" name="TopLevelNodeID" value="{$node.object.main_node_id}" />
 						<input type="hidden" name="ContentNodeID" value="{$node.node_id}" />
 						<input type="hidden" name="ContentObjectID" value="{$node.contentobject_id}" />
 
@@ -133,12 +133,11 @@
 						<div class="box-header"></div>
 						<div class="box-content">
 							<form action={'newsletter/send'|ezurl()}  method="post" style="display:inline;">
-								<input type="hidden" name="TopLevelNode" value="{$node.object.main_node_id}" />
 								<input type="hidden" name="ContentNodeID" value="{$node.node_id}" />
 								<input type="hidden" name="ContentObjectID" value="{$node.object.id}" />
 								<div class="block">
 									<div class="left">
-										<input type="text" name="EmailReseiverTestInput" value="{$email_receiver_test}"  title="test1@example.com;test2@example.com" />
+										<input type="text" name="EmailReceiverTest" value="{$email_receiver_test}"  title="test1@example.com;test2@example.com" />
 										<input type="submit" class="defaultbutton" name="SendNewsletterTestButton" value="{"Send Test Newsletter"|i18n("newsletter/send")}">
 									</div>
 									<div class="right">

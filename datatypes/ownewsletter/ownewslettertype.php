@@ -38,13 +38,13 @@ class OWNewsletterType extends eZDataType {
 
 		$emailReceiverTest = $http->postVariable( $prefix . 'EmailReceiverTest' . $postfix );
 		if ( $emailReceiverTest == '' ) {
-			$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid test reciever email" );
+			$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid test receiver email" );
 		} else {
-			$recieverList = explode( ';', $emailReceiverTest );
-			foreach ( $recieverList as $reciever ) {
-				if ( eZMail::validate( $reciever ) == false ) {
-					$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid reciever email adress >> %email", null, array(
-								'%email' => $reciever ) );
+			$receiverList = explode( ';', $emailReceiverTest );
+			foreach ( $receiverList as $receiver ) {
+				if ( eZMail::validate( $receiver ) == false ) {
+					$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid receiver email adress >> %email", null, array(
+								'%email' => $receiver ) );
 				}
 			}
 		}

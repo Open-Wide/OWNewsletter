@@ -743,11 +743,11 @@
 		<translation>L&apos;adresse email de l&apos;expéditeur doit être rempli et valide</translation>
 	</message>
 	<message>
-		<source>You have to set a valid test reciever email</source>
+		<source>You have to set a valid test receiver email</source>
 		<translation>L&apos;adresse email du destinataire des tests doit être rempli et valide</translation>
 	</message>
 	<message>
-		<source>You have to set a valid reciever email adress >> %email</source>
+		<source>You have to set a valid receiver email adress >> %email</source>
 		<translation>L&apos;adresse email du destinataire %email n&apos;est pas valide</translation>
 	</message>
 </context>

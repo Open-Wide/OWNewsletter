@@ -103,7 +103,7 @@
             <td>
             {if and( $edition_node.can_edit, $nl_status_is_draft )}
                 <form action={'content/action'|ezurl()} method="post">
-                    <input type="hidden" value="{$edition_node.node_id}" name="TopLevelNode"/>
+                    <input type="hidden" value="{$edition_node.node_id}" name="TopLevelNodeID"/>
                     <input type="hidden" value="{$edition_node.node_id}" name="ContentNodeID"/>
                     <input type="hidden" value="{$edition_node.contentobject_id}" name="ContentObjectID" />
                    {* <input type="hidden" value="{'newsletter/index'}" name="RedirectIfDiscarded" />*}

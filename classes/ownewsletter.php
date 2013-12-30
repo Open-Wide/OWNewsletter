@@ -145,7 +145,7 @@ class OWNewsletter extends eZPersistentObject {
 	function getAvailableSkinList() {
 
 		$newsletterIni = eZINI::instance( 'newsletter.ini' );
-		$availableSkinList = $newsletterIni->variable( 'NewsletterSettings', 'AvailableSkinArray' );
+		$availableSkinList = $newsletterIni->variable( 'NewsletterSettings', 'AvailableSkinList' );
 		return $availableSkinList;
 	}
 
@@ -182,6 +182,18 @@ class OWNewsletter extends eZPersistentObject {
 		$object = eZPersistentObject::fetchObject( self::definition(), null, array(
 					'contentobject_attribute_id' => $attributeId,
 					'contentobject_attribute_version' => $version ), true );
+		return $object;
+	}
+
+	/**
+	 * Return object by custom conditions
+	 *
+	 * @param integer $attributeId
+	 * @param integer $version
+	 * @return object or boolean
+	 */
+	static public function fetchByCustomConditions( $conds ) {
+		$object = eZPersistentObject::fetchObject( self::definition(), null, $conds, true );
 		return $object;
 	}
 

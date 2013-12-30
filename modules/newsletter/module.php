@@ -64,7 +64,7 @@ $ViewList['blacklist'] = array(
 	'functions' => array( 'blacklist' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
 	'ui_context' => 'admin',
-	'params' => array( ),
+	'params' => array(),
 	'single_post_actions' => array(
 		'CancelButton' => 'Cancel',
 		'AddBacklistItemButton' => 'AddBacklistItem',
@@ -81,6 +81,36 @@ $ViewList['blacklist'] = array(
 		'RemoveBacklistItem' => array(
 			'Email' => 'Email',
 			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		)
+	)
+);
+
+
+
+$ViewList['send'] = array(
+	'script' => 'send.php',
+	'functions' => array( 'send' ),
+	'default_navigation_part' => 'eznewsletternavigationpart',
+	'ui_context' => 'admin',
+	'params' => array(),
+	'single_post_actions' => array(
+		'SendNewsletterButton' => 'SendNewsletter',
+		'AbortNewsletterButton' => 'AbortNewsletter',
+		'SendNewsletterTestButton' => 'SendNewsletterTest'
+	),
+	'post_action_parameters' => array(
+		'SendNewsletter' => array(
+			'ContentNodeID' => 'ContentNodeID',
+			'ContentObjectID' => 'ContentObjectID'
+		),
+		'AbortNewsletter' => array(
+			'ContentNodeID' => 'ContentNodeID',
+			'ContentObjectID' => 'ContentObjectID'
+		),
+		'SendNewsletterTest' => array(
+			'ContentNodeID' => 'ContentNodeID',
+			'ContentObjectID' => 'ContentObjectID',
+			'EmailReceiverTest' => 'EmailReceiverTest'
 		)
 	)
 );

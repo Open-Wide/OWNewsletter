@@ -68,7 +68,7 @@
 <input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_EmailSenderName_{$attribute.id}" value="{$email_sender_name}" />
 
 <hr>
-{* email_reciever_test *}
+{* email_receiver_test *}
 <label>{'Newsletter default test receiver emails (separated by ;)'|i18n('newsletter/datatype/ownewsletter')} *</label>
 <input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_EmailReceiverTest_{$attribute.id}" value="{$email_receiver_test}" />
 
