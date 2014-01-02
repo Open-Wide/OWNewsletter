@@ -48,8 +48,8 @@ if ( $module->hasActionParameter( 'ContentObjectID' ) ) {
 
 /* If press Send test newsletter button */
 if ( $module->isCurrentAction( 'SendNewsletterTest' ) ) {
-	if ( $module->hasActionParameter( 'EmailReceiverTest' ) ) {
-		$emailReceiverTest = $module->actionParameter( 'EmailReceiverTest' );
+	if ( $module->hasActionParameter( 'TestReceiverEmailString' ) ) {
+		$testReceiverEmailString = $module->actionParameter( 'TestReceiverEmailString' );
 	} else {
 		$errors[] = "Email receiver is missing";
 	}
@@ -67,6 +67,6 @@ if ( !empty( $errors ) ) {
 	OWNewsletterSending::abort( $newsletterEdition );
 	eZContentCacheManager::clearContentCacheIfNeeded( array( $contentObjectID ) );
 } elseif ( $module->isCurrentAction( 'SendNewsletterTest' ) ) {
-	OWNewsletterSending::sendTest( $newsletterEdition, $emailReceiverTest );
+	OWNewsletterSending::sendTest( $newsletterEdition, $testReceiverEmailString );
 }
 $module->redirectTo( $contentNode->attribute( 'url_alias' ) );

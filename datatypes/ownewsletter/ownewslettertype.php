@@ -36,11 +36,11 @@ class OWNewsletterType extends eZDataType {
 			$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid sender email adress" );
 		}
 
-		$emailReceiverTest = $http->postVariable( $prefix . 'EmailReceiverTest' . $postfix );
-		if ( $emailReceiverTest == '' ) {
+		$testReceiverEmail = $http->postVariable( $prefix . 'TestReceiverEmail' . $postfix );
+		if ( $testReceiverEmail == '' ) {
 			$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid test receiver email" );
 		} else {
-			$receiverList = explode( ';', $emailReceiverTest );
+			$receiverList = explode( ';', $testReceiverEmail );
 			foreach ( $receiverList as $receiver ) {
 				if ( eZMail::validate( $receiver ) == false ) {
 					$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid receiver email adress >> %email", null, array(
@@ -75,7 +75,7 @@ class OWNewsletterType extends eZDataType {
 		$postListData['main_siteaccess'] = $http->postVariable( $prefix . 'MainSiteaccess' . $postfix );
 		$postListData['sender_email'] = $http->postVariable( $prefix . 'SenderEmail' . $postfix );
 		$postListData['sender_name'] = $http->postVariable( $prefix . 'SenderName' . $postfix );
-		$postListData['email_receiver_test'] = explode( ';', $http->postVariable( $prefix . 'EmailReceiverTest' . $postfix ) );
+		$postListData['test_receiver_email'] = explode( ';', $http->postVariable( $prefix . 'TestReceiverEmail' . $postfix ) );
 		$postListData['skin_name'] = $http->hasPostVariable( $prefix . 'SkinName' . $postfix ) ? $http->postVariable( $prefix . 'SkinName' . $postfix ) : '';
 		$postListData['personalize_content'] = (int) $http->postVariable( $prefix . 'PersonalizeContent' . $postfix );
 
@@ -88,7 +88,7 @@ class OWNewsletterType extends eZDataType {
 			'main_siteaccess' => $postListData['main_siteaccess'],
 			'sender_name' => $postListData['sender_name'],
 			'sender_email' => $postListData['sender_email'],
-			'email_receiver_test' => OWNewsletterUtils::arrayToString( $postListData['email_receiver_test'] ),
+			'test_receiver_email_string' => OWNewsletterUtils::arrayToString( $postListData['test_receiver_email'] ),
 			'skin_name' => $postListData['skin_name'],
 			'personalize_content' => $postListData['personalize_content']
 				) );
@@ -142,10 +142,7 @@ class OWNewsletterType extends eZDataType {
 	 * @return boolean
 	 */
 	function hasObjectAttributeContent( $contentObjectAttribute ) {
-		if ( OWNewsletterType::objectAttributeContent( $contentObjectAttribute ) )
-			return true;
-		else
-			return false;
+		return OWNewsletterType::objectAttributeContent( $contentObjectAttribute ) ? true : false;
 	}
 
 	/**
@@ -173,8 +170,9 @@ class OWNewsletterType extends eZDataType {
 		// enclose mainsiteaccess with '[]'
 		$newSiteAccessArray = $content->attribute( 'siteaccess_array' );
 		foreach ( $newSiteAccessArray as $index => $siteAccessName ) {
-			if ( $siteAccessName == $mainSiteAccess )
+			if ( $siteAccessName == $mainSiteAccess ) {
 				$newSiteAccessArray[$index] = '[' . $siteAccessName . ']';
+			}
 		}
 
 		$listTitle = $contentObjectAttribute->attribute( 'contentobject_id' )
@@ -216,8 +214,9 @@ class OWNewsletterType extends eZDataType {
 	 */
 	function deleteStoredObjectAttribute( $contentObjectAttribute, $version = null ) {
 		$object = OWNewsletter::fetch( $contentObjectAttribute->attribute( "id" ), $contentObjectAttribute->attribute( "version" ) );
-		if ( is_object( $object ) )
+		if ( is_object( $object ) ) {
 			$object->remove();
+		}
 	}
 
 	/**
@@ -237,9 +236,9 @@ class OWNewsletterType extends eZDataType {
 			foreach ( $map as $attributeName => $xmlName ) {
 				if ( $objectAttribute->hasAttribute( $attributeName ) ) {
 					$value = $objectAttribute->attribute( $attributeName );
-					unset( $attributeNode );
 					$attributeNode = $dom->createElement( $xmlName, (string) $value );
 					$node->appendChild( $attributeNode );
+					unset( $attributeNode );
 				} else {
 					eZDebug::writeError( "The attribute '$attributeName' does not exists for contentobject attribute " . $objectAttribute->attribute( 'id' ), 'eZDataType::serializeContentObjectAttribute' );
 				}
@@ -310,4 +309,4 @@ class OWNewsletterType extends eZDataType {
 }
 
 eZDataType::register( OWNewsletterType::DATA_TYPE_STRING, 'OWNewsletterType' );
-?>
+

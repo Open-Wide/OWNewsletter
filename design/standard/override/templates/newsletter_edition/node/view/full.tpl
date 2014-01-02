@@ -137,7 +137,7 @@
 								<input type="hidden" name="ContentObjectID" value="{$node.object.id}" />
 								<div class="block">
 									<div class="left">
-										<input type="text" name="EmailReceiverTest" value="{$email_receiver_test}"  title="test1@example.com;test2@example.com" />
+										<input type="text" name="TestReceiverEmail" value="{$newsletter_edition.newsletter.test_receiver_email_list|implode(';')}"  title="test1@example.com;test2@example.com" />
 										<input type="submit" class="defaultbutton" name="SendNewsletterTestButton" value="{"Send Test Newsletter"|i18n("newsletter/send")}">
 									</div>
 									<div class="right">

@@ -12,7 +12,7 @@
      $main_siteaccess = $newsletter_object.main_siteaccess
      $sender_name = $newsletter_object.sender_name
      $sender_email = $newsletter_object.sender_email
-     $email_receiver_test = $newsletter_object.email_receiver_test_list|implode(';')
+     $test_receiver_email = $newsletter_object.test_receiver_email_list|implode(';')
      $skin_name = $newsletter_object.skin_name
      $personalize_content = $newsletter_object.personalize_content
 	 $available_mailing_lists = $newsletter_object.available_mailing_lists
@@ -26,8 +26,8 @@
     {set $sender_email = ezini('MailSettings','AdminEmail')}
 {/if}
 
-{if $email_receiver_test|eq('') }
-    {set $email_receiver_test = ezini('MailSettings','AdminEmail')}
+{if $test_receiver_email|eq('') }
+    {set $test_receiver_email = ezini('MailSettings','AdminEmail')}
 {/if}
 
 <hr>
@@ -68,9 +68,9 @@
 <input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_SenderName_{$attribute.id}" value="{$sender_name}" />
 
 <hr>
-{* email_receiver_test *}
+{* test_receiver_email_string *}
 <label>{'Newsletter default test receiver emails (separated by ;)'|i18n('newsletter/datatype/ownewsletter')} *</label>
-<input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_EmailReceiverTest_{$attribute.id}" value="{$email_receiver_test}" />
+<input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_TestReceiverEmail_{$attribute.id}" value="{$test_receiver_email}" />
 
 <hr>
 

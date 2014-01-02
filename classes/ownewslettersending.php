@@ -301,15 +301,15 @@ class OWNewsletterSending extends eZPersistentObject {
 		}
 	}
 
-	static function sendTest( OWNewsletterEdition $newsletterEdition, $emailReceiverTest ) {
-		if ( is_string( $emailReceiverTest ) ) {
-			$emailReceiverTest = explode( ';', $emailReceiverTest );
+	static function sendTest( OWNewsletterEdition $newsletterEdition, $testReceiverEmailString ) {
+		if ( is_string( $testReceiverEmailString ) ) {
+			$testReceiverEmailString = explode( ';', $testReceiverEmailString );
 		}
 		$editionContentObjectID = $newsletterEdition->attribute( 'contentobject_id' );
 		$sendingObject = self::fetch( $editionContentObjectID );
 		if ( $sendingObject instanceof self ) {
 			$newsletterMail = new OWNewsletterMail();
-			return $newsletterMail->sendNewsletterTestMail( $sendingObject, $emailReceiverTest );
+			return $newsletterMail->sendNewsletterTestMail( $sendingObject, $testReceiverEmailString );
 		}
 	}
 

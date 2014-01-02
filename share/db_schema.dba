@@ -411,7 +411,7 @@ $schema = array(
 				'not_null' => '1',
 				'default' => '',
 			),
-			'email_receiver_test' => array(
+			'test_receiver_email_string' => array(
 				'length' => 255,
 				'type' => 'varchar',
 				'not_null' => '1',

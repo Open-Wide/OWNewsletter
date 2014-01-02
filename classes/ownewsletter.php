@@ -52,8 +52,8 @@ class OWNewsletter extends eZPersistentObject {
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
-				'email_receiver_test' => array(
-					'name' => 'EmailReceiverTest',
+				'test_receiver_email_string' => array(
+					'name' => 'TestReceiverEmailString',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => false ),
@@ -81,7 +81,7 @@ class OWNewsletter extends eZPersistentObject {
 			'keys' => array( 'contentobject_attribute_id', 'contentobject_attribute_version' ),
 			'function_attributes' => array(
 				'default_mailing_lists_ids' => 'getDefaultMailingListsIDs',
-				'email_receiver_test_list' => 'getEmailReceiverTestList',
+				'test_receiver_email_list' => 'getTestReceiverEmailList',
 				'available_siteaccess_list' => 'getAvailableSiteAccessList',
 				'available_skin_list' => 'getAvailableSkinList',
 				'available_mailing_lists' => 'getAvailableMailingLists' ),
@@ -103,12 +103,12 @@ class OWNewsletter extends eZPersistentObject {
 	}
 
 	/**
-	 * Transform string to array for email_receiver_test_list attribute
+	 * Transform string to array for test_receiver_email_list attribute
 	 * 
 	 * @return array
 	 */
-	public function getEmailReceiverTestList() {
-		return OWNewsletterUtils::stringToArray( $this->attribute( 'email_receiver_test' ) );
+	public function getTestReceiverEmailList() {
+		return OWNewsletterUtils::stringToArray( $this->attribute( 'test_receiver_email_string' ) );
 	}
 
 	/**

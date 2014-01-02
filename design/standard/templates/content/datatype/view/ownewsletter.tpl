@@ -49,7 +49,7 @@
 		<label>{'Newsletter sender name'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.sender_name|wash}
 	</div>
 	<div class="element">
-		<label>{'Newsletter default test receiver emails (separated by ;)'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.email_receiver_test_list|implode(';')|wash}
+		<label>{'Newsletter default test receiver emails (separated by ;)'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.test_receiver_email_list|implode(';')|wash}
 	</div>
 </div>
 
