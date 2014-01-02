@@ -805,6 +805,10 @@
         <translation>Historique de l'envoi</translation>
     </message>
     <message>
+        <source>Waiting for process</source>
+        <translation>En attente de traitement</translation>
+    </message>
+    <message>
         <source>Mail queue creation</source>
         <translation>Création de la file d'attente de messagerie</translation>
     </message>

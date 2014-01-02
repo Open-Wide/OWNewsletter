@@ -10,6 +10,14 @@
 			{/if}
 		</li>
 		<li>
+			<label>{'Waiting for process'|i18n('design/admin/node/view/full')}</label>
+			{if $newsletter_edition.sending.waiting_for_process}
+				{$newsletter_edition.sending.waiting_for_process|l10n( shortdatetime )}
+			{else}
+				{'n/a'|i18n('design/admin/node/view/full')}
+			{/if}
+		</li>
+		<li>
 			<label>{'Mail queue creation'|i18n('design/admin/node/view/full')}</label>
 			{if $newsletter_edition.sending.mailqueue_created}
 				{$newsletter_edition.sending.mailqueue_created|l10n( shortdatetime )}

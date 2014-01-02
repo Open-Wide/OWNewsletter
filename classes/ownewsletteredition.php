@@ -114,7 +114,15 @@ class OWNewsletterEdition extends eZPersistentObject {
 	 * Returns OWNewsletterSending of the edition
 	 */
 	public function getSending() {
-		return OWNewsletterSending::fetch( $this->attribute( 'contentobject_id' ) );
+		$sending = OWNewsletterSending::fetch( $this->attribute( 'contentobject_id' ) );
+		if ( !$sending instanceof OWNewsletterSending ) {
+			try {
+				$sending = OWNewsletterSending::create( $this );
+			} catch ( OWNewsletterException $e ) {
+				return false;
+			}
+		}
+		return $sending;
 	}
 
 	/**
@@ -125,7 +133,9 @@ class OWNewsletterEdition extends eZPersistentObject {
 	public function getStatus() {
 		$sending = $this->attribute( 'sending' );
 		if ( $sending instanceof OWNewsletterSending ) {
-			if ( $sending->attribute( 'status' ) == OWNewsletterSending::STATUS_ABORT ) {
+			if ( $sending->attribute( 'status' ) == OWNewsletterSending::STATUS_DRAFT ) {
+				return self::STATUS_DRAFT;
+			} elseif ( $sending->attribute( 'status' ) == OWNewsletterSending::STATUS_ABORT ) {
 				return self::STATUS_ABORT;
 			} elseif ( $sending->attribute( 'status' ) == OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_FINISHED ) {
 				return self::STATUS_ARCHIVE;
@@ -150,11 +160,10 @@ class OWNewsletterEdition extends eZPersistentObject {
 			case self::STATUS_ARCHIVE:
 				return ezpI18n::tr( 'newsletter/edition/status', 'Archived' );
 			case self::STATUS_ABORT:
-				return ezpI18n::tr( 'newsletter/edition/status', 'Aborted');
+				return ezpI18n::tr( 'newsletter/edition/status', 'Aborted' );
 			default:
 				break;
 		}
-		
 	}
 
 	/*	 * **********************
@@ -162,7 +171,7 @@ class OWNewsletterEdition extends eZPersistentObject {
 	 * ********************** */
 
 	/**
-	 * Return object by id
+	 * Return object by attribute id and version
 	 *
 	 * @param integer $attributeId
 	 * @param integer $version
@@ -173,6 +182,22 @@ class OWNewsletterEdition extends eZPersistentObject {
 					'contentobject_attribute_id' => $attributeId,
 					'contentobject_attribute_version' => $version ), true );
 		return $object;
+	}
+
+	/**
+	 * Return last version object by content object id
+	 *
+	 * @param integer $attributeId
+	 * @param integer $version
+	 * @return object or boolean
+	 */
+	static public function fetchLastVersion( $objectId ) {
+		$rows = eZPersistentObject::fetchObjectList( self::definition(), null, array(
+					'contentobject_id' => $objectId ), array( 'contentobject_attribute_version' => 'desc' ) );
+		if ( $rows ) {
+			return $rows[0];
+		}
+		return null;
 	}
 
 	/**
@@ -190,6 +215,20 @@ class OWNewsletterEdition extends eZPersistentObject {
 	/*	 * **********************
 	 * OBJECT METHODS
 	 * ********************** */
+
+	public function store( $fieldFilters = null ) {
+		$sending = $this->attribute( 'sending' );
+		try {
+			if ( $sending instanceof OWNewsletterSending && $sending->attribute( 'status' ) == OWNewsletterSending::STATUS_DRAFT ) {
+				OWNewsletterSending::create( $this );
+			} elseif ( !$sending instanceof OWNewsletterSending ) {
+				OWNewsletterSending::create( $this );
+			}
+		} catch ( OWNewsletterException $e ) {
+			eZDebug::writeError( "Fail to create sending object : " . $e->getMessage(), "Newsletter edition store" );
+		}
+		parent::store( $fieldFilters );
+	}
 
 	/*	 * **********************
 	 * PERSISTENT METHODS

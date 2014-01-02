@@ -186,6 +186,22 @@ class OWNewsletter extends eZPersistentObject {
 	}
 
 	/**
+	 * Return last version object by content object id
+	 *
+	 * @param integer $attributeId
+	 * @param integer $version
+	 * @return object or boolean
+	 */
+	static public function fetchLastVersion( $objectId ) {
+		$rows = eZPersistentObject::fetchObjectList( self::definition(), null, array(
+					'contentobject_id' => $objectId ), array( 'contentobject_attribute_version' => 'desc' ) );
+		if ( $rows ) {
+			return $rows[0];
+		}
+		return null;
+	}
+
+	/**
 	 * Return object by custom conditions
 	 *
 	 * @param integer $attributeId

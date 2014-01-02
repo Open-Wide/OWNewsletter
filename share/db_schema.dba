@@ -576,6 +576,12 @@ $schema = array(
 				'not_null' => true,
 				'default' => false,
 			),
+			'waiting_for_process' => array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => 0,
+			),
 			'mailqueue_created' => array(
 				'length' => 11,
 				'type' => 'int',
@@ -600,7 +606,7 @@ $schema = array(
 				'not_null' => '1',
 				'default' => 0,
 			),
-			'output_xml' => array(
+			'serialized_output' => array(
 				'type' => 'longtext',
 				'not_null' => '1',
 				'default' => false,

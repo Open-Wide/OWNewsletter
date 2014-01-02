@@ -61,12 +61,12 @@ if ( !empty( $errors ) ) {
 		eZDebug::writeError( $error, 'Send newsletter' );
 	}
 } elseif ( $module->isCurrentAction( 'SendNewsletter' ) ) {
-	OWNewsletterSending::create( $newsletter, $newsletterEdition );
+	OWNewsletterSending::send( $newsletterEdition );
 	eZContentCacheManager::clearContentCacheIfNeeded( $contentObjectID );
 } elseif ( $module->isCurrentAction( 'AbortNewsletter' ) ) {
 	OWNewsletterSending::abort( $newsletterEdition );
 	eZContentCacheManager::clearContentCacheIfNeeded( array( $contentObjectID ) );
 } elseif ( $module->isCurrentAction( 'SendNewsletterTest' ) ) {
-	OWNewsletterSending::sendTest( $newsletter, $newsletterEdition, $emailReceiverTest );
+	OWNewsletterSending::sendTest( $newsletterEdition, $emailReceiverTest );
 }
 $module->redirectTo( $contentNode->attribute( 'url_alias' ) );

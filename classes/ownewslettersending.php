@@ -2,10 +2,11 @@
 
 class OWNewsletterSending extends eZPersistentObject {
 
-	const STATUS_WAIT_FOR_PROCESS = 0;
-	const STATUS_MAILQUEUE_CREATED = 1;
-	const STATUS_MAILQUEUE_PROCESS_STARTED = 2;
-	const STATUS_MAILQUEUE_PROCESS_FINISHED = 3;
+	const STATUS_DRAFT = 0;
+	const STATUS_WAIT_FOR_PROCESS = 1;
+	const STATUS_MAILQUEUE_CREATED = 2;
+	const STATUS_MAILQUEUE_PROCESS_STARTED = 3;
+	const STATUS_MAILQUEUE_PROCESS_FINISHED = 4;
 	const STATUS_ABORT = 9;
 
 	/**
@@ -56,6 +57,10 @@ class OWNewsletterSending extends eZPersistentObject {
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
+				'waiting_for_process' => array( 'name' => 'WaitingForProcess',
+					'datatype' => 'integer',
+					'default' => 0,
+					'required' => false ),
 				'mailqueue_created' => array( 'name' => 'MailQueueCreated',
 					'datatype' => 'integer',
 					'default' => 0,
@@ -76,7 +81,7 @@ class OWNewsletterSending extends eZPersistentObject {
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
-				'output_xml' => array( 'name' => 'OutputXml',
+				'serialized_output' => array( 'name' => 'SerializedOutput',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
@@ -103,6 +108,7 @@ class OWNewsletterSending extends eZPersistentObject {
 				'edition_object' => 'getEditionObject',
 				'can_abort' => 'canAbort',
 				'send_items_statistic' => 'getSendItemsStatistic',
+				'output' => 'getOutput',
 			),
 			'class_name' => 'OWNewsletterSending',
 			'name' => 'ownl_sending' );
@@ -113,6 +119,9 @@ class OWNewsletterSending extends eZPersistentObject {
 	 * ********************** */
 
 	public function getNewsletterObject() {
+		if ( $this->attribute( 'status' ) == self::STATUS_DRAFT ) {
+			return OWNewsletter::fetchLastVersion( $this->attribute( 'newsletter_contentobject_id' ) );
+		}
 		return OWNewsletter::fetchByCustomConditions( array(
 					'contentobject_id' => $this->attribute( 'newsletter_contentobject_id' ),
 					'contentobject_attribute_version' => $this->attribute( 'newsletter_contentobject_version' )
@@ -120,6 +129,9 @@ class OWNewsletterSending extends eZPersistentObject {
 	}
 
 	public function getEditionObject() {
+		if ( $this->attribute( 'status' ) == self::STATUS_DRAFT ) {
+			return OWNewsletterEdition::fetchLastVersion( $this->attribute( 'edition_contentobject_id' ) );
+		}
 		return OWNewsletterEdition::fetchByCustomConditions( array(
 					'contentobject_id' => $this->attribute( 'edition_contentobject_id' ),
 					'contentobject_attribute_version' => $this->attribute( 'edition_contentobject_version' )
@@ -149,6 +161,13 @@ class OWNewsletterSending extends eZPersistentObject {
 			'items_bounced' => 0 );
 	}
 
+	/**
+	 * Return unserialized output
+	 */
+	public function getOutput() {
+		return unserialize( $this->attribute( 'serialized_output' ) );
+	}
+
 	/*	 * **********************
 	 * FETCH METHODS
 	 * ********************** */
@@ -176,7 +195,9 @@ class OWNewsletterSending extends eZPersistentObject {
 
 		switch ( $attr ) {
 			case 'status': {
-					if ( $value === self::STATUS_MAILQUEUE_CREATED ) {
+					if ( $value === self::STATUS_WAIT_FOR_PROCESS ) {
+						$this->setAttribute( 'waiting_for_process', time() );
+					} elseif ( $value === self::STATUS_MAILQUEUE_CREATED ) {
 						$this->setAttribute( 'mailqueue_created', time() );
 					} elseif ( $value === self::STATUS_MAILQUEUE_PROCESS_STARTED ) {
 						$this->setAttribute( 'mailqueue_process_started', time() );
@@ -215,10 +236,17 @@ class OWNewsletterSending extends eZPersistentObject {
 	 * @param OWNewsletterEdition $newsletterEdition
 	 * @return object
 	 */
-	static function create( OWNewsletter $newsletter, OWNewsletterEdition $newsletterEdition ) {
+	static function create( OWNewsletterEdition $newsletterEdition ) {
 		$user = eZUser::currentUser();
 		$creatorId = $user->attribute( 'contentobject_id' );
-
+		$newsletter = $newsletterEdition->attribute( 'newsletter' );
+		if ( !$newsletter instanceof OWNewsletter ) {
+			throw new OWNewsletterException( "Fail to find newsletter configuration" );
+		}
+		$mailingList = $newsletterEdition->attribute( 'mailing_lists_ids' );
+		if ( empty( $mailingList ) ) {
+			throw new OWNewsletterException( "Mailing list is empty" );
+		}
 		$hashString = $newsletterEdition->attribute( 'mailing_lists_string' ) . $newsletterEdition->attribute( 'contentobject_id' ) . $newsletterEdition->attribute( 'contentobject_attribute_version' );
 
 		$row = array(
@@ -230,18 +258,37 @@ class OWNewsletterSending extends eZPersistentObject {
 			'siteaccess' => $newsletter->attribute( 'main_siteaccess' ),
 			'created' => time(),
 			'creator_id' => $creatorId,
-			'status' => self::STATUS_WAIT_FOR_PROCESS,
+			'status' => self::STATUS_DRAFT,
 			'hash' => OWNewsletterUtils::generateUniqueMd5Hash( $hashString ),
 			'email_sender' => $newsletter->attribute( 'email_sender' ),
 			'email_sender_name' => $newsletter->attribute( 'email_sender_name' ),
 			'personalize_content' => $newsletter->attribute( 'personalize_content' )
 		);
 		$object = new OWNewsletterSending( $row );
-		$object->setAttribute( 'output_xml', $object->getOutputXml() );
+		$object->setAttribute( 'serialized_output', $object->getSerializedOutput() );
 		$object->store();
 		return $object;
 	}
 
+	/**
+	 * Mark sending as wait for preocess if possible
+	 * 
+	 * @param OWNewsletterEdition $newsletterEdition
+	 */
+	static function send( OWNewsletterEdition $newsletterEdition ) {
+		$editionContentObjectID = $newsletterEdition->attribute( 'contentobject_id' );
+		$sendingObject = self::fetch( $editionContentObjectID );
+		if ( $sendingObject instanceof self && $sendingObject->attribute( 'status' ) == self::STATUS_DRAFT ) {
+			$sendingObject->setAttribute( 'status', self::STATUS_WAIT_FOR_PROCESS );
+			$sendingObject->store();
+		}
+	}
+
+	/**
+	 * Abort newsletter sending if possible
+	 * 
+	 * @param OWNewsletterEdition $newsletterEdition
+	 */
 	static function abort( OWNewsletterEdition $newsletterEdition ) {
 		$editionContentObjectID = $newsletterEdition->attribute( 'contentobject_id' );
 		$sendingObject = self::fetch( $editionContentObjectID );
@@ -251,6 +298,18 @@ class OWNewsletterSending extends eZPersistentObject {
 				$sendingObject->abortSendingItems();
 				$sendingObject->store();
 			}
+		}
+	}
+
+	static function sendTest( OWNewsletterEdition $newsletterEdition, $emailReceiverTest ) {
+		if ( is_string( $emailReceiverTest ) ) {
+			$emailReceiverTest = explode( ';', $emailReceiverTest );
+		}
+		$editionContentObjectID = $newsletterEdition->attribute( 'contentobject_id' );
+		$sendingObject = self::fetch( $editionContentObjectID );
+		if ( $sendingObject instanceof self ) {
+			$newsletterMail = new OWNewsletterMail();
+			return $newsletterMail->sendNewsletterTestMail( $sendingObject, $emailReceiverTest );
 		}
 	}
 
@@ -266,52 +325,23 @@ class OWNewsletterSending extends eZPersistentObject {
 	 * Create a xml to save all rendered outputformats as a templatedraft so as
 	 * later to send several newsletters
 	 *
-	 * @return xml
+	 * @return serialized array
 	 */
-	public function getOutputXml() {
-		$newsletterObject = $this->attribute( 'newsletter_object' );
+	public function getSerializedOutput() {
 		$editionObject = $this->attribute( 'edition_object' );
-
-		$dom = new DOMDocument( '1.0', 'utf-8' );
-		$root = $dom->createElement( 'newsletter_sending' );
-		$root = $dom->appendChild( $root );
-
-		// in first version attribut xml_version did not exists
-		$root->setAttribute( 'xml_version', '2' );
-
-		$root->setAttribute( 'edition_contentobject_id', $editionObject->attribute( 'contentobject_id' ) );
-		$root->setAttribute( 'edition_contentobject_version', $editionObject->attribute( 'contentobject_attribute_version' ) );
-		$root->setAttribute( 'main_siteaccess', $newsletterObject->attribute( 'main_siteaccess' ) );
-
+		if ( !$editionObject instanceof OWNewsletterEdition ) {
+			throw new OWNewsletterException( "Fail to find newsletter edition configuration" );
+		}
+		$newsletterObject = $this->attribute( 'newsletter_object' );
+		if ( !$newsletterObject instanceof OWNewsletter ) {
+			throw new OWNewsletterException( "Fail to find newsletter configuration" );
+		}
 		$mainSiteAccess = $newsletterObject->attribute( 'main_siteaccess' );
 		$skinName = $newsletterObject->attribute( 'skin_name' );
-
 		$forceNotIncludingImages = true;
-		$textArray = $editionObject->getOutput( $mainSiteAccess, $skinName, $forceNotIncludingImages );
-
-		$output = $dom->createElement( 'output' );
-		$output->setAttribute( 'content_type', trim( $textArray['content_type'] ) );
-		$output->setAttribute( 'subject', trim( $textArray['subject'] ) );
-		$output->setAttribute( 'site_url', trim( $textArray['site_url'] ) );
-		$output->setAttribute( 'ez_url', trim( $textArray['ez_url'] ) );
-		$output->setAttribute( 'ez_root', trim( $textArray['ez_root'] ) );
-		$output->setAttribute( 'html_mail_image_include', $textArray['html_mail_image_include'] );
-		$output->setAttribute( 'locale', trim( $textArray['locale'] ) );
-
-		$root->appendChild( $output );
-
-		$mainTemplateNode = $dom->createElement( 'main_template' );
-		foreach ( $textArray['body'] as $typeName => $outputString ) {
-			$typeNode = $dom->createElement( 'type' );
-			$typeNode->setAttribute( 'name', $typeName );
-			$typeNodeCDATA = $dom->createCDATASection( $outputString );
-			$typeNode->appendChild( $typeNodeCDATA );
-			$mainTemplateNode->appendChild( $typeNode );
-		}
-		$output->appendChild( $mainTemplateNode );
-
-		$xml = $dom->saveXML();
-		return $xml;
+		$output = $editionObject->getOutput( $mainSiteAccess, $skinName, $forceNotIncludingImages );
+		$output['skin_name'] = $skinName;
+		return serialize( $output );
 	}
 
 }

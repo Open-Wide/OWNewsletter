@@ -37,12 +37,11 @@ class OWNewsletterEditionFilter {
 		if ( $status == 'draft' ) {
 			$sql = "SELECT c.edition_contentobject_id FROM ownl_sending c, ezcontentobject e
 					WHERE e.id = c.edition_contentobject_id
-					AND e.current_version = c.edition_contentobject_version ";
-
-			$sqlCond .= ' ezcontentobject_tree.contentobject_id NOT IN (' . $sql . ' ) AND ';
+					AND e.current_version = c.edition_contentobject_version 
+					AND c.status = " . OWNewsletterSending::STATUS_DRAFT;
+			$sqlCond .= ' ezcontentobject_tree.contentobject_id IN (' . $sql . ' ) AND ';
 			return array( 'tables' => $sqlTables, 'joins' => $sqlCond, 'columns' => $sqlColumns );
 		} else if ( $status == 'process' ) {
-
 			$sql = "SELECT c.edition_contentobject_id FROM ownl_sending c, ezcontentobject e
                     WHERE e.id = c.edition_contentobject_id
 					AND e.current_version = c.edition_contentobject_version
