@@ -618,6 +618,21 @@
     </message>
 </context>
 <context>
+	<name>newsletter/editionsenditem/status</name>
+    <message>
+        <source>New</source>
+        <translation>Nouveau</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Envoyé</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation>Annulé</translation>
+    </message>
+</context>
+<context>
     <name>newsletter/user/salutation</name>
     <message>
         <source>Mr</source>

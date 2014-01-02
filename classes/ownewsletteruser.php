@@ -4,12 +4,6 @@ class OWNewsletterUser extends eZPersistentObject {
 
 	/**
 	 *
-	 * @var int if newsletter user has this status he wants do get newsletter but did activate his ez user account
-	 */
-	const STATUS_PENDING_EZ_USER_REGISTER = 20;
-
-	/**
-	 *
 	 * @var int if newsletter user has this status he wants do get newsletter but did not confirm his email
 	 */
 	const STATUS_PENDING = 0;
@@ -188,7 +182,9 @@ class OWNewsletterUser extends eZPersistentObject {
 				'modifier' => 'getModifierUserObject',
 				'ez_user' => 'getEzUserObject',
 				'status_name' => 'getStatusString',
-				'status_identifier' => 'getStatusIdentifier'
+				'status_identifier' => 'getStatusIdentifier',
+				'approved_subscriptions' => 'getApprovedSubscriptions',
+				'approved_miling_lists' => 'getApprovedMailingLists',
 			),
 			'class_name' => 'OWNewsletterUser',
 			'name' => 'ownl_user' );
@@ -375,6 +371,33 @@ class OWNewsletterUser extends eZPersistentObject {
 			$statusIdentifier = $availableStatusArray[$currentStatusId];
 		}
 		return $statusIdentifier;
+	}
+
+	/**
+	 * Return all approved subscriptions of the user
+	 * 
+	 * @return array of OWNewsletterSubscription
+	 */
+	function getApprovedSubscriptions() {
+		$conds = array(
+			'status' => OWNewsletterSubscription::STATUS_APPROVED,
+			'newsletter_user_id' => $this->attribute( 'id' )
+		);
+		return OWNewsletterSubscription::fetchList( $conds );
+	}
+
+	/**
+	 * Return all approved mailing lists of the user
+	 * 
+	 * @return array of OWNewsletterMailingList
+	 */
+	function getApprovedMailingLists() {
+		$return = array();
+		$approvedSubscriptions = $this->attribute( 'approved_subscriptions' );
+		foreach ( $approvedSubscriptions as $approvedSubscription ) {
+			$return[] = $approvedSubscription->attribute( 'mailing_list' );
+		}
+		return array_unique( $return );
 	}
 
 	/*	 * **********************
@@ -829,6 +852,10 @@ class OWNewsletterUser extends eZPersistentObject {
 			'status' => self::STATUS_PENDING ), $dataArray );
 		$object = new self( $row );
 		$object->setAttribute( 'status', $row['status'] );
+		if ( $object->attribute( 'status' ) == self::STATUS_PENDING && $object->attribute( 'ez_user' ) !== FALSE ) {
+			// auto confirm newsletter user related with a eZ user
+			$object->setAttribute( 'status', self::STATUS_CONFIRMED );
+		}
 		$object->store();
 		return $object;
 	}

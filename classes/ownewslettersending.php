@@ -24,19 +24,23 @@ class OWNewsletterSending extends eZPersistentObject {
 	 */
 	static function definition() {
 		return array( 'fields' => array(
-				'edition_contentobject_id' => array( 'name' => 'EditionContentObjectId',
+				'edition_contentobject_id' => array(
+					'name' => 'EditionContentObjectId',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
-				'edition_contentobject_version' => array( 'name' => 'EditionContentObjectVersion',
+				'edition_contentobject_version' => array(
+					'name' => 'EditionContentObjectVersion',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
-				'newsletter_contentobject_id' => array( 'name' => 'NewsletterContentObjectId',
+				'newsletter_contentobject_id' => array(
+					'name' => 'NewsletterContentObjectId',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
-				'newsletter_contentobject_version' => array( 'name' => 'NewsletterContentObjectVersion',
+				'newsletter_contentobject_version' => array(
+					'name' => 'NewsletterContentObjectVersion',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
@@ -45,60 +49,79 @@ class OWNewsletterSending extends eZPersistentObject {
 					'datatype' => 'string',
 					'default' => 'default',
 					'required' => true ),
-				'siteaccess' => array( 'name' => 'SiteAccess',
+				'siteaccess' => array(
+					'name' => 'SiteAccess',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
-				'creator_id' => array( 'name' => 'CreatorId',
+				'creator_id' => array(
+					'name' => 'CreatorId',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
-				'created' => array( 'name' => 'Created',
+				'created' => array(
+					'name' => 'Created',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
-				'waiting_for_process' => array( 'name' => 'WaitingForProcess',
+				'waiting_for_process' => array(
+					'name' => 'WaitingForProcess',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => false ),
-				'mailqueue_created' => array( 'name' => 'MailQueueCreated',
+				'mailqueue_created' => array(
+					'name' => 'MailQueueCreated',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => false ),
-				'mailqueue_process_started' => array( 'name' => 'MailQueueProcessStarted',
+				'mailqueue_process_started' => array(
+					'name' => 'MailQueueProcessStarted',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => false ),
-				'mailqueue_process_finished' => array( 'name' => 'MailQueueProcessFinished',
+				'mailqueue_process_finished' => array(
+					'name' => 'MailQueueProcessFinished',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => false ),
-				'mailqueue_process_aborted' => array( 'name' => 'MailQueueProcessAborted',
+				'mailqueue_process_aborted' => array(
+					'name' => 'MailQueueProcessAborted',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => false ),
-				'status' => array( 'name' => 'Status',
+				'status' => array(
+					'name' => 'Status',
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
-				'serialized_output' => array( 'name' => 'SerializedOutput',
+				'serialized_output' => array(
+					'name' => 'SerializedOutput',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
-				'hash' => array( 'name' => 'Hash',
+				'hash' => array(
+					'name' => 'Hash',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
-				'sender_email' => array( 'name' => 'SenderEmail',
+				'sender_email' => array(
+					'name' => 'SenderEmail',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
-				'sender_name' => array( 'name' => 'SenderName',
+				'sender_name' => array(
+					'name' => 'SenderName',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
-				'personalize_content' => array( 'name' => 'PersonalizeContent',
-					'datatype' => 'Integer',
+				'personalize_content' => array(
+					'name' => 'PersonalizeContent',
+					'datatype' => 'integer',
+					'default' => 0,
+					'required' => false ),
+				'send_date' => array(
+					'name' => 'SendDate',
+					'datatype' => 'integer',
 					'default' => 0,
 					'required' => false ),
 			),
@@ -109,6 +132,7 @@ class OWNewsletterSending extends eZPersistentObject {
 				'can_abort' => 'canAbort',
 				'send_items_statistic' => 'getSendItemsStatistic',
 				'output' => 'getOutput',
+				'mailing_lists_ids' => 'getMailingListIDs',
 			),
 			'class_name' => 'OWNewsletterSending',
 			'name' => 'ownl_sending' );
@@ -168,6 +192,15 @@ class OWNewsletterSending extends eZPersistentObject {
 		return unserialize( $this->attribute( 'serialized_output' ) );
 	}
 
+	/**
+	 * Transform string to array for mailing_lists_ids attribute
+	 * 
+	 * @return array
+	 */
+	public function getMailingListIDs() {
+		return OWNewsletterUtils::stringToArray( $this->attribute( 'mailing_lists_string' ) );
+	}
+
 	/*	 * **********************
 	 * FETCH METHODS
 	 * ********************** */
@@ -183,6 +216,38 @@ class OWNewsletterSending extends eZPersistentObject {
 		return $object;
 	}
 
+	/**
+	 * Return object by custom conditions
+	 *
+	 * @param integer $attributeId
+	 * @param integer $version
+	 * @return object or boolean
+	 */
+	static public function fetchByCustomConditions( $conds ) {
+		$object = eZPersistentObject::fetchObject( self::definition(), null, $conds, true );
+		return $object;
+	}
+
+	/**
+	 * Search all objects with custom conditions
+	 *
+	 * @param array $conds
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @param boolean $asObject
+	 * @return array
+	 */
+	static function fetchList( $conds = array(), $limit = false, $offset = false, $asObject = true ) {
+		$limitArr = null;
+		if ( (int) $limit != 0 ) {
+			$limitArr = array(
+				'limit' => $limit,
+				'offset' => $offset );
+		}
+		$objectList = eZPersistentObject::fetchObjectList( self::definition(), null, $conds, null, $limitArr, $asObject, null, null, null, null );
+		return $objectList;
+	}
+
 	/*	 * **********************
 	 * OBJECT METHODS
 	 * ********************** */
@@ -192,25 +257,24 @@ class OWNewsletterSending extends eZPersistentObject {
 	 * @see kernel/classes/eZPersistentObject#setAttribute($attr, $val)
 	 */
 	function setAttribute( $attr, $value ) {
-
 		switch ( $attr ) {
-			case 'status': {
-					if ( $value === self::STATUS_WAIT_FOR_PROCESS ) {
-						$this->setAttribute( 'waiting_for_process', time() );
-					} elseif ( $value === self::STATUS_MAILQUEUE_CREATED ) {
-						$this->setAttribute( 'mailqueue_created', time() );
-					} elseif ( $value === self::STATUS_MAILQUEUE_PROCESS_STARTED ) {
-						$this->setAttribute( 'mailqueue_process_started', time() );
-					} elseif ( $value === self::STATUS_MAILQUEUE_PROCESS_FINISHED ) {
-						$this->setAttribute( 'mailqueue_process_finished', time() );
-					} elseif ( $value === self::STATUS_ABORT ) {
-						$this->setAttribute( 'mailqueue_process_aborted', time() );
-					}
-					return eZPersistentObject::setAttribute( $attr, $value );
-				} break;
+			case 'status':
+				if ( $value === self::STATUS_WAIT_FOR_PROCESS ) {
+					$this->setAttribute( 'waiting_for_process', time() );
+				} elseif ( $value === self::STATUS_MAILQUEUE_CREATED ) {
+					$this->setAttribute( 'mailqueue_created', time() );
+				} elseif ( $value === self::STATUS_MAILQUEUE_PROCESS_STARTED ) {
+					$this->setAttribute( 'mailqueue_process_started', time() );
+				} elseif ( $value === self::STATUS_MAILQUEUE_PROCESS_FINISHED ) {
+					$this->setAttribute( 'mailqueue_process_finished', time() );
+				} elseif ( $value === self::STATUS_ABORT ) {
+					$this->setAttribute( 'mailqueue_process_aborted', time() );
+				}
+				eZPersistentObject::setAttribute( $attr, $value );
 			default:
-				return eZPersistentObject::setAttribute( $attr, $value );
+				eZPersistentObject::setAttribute( $attr, $value );
 		}
+		eZContentCacheManager::clearContentCacheIfNeeded( array( $this->attribute( 'edition_contentobject_id' ) ) );
 	}
 
 	/**

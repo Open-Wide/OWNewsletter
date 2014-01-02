@@ -62,10 +62,8 @@ if ( !empty( $errors ) ) {
 	}
 } elseif ( $module->isCurrentAction( 'SendNewsletter' ) ) {
 	OWNewsletterSending::send( $newsletterEdition );
-	eZContentCacheManager::clearContentCacheIfNeeded( $contentObjectID );
 } elseif ( $module->isCurrentAction( 'AbortNewsletter' ) ) {
 	OWNewsletterSending::abort( $newsletterEdition );
-	eZContentCacheManager::clearContentCacheIfNeeded( array( $contentObjectID ) );
 } elseif ( $module->isCurrentAction( 'SendNewsletterTest' ) ) {
 	OWNewsletterSending::sendTest( $newsletterEdition, $testReceiverEmail );
 }

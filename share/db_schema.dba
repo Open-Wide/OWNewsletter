@@ -547,8 +547,8 @@ $schema = array(
 				'default' => false,
 			),
 			'mailing_lists_string' => array(
-				'length' => 11,
-				'type' => 'int',
+				'length' => 255,
+				'type' => 'varchar',
 				'not_null' => true,
 				'default' => false,
 			),
@@ -635,12 +635,79 @@ $schema = array(
 				'not_null' => '1',
 				'default' => '0',
 			),
+			'send_date' => array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => '0',
+			),
 		),
 		'indexes' => array(
 			'PRIMARY' => array(
 				'type' => 'primary',
 				'fields' => array( 'edition_contentobject_id' ),
 			)
+		),
+	),
+	'ownl_sending_item' =>
+	array(
+		'name' => 'ownl_sending_item',
+		'fields' =>
+		array(
+			'edition_contentobject_id' => array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => false,
+			),
+			'newsletter_user_id' => array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => false,
+			),
+			'subscription_ids_string' => array(
+				'length' => 255,
+				'type' => 'varchar',
+				'not_null' => '1',
+				'default' => false,
+			),
+			'created' => array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => '0',
+			),
+			'processed' => array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => '0',
+			),
+			'status' => array(
+				'length' => 4,
+				'type' => 'tinyint',
+				'not_null' => '1',
+				'default' => '0',
+			),
+			'hash' => array(
+				'length' => 255,
+				'type' => 'varchar',
+				'not_null' => '1',
+				'default' => false,
+			),
+			'bounced' => array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => '0',
+			),
+		),
+		'indexes' => array(
+			'PRIMARY' => array(
+				'type' => 'primary',
+				'fields' => array( 'edition_contentobject_id', 'newsletter_user_id' ),
+			),
 		),
 	),
 	'_info' => array(
