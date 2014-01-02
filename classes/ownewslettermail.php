@@ -106,7 +106,7 @@ class OWNewsletterMail {
 	 * @param string $emailCharset
 	 * @return array
 	 */
-	public function sendEmail( $emailReceiver, $emailReceiverName = 'NL Test Receiver', $isPreview = false, $emailCharset = 'utf-8' ) {
+	public function sendEmail( $emailReceiver, $emailReceiverName = 'NL Test Receiver', $emailCharset = 'utf-8' ) {
 
 		$transportMethod = $this->transportMethod;
 		//$mail = new ezcMailComposer();
@@ -151,8 +151,6 @@ class OWNewsletterMail {
 			'email_subject' => $this->subject,
 			'email_charset' => $emailCharset,
 			'transport_method' => $transportMethod );
-		var_dump( $emailResult );
-		die();
 		if ( $sendResult ) {
 			OWNewsletterLog::writeInfo( 'Email send ok', 'OWNewsletterMail', 'sendEmail', $emailResult );
 		} else {

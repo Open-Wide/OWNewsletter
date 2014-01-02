@@ -110,7 +110,7 @@ $ViewList['send'] = array(
 		'SendNewsletterTest' => array(
 			'ContentNodeID' => 'ContentNodeID',
 			'ContentObjectID' => 'ContentObjectID',
-			'TestReceiverEmailString' => 'TestReceiverEmailString'
+			'TestReceiverEmail' => 'TestReceiverEmail'
 		)
 	)
 );

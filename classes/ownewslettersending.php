@@ -236,7 +236,7 @@ class OWNewsletterSending extends eZPersistentObject {
 	 * @param OWNewsletterEdition $newsletterEdition
 	 * @return object
 	 */
-	static function create( OWNewsletterEdition $newsletterEdition ) {
+	static function create( OWNewsletterEdition $newsletterEdition, $status = self::STATUS_DRAFT ) {
 		$user = eZUser::currentUser();
 		$creatorId = $user->attribute( 'contentobject_id' );
 		$newsletter = $newsletterEdition->attribute( 'newsletter' );
@@ -258,7 +258,7 @@ class OWNewsletterSending extends eZPersistentObject {
 			'siteaccess' => $newsletter->attribute( 'main_siteaccess' ),
 			'created' => time(),
 			'creator_id' => $creatorId,
-			'status' => self::STATUS_DRAFT,
+			'status' => $status,
 			'hash' => OWNewsletterUtils::generateUniqueMd5Hash( $hashString ),
 			'sender_email' => $newsletter->attribute( 'sender_email' ),
 			'sender_name' => $newsletter->attribute( 'sender_name' ),
@@ -279,8 +279,7 @@ class OWNewsletterSending extends eZPersistentObject {
 		$editionContentObjectID = $newsletterEdition->attribute( 'contentobject_id' );
 		$sendingObject = self::fetch( $editionContentObjectID );
 		if ( $sendingObject instanceof self && $sendingObject->attribute( 'status' ) == self::STATUS_DRAFT ) {
-			$sendingObject->setAttribute( 'status', self::STATUS_WAIT_FOR_PROCESS );
-			$sendingObject->store();
+			self::create( $newsletterEdition, self::STATUS_WAIT_FOR_PROCESS );
 		}
 	}
 
@@ -301,15 +300,16 @@ class OWNewsletterSending extends eZPersistentObject {
 		}
 	}
 
-	static function sendTest( OWNewsletterEdition $newsletterEdition, $testReceiverEmailString ) {
-		if ( is_string( $testReceiverEmailString ) ) {
-			$testReceiverEmailString = explode( ';', $testReceiverEmailString );
+	static function sendTest( OWNewsletterEdition $newsletterEdition, $testReceiverEmail ) {
+		if ( is_string( $testReceiverEmail ) ) {
+			$testReceiverEmail = explode( ';', $testReceiverEmail );
 		}
 		$editionContentObjectID = $newsletterEdition->attribute( 'contentobject_id' );
 		$sendingObject = self::fetch( $editionContentObjectID );
 		if ( $sendingObject instanceof self ) {
+			$sendingObject = self::create( $newsletterEdition, $sendingObject->attribute( 'status' ) );
 			$newsletterMail = new OWNewsletterMail();
-			return $newsletterMail->sendNewsletterTestMail( $sendingObject, $testReceiverEmailString );
+			return $newsletterMail->sendNewsletterTestMail( $sendingObject, $testReceiverEmail );
 		}
 	}
 
