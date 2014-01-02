@@ -4,7 +4,6 @@
  * Cronjob newsletter_mailqueue_create.php
  */
 
-$logInstance = OWNewsletterLog::getInstance( true );
 // Get all wait for process sending
 $newsletterSendingWaitForProcessList = OWNewsletterSending::fetchList( array( 'status' => OWNewsletterSending::STATUS_WAIT_FOR_PROCESS ) );
 foreach ( $newsletterSendingWaitForProcessList as $newsletterSending ) {

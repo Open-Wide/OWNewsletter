@@ -66,11 +66,11 @@ class OWNewsletterMail {
 	}
 
 	/**
-	 * Send testnewsletter to one email address
+	 * Send test newsletter to tester email addresses
 	 *
 	 * @param OWNewsletterSending $editonContentObjectVersion
 	 * @param array $emailReceivers
-	 * @return unknown_type
+	 * @return array
 	 */
 	function sendNewsletterTestMail( OWNewsletterSending $newsletterSending, $emailReceivers ) {
 		// generate all newsletter versions
@@ -94,6 +94,98 @@ class OWNewsletterMail {
 		$sendResult = array();
 		foreach ( $emailReceivers as $emailReceiver ) {
 			$sendResult[] = $this->sendEmail( $emailReceiver );
+		}
+		return $sendResult;
+	}
+
+	/**
+	 * Send test newsletter to tester email addresses
+	 *
+	 * @param OWNewsletterSending $editonContentObjectVersion
+	 * @param array $emailReceivers
+	 * @return array
+	 */
+	function sendNewsletter( OWNewsletterSending $newsletterSending, $limit = false, $tracker = false ) {
+		// generate all newsletter versions
+		$this->newsletterSending = $newsletterSending;
+		if ( $tracker ) {
+			$tracker->setEditionContentObjectId( $this->newsletterSending->attribute( 'edition_contentobject_id' ) );
+		}
+		$output = $this->newsletterSending->attribute( 'output' );
+		$this->senderEmail = trim( $this->newsletterSending->attribute( 'sender_email' ) );
+		$this->senderName = $this->newsletterSending->attribute( 'sender_name' );
+		$personalizeContent = (boolean) $this->newsletterSending->attribute( 'personalize_content' );
+		if ( isset( $output['subject'] ) ) {
+			$originalSubject = $output['subject'];
+		}
+		if ( isset( $output['body'] ) && isset( $output['body']['html'] ) ) {
+			$originalHTMLBody = $output['body']['html'];
+		}
+		if ( isset( $output['body'] ) && isset( $output['body']['text'] ) ) {
+			$originalPlainTextBody = $output['body']['text'];
+		}
+		if ( isset( $output['content_type'] ) ) {
+			$this->contentType = $output['content_type'];
+		}
+		$this->setTransportMethodCronjobFromIni();
+		$sendingItemList = OWNewsletterSendingItem::fetchList( array( 'edition_contentobject_id' => $this->newsletterSending->attribute( 'edition_contentobject_id' ) ), $limit );
+		$sendResult = array();
+		foreach ( $sendingItemList as $sendingItem ) {
+			$sendingItem->sync();
+			if ( $sendingItem->attribute( 'status' ) == OWNewsletterSendingItem::STATUS_NEW ) {
+				$newsletterUser = $sendingItem->attribute( 'newsletter_user' );
+				// Assign newsletter user to tracking
+				if ( $tracker ) {
+					$tracker->setNewsletterUser( $newsletterUser );
+				}
+
+				$receiverEmail = $newsletterUser->attribute( 'email' );
+				$receiverName = $newsletterUser->attribute( 'email_name' );
+
+				// ### configure hash
+				$newsletterConfigureHash = $newsletterUser->attribute( 'hash' );
+				$newsletterUnsubscribeHash = $newsletterUser->attribute( 'hash' );
+
+				$searchArray = array( '#_hash_unsubscribe_#',
+					'#_hash_configure_#' );
+
+				$replaceArray = array( $newsletterUnsubscribeHash,
+					$newsletterConfigureHash );
+				
+				$subject = $originalSubject;
+				$HTMLBody = $originalHTMLBody;
+				$plainTextBody = $originalPlainTextBody;
+				
+				if ( $personalizeContent === true ) {
+					$searchArray = array_merge( $searchArray, array(
+						'[[name]]',
+						'[[salutation_name]]',
+						'[[first_name]]',
+						'[[last_name]]'
+							) );
+					$replaceArray = array_merge( $replaceArray, array(
+						$newsletterUser->attribute( 'name' ),
+						$newsletterUser->attribute( 'salutation_name' ),
+						$newsletterUser->attribute( 'first_name' ),
+						$newsletterUser->attribute( 'last_name' )
+							) );
+				}
+				if ( $tracker ) {
+					$HTMLBody = $tracker->insertMarkers( $HTMLBody );
+					$plainTextBody = $tracker->insertMarkers( $plainTextBody );
+				}
+
+				$this->subject = str_replace( $searchArray, $replaceArray, $subject );
+				$this->HTMLBody = str_replace( $searchArray, $replaceArray, $HTMLBody );
+				$this->plainTextBody = str_replace( $searchArray, $replaceArray, $plainTextBody );
+
+				$this->resetExtraMailHeaders();
+				$this->setExtraMailHeadersByNewsletterSendItem( $sendingItem );
+
+				$sendResult[] = $this->sendEmail( $receiverEmail, $receiverName );
+				$sendingItem->setAttribute( 'status', OWNewsletterSendingItem::STATUS_SEND );
+				$sendingItem->store();
+			}
 		}
 		return $sendResult;
 	}
@@ -263,18 +355,9 @@ class OWNewsletterMail {
 	 * @param OWNewsletterUser $newsletterUser
 	 * @return boolean
 	 */
-	public function setExtraMailHeadersByNewsletterSendItem( $newsletterEditionSendItem ) {
-		if ( $newsletterEditionSendItem instanceof OWNewsletterEditionSendItem ) {
-			// nl user header setzen
-			$this->setExtraMailHeadersByNewsletterUser( $newsletterEditionSendItem->attribute( 'newsletter_user_object' ) );
-			$this->setExtraMailHeader( 'senditem', $newsletterEditionSendItem->attribute( 'hash' ) );
-
-			// unsubscribe hash
-			$subscriptionObject = $newsletterEditionSendItem->attribute( 'newsletter_subscription_object' );
-			$this->setExtraMailHeader( 'subscription', $subscriptionObject->attribute( 'hash' ) );
-		} else {
-			return false;
-		}
+	public function setExtraMailHeadersByNewsletterSendItem( OWNewsletterSendingItem $newsletterSendingItem ) {
+		$this->setExtraMailHeadersByNewsletterUser( $newsletterSendingItem->attribute( 'newsletter_user' ) );
+		$this->setExtraMailHeader( 'senditem', $newsletterSendingItem->attribute( 'hash' ) );
 	}
 
 	/**
@@ -294,5 +377,3 @@ class OWNewsletterMail {
 	}
 
 }
-
-?>

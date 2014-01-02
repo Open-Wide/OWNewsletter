@@ -402,10 +402,66 @@ class OWNewsletterSending extends eZPersistentObject {
 		}
 		$mainSiteAccess = $newsletterObject->attribute( 'main_siteaccess' );
 		$skinName = $newsletterObject->attribute( 'skin_name' );
-		$forceNotIncludingImages = true;
-		$output = $editionObject->getOutput( $mainSiteAccess, $skinName, $forceNotIncludingImages );
+		$output = $this->prepareOutput( $mainSiteAccess, $skinName );
 		$output['skin_name'] = $skinName;
 		return serialize( $output );
+	}
+
+	public function prepareOutput( $siteAccess, $skinName = 'default' ) {
+		$editionContentObjectId = $this->attribute( 'edition_contentobject_id' );
+		$versionId = $this->attribute( 'edition_contentobject_version' );
+		if ( $skinName == '' ) {
+			$skinName = 'default';
+		}
+
+		$newsletterIni = eZINI::instance( 'newsletter.ini' );
+		$phpCli = $newsletterIni->variable( 'NewsletterSettings', 'PhpCli' );
+
+		$currentHostName = eZSys::hostname();
+		$wwwDir = eZSys::wwwDir();
+
+		$wwwDirString = '';
+		if ( $wwwDir != '' ) {
+			$wwwDirString = "--www_dir=$wwwDir ";
+		}
+
+		$cmd = "\"$phpCli\" extension/ownewsletter/bin/php/createoutput.php --object_id=$editionContentObjectId --object_version=$versionId $wwwDirString--current_hostname=$currentHostName --skin_name=$skinName -s $siteAccess";
+
+		$fileSep = eZSys::fileSeparator();
+		$cmd = str_replace( '/', $fileSep, $cmd );
+
+		eZDebug::writeDebug( "shell_exec( $cmd )", 'newsletter/preview' );
+
+		$returnValue = shell_exec( escapeshellcmd( $cmd ) );
+		$newsletterContentArray = unserialize( trim( $returnValue ) );
+
+		if ( $newsletterContentArray['html_mail_image_include'] === 1 ) {
+			$newsletterContentArray = self::prepareImageInclude( $newsletterContentArray );
+		}
+
+		return $newsletterContentArray;
+	}
+
+	/**
+	 * prepare string => find local img files and replace http:// to file:// so it will be included by ezcomponents into the mail
+	 *
+	 * @param $newsletterContentArray
+	 * @return unknown_type
+	 */
+	static function prepareImageInclude( $newsletterContentArray ) {
+		
+		$newsletterContentArrayNew = $newsletterContentArray;
+
+		$eZRoot = $newsletterContentArray['ez_root'] . '/';
+		$eZFile = 'file://ezroot/';
+		$body = $newsletterContentArray['body'];
+		foreach ( $body as $id => $value ) {
+			// replace all image src from http => file:\\ezroot\ so OWNewsletterMailComposer will embed it into the mail message
+			if ( $id === 'html' ) {
+				$newsletterContentArrayNew['body'][$id] = str_replace( "src=\"$eZRoot", "src=\"$eZFile", $value );
+			}
+		}
+		return $newsletterContentArrayNew;
 	}
 
 }
