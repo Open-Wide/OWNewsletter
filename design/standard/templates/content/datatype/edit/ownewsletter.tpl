@@ -11,7 +11,7 @@
      $default_mailing_lists_ids = $newsletter_object.default_mailing_lists_ids
      $main_siteaccess = $newsletter_object.main_siteaccess
      $sender_name = $newsletter_object.sender_name
-     $sender_mail = $newsletter_object.sender_mail
+     $sender_email = $newsletter_object.sender_email
      $email_receiver_test = $newsletter_object.email_receiver_test_list|implode(';')
      $skin_name = $newsletter_object.skin_name
      $personalize_content = $newsletter_object.personalize_content
@@ -22,8 +22,8 @@
     {set $main_siteaccess = $available_siteaccess_list[0]}
 {/if}
 
-{if $sender_mail|eq('') }
-    {set $sender_mail = ezini('MailSettings','AdminEmail')}
+{if $sender_email|eq('') }
+    {set $sender_email = ezini('MailSettings','AdminEmail')}
 {/if}
 
 {if $email_receiver_test|eq('') }
@@ -59,9 +59,9 @@
 </table>
 
 <hr>
-{* sender_mail *}
+{* sender_email *}
 <label>{'Newsletter sender email'|i18n('newsletter/datatype/ownewsletter')} *</label>
-<input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_SenderMail_{$attribute.id}" value="{$sender_mail}" />
+<input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_SenderEmail_{$attribute.id}" value="{$sender_email}" />
 
 {* sender_name *}
 <label>{'Newsletter sender name'|i18n('newsletter/datatype/ownewsletter')}</label>

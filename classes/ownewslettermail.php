@@ -48,7 +48,7 @@ class OWNewsletterMail {
 	 * Mail info for sending
 	 */
 	protected $newsletterSending;
-	protected $senderMail;
+	protected $senderEmail;
 	protected $senderName;
 	protected $subject = '';
 	protected $HTMLBody = '';
@@ -76,7 +76,7 @@ class OWNewsletterMail {
 		// generate all newsletter versions
 		$this->newsletterSending = $newsletterSending;
 		$output = $this->newsletterSending->attribute( 'output' );
-		$this->senderMail = trim( $this->newsletterSending->attribute( 'sender_mail' ) );
+		$this->senderEmail = trim( $this->newsletterSending->attribute( 'sender_email' ) );
 		$this->senderName = $this->newsletterSending->attribute( 'sender_name' );
 		if ( isset( $output['subject'] ) ) {
 			$this->subject = $output['subject'];
@@ -114,9 +114,9 @@ class OWNewsletterMail {
 		$mail->charset = $emailCharset;
 		$mail->subjectCharset = $emailCharset;
 		// from and to addresses, and subject
-		$mail->from = new ezcMailAddress( $this->senderMail, $this->senderName );
+		$mail->from = new ezcMailAddress( $this->senderEmail, $this->senderName );
 		// returnpath for email bounces
-		$mail->returnPath = new ezcMailAddress( $this->senderMail );
+		$mail->returnPath = new ezcMailAddress( $this->senderEmail );
 
 		$mail->addTo( new ezcMailAddress( trim( $emailReceiver ), $emailReceiverName ) );
 
@@ -146,7 +146,7 @@ class OWNewsletterMail {
 		$transport = new OWNewsletterTransport( $transportMethod );
 		$sendResult = $transport->send( $mail );
 		$emailResult = array( 'send_result' => $sendResult,
-			'sender_mail' => $this->senderMail,
+			'sender_email' => $this->senderEmail,
 			'email_receiver' => $emailReceiver,
 			'email_subject' => $this->subject,
 			'email_charset' => $emailCharset,

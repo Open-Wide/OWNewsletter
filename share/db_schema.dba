@@ -405,7 +405,7 @@ $schema = array(
 				'not_null' => '1',
 				'default' => '',
 			),
-			'sender_mail' => array(
+			'sender_email' => array(
 				'length' => 255,
 				'type' => 'varchar',
 				'not_null' => '1',
@@ -617,7 +617,7 @@ $schema = array(
 				'not_null' => '1',
 				'default' => '',
 			),
-			'sender_mail' => array(
+			'sender_email' => array(
 				'length' => 255,
 				'type' => 'varchar',
 				'not_null' => '1',

@@ -31,8 +31,8 @@ class OWNewsletterType extends eZDataType {
 			$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "Main Siteaccess must be set" );
 		}
 
-		$senderMail = $http->postVariable( $prefix . 'SenderMail' . $postfix );
-		if ( $senderMail == '' || !eZMail::validate( $senderMail ) ) {
+		$senderEmail = $http->postVariable( $prefix . 'SenderEmail' . $postfix );
+		if ( $senderEmail == '' || !eZMail::validate( $senderEmail ) ) {
 			$validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid sender email adress" );
 		}
 
@@ -73,7 +73,7 @@ class OWNewsletterType extends eZDataType {
 		$postListData = array();
 		$postListData['default_mailing_lists_string'] = (array) $http->postVariable( $prefix . 'DefaultMailingListSelection' . $postfix );
 		$postListData['main_siteaccess'] = $http->postVariable( $prefix . 'MainSiteaccess' . $postfix );
-		$postListData['sender_mail'] = $http->postVariable( $prefix . 'SenderMail' . $postfix );
+		$postListData['sender_email'] = $http->postVariable( $prefix . 'SenderEmail' . $postfix );
 		$postListData['sender_name'] = $http->postVariable( $prefix . 'SenderName' . $postfix );
 		$postListData['email_receiver_test'] = explode( ';', $http->postVariable( $prefix . 'EmailReceiverTest' . $postfix ) );
 		$postListData['skin_name'] = $http->hasPostVariable( $prefix . 'SkinName' . $postfix ) ? $http->postVariable( $prefix . 'SkinName' . $postfix ) : '';
@@ -87,7 +87,7 @@ class OWNewsletterType extends eZDataType {
 			'default_mailing_lists_string' => OWNewsletterUtils::arrayToString( $postListData['default_mailing_lists_string'] ),
 			'main_siteaccess' => $postListData['main_siteaccess'],
 			'sender_name' => $postListData['sender_name'],
-			'sender_mail' => $postListData['sender_mail'],
+			'sender_email' => $postListData['sender_email'],
 			'email_receiver_test' => OWNewsletterUtils::arrayToString( $postListData['email_receiver_test'] ),
 			'skin_name' => $postListData['skin_name'],
 			'personalize_content' => $postListData['personalize_content']
