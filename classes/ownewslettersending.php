@@ -89,11 +89,11 @@ class OWNewsletterSending extends eZPersistentObject {
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
-				'email_sender' => array( 'name' => 'EmailSender',
+				'sender_mail' => array( 'name' => 'SenderMail',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
-				'email_sender_name' => array( 'name' => 'EmailSenderName',
+				'sender_name' => array( 'name' => 'SenderName',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
@@ -260,8 +260,8 @@ class OWNewsletterSending extends eZPersistentObject {
 			'creator_id' => $creatorId,
 			'status' => self::STATUS_DRAFT,
 			'hash' => OWNewsletterUtils::generateUniqueMd5Hash( $hashString ),
-			'email_sender' => $newsletter->attribute( 'email_sender' ),
-			'email_sender_name' => $newsletter->attribute( 'email_sender_name' ),
+			'sender_mail' => $newsletter->attribute( 'sender_mail' ),
+			'sender_name' => $newsletter->attribute( 'sender_name' ),
 			'personalize_content' => $newsletter->attribute( 'personalize_content' )
 		);
 		$object = new OWNewsletterSending( $row );

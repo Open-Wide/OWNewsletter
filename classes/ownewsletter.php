@@ -42,13 +42,13 @@ class OWNewsletter extends eZPersistentObject {
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
-				'email_sender_name' => array(
-					'name' => 'EmailSenderName',
+				'sender_name' => array(
+					'name' => 'SenderName',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => false ),
-				'email_sender' => array(
-					'name' => 'EmailSender',
+				'sender_mail' => array(
+					'name' => 'SenderMail',
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),

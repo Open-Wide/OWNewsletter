@@ -48,8 +48,8 @@ class OWNewsletterMail {
 	 * Mail info for sending
 	 */
 	protected $newsletterSending;
-	protected $emailSender;
-	protected $emailSenderName;
+	protected $senderMail;
+	protected $senderName;
 	protected $subject = '';
 	protected $HTMLBody = '';
 	protected $plainTextBody = '';
@@ -76,8 +76,8 @@ class OWNewsletterMail {
 		// generate all newsletter versions
 		$this->newsletterSending = $newsletterSending;
 		$output = $this->newsletterSending->attribute( 'output' );
-		$this->emailSender = trim( $this->newsletterSending->attribute( 'email_sender' ) );
-		$this->emailSenderName = $this->newsletterSending->attribute( 'email_sender_name' );
+		$this->senderMail = trim( $this->newsletterSending->attribute( 'sender_mail' ) );
+		$this->senderName = $this->newsletterSending->attribute( 'sender_name' );
 		if ( isset( $output['subject'] ) ) {
 			$this->subject = $output['subject'];
 		}
@@ -114,9 +114,9 @@ class OWNewsletterMail {
 		$mail->charset = $emailCharset;
 		$mail->subjectCharset = $emailCharset;
 		// from and to addresses, and subject
-		$mail->from = new ezcMailAddress( $this->emailSender, $this->emailSenderName );
+		$mail->from = new ezcMailAddress( $this->senderMail, $this->senderName );
 		// returnpath for email bounces
-		$mail->returnPath = new ezcMailAddress( $this->emailSender );
+		$mail->returnPath = new ezcMailAddress( $this->senderMail );
 
 		$mail->addTo( new ezcMailAddress( trim( $emailReceiver ), $emailReceiverName ) );
 
@@ -146,12 +146,12 @@ class OWNewsletterMail {
 		$transport = new OWNewsletterTransport( $transportMethod );
 		$sendResult = $transport->send( $mail );
 		$emailResult = array( 'send_result' => $sendResult,
-			'email_sender' => $this->emailSender,
+			'sender_mail' => $this->senderMail,
 			'email_receiver' => $emailReceiver,
 			'email_subject' => $this->subject,
 			'email_charset' => $emailCharset,
 			'transport_method' => $transportMethod );
-		var_dump( $sendResult );
+		var_dump( $emailResult );
 		die();
 		if ( $sendResult ) {
 			OWNewsletterLog::writeInfo( 'Email send ok', 'OWNewsletterMail', 'sendEmail', $emailResult );

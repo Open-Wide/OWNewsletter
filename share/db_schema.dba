@@ -399,13 +399,13 @@ $schema = array(
 				'not_null' => '1',
 				'default' => '',
 			),
-			'email_sender_name' => array(
+			'sender_name' => array(
 				'length' => 255,
 				'type' => 'varchar',
 				'not_null' => '1',
 				'default' => '',
 			),
-			'email_sender' => array(
+			'sender_mail' => array(
 				'length' => 255,
 				'type' => 'varchar',
 				'not_null' => '1',
@@ -617,13 +617,13 @@ $schema = array(
 				'not_null' => '1',
 				'default' => '',
 			),
-			'email_sender' => array(
+			'sender_mail' => array(
 				'length' => 255,
 				'type' => 'varchar',
 				'not_null' => '1',
 				'default' => '',
 			),
-			'email_sender_name' => array(
+			'sender_name' => array(
 				'length' => 255,
 				'type' => 'varchar',
 				'not_null' => '1',

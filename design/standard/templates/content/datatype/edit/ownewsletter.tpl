@@ -10,8 +10,8 @@
      $available_skin_list =  $newsletter_object.available_skin_list
      $default_mailing_lists_ids = $newsletter_object.default_mailing_lists_ids
      $main_siteaccess = $newsletter_object.main_siteaccess
-     $email_sender_name = $newsletter_object.email_sender_name
-     $email_sender = $newsletter_object.email_sender
+     $sender_name = $newsletter_object.sender_name
+     $sender_mail = $newsletter_object.sender_mail
      $email_receiver_test = $newsletter_object.email_receiver_test_list|implode(';')
      $skin_name = $newsletter_object.skin_name
      $personalize_content = $newsletter_object.personalize_content
@@ -22,8 +22,8 @@
     {set $main_siteaccess = $available_siteaccess_list[0]}
 {/if}
 
-{if $email_sender|eq('') }
-    {set $email_sender = ezini('MailSettings','AdminEmail')}
+{if $sender_mail|eq('') }
+    {set $sender_mail = ezini('MailSettings','AdminEmail')}
 {/if}
 
 {if $email_receiver_test|eq('') }
@@ -59,13 +59,13 @@
 </table>
 
 <hr>
-{* email_sender *}
+{* sender_mail *}
 <label>{'Newsletter sender email'|i18n('newsletter/datatype/ownewsletter')} *</label>
-<input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_EmailSender_{$attribute.id}" value="{$email_sender}" />
+<input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_SenderMail_{$attribute.id}" value="{$sender_mail}" />
 
-{* email_sender_name *}
+{* sender_name *}
 <label>{'Newsletter sender name'|i18n('newsletter/datatype/ownewsletter')}</label>
-<input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_EmailSenderName_{$attribute.id}" value="{$email_sender_name}" />
+<input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_SenderName_{$attribute.id}" value="{$sender_name}" />
 
 <hr>
 {* email_receiver_test *}

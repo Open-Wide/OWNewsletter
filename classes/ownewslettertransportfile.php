@@ -89,7 +89,7 @@ class OWNewsletterTransportFile implements ezcMailTransport
 
         $data .= "To: ".$receiver.$lineBreak;
         $data .= "Subject: ".$subject.$lineBreak;
-        // $data .= "From: ".$emailSender.$lineBreak;
+        // $data .= "From: ".$senderMail.$lineBreak;
         $data .=  $lineBreak;
         $data .= $message;
 
