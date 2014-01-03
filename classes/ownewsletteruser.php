@@ -176,6 +176,7 @@ class OWNewsletterUser extends eZPersistentObject {
 				'is_confirmed' => 'isConfirmed',
 				'is_removed_self' => 'isRemovedSelf',
 				'is_removed' => 'isRemoved',
+				'is_on_blacklist' => 'isOnBlacklist',
 				'subscription_array' => 'getSubscriptionArray',
 				'email_name' => 'getEmailName',
 				'creator' => 'getCreatorUserObject',
@@ -183,6 +184,7 @@ class OWNewsletterUser extends eZPersistentObject {
 				'ez_user' => 'getEzUserObject',
 				'status_name' => 'getStatusString',
 				'status_identifier' => 'getStatusIdentifier',
+				'active_subscriptions' => 'getActiveSubscriptions',
 				'approved_subscriptions' => 'getApprovedSubscriptions',
 				'approved_miling_lists' => 'getApprovedMailingLists',
 			),
@@ -264,6 +266,28 @@ class OWNewsletterUser extends eZPersistentObject {
 	function isRemoved() {
 		$status = $this->attribute( 'status' );
 		return $status == self::STATUS_REMOVED_SELF || $status == self::STATUS_REMOVED_ADMIN ? true : false;
+	}
+
+	/**
+	 * Check if current user object is on blacklist
+	 * and if status is blacklisted
+	 *
+	 * @return boolean
+	 */
+	function isOnBlacklist() {
+		$status = $this->attribute( 'status' );
+		$isOnBlacklist = OWNewsletterBlacklistItem::isEmailOnBlacklist( $this->attribute( 'email' ) );
+		if ( $isOnBlacklist ) {
+			// fix up status blacklisted if it is not set
+			if ( $status != CjwNewsletterUser::STATUS_BLACKLISTED ) {
+				$this->setBlacklisted();
+				return true;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -374,6 +398,18 @@ class OWNewsletterUser extends eZPersistentObject {
 	}
 
 	/**
+	 * Return all active subscriptions of the user
+	 * 
+	 * @return array of OWNewsletterSubscription
+	 */
+	function getActiveSubscriptions() {
+		$conds = array(
+			'newsletter_user_id' => $this->attribute( 'id' )
+		);
+		return OWNewsletterSubscription::fetchActiveList( $conds );
+	}
+
+	/**
 	 * Return all approved subscriptions of the user
 	 * 
 	 * @return array of OWNewsletterSubscription
@@ -405,7 +441,7 @@ class OWNewsletterUser extends eZPersistentObject {
 	 * ********************** */
 
 	/**
-	 * Return object by id
+	 * Returns object by id
 	 *
 	 * @param integer $id
 	 * @return object
@@ -450,62 +486,39 @@ class OWNewsletterUser extends eZPersistentObject {
 	}
 
 	/**
-	 * Used in datatype ownewsletter_list
+	 * Returns object by email
 	 *
 	 * @param string $email
 	 * @return array / boolean
 	 */
 	static function fetchByEmail( $email ) {
-		$db = eZDB::instance();
-		$objectList = eZPersistentObject::fetchObjectList(
-						self::definition(), null, array(
-					'email' => $db->escapeString( $email ) ), null, null, true
-		);
-
-		$count = count( $objectList );
-		if ( $count == 1 ) {
-			return $objectList[0];
-		} elseif ( $count > 1 ) {
-			$userIdArray = array();
-			foreach ( $objectList as $nlUser ) {
-				$userIdArray[] = $nlUser->attribute( 'id' );
-			}
-
-			OWNewsletterLog::writeError( 'Email existing more than 1 time OWNewsletterUser::fetchByEmail', 'user', 'email', array(
-				'email' => $objectList[0]->attribute( 'email' ),
-				'email_count' => $count,
-				'nl_user_ids' => implode( ',', $userIdArray ),
-				'modifier' => eZUser::currentUserID() )
-			);
-			return $objectList;
-		} else {
-			return false;
-		}
+		$object = eZPersistentObject::fetchObject( self::definition(), null, array( 'email' => $email ), true );
+		return $object;
 	}
 
 	/**
-	 * fetch NewsletterUser Object by eZ User Id
+	 * Returns object by eZ User Id
 	 *
 	 * @param int $ezUserId
 	 * @return NewsletterUser / boolean
 	 */
 	static function fetchByEzUserId( $ezUserId ) {
 		if ( $ezUserId > 0 ) {
-
-			$db = eZDB::instance();
-			$objectList = eZPersistentObject::fetchObjectList(
-							self::definition(), null, array(
-						'ez_user_id' => $db->escapeString( $ezUserId ) ), null, null, true
-			);
-
-			if ( count( $objectList ) > 0 ) {
-				return $objectList[0];
-			} else {
-				return false;
-			}
-		} else {
-			return false;
+			$object = eZPersistentObject::fetchObject( self::definition(), null, array( 'ez_user_id' => $ezUserId ), true );
+			return $object;
 		}
+		return false;
+	}
+
+	/**
+	 * Returns object by hash
+	 *
+	 * @param string $hash
+	 * @return object
+	 */
+	static function fetchByHash( $hash ) {
+		$object = eZPersistentObject::fetchObject( self::definition(), null, array( 'hash' => $hash ), true );
+		return $object;
 	}
 
 	/**
@@ -802,6 +815,15 @@ class OWNewsletterUser extends eZPersistentObject {
 		$this->setAttribute( 'status', self::STATUS_CONFIRMED );
 		$this->sync();
 		$this->store();
+	}
+	
+	/**
+	 * Unsubscribe from all approved subscription
+	 */
+	public function unsubscribe() {
+		foreach ($this->attribute('active_subscriptions') as $subscription ) {
+			$subscription->unsubscribe();
+		}
 	}
 
 	/**

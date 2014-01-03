@@ -7,21 +7,15 @@ $ViewList = array();
 
 $ViewList['index'] = array(
 	'script' => 'index.php',
-	'functions' => array(
-		'index' ),
+	'functions' => array( 'index' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
 	'params' => array() );
 
 $ViewList['user'] = array(
 	'script' => 'user.php',
-	'functions' => array(
-		'user_list',
-		'user_view',
-		'user_create',
-		'user_edit',
-		'user_remove' ),
+	'functions' => array( 'manage_user' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
-	'ui_context' => 'admin',
+	'ui_context' => 'navigation',
 	'params' => array( 'newsletterUserID', 'mailingListContentobjectID' ),
 	'single_post_actions' => array(
 		'CancelButton' => 'Cancel',
@@ -63,7 +57,7 @@ $ViewList['blacklist'] = array(
 	'script' => 'blacklist.php',
 	'functions' => array( 'blacklist' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
-	'ui_context' => 'admin',
+	'ui_context' => 'navigation',
 	'params' => array(),
 	'single_post_actions' => array(
 		'CancelButton' => 'Cancel',
@@ -91,7 +85,6 @@ $ViewList['send'] = array(
 	'script' => 'send.php',
 	'functions' => array( 'send' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
-	'ui_context' => 'admin',
 	'params' => array(),
 	'single_post_actions' => array(
 		'SendNewsletterButton' => 'SendNewsletter',
@@ -115,30 +108,29 @@ $ViewList['send'] = array(
 	)
 );
 
+$ViewList['unsubscribe'] = array(
+	'script' => 'unsubscribe.php',
+	'functions' => array( 'unsubscribe' ),
+	'default_navigation_part' => 'eznewsletternavigationpart',
+	'params' => array( 'Hash' ),
+	'single_post_actions' => array(
+		'UnsubscribeButton' => 'Unsubscribe',
+		'CancelButton' => 'Cancel'
+	)
+);
+
 $FunctionList['subscribe'] = array();
 $FunctionList['configure'] = array();
 $FunctionList['unsubscribe'] = array();
-$FunctionList['subscription_list_csvimport'] = array();
-$FunctionList['subscription_list_csvimport_import'] = array();
-$FunctionList['subscription_list_csvexport'] = array();
-$FunctionList['subscription_list'] = array();
-$FunctionList['subscription_view'] = array();
-$FunctionList['user_list'] = array();
-$FunctionList['user_view'] = array();
-$FunctionList['user_remove'] = array();
-$FunctionList['user_edit'] = array();
-$FunctionList['user_create'] = array();
+$FunctionList['manage_subscription'] = array();
+$FunctionList['manage_user'] = array();
 $FunctionList['preview'] = array();
 $FunctionList['archive'] = array();
 $FunctionList['index'] = array();
 $FunctionList['settings'] = array();
 $FunctionList['send'] = array();
-$FunctionList['mailbox_item_list'] = array();
-$FunctionList['mailbox_item_view'] = array();
-$FunctionList['mailbox_list'] = array();
-$FunctionList['mailbox_edit'] = array();
+$FunctionList['manage_mailbox'] = array();
 $FunctionList['blacklist'] = array();
-$FunctionList['import_list'] = array();
-$FunctionList['import_view'] = array();
+$FunctionList['manage_import'] = array();
 
 $FunctionList['admin'] = array(); // for display / hide of admin menue

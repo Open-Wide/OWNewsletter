@@ -11,7 +11,7 @@ class OWNewsletterBlacklistItem extends eZPersistentObject {
 	function __construct( $row = array() ) {
 		$this->eZPersistentObject( $row );
 	}
-	
+
 	/**
 	 * data fields...
 	 *
@@ -155,6 +155,16 @@ class OWNewsletterBlacklistItem extends eZPersistentObject {
 		return eZPersistentObject::fetchObject( self::definition(), null, $condArray, $asObject );
 	}
 
+	/**
+	 * Check if an email is on the list
+	 * 
+	 * @param string $email
+	 * @return boolean
+	 */
+	public static function isEmailOnBlacklist( $email ) {
+		return self::countList( array( 'email_hash' => self::generateEmailHash( $email ) ) ) != 0;
+	}
+
 	/*	 * **********************
 	 * OBJECT METHODS
 	 * ********************** */
@@ -227,5 +237,3 @@ class OWNewsletterBlacklistItem extends eZPersistentObject {
 	}
 
 }
-
-?>

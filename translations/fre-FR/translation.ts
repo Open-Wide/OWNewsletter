@@ -38,6 +38,10 @@
         <source>Blacklist</source>
         <translation>Liste noire</translation>
     </message>
+    <message>
+        <source>Unsubscribe</source>
+        <translation>Se désabonner</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/menu</name>
@@ -517,6 +521,41 @@
     </message>
 </context>
 <context>
+    <name>newsletter/unsubscribe</name>
+    <message>
+        <source>Unsubscribe</source>
+        <translation>Se désabonner</translation>
+    </message>
+    <message>
+        <source>If you no longer wish to receive email from our website, confirm your unsubscribe from our mailing lists.</source>
+        <translation>Si vous ne souhaitez plus recevoir d'email de notre site, confirmer votre désabonnement à nos listes de diffusions</translation>
+    </message>
+    <message>
+        <source>Unsubscribe from all lists.</source>
+        <translation>Me désabonner de toutes les listes de diffusions</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <source>If you want to change your subscription</source>
+        <translation>Si vous souhaitez modifier votre abonnement</translation>
+    </message>
+    <message>
+        <source>follow this link.</source>
+        <translation>suivez ce lien.</translation>
+    </message>
+    <message>
+        <source>You have unsubscribed from our mailing lists.</source>
+        <translation>Vous êtes désabonné de nos listes de diffusion.</translation>
+    </message>
+    <message>
+        <source>You are not subscribed anymore to our mailing lists.</source>
+        <translation>Vous n&apos;êtes plus abonné à nos listes de diffusion.</translation>
+    </message>
+</context>
+<context>
     <name>newsletter/edition/status</name>
     <message>
         <source>Draft</source>
@@ -555,7 +594,7 @@
     </message>
     <message>
         <source>Removed by user</source>
-        <translation>Supprimé l&apos;abonné</translation>
+        <translation>Supprimé par l&apos;abonné</translation>
     </message>
     <message>
         <source>Removed by admin</source>

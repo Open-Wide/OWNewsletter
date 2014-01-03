@@ -25,7 +25,7 @@
 .icon_s_approved {
 	background:-64px top;
 }
-.icon_s_removed, .icon_s_removed_self {
+.icon_s_removed, .icon_s_removed_by_user {
 	background:-96px top;
 }
 .icon_s_removed_by_admin {
