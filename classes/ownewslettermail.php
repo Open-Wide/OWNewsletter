@@ -151,11 +151,11 @@ class OWNewsletterMail {
 
 				$replaceArray = array( $newsletterUnsubscribeHash,
 					$newsletterConfigureHash );
-				
+
 				$subject = $originalSubject;
 				$HTMLBody = $originalHTMLBody;
 				$plainTextBody = $originalPlainTextBody;
-				
+
 				if ( $personalizeContent === true ) {
 					$searchArray = array_merge( $searchArray, array(
 						'[[name]]',
@@ -335,21 +335,6 @@ class OWNewsletterMail {
 	}
 
 	/**
-	 * used by Newletter edition preview and newsletter cronjob process
-	 *
-	 * @param OWNewsletterUser $newsletterUser
-	 * @return boolean
-	 */
-	public function setExtraMailHeadersByNewsletterUser( $newsletterUser ) {
-		if ( $newsletterUser instanceof OWNewsletterUser ) {
-			$this->setExtraMailHeader( 'receiver', $newsletterUser->attribute( 'email' ) );
-			$this->setExtraMailHeader( 'user', $newsletterUser->attribute( 'hash' ) );
-		} else {
-			return false;
-		}
-	}
-
-	/**
 	 * used by newsletter cronjob process
 	 *
 	 * @param OWNewsletterUser $newsletterUser
@@ -357,7 +342,29 @@ class OWNewsletterMail {
 	 */
 	public function setExtraMailHeadersByNewsletterSendItem( OWNewsletterSendingItem $newsletterSendingItem ) {
 		$this->setExtraMailHeadersByNewsletterUser( $newsletterSendingItem->attribute( 'newsletter_user' ) );
+		$this->setExtraMailHeadersByNewsletterSending( $newsletterSendingItem->attribute( 'newsletter_sending' ) );
 		$this->setExtraMailHeader( 'senditem', $newsletterSendingItem->attribute( 'hash' ) );
+	}
+
+	/**
+	 * used by Newletter edition preview and newsletter cronjob process
+	 *
+	 * @param OWNewsletterUser $newsletterUser
+	 * @return boolean
+	 */
+	public function setExtraMailHeadersByNewsletterUser( OWNewsletterUser $newsletterUser ) {
+		$this->setExtraMailHeader( 'receiver', $newsletterUser->attribute( 'email' ) );
+		$this->setExtraMailHeader( 'user', $newsletterUser->attribute( 'hash' ) );
+	}
+
+	/**
+	 * used by Newletter edition preview and newsletter cronjob process
+	 *
+	 * @param OWNewsletterUser $newsletterUser
+	 * @return boolean
+	 */
+	public function setExtraMailHeadersByNewsletterSending( OWNewsletterSending $newsletterSending ) {
+		$this->setExtraMailHeader( 'sending', $newsletterSending->attribute( 'hash' ) );
 	}
 
 	/**
