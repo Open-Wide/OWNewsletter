@@ -13,7 +13,9 @@
 		<form name="CreateNewNewsletterUser" method="post" style="display:inline;" action={'newsletter/user'|ezurl}>
 			<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
 			<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
-			<input class="button" type="submit" name="SubmitNewsletterUserButton" value="{'Create new subscription'|i18n( 'design/admin/node/view/full' )}" />
+			<input type="text" name="Email" />
+			<input type="hidden" name="MailingListContentObjectID" value='{$node.contentobject_id}'/>
+			<input class="button" type="submit" name="SubscribeNewsletterUserButton" value="{'Subscribe this user to the mailing list'|i18n( 'design/admin/node/view/full' )}" />
 		</form>
 	</div>
 </div>

@@ -96,7 +96,25 @@ if ( $module->hasActionParameter( 'NewsletterUser' ) ) {
 	}
 }
 
-if ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) { /* If press SubmitNewsletterUser button to access or validate form */
+if ( $module->isCurrentAction( 'SubscribeNewsletterUser' ) ) {
+	if ( $module->hasActionParameter( 'Email' ) ) {
+		$email = $module->actionParameter( 'Email' );
+	}
+	if ( $module->hasActionParameter( 'MailingListContentObjectID' ) ) {
+		$mailingListContentObjectID = $module->actionParameter( 'MailingListContentObjectID' );
+	}
+	if ( $email && $mailingListContentObjectID ) {
+		$newsletterUser = OWNewsletterUser::fetchByEmail( $email );
+		if ( $newsletterUser instanceof OWNewsletterUser ) {
+			$newsletterUser->subscribeTo( $mailingListContentObjectID, OWNewsletterSubscription::STATUS_APPROVED, 'user_edit' );
+		} else {
+			$newsletterUserRow['email'] = $email;
+			$newsletterUser = OWNewsletterUser::createOrUpdate( $newsletterUserRow, 'user_edit' );
+			$newsletterUser->subscribeTo( $mailingListContentObjectID, OWNewsletterSubscription::STATUS_APPROVED, 'user_edit' );
+		}
+		$module->redirectTo( $redirectUrlSuccess );
+	}
+} elseif ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) { /* If press SubmitNewsletterUser button to access or validate form */
 	if ( isset( $newsletterUser ) ) { /* edit user */
 		$tpl->setVariable( 'newsletter_user', $newsletterUser );
 		$tpl->setVariable( 'subscription_array', $newsletterUser->attribute( 'subscription_array' ) );
@@ -128,7 +146,7 @@ if ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) { /* If press SubmitNe
 	} elseif ( $module->isCurrentAction( 'RemoveNewsletterUser' ) ) {
 		$newsletterUser->setRemoved( true );
 		$module->redirectTo( $redirectUrlSuccess );
-	}elseif ( $module->isCurrentAction( 'RemoveForGoodNewsletterUser' ) ) {
+	} elseif ( $module->isCurrentAction( 'RemoveForGoodNewsletterUser' ) ) {
 		$newsletterUser->remove();
 		$redirectUrlRemove = 'newsletter/user';
 		if ( $module->hasActionParameter( 'RedirectUrlActionRemove' ) ) {

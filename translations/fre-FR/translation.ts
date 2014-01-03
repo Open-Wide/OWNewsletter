@@ -831,6 +831,10 @@
         <translation>Créer un abonnement</translation>
     </message>
     <message>
+        <source>Subscribe this user to the mailing list</source>
+        <translation>Abonner cet utilisateur à la liste de diffusion</translation>
+    </message>
+    <message>
         <source>All</source>
         <translation>Tout</translation>
     </message>

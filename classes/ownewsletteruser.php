@@ -816,12 +816,26 @@ class OWNewsletterUser extends eZPersistentObject {
 		$this->sync();
 		$this->store();
 	}
-	
+
+	/**
+	 * Unsubscribe from all approved subscription
+	 */
+	public function subscribeTo( $mailingListContentObjectID, $status, $context = 'default' ) {
+		$newSubscription = array(
+			'newsletter_user_id' => $this->attribute( 'id' ),
+			'mailing_list_contentobject_id' => $mailingListContentObjectID,
+			'status' => $status
+		);
+		$subscription = OWNewsletterSubscription::createOrUpdate( $newSubscription, $context );
+		$subscription->setAttribute( 'status', $status );
+		$subscription->store();
+	}
+
 	/**
 	 * Unsubscribe from all approved subscription
 	 */
 	public function unsubscribe() {
-		foreach ($this->attribute('active_subscriptions') as $subscription ) {
+		foreach ( $this->attribute( 'active_subscriptions' ) as $subscription ) {
 			$subscription->unsubscribe();
 		}
 	}

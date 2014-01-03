@@ -20,6 +20,7 @@ $ViewList['user'] = array(
 	'single_post_actions' => array(
 		'CancelButton' => 'Cancel',
 		'SubmitNewsletterUserButton' => 'SubmitNewsletterUser',
+		'SubscribeNewsletterUserButton' => 'SubscribeNewsletterUser',
 		'ConfirmNewsletterUserButton' => 'ConfirmNewsletterUser',
 		'RemoveNewsletterUserButton' => 'RemoveNewsletterUser',
 		'RemoveForGoodNewsletterUserButton' => 'RemoveForGoodNewsletterUser',
@@ -32,6 +33,12 @@ $ViewList['user'] = array(
 		),
 		'SubmitNewsletterUser' => array(
 			'NewsletterUser' => 'NewsletterUser',
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		),
+		'SubscribeNewsletterUser' => array(
+			'Email' => 'Email',
+			'MailingListContentObjectID' => 'MailingListContentObjectID',
 			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
 			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
 		),
