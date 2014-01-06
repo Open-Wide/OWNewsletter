@@ -143,6 +143,12 @@ $ViewList['unsubscribe'] = array(
 	)
 );
 
+$ViewList['preview'] = array(
+	'script' => 'preview.php',
+	'functions' => array( 'preview' ),
+	'default_navigation_part' => 'eznewsletternavigationpart',
+	'params' => array( 'EditionContentobjectId' ) );
+
 $FunctionList['subscribe'] = array();
 $FunctionList['configure'] = array();
 $FunctionList['unsubscribe'] = array();

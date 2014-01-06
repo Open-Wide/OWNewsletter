@@ -683,6 +683,13 @@
 	</message>
 </context>
 <context>
+    <name>newsletter/preview</name>
+    <message>
+        <source>E-mail subject</source>
+        <translation>Sujet de l&apos;e-mail</translation>
+    </message>
+</context>
+<context>
     <name>newsletter/edition/status</name>
     <message>
         <source>Draft</source>
