@@ -38,7 +38,7 @@ class OWNewsletterServerFunctions extends ezjscServerFunctions {
 			'ObjectNameFilter' => $objectNameFilter,
 			'AsObject' => true );
 		if ( !empty( $objectStatusFilter ) ) {
-			$params['ExtendedAttributeFilter'] = array( 
+			$params['ExtendedAttributeFilter'] = array(
 				'id' => 'newsletter_edition_filter',
 				'params' => array( 'status' => $objectStatusFilter ) );
 		}
@@ -121,6 +121,11 @@ class OWNewsletterServerFunctions extends ezjscServerFunctions {
 			$list[$index]['class_icon'] = '<img src="' . $operatorValue . '" width="16" height="16" alt="' . $object['class_name'] . ' [' . $statusName . ']" title="' . $object['class_name'] . ' [' . $statusName . ']" />';
 			if ( $status != OWNewsletterEdition::STATUS_DRAFT ) {
 				$list[$index]['can_edit'] = false;
+			}
+			$list[$index]['emails'] = '';
+			if ( $status != OWNewsletterEdition::STATUS_DRAFT ) {
+				$sendingStatistic = $newsletterEdition->attribute( 'sending' )->attribute( 'send_items_statistic' );
+			$list[$index]['emails'] = $sendingStatistic['items_send'] . '/' . $sendingStatistic['items_count'] . ' (' . $sendingStatistic['items_send_in_percent'] . '%)';
 			}
 		}
 		return $list;

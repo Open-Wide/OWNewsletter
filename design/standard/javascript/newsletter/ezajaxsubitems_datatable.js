@@ -124,6 +124,7 @@ var sortableSubitems = function() {
 			{key: "contentobject_id", label: labelsObj.DATA_TABLE_COLS.objectid, sortable: true, resizeable: true},
 			{key: "contentobject_remote_id", label: labelsObj.DATA_TABLE_COLS.objectremoteid, sortable: false, resizeable: true},
 			{key: "contentobject_state", label: labelsObj.DATA_TABLE_COLS.objectstate, sortable: false, resizeable: true},
+			{key: "emails", label: labelsObj.DATA_TABLE_COLS.emails, sortable: false, resizeable: true},
 			{key: "priority", label: labelsObj.DATA_TABLE_COLS.priority, sortable: true, resizeable: true,
 				editor: new YAHOO.widget.TextboxCellEditor({asyncSubmitter: updatePriority, disableBtns: true, validator: YAHOO.widget.DataTable.validateNumber})}
 		];
@@ -180,6 +181,7 @@ var sortableSubitems = function() {
 				{key: "contentobject_id"},
 				{key: "contentobject_remote_id"},
 				{key: "contentobject_state"},
+				{key: "emails"},
 				{key: "priority"},
 				{key: "class_icon"},
 				{key: "thumbnail_url"},
@@ -444,7 +446,8 @@ var sortableSubitems = function() {
 			createOptions = options;
 			shownColumns = getCookieSubMultiValue(confObj.navigationPart);
 			if (shownColumns == null)
-				shownColumns = confObj.defaultShownColumns[confObj.navigationPart];
+				confObj.defaultShownColumns[confObj.navigationPart].push( "emails" );
+				shownColumns = confObj.defaultShownColumns[confObj.navigationPart]
 			dataTable = initDataTable();
 		}
 	};
