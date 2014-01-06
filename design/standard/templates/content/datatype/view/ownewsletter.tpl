@@ -39,9 +39,9 @@
 
 <div class="block float-break">
 
-	{* email data *}
+	{* e-mail data *}
 	<div class="element">
-		<label>{'Newsletter sender email'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.sender_email|wash}
+		<label>{'Newsletter sender e-mail'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.sender_email|wash}
 	</div>
 	<div class="element">
 		<label>{'Newsletter sender name'|i18n('newsletter/datatype/ownewsletter')}:</label> {$newsletter_object.sender_name|wash}

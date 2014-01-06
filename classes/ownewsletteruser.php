@@ -865,6 +865,10 @@ class OWNewsletterUser extends eZPersistentObject {
 		}
 		parent::remove( $conditions, $extraConditions );
 	}
+	
+	public function sendSubscriptionConfirmationMail() {
+		//TODO
+	}
 
 	/*	 * **********************
 	 * PERSISTENT METHODS

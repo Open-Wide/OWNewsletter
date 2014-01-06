@@ -155,7 +155,7 @@
 							<table class="list" cellspacing="0">
 								<tr>
 									<th>
-										{'Email'|i18n( 'newsletter/user' )}
+										{'E-mail'|i18n( 'newsletter/user' )}
 									</th>
 									<th>
 										{'Mailing lists'|i18n( 'newsletter/user' )}

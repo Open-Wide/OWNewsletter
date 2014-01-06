@@ -60,7 +60,7 @@
 
 <hr>
 {* sender_email *}
-<label>{'Newsletter sender email'|i18n('newsletter/datatype/ownewsletter')} *</label>
+<label>{'Newsletter sender e-mail'|i18n('newsletter/datatype/ownewsletter')} *</label>
 <input type="text" class="halfbox" name="{$attribute_base}_{$datatype_name}_SenderEmail_{$attribute.id}" value="{$sender_email}" />
 
 {* sender_name *}

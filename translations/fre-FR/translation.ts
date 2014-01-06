@@ -70,7 +70,7 @@
         <translation>Paramétrage</translation>
     </message>
     <message>
-        <source>Mail accounts</source>
+        <source>E-mail accounts</source>
         <translation>Comptes emails</translation>
     </message>
     <message>
@@ -139,20 +139,20 @@
         <translation>Saisie incorrecte</translation>
     </message>
     <message>
-        <source>User email is missing</source>
-        <translation>Veuillez l&apos;email de l&apos;abonné</translation>
+        <source>User e-mail is missing</source>
+        <translation>Veuillez l&apos;e-mail de l&apos;abonné</translation>
     </message>
     <message>
-        <source>A user with this email already exists</source>
-        <translation>Un abonné avec cet email existe déjà</translation>
+        <source>A user with this e-mail already exists</source>
+        <translation>Un abonné avec cet e-mail existe déjà</translation>
     </message>
     <message>
         <source>Failed to create or update subscription</source>
         <translation>La mise à jour des abonnements a échoué</translation>
     </message>
     <message>
-        <source>You must provide a valid email address.</source>
-        <translation>Vous devez saisir une adresse email valide.</translation>
+        <source>You must provide a valid e-mail address.</source>
+        <translation>Vous devez saisir une adresse e-mail valide.</translation>
     </message>
     <message>
         <source>You must choose a list for subscription.</source>
@@ -194,8 +194,8 @@
         <translation>Abonné</translation>
     </message>
     <message>
-        <source>Email</source>
-        <translation>Email</translation>
+        <source>E-mail</source>
+        <translation>E-mail</translation>
     </message>
     <message>
         <source>Mailing lists</source>
@@ -461,12 +461,12 @@
         <translation>Identifiant</translation>
     </message>
     <message>
-        <source>Email hash</source>
-        <translation>Hash email</translation>
+        <source>E-mail hash</source>
+        <translation>Hash e-mail</translation>
     </message>
     <message>
-        <source>Email</source>
-        <translation>Email</translation>
+        <source>E-mail</source>
+        <translation>E-mail</translation>
     </message>
     <message>
         <source>Created</source>
@@ -493,8 +493,8 @@
         <translation>En ajoutant un abonné à la liste noire, vous pouvez être sûr qu&apos;il ne recevra plus jamais de lettre d&apos;information de ce système.</translation>
     </message>
     <message>
-        <source>Add this email address to blacklist</source>
-        <translation>Ajouter cette adresse mail à la liste noire</translation>
+        <source>Add this e-mail address to blacklist</source>
+        <translation>Ajouter cette adresse e-mail à la liste noire</translation>
     </message>
     <message>
         <source>Blacklisted users</source>
@@ -539,8 +539,8 @@
         <translation>Se désabonner</translation>
     </message>
     <message>
-        <source>If you no longer wish to receive email from our website, confirm your unsubscribe from our mailing lists.</source>
-        <translation>Si vous ne souhaitez plus recevoir d'email de notre site, confirmer votre désabonnement à nos listes de diffusions</translation>
+        <source>If you no longer wish to receive e-mail from our website, confirm your unsubscribe from our mailing lists.</source>
+        <translation>Si vous ne souhaitez plus recevoir d'e-mail de notre site, confirmer votre désabonnement à nos listes de diffusions</translation>
     </message>
     <message>
         <source>Unsubscribe from all lists.</source>
@@ -583,7 +583,7 @@
     </message>
     <message>
         <source>E-mail</source>
-        <translation>Email</translation>
+        <translation>E-mail</translation>
     </message>
     <message>
         <source>Salutation</source>
@@ -611,7 +611,7 @@
     </message>
     <message>
         <source>Your e-mail address will under no circumstances be passed on to unauthorized third parties.</source>
-        <translation>Votre adresse mail ne sera en aucun cas transmise à un tiers.</translation>
+        <translation>Votre adresse e-mail ne sera en aucun cas transmise à un tiers.</translation>
     </message>
     <message>
         <source>* mandatory fields</source>
@@ -628,6 +628,14 @@
 	<message>
 		<source>follow this link.</source>
 		<translation>suivez ce lien.</translation>
+	</message>
+	<message>
+		<source>Your subscription has been taken into account.</source>
+		<translation>Votre abonnement a été pris en compte.</translation>
+	</message>
+	<message>
+		<source>You will soon receive an e-mail to confirm your e-mail address.</source>
+		<translation>Vous recevrez bientôt un e-mail pour confirmer votre adresse e-mail.</translation>
 	</message>
 </context>
 <context>
@@ -824,8 +832,8 @@
 		<translation>Siteaccess</translation>
 	</message>
 	<message>
-		<source>Newsletter sender email</source>
-		<translation>Email de l&apos;expéditeur de la newsletter</translation>
+		<source>Newsletter sender e-mail</source>
+		<translation>E-mail de l&apos;expéditeur de la newsletter</translation>
 	</message>
 	<message>
 		<source>Newsletter sender name</source>
@@ -833,7 +841,7 @@
 	</message>
 	<message>
 		<source>Newsletter default test receiver emails (separated by ;)</source>
-		<translation>Email des destinataires par défaut des envois de test (séparés par ;)</translation>
+		<translation>E-mail des destinataires par défaut des envois de test (séparés par ;)</translation>
 	</message>
     <message>
         <source>Newsletter skin name</source>
@@ -868,16 +876,16 @@
 		<translation>Le siteaccess principal doit être rempli</translation>
 	</message>
 	<message>
-		<source>You have to set a valid sender email adress</source>
-		<translation>L&apos;adresse email de l&apos;expéditeur doit être rempli et valide</translation>
+		<source>You have to set a valid sender e-mail adress</source>
+		<translation>L&apos;adresse e-mail de l&apos;expéditeur doit être rempli et valide</translation>
 	</message>
 	<message>
-		<source>You have to set a valid test receiver email</source>
-		<translation>L&apos;adresse email du destinataire des tests doit être rempli et valide</translation>
+		<source>You have to set a valid test receiver e-mail</source>
+		<translation>L&apos;adresse e-mail du destinataire des tests doit être rempli et valide</translation>
 	</message>
 	<message>
-		<source>You have to set a valid receiver email adress >> %email</source>
-		<translation>L&apos;adresse email du destinataire %email n&apos;est pas valide</translation>
+		<source>You have to set a valid receiver e-mail adress >> %e-mail</source>
+		<translation>L&apos;adresse e-mail du destinataire %e-mail n&apos;est pas valide</translation>
 	</message>
 </context>
 <context>
@@ -942,15 +950,15 @@
         <translation>En attente de traitement</translation>
     </message>
     <message>
-        <source>Mail queue creation</source>
+        <source>E-mail queue creation</source>
         <translation>Création de la file d'attente de messagerie</translation>
     </message>
     <message>
-        <source>Mail queue process start</source>
+        <source>E-mail queue process start</source>
         <translation>Début du traitement de la file d'attente</translation>
     </message>
     <message>
-        <source>Mail queue process finish</source>
+        <source>E-mail queue process finish</source>
         <translation>Fin du traitement de la file d'attente</translation>
     </message>
     <message>

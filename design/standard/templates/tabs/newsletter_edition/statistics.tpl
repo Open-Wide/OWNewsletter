@@ -18,7 +18,7 @@
 			{/if}
 		</li>
 		<li>
-			<label>{'Mail queue creation'|i18n('design/admin/node/view/full')}</label>
+			<label>{'E-mail queue creation'|i18n('design/admin/node/view/full')}</label>
 			{if $newsletter_edition.sending.mailqueue_created}
 				{$newsletter_edition.sending.mailqueue_created|l10n( shortdatetime )}
 			{else}
@@ -26,7 +26,7 @@
 			{/if}
 		</li>
 		<li>
-			<label>{'Mail queue process start'|i18n('design/admin/node/view/full')}</label>
+			<label>{'E-mail queue process start'|i18n('design/admin/node/view/full')}</label>
 			{if $newsletter_edition.sending.mailqueue_process_started}
 				{$newsletter_edition.sending.mailqueue_process_started|l10n( shortdatetime )}
 			{else}
@@ -34,7 +34,7 @@
 			{/if}
 		</li>
 		<li>
-			<label>{'Mail queue process finish'|i18n('design/admin/node/view/full')}</label>
+			<label>{'E-mail queue process finish'|i18n('design/admin/node/view/full')}</label>
 			{if $newsletter_edition.sending.mailqueue_process_finished}
 				{$newsletter_edition.sending.mailqueue_process_finished|l10n( shortdatetime )}
 			{else}

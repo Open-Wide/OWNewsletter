@@ -31,7 +31,7 @@
                                     <td>{$newsletter_user.id|wash()}</td>
                                 </tr>
                                 <tr>
-                                    <th>{'Email'|i18n( 'newsletter/user' )}</th>
+                                    <th>{'E-mail'|i18n( 'newsletter/user' )}</th>
                                     <td>{$newsletter_user.email|wash()}</td>
                                 </tr>
 

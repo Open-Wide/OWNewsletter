@@ -81,7 +81,7 @@
 									{/if}
 									<tr>
 										<th>
-											{'Email'|i18n( 'newsletter/user' )}
+											{'E-mail'|i18n( 'newsletter/user' )}
 										</th>
 										<td>
 											<input  class="halfbox" type="text" name="NewsletterUser[email]" value="{$newsletter_user.email|wash}">

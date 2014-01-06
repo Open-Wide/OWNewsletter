@@ -56,7 +56,7 @@
 								<table class="list" cellspacing="0">
 									<tr>
 										<th class="tight">{'Id'|i18n('newsletter/user')}</th>
-										<th>{'Email'|i18n( 'newsletter/user' )}</th>
+										<th>{'E-mail'|i18n( 'newsletter/user' )}</th>
 										<th>{'Name'|i18n( 'newsletter/user' )}</th>
 										<th>{'eZ Publish User'|i18n('newsletter/user')}</th>
 										<th>{'Status'|i18n( 'newsletter/user' )}</th>

@@ -39,7 +39,7 @@
                                     <div class="left">
                                         <form method="post" action={'newsletter/blacklist'|ezurl}>
 											<input type="text" name="Email" />
-                                            <input class="button" type="submit" name="AddBacklistItemButton" value="{'Add this email address to blacklist'|i18n( 'newsletter/blacklist' )}" title="{'Create a new blacklist entry.'|i18n( 'newsletter/blacklist' )}" />
+                                            <input class="button" type="submit" name="AddBacklistItemButton" value="{'Add this e-mail address to blacklist'|i18n( 'newsletter/blacklist' )}" title="{'Create a new blacklist entry.'|i18n( 'newsletter/blacklist' )}" />
                                         </form>
                                     </div>
                                 </div>
@@ -103,7 +103,7 @@
 								<table class="list" cellspacing="0">
 									<tr>
 										<th>
-											{'Email'|i18n( 'newsletter/blacklist' )}
+											{'E-mail'|i18n( 'newsletter/blacklist' )}
 										</th>
 										<th>
 											{'Newsletter UID'|i18n( 'newsletter/blacklist' )}
@@ -142,7 +142,7 @@
 											<td>
 												<form id="submit_blacklist_{$blacklist_item.id}" method="post" style="display:inline;" action={'newsletter/blacklist'|ezurl()}>
 													<input type="hidden" name="RedirectUrlActionSuccess" value={$page_uri} />
-													<input type="hidden" name="Email" value="{$blacklist_item.email|wash()}" />
+													<input type="hidden" name="E-mail" value="{$blacklist_item.email|wash()}" />
 													<input class="button" type="submit" name="RemoveBacklistItemButton" value="{'Remove from blacklist'|i18n( 'newsletter/blacklist' )}" />
 												</form>
 											</td>
