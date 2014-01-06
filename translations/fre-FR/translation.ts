@@ -586,6 +586,10 @@
         <translation>E-mail</translation>
     </message>
     <message>
+        <source>Your e-mail.</source>
+        <translation>Votre e-mail.</translation>
+    </message>
+    <message>
         <source>Salutation</source>
         <translation>Civilité</translation>
     </message>
@@ -594,8 +598,28 @@
         <translation>Prénom</translation>
     </message>
     <message>
+        <source>Your first name.</source>
+        <translation>Votre prénom.</translation>
+    </message>
+    <message>
         <source>Last name</source>
         <translation>Nom</translation>
+    </message>
+    <message>
+        <source>Your last name</source>
+        <translation>Votre nom</translation>
+    </message>
+    <message>
+        <source>Organisation</source>
+        <translation>Organisation</translation>
+    </message>
+    <message>
+        <source>Your organisation.</source>
+        <translation>Votre organisation.</translation>
+    </message>
+    <message>
+        <source>Your last name</source>
+        <translation>Votre nom</translation>
     </message>
     <message>
         <source>Newsletter</source>

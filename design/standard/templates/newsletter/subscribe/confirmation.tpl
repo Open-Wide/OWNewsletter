@@ -76,7 +76,13 @@
 							{* Last name. *}
 							<div class="block">
 								<label for="Subscription_LastName">{"Last name"|i18n( 'newsletter/subscribe' )}:</label>
-								<input class="halfbox" id="Subscription_LastName" type="text" name="NewsletterUser[last_name]" value="{$newsletter_user.last_name|wash}" title="{'Your last name of the subscriber.'|i18n( 'newsletter/subscribe' )}" />
+								<input class="halfbox" id="Subscription_LastName" type="text" name="NewsletterUser[last_name]" value="{$newsletter_user.last_name|wash}" title="{'Your last name.'|i18n( 'newsletter/subscribe' )}" />
+							</div>
+
+							{* Organisation. *}
+							<div class="block">
+								<label for="Subscription_Organisation">{"Organisation"|i18n( 'newsletter/subscribe' )}:</label>
+								<input class="halfbox" id="Subscription_Organisation" type="text" name="NewsletterUser[organisation]" value="{$newsletter_user.organisation|wash}" title="{'Your organisation.'|i18n( 'newsletter/subscribe' )}" />
 							</div>
 							<div class="block">
 								{foreach $newsletter_system_list as $newsletter_system}
