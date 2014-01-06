@@ -683,6 +683,23 @@ class OWNewsletterUser extends eZPersistentObject {
 	}
 
 	/**
+	 * Mark the user as removed
+	 * 
+	 * @param boolean $byAdmin
+	 * @return void
+	 */
+	public function setRemoved( $byAdmin = false ) {
+		if ( $byAdmin == true ) {
+			$this->setAttribute( 'status', self::STATUS_REMOVED_ADMIN );
+			$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_REMOVED_ADMIN );
+		} else {
+			$this->setAttribute( 'status', self::STATUS_REMOVED_SELF );
+			$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_REMOVED_SELF );
+		}
+		$this->store();
+	}
+
+	/**
 	 * set Modifed data if somebody store content
 	 * (non-PHPdoc)
 	 * @see kernel/classes/eZPersistentObject#store($fieldFilters)
@@ -790,22 +807,6 @@ class OWNewsletterUser extends eZPersistentObject {
 	 */
 	public function resetBounceCount() {
 		$this->setAttribute( 'bounce_count', 0 );
-	}
-
-	/**
-	 * call this function if a bounce mail for current user is detected
-	 * if it is a hard bounce set
-	 * @param boolean $isHardBounce
-	 * @return unknown_type
-	 */
-	public function setRemoved( $byAdmin = false ) {
-		if ( $byAdmin === true ) {
-			$this->setAttribute( 'status', self::STATUS_REMOVED_ADMIN );
-			$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_REMOVED_ADMIN );
-		} else {
-			$this->setAttribute( 'status', self::STATUS_REMOVED_SELF );
-			$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_REMOVED_SELF );
-		}
 	}
 
 	/**
@@ -985,23 +986,14 @@ class OWNewsletterUser extends eZPersistentObject {
 	 * @return unknown_type
 	 */
 	private function setAllNewsletterUserRelatedItemsToStatus( $status ) {
-		$newsletterUserId = $this->attribute( 'id' );
-
 		switch ( $status ) {
-			case OWNewsletterSubscription::STATUS_BOUNCED_SOFT:
-			case OWNewsletterSubscription::STATUS_BOUNCED_HARD:
-			case OWNewsletterSubscription::STATUS_BLACKLISTED:
-
+			case self::STATUS_BOUNCED_SOFT:
+			case self::STATUS_BOUNCED_HARD:
+			case self::STATUS_BLACKLISTED:
 				// update active subscriptions
-				$activeSubscriptionList = OWNewsletterSubscription::fetchActiveList( array( 'newsletter_user_id' => $newsletterUserId ) );
+				$activeSubscriptionList = OWNewsletterSubscription::fetchActiveList( array( 'newsletter_user_id' => $this->attribute( 'id' ) ) );
 				foreach ( $activeSubscriptionList as $subscription ) {
-					if ( $subscription->attribute( 'status' ) == $status ) {
-						OWNewsletterLog::writeDebug(
-								'skip - already set this status - OWNewsletterUser::setAllNewsletterUserRelatedItemsToStatus', 'subscription', 'status', array(
-							'status' => $status,
-							'subscription_id' => $subscription->attribute( 'id' ),
-							'nl_user' => $newsletterUserId ) );
-					} else {
+					if ( $subscription->attribute( 'status' ) != $status ) {
 						$subscription->setAttribute( 'status', $status );
 						$subscription->store();
 					}
