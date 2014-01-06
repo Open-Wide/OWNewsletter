@@ -12,6 +12,7 @@ foreach ( $newsletterSendingWaitForProcessList as $newsletterSending ) {
 		// Get all user with at least one approved subscription to on of the mailing list of the sending
 		$mailingListsIDs = $newsletterSending->attribute( 'mailing_lists_ids' );
 		$newsletterUserList = OWNewsletterUser::fetchListWithSubsricption( array(
+					'status' => OWNewsletterUser::STATUS_APPROVED,
 					'subscription' => array(
 						'status' => OWNewsletterSubscription::STATUS_APPROVED,
 						'mailing_list_contentobject_id' => array( $mailingListsIDs ) )
