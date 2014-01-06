@@ -152,7 +152,7 @@
 								<div class="box-bl">
 									<div class="box-br">
 										<div class="left">
-											<form id="submit_newsletter_user_{$newsletter_user.id}}" method="post" style="display:inline;" action={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()}>
+											<form id="submit_newsletter_user_{$newsletter_user.id}" method="post" style="display:inline;" action={concat( 'newsletter/user/', $newsletter_user.id)|ezurl()}>
 												<input type="hidden" name="RedirectUrlActionCancel" value={$page_uri} />
 												<input type="hidden" name="RedirectUrlActionSuccess" value={$page_uri} />
 												<input type="hidden" name="RedirectUrlActionRemove" value={'newsletter/user'} />
