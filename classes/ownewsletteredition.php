@@ -165,7 +165,7 @@ class OWNewsletterEdition extends eZPersistentObject {
 				break;
 		}
 	}
-
+	
 	/*	 * **********************
 	 * FETCH METHODS
 	 * ********************** */

@@ -36,7 +36,7 @@
 														'sort_by', array( 'name', true() ),
 													) )}
 												{foreach $newsletter_system_node_list as $newsletter_system_node}
-													{include uri='design:newsletter/index_newsletter_system_info_box.tpl'
+													{include uri='design:newsletter/index/dashboard.tpl'
 															 name='NlSystemBox'
 															 newsletter_system_node=$newsletter_system_node}
 												{/foreach}
@@ -82,19 +82,19 @@
 											<div class="box-br">
 												<div class="box-content">
 													{if $last_edition_node_list_count|gt(0)}
-													{include uri = 'design:includes/newsletteredition_statistic_list.tpl'
+														{include uri = 'design:newsletter/index/last_actions.tpl'
 															 name = 'EditionList'
 															 edition_node_list = $last_edition_node_list
 															 edition_node_list_count = $last_edition_node_list_count
 															 show_actions_colum = false()}
-													<div class="context-toolbar subitems-context-toolbar">
-														{include name = 'Navigator'
+														<div class="context-toolbar subitems-context-toolbar">
+															{include name = 'Navigator'
 																 uri = 'design:navigator/google.tpl'
 																 page_uri = $page_uri
 																 item_count = $last_edition_node_list_count
 																 view_parameters = $view_parameters
 																 item_limit = $limit}
-													</div>
+														</div>
 													{else}
 														{'No action'|i18n('newsletter/index')}
 													{/if}

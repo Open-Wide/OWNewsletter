@@ -94,7 +94,7 @@
     <name>newsletter/index</name>
     <message>
         <source>Newsletter dashboard</source>
-        <translation>Tableau de bord des nesletters</translation>
+        <translation>Tableau de bord des newsletters</translation>
     </message>
     <message>
         <source>Last actions</source>
@@ -115,6 +115,26 @@
     <message>
         <source>No action</source>
         <translation>Aucune action</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation>Modifier</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <source>E-mails</source>
+        <translation>E-mails</translation>
+    </message>
+    <message>
+        <source>Bounced</source>
+        <translation type="untranslated"></translation>
+    </message>
+    <message>
+        <source>Modified</source>
+        <translation>Modifié</translation>
     </message>
 </context>
 <context>

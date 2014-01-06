@@ -177,12 +177,34 @@ class OWNewsletterSending extends eZPersistentObject {
 	 * @return array
 	 */
 	public function getSendItemsStatistic() {
+		$editionContentobjectID = $this->attribute( 'edition_contentobject_id' );
+		$itemsCount = OWNewsletterSendingItem::countList( array(
+					'edition_contentobject_id' => $editionContentobjectID
+				) );
+		$itemsNotSend = OWNewsletterSendingItem::countList( array(
+					'edition_contentobject_id' => $editionContentobjectID,
+					'status' => OWNewsletterSendingItem::STATUS_NEW
+				) );
+		$itemsSend = OWNewsletterSendingItem::countList( array(
+					'edition_contentobject_id' => $editionContentobjectID,
+					'status' => OWNewsletterSendingItem::STATUS_SEND
+				) );
+		$itemsBounced = OWNewsletterSendingItem::countList( array(
+					'edition_contentobject_id' => $editionContentobjectID,
+					'bounced' => array( '>', 0 )
+				) );
+		$itemsSendInPersent = 0;
+		// catch division by zero
+		if ( $itemsCount > 0 ) {
+			$itemsSendInPersent = round( $itemsSend / $itemsCount * 100, 1 );
+		}
+
 		return array(
-			'items_count' => 0,
-			'items_not_send' => 0,
-			'items_send' => 0,
-			'items_send_in_percent' => 0,
-			'items_bounced' => 0 );
+			'items_count' => $itemsCount,
+			'items_not_send' => $itemsNotSend,
+			'items_send' => $itemsSend,
+			'items_send_in_percent' => $itemsSendInPersent,
+			'items_bounced' => $itemsBounced );
 	}
 
 	/**
@@ -449,7 +471,7 @@ class OWNewsletterSending extends eZPersistentObject {
 	 * @return unknown_type
 	 */
 	static function prepareImageInclude( $newsletterContentArray ) {
-		
+
 		$newsletterContentArrayNew = $newsletterContentArray;
 
 		$eZRoot = $newsletterContentArray['ez_root'] . '/';
