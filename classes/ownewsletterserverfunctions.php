@@ -124,7 +124,7 @@ class OWNewsletterServerFunctions extends ezjscServerFunctions {
 			}
 			$list[$index]['emails'] = '';
 			if ( $status != OWNewsletterEdition::STATUS_DRAFT ) {
-				$sendingStatistic = $newsletterEdition->attribute( 'sending' )->attribute( 'send_items_statistic' );
+				$sendingStatistic = $newsletterEdition->attribute( 'sending' )->attribute( 'statistics' );
 			$list[$index]['emails'] = $sendingStatistic['items_send'] . '/' . $sendingStatistic['items_count'] . ' (' . $sendingStatistic['items_send_in_percent'] . '%)';
 			}
 		}

@@ -239,11 +239,11 @@
     </message>
     <message>
         <source>Bounced</source>
-        <translation type="unfinished"></translation>
+        <translation type="untranslated"></translation>
     </message>
     <message>
         <source>Bounce</source>
-        <translation type="unfinished"></translation>
+        <translation type="untranslated"></translation>
     </message>
     <message>
         <source>Status</source>
@@ -323,7 +323,7 @@
     </message>
     <message>
         <source>Bounce count</source>
-        <translation type="unfinished"></translation>
+        <translation type="untranslated"></translation>
     </message>
     <message>
         <source>Remote id</source>
@@ -986,8 +986,28 @@
         <translation>Voir les statistiques.</translation>
     </message>
     <message>
+        <source>Sending statistics</source>
+        <translation>Statistiques d&apos;envoi</translation>
+    </message>
+    <message>
+        <source>E-mails count</source>
+        <translation>Nombre d'e-mails</translation>
+    </message>
+    <message>
+        <source>E-mails sent</source>
+        <translation>E-mails envoyés</translation>
+    </message>
+    <message>
+        <source>E-mails not sent</source>
+        <translation>E-mails non envoyés</translation>
+    </message>
+    <message>
+        <source>E-mails bounced</source>
+        <translation type="untranslated"></translation>
+    </message>
+    <message>
         <source>Sending history</source>
-        <translation>Historique de l'envoi</translation>
+        <translation>Historique de l&apos;envoi</translation>
     </message>
     <message>
         <source>Waiting for process</source>

@@ -36,7 +36,7 @@
 				</td>
 				<td nowrap>
 					{if $newsletter_edition.status|ne('draft')}
-						{def $current_send_statistic = $newsletter_edition.sending.send_items_statistic}
+						{def $current_send_statistic = $newsletter_edition.sending.statistics}
 						{$current_send_statistic.items_send|wash()}/{$current_send_statistic.items_count|wash()} ({$current_send_statistic.items_send_in_percent|wash()}%)
 						{undef $current_send_statistic}
 					{/if}

@@ -74,7 +74,7 @@
             </td>
             <td nowrap>
                 {if $edition_status|ne('draft')}
-                    {def $current_send_statistic = $newsletter_edition_attribute_content.edition_send_array.current.0.send_items_statistic}
+                    {def $current_send_statistic = $newsletter_edition_attribute_content.edition_send_array.current.0.statistics}
 
                     {$current_send_statistic.items_send|wash}/{$current_send_statistic.items_count|wash} ({$current_send_statistic.items_send_in_percent|wash}%)
 

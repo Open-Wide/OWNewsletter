@@ -130,7 +130,7 @@ class OWNewsletterSending extends eZPersistentObject {
 				'newsletter_object' => 'getNewsletterObject',
 				'edition_object' => 'getEditionObject',
 				'can_abort' => 'canAbort',
-				'send_items_statistic' => 'getSendItemsStatistic',
+				'statistics' => 'getStatistics',
 				'output' => 'getOutput',
 				'mailing_lists_ids' => 'getMailingListIDs',
 			),
@@ -176,7 +176,7 @@ class OWNewsletterSending extends eZPersistentObject {
 	 *
 	 * @return array
 	 */
-	public function getSendItemsStatistic() {
+	public function getStatistics() {
 		$editionContentobjectID = $this->attribute( 'edition_contentobject_id' );
 		$itemsCount = OWNewsletterSendingItem::countList( array(
 					'edition_contentobject_id' => $editionContentobjectID
