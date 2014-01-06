@@ -42,6 +42,10 @@
         <source>Unsubscribe</source>
         <translation>Se désabonner</translation>
     </message>
+    <message>
+        <source>Subscribe</source>
+        <translation>S'abonner</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/menu</name>
@@ -145,6 +149,14 @@
     <message>
         <source>Failed to create or update subscription</source>
         <translation>La mise à jour des abonnements a échoué</translation>
+    </message>
+    <message>
+        <source>You must provide a valid email address.</source>
+        <translation>Vous devez saisir une adresse email valide.</translation>
+    </message>
+    <message>
+        <source>You must choose a list for subscription.</source>
+        <translation>Vous devez sélectionner au moins une newsletter.</translation>
     </message>
 </context>
 <context>
@@ -554,6 +566,69 @@
         <source>You are not subscribed anymore to our mailing lists.</source>
         <translation>Vous n&apos;êtes plus abonné à nos listes de diffusion.</translation>
     </message>
+</context>
+<context>
+    <name>newsletter/subscribe</name>
+    <message>
+        <source>Subscribe</source>
+        <translation>S'abonner</translation>
+    </message>
+    <message>
+        <source>No newsletter available.</source>
+        <translation>Aucune newsletter disponible.</translation>
+    </message>
+    <message>
+        <source>Subscribe now to one or more of our newsletters.</source>
+        <translation>Abonnez-vous dès maintenant à une ou plusieurs de nos newsletters.</translation>
+    </message>
+    <message>
+        <source>E-mail</source>
+        <translation>Email</translation>
+    </message>
+    <message>
+        <source>Salutation</source>
+        <translation>Civilité</translation>
+    </message>
+    <message>
+        <source>First name</source>
+        <translation>Prénom</translation>
+    </message>
+    <message>
+        <source>Last name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <source>Newsletter</source>
+        <translation>Newsletter</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <source>Data Protection</source>
+        <translation>Protection des données</translation>
+    </message>
+    <message>
+        <source>Your e-mail address will under no circumstances be passed on to unauthorized third parties.</source>
+        <translation>Votre adresse mail ne sera en aucun cas transmise à un tiers.</translation>
+    </message>
+    <message>
+        <source>* mandatory fields</source>
+        <translation>* champs obligatoires</translation>
+    </message>
+    <message>
+        <source>You are already subscribed to our newsletter.</source>
+        <translation>Vous ètes déjà abonné à une de nos newsletter</translation>
+    </message>
+    <message>
+        <source>To change your subscription</source>
+        <translation>Pour modifier votre abonnement</translation>
+    </message>
+	<message>
+		<source>follow this link.</source>
+		<translation>suivez ce lien.</translation>
+	</message>
 </context>
 <context>
     <name>newsletter/edition/status</name>

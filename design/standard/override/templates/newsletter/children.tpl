@@ -14,7 +14,7 @@
 				'parent_node_id', $node.node_id,
 				'objectname_filter', $view_parameters.namefilter,
 				'extended_attribute_filter', hash(	
-					'id', 'OWNewsletterEditionFilter',
+					'id', 'newsletter_edition_filter',
 					'params', hash( 'status', $view_parameters.status ) ) 
 			) )
      $all_children_count = fetch( 'content', 'list_count', hash( 
@@ -40,7 +40,7 @@
 				'offset', $view_parameters.offset,
 				'objectname_filter', $view_parameters.namefilter,
 				'extended_attribute_filter', hash(	
-					'id', 'OWNewsletterEditionFilter',
+					'id', 'newsletter_edition_filter',
 					'params', hash( 'status', $view_parameters.status ) )
 			) )}
 			{/if}

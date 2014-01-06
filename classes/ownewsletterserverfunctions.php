@@ -39,7 +39,7 @@ class OWNewsletterServerFunctions extends ezjscServerFunctions {
 			'AsObject' => true );
 		if ( !empty( $objectStatusFilter ) ) {
 			$params['ExtendedAttributeFilter'] = array( 
-				'id' => 'OWNewsletterEditionFilter',
+				'id' => 'newsletter_edition_filter',
 				'params' => array( 'status' => $objectStatusFilter ) );
 		}
 		// fetch nodes and total node count

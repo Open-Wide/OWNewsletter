@@ -11,7 +11,7 @@
  * <code>
  *    fetch('content','list',hash('parent_node_id', 2,
  *           'extended_attribute_filter',
- *           hash( 'id', 'OWNewsletterEditionFilter',
+ *           hash( 'id', 'newsletter_edition_filter',
  *                 'params', hash( 'status', 'draft' ) )
  *          ) )
  * </code>

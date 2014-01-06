@@ -36,69 +36,71 @@
 	{'newsletter'|class_icon( small )}
 
 	{* Text *}
+	{def $newsletter_edition_count = fetch('content','list_count', hash(
+					'parent_node_id', $newsletter_node_id ) )}
 	{if or( eq($ui_context, 'browse')|not(), eq($:parentNode.object.is_container, true()))}
-		<a class="nodetext" href={$:newsletter_node.url_alias|ezurl} title="{$:toolTip}"><span class="node-name-normal">{$:newsletter_node.name|wash}</span></a>
+		<a class="nodetext" href={$:newsletter_node.url_alias|ezurl} title="{$:toolTip}"><span class="node-name-normal">{$:newsletter_node.name|wash} ({$newsletter_edition_count})</span></a>
 		{else}
-		<span class="node-name-normal">{$:newsletter_node.name|wash}</span>
+		<span class="node-name-normal">{$:newsletter_node.name|wash} ({$newsletter_edition_count})</span>
 	{/if}
 
 	{* Show children *}
 
 	<ul>
 		{* draft *}
-		{def $editionObjectListDraftCount = fetch('content','list_count', hash(
+		{set $newsletter_edition_count = fetch('content','list_count', hash(
 					'parent_node_id', $newsletter_node_id,
 					'extended_attribute_filter', hash(	
-						'id', 'OWNewsletterEditionFilter',
+						'id', 'newsletter_edition_filter',
 						'params', hash( 'status', 'draft' ) )
 				) )}
 		<li id="n{$newsletter_node_id}_draft">
 			<span class="openclose"></span>
 			<img src={'images/newsletter/icons/crystal-newsletter/16x16/newsletter_draft.png'|ezdesign} />
 			<a class="nodetext" href={concat($:newsletter_node.url_alias, '/(status)/draft')|ezurl}>
-				<span class="node-name-normal">{'Draft'|i18n('newsletter/edition/status')} ({$editionObjectListDraftCount})</span>
+				<span class="node-name-normal">{'Draft'|i18n('newsletter/edition/status')} ({$newsletter_edition_count})</span>
 			</a>
 		</li>
 		{* process *}
-		{def $editionObjectListProcessCount = fetch('content','list_count', hash(
+		{set $newsletter_edition_count = fetch('content','list_count', hash(
 					'parent_node_id', $newsletter_node_id,
 					'extended_attribute_filter', hash(	
-						'id', 'OWNewsletterEditionFilter',
+						'id', 'newsletter_edition_filter',
 						'params', hash( 'status', 'process' ) )
 				) )}
 		<li id="n{$newsletter_node_id}_process">
 			<span class="openclose"></span>
 			<img src={'images/newsletter/icons/crystal-newsletter/16x16/newsletter_process.png'|ezdesign} />
 			<a class="nodetext" href={concat($:newsletter_node.url_alias, '/(status)/process')|ezurl}>
-				<span class="node-name-normal">{'Sending'|i18n('newsletter/edition/status')} ({$editionObjectListProcessCount})</span>
+				<span class="node-name-normal">{'Sending'|i18n('newsletter/edition/status')} ({$newsletter_edition_count})</span>
 			</a>
 		</li>
 		{* Archive *}
-		{def $editionObjectListArchiveCount = fetch('content','list_count', hash(
+		{set $newsletter_edition_count = fetch('content','list_count', hash(
 					'parent_node_id', $newsletter_node_id,
 					'extended_attribute_filter', hash(	
-						'id', 'OWNewsletterEditionFilter',
+						'id', 'newsletter_edition_filter',
 						'params', hash( 'status', 'archive' ) )
 				) )}
 		<li id="n{$newsletter_node_id}_archive">
 			<span class="openclose"></span>
 			<img src={'images/newsletter/icons/crystal-newsletter/16x16/newsletter_archive.png'|ezdesign} />
 			<a class="nodetext" href={concat($:newsletter_node.url_alias, '/(status)/archive')|ezurl}>
-				<span class="node-name-normal">{'Archived'|i18n('newsletter/edition/status')} ({$editionObjectListArchiveCount})</span>
+				<span class="node-name-normal">{'Archived'|i18n('newsletter/edition/status')} ({$newsletter_edition_count})</span>
 			</a>
 		</li>
 		{* Abort *}
-		{def $editionObjectListAbortCount = fetch('content','list_count', hash(
+		{set $newsletter_edition_count = fetch('content','list_count', hash(
 					'parent_node_id', $newsletter_node_id,
 					'extended_attribute_filter', hash(	
-						'id', 'OWNewsletterEditionFilter',
+						'id', 'newsletter_edition_filter',
 						'params', hash( 'status', 'abort' ) )
 				) )}
 		<li class="lastli" id="n{$newsletter_node_id}_abort">
 			<span class="openclose"></span>
 			<img src={'images/newsletter/icons/crystal-newsletter/16x16/newsletter_abort.png'|ezdesign} />
 			<a class="nodetext" href={concat($:newsletter_node.url_alias, '/(status)/abort')|ezurl}>
-				<span class="node-name-normal">{'Aborted'|i18n('newsletter/edition/status')} ({$editionObjectListAbortCount})</span>
+				<span class="node-name-normal">{'Aborted'|i18n('newsletter/edition/status')} ({$newsletter_edition_count})</span>
 			</a>
 		</li>
 

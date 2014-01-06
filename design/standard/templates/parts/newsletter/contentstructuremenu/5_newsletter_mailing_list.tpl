@@ -34,27 +34,21 @@
                 {'newsletter_mailing_list'|class_icon( small )}
 
                 {* Text *}
-                {if or( eq($ui_context, 'browse')|not(), eq($:parentNode.object.is_container, true()))}
-                    <a class="nodetext" href={$newsletter_mailing_list_node.url_alias|ezurl} title="{$:toolTip}"><span class="node-name-normal">{$:newsletter_mailing_list_node.name|wash}</span></a>
-                {else}
-                    <span class="node-name-normal">{$:newsletter_mailing_list_node.name|wash}</span>
-                {/if}
-
-                {* Show children *}
-
-            <ul>
+				
                 {* subscription_list *}
                 {def $subcriptions_count = 0}
 				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id
 							) )}
-                <li id="n{$newsletter_mailing_list_node_id}_subscription_list">
-                    <span class="openclose"></span>
-                    <img src={'images/newsletter/icons/crystal-newsletter/16x16/newsletter_user.png'|ezdesign} />
-                    <a class="nodetext" href={$newsletter_mailing_list_node.url_alias|ezurl}>
-                        <span class="node-name-normal">{'Subscriptions'|i18n('newsletter/contentstructuremenu')} ({$subcriptions_count})</span>
-                    </a>
-                </li>
+                {if or( eq($ui_context, 'browse')|not(), eq($:parentNode.object.is_container, true()))}
+                    <a class="nodetext" href={$newsletter_mailing_list_node.url_alias|ezurl} title="{$:toolTip}"><span class="node-name-normal">{$:newsletter_mailing_list_node.name|wash} ({$subcriptions_count})</span></a>
+                {else}
+                    <span class="node-name-normal">{$:newsletter_mailing_list_node.name|wash} ({$subcriptions_count})</span>
+                {/if}
+
+                {* Show children *}
+
+            <ul>
 				
 				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,

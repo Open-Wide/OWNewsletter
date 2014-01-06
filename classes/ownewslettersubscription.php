@@ -413,10 +413,10 @@ class OWNewsletterSubscription extends eZPersistentObject {
 					case self::STATUS_CONFIRMED : {
 							$this->setAttribute( 'removed', 0 );
 							$this->setAttribute( 'confirmed', $currentTimeStamp );
-							$newsletterListAttributeContent = $this->attribute( 'newsletter_list_attribute_content' );
+							$mailingList = $this->attribute( 'mailing_list' );
 
 							// set approve automatically if defined in list config
-							if ( is_object( $newsletterListAttributeContent ) and (int) $newsletterListAttributeContent->attribute( 'auto_approve_registered_user' ) == 1 ) {
+							if ( is_object( $mailingList ) and (boolean) $mailingList->attribute( 'auto_approve_registered_user' ) == true ) {
 								$this->setAttribute( 'approved', $currentTimeStamp );
 								$val = self::STATUS_APPROVED;
 							} else {
@@ -498,9 +498,8 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	 */
 	static function createOrUpdate( $dataArray, $context = 'default' ) {
 		self::validateSubscriptionData( $dataArray );
-		if ( isset( $dataArray['status'] ) ) {
-			$status = $dataArray['status'];
-			unset( $dataArray['status'] );
+		if ( !isset( $dataArray['status'] ) ) {
+			$dataArray['status'] = self::STATUS_PENDING;
 		}
 		$newsletterUserId = $dataArray['newsletter_user_id'];
 		$row = array_merge( array(
@@ -513,9 +512,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 			$object->setAttribute( 'hash', OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ) );
 			$object->setAttribute( 'remote_id', 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ) );
 		}
-		if ( isset( $status ) ) {
-			$object->setAttribute( 'status', $status );
-		}
+		$object->setAttribute( 'status', $dataArray['status'] );
 		$object->store();
 		return $object;
 	}

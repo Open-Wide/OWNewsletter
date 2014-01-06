@@ -820,7 +820,7 @@ class OWNewsletterUser extends eZPersistentObject {
 	/**
 	 * Unsubscribe from all approved subscription
 	 */
-	public function subscribeTo( $mailingListContentObjectID, $status, $context = 'default' ) {
+	public function subscribeTo( $mailingListContentObjectID, $status = self::STATUS_PENDING, $context = 'default' ) {
 		$newSubscription = array(
 			'newsletter_user_id' => $this->attribute( 'id' ),
 			'mailing_list_contentobject_id' => $mailingListContentObjectID,
