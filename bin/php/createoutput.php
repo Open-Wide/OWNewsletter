@@ -324,38 +324,28 @@ function formatTextLink( $content, $textLinkFormat = "[ %url_text: %url_link ]" 
 	// $matches[1] => Array with all links        http://example.com
 	// $matches[2] => Array with all link texts   This is the link text
 	$pattern = '/<a.*?href="(.*?)".*?>(.*?)<?\/a>/is';
-	/*   $pattern = '/<a.*?(href|name)="(.*?)".*?>(.*?)<?\/a>/is'; */
 
 	preg_match_all( $pattern, $content, $matches );
-	//$content .= print_r( $matches , true );
 
 	for ( $i = 0; $i < count( $matches[0] ); $i++ ) {
 		$completeUrlString = $matches[0][$i];
 		$urlLink = $matches[1][$i];
 		$urlText = $matches[2][$i];
-		//  Link: "http://link">linktext
 		$linkFormatted = str_replace( array( '%url_link', '%url_text' ), array( $urlLink,
 			$urlText ), $textLinkFormat );
-		//'['. $urlText .' > '. $urlLink.']'
 		$content = str_replace( $completeUrlString, $linkFormatted, $content );
 	}
-
-//    $content .= print_r( $matchesAchors , true );
-//    $content .= print_r( $matches , true );
-
 	return $content;
 }
 
 function compressHTML( $html ) {
 	$search = array(
-		'/\n/', // replace end of line by a space
-		'/\>[^\S ]+/s', // strip whitespaces after tags, except space
-		'/[^\S ]+\</s', // strip whitespaces before tags, except space
+		'/\>[^\S\n ]+/s', // strip whitespaces after tags, except space
+		'/[^\S\n ]+\</s', // strip whitespaces before tags, except space
 		'/(\s)+/s'  // shorten multiple whitespace sequences
 	);
 
 	$replace = array(
-		' ',
 		'>',
 		'<',
 		'\\1'
