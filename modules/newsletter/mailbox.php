@@ -126,7 +126,15 @@ if ( $module->isCurrentAction( 'SubmitMailbox' ) ) {
 	} elseif ( $viewParameters['status'] == 'inactive' ) {
 		$conds['is_activated'] = false;
 	}
-	$tpl->setVariable( 'mailbox_list', OWNewsletterMailbox::fetchList( $conds ) );
+	
+	$limit = 10;
+	$limitArray = array( 10, 10, 25, 50 );
+	$limitArrayKey = eZPreferences::value( 'admin_mailbox_list_limit' );
+	if ( isset( $limitArray[$limitArrayKey] ) ) {
+		$limit = $limitArray[$limitArrayKey];
+	}
+	
+	$tpl->setVariable( 'mailbox_list', OWNewsletterMailbox::fetchList( $conds, $limit, $viewParameters[ 'offset' ] ) );
 	$tpl->setVariable( 'all_mailbox_list_count', OWNewsletterMailbox::countList() );
 	$tpl->setVariable( 'mailbox_list_count', OWNewsletterMailbox::countList( $conds ) );
 }
