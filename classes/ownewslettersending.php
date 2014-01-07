@@ -64,6 +64,11 @@ class OWNewsletterSending extends eZPersistentObject {
 					'datatype' => 'integer',
 					'default' => 0,
 					'required' => true ),
+				'modified' => array(
+					'name' => 'Modified',
+					'datatype' => 'integer',
+					'default' => 0,
+					'required' => true ),
 				'waiting_for_process' => array(
 					'name' => 'WaitingForProcess',
 					'datatype' => 'integer',
@@ -194,7 +199,7 @@ class OWNewsletterSending extends eZPersistentObject {
 					'bounced' => array( '>', 0 )
 				) );
 		$itemsSendInPersent = 0;
-		// catch division by zero
+// catch division by zero
 		if ( $itemsCount > 0 ) {
 			$itemsSendInPersent = round( $itemsSend / $itemsCount * 100, 1 );
 		}
@@ -361,11 +366,13 @@ class OWNewsletterSending extends eZPersistentObject {
 	 * 
 	 * @param OWNewsletterEdition $newsletterEdition
 	 */
-	static function send( OWNewsletterEdition $newsletterEdition ) {
+	static function send( OWNewsletterEdition $newsletterEdition, $sendingDate = 0 ) {
 		$editionContentObjectID = $newsletterEdition->attribute( 'contentobject_id' );
 		$sendingObject = self::fetch( $editionContentObjectID );
 		if ( $sendingObject instanceof self && $sendingObject->attribute( 'status' ) == self::STATUS_DRAFT ) {
-			self::create( $newsletterEdition, self::STATUS_WAIT_FOR_PROCESS );
+			$sendingObject = self::create( $newsletterEdition, self::STATUS_WAIT_FOR_PROCESS );
+			$sendingObject->setAttribute( 'send_date', $sendingDate );
+			$sendingObject->store();
 		}
 	}
 
@@ -394,9 +401,11 @@ class OWNewsletterSending extends eZPersistentObject {
 		$sendingObject = self::fetch( $editionContentObjectID );
 		if ( $sendingObject instanceof self ) {
 			$sendingObject = self::create( $newsletterEdition, $sendingObject->attribute( 'status' ) );
-			$newsletterMail = new OWNewsletterMail();
-			return $newsletterMail->sendNewsletterTestMail( $sendingObject, $testReceiverEmail );
+		} else {
+			$sendingObject = self::create( $newsletterEdition );
 		}
+		$newsletterMail = new OWNewsletterMail();
+		return $newsletterMail->sendNewsletterTestMail( $sendingObject, $testReceiverEmail );
 	}
 
 	/*	 * **********************
@@ -478,7 +487,7 @@ class OWNewsletterSending extends eZPersistentObject {
 		$eZFile = 'file://ezroot/';
 		$body = $newsletterContentArray['body'];
 		foreach ( $body as $id => $value ) {
-			// replace all image src from http => file:\\ezroot\ so OWNewsletterMailComposer will embed it into the mail message
+// replace all image src from http => file:\\ezroot\ so OWNewsletterMailComposer will embed it into the mail message
 			if ( $id === 'html' ) {
 				$newsletterContentArrayNew['body'][$id] = str_replace( "src=\"$eZRoot", "src=\"$eZFile", $value );
 			}

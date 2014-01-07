@@ -558,6 +558,12 @@ $schema = array(
 				'not_null' => true,
 				'default' => false,
 			),
+			'modified' => array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => true,
+				'default' => false,
+			),
 			'status' => array(
 				'length' => 4,
 				'type' => 'tinyint',

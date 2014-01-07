@@ -94,14 +94,20 @@ $ViewList['send'] = array(
 	'default_navigation_part' => 'eznewsletternavigationpart',
 	'params' => array(),
 	'single_post_actions' => array(
-		'SendNewsletterButton' => 'SendNewsletter',
+		'SendNewsletterSoonAsPossibleButton' => 'SendNewsletterSoonAsPossible',
+		'SendNewsletterFromDateButton' => 'SendNewsletterFromDate',
 		'AbortNewsletterButton' => 'AbortNewsletter',
 		'SendNewsletterTestButton' => 'SendNewsletterTest'
 	),
 	'post_action_parameters' => array(
-		'SendNewsletter' => array(
+		'SendNewsletterSoonAsPossible' => array(
 			'ContentNodeID' => 'ContentNodeID',
 			'ContentObjectID' => 'ContentObjectID'
+		),
+		'SendNewsletterFromDate' => array(
+			'ContentNodeID' => 'ContentNodeID',
+			'ContentObjectID' => 'ContentObjectID',
+			'NewsletterSendingDate' => 'NewsletterSendingDate'
 		),
 		'AbortNewsletter' => array(
 			'ContentNodeID' => 'ContentNodeID',

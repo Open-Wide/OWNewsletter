@@ -130,7 +130,7 @@ class OWNewsletterMail {
 		$this->setTransportMethodCronjobFromIni();
 		$sendingItemList = OWNewsletterSendingItem::fetchList( array( 'edition_contentobject_id' => $this->newsletterSending->attribute( 'edition_contentobject_id' ) ), $limit );
 		$sendResult = array();
-		foreach ( $sendingItemList as $sendingItem ) {
+		foreach ( $sendingItemList as $sendingIndex => $sendingItem ) {
 			$sendingItem->sync();
 			if ( $sendingItem->attribute( 'status' ) == OWNewsletterSendingItem::STATUS_NEW ) {
 				$newsletterUser = $sendingItem->attribute( 'newsletter_user' );
@@ -182,8 +182,12 @@ class OWNewsletterMail {
 				$this->resetExtraMailHeaders();
 				$this->setExtraMailHeadersByNewsletterSendItem( $sendingItem );
 
-				$sendResult[] = $this->sendEmail( $receiverEmail, $receiverName );
-				$sendingItem->setAttribute( 'status', OWNewsletterSendingItem::STATUS_SEND );
+				$sendResult[$sendingIndex] = $this->sendEmail( $receiverEmail, $receiverName );
+				if ( $sendResult[$sendingIndex]['send_result'] == false ) {
+					$sendingItem->setAttribute( 'status', OWNewsletterSendingItem::STATUS_ABORT );
+				} else {
+					$sendingItem->setAttribute( 'status', OWNewsletterSendingItem::STATUS_SEND );
+				}
 				$sendingItem->store();
 			}
 		}
@@ -199,53 +203,64 @@ class OWNewsletterMail {
 	 * @return array
 	 */
 	public function sendEmail( $emailReceiver, $emailReceiverName = 'NL Test Receiver', $emailCharset = 'utf-8' ) {
-
 		$transportMethod = $this->transportMethod;
-		//$mail = new ezcMailComposer();
-		$mail = new OWNewsletterMailComposer();
-		$mail->charset = $emailCharset;
-		$mail->subjectCharset = $emailCharset;
-		// from and to addresses, and subject
-		$mail->from = new ezcMailAddress( $this->senderEmail, $this->senderName );
-		// returnpath for email bounces
-		$mail->returnPath = new ezcMailAddress( $this->senderEmail );
+		if ( ezcMailTools::validateEmailAddress( $emailReceiver ) ) {
+			//$mail = new ezcMailComposer();
+			$mail = new OWNewsletterMailComposer();
+			$mail->charset = $emailCharset;
+			$mail->subjectCharset = $emailCharset;
+			// from and to addresses, and subject
+			$mail->from = new ezcMailAddress( $this->senderEmail, $this->senderName );
+			// returnpath for email bounces
+			$mail->returnPath = new ezcMailAddress( $this->senderEmail );
 
-		$mail->addTo( new ezcMailAddress( trim( $emailReceiver ), $emailReceiverName ) );
+			$mail->addTo( new ezcMailAddress( trim( $emailReceiver ), $emailReceiverName ) );
 
-		$mail->subject = $this->subject;
-		if ( !empty( $this->HTMLBody ) ) {
-			$mail->htmlText = $this->HTMLBody;
-		}
-		if ( !empty( $this->plainTextBody ) ) {
-			$mail->plainText = $this->plainTextBody;
-		}
+			$mail->subject = $this->subject;
+			if ( !empty( $this->HTMLBody ) ) {
+				$mail->htmlText = $this->HTMLBody;
+			}
+			if ( !empty( $this->plainTextBody ) ) {
+				$mail->plainText = $this->plainTextBody;
+			}
 
-		// http://ezcomponents.org/docs/api/latest/introduction_Mail.html#mta-qmail
-		// HeaderLineEnding=auto
-		// CRLF - windows - \r\n
-		// CR - mac - \r
-		// LF - UNIX-MACOSX - \n
-		// default LF
-		//ezcMailTools::setLineBreak( "\n" );
-		ezcMailTools::setLineBreak( $this->HeaderLineEnding );
+			// http://ezcomponents.org/docs/api/latest/introduction_Mail.html#mta-qmail
+			// HeaderLineEnding=auto
+			// CRLF - windows - \r\n
+			// CR - mac - \r
+			// LF - UNIX-MACOSX - \n
+			// default LF
+			//ezcMailTools::setLineBreak( "\n" );
+			ezcMailTools::setLineBreak( $this->HeaderLineEnding );
 
-		// set 'x-ownl-' mailheader
-		foreach ( $this->ExtraEmailHeaderItemArray as $key => $value ) {
-			$mail->setHeader( $key, $value );
-		}
+			// set 'x-ownl-' mailheader
+			foreach ( $this->ExtraEmailHeaderItemArray as $key => $value ) {
+				$mail->setHeader( $key, $value );
+			}
 
-		$mail->build();
-		$transport = new OWNewsletterTransport( $transportMethod );
-		$sendResult = $transport->send( $mail );
-		$emailResult = array( 'send_result' => $sendResult,
-			'sender_email' => $this->senderEmail,
-			'email_receiver' => $emailReceiver,
-			'email_subject' => $this->subject,
-			'email_charset' => $emailCharset,
-			'transport_method' => $transportMethod );
-		if ( $sendResult ) {
-			OWNewsletterLog::writeInfo( 'Email send ok', 'OWNewsletterMail', 'sendEmail', $emailResult );
+			$mail->build();
+			$transport = new OWNewsletterTransport( $transportMethod );
+			$sendResult = $transport->send( $mail );
+			$emailResult = array( 
+				'send_result' => $sendResult,
+				'sender_email' => $this->senderEmail,
+				'email_receiver' => $emailReceiver,
+				'email_subject' => $this->subject,
+				'email_charset' => $emailCharset,
+				'transport_method' => $transportMethod );
+			if ( $sendResult ) {
+				OWNewsletterLog::writeInfo( 'Email send ok', 'OWNewsletterMail', 'sendEmail', $emailResult );
+			} else {
+				OWNewsletterLog::writeError( 'Email send failed', 'OWNewsletterMail', 'sendEmail', $emailResult );
+			}
 		} else {
+			$emailResult = array( 
+				'send_result' => false,
+				'sender_email' => $this->senderEmail,
+				'email_receiver' => $emailReceiver,
+				'email_subject' => $this->subject,
+				'email_charset' => $emailCharset,
+				'transport_method' => $transportMethod );
 			OWNewsletterLog::writeError( 'Email send failed', 'OWNewsletterMail', 'sendEmail', $emailResult );
 		}
 		return $emailResult;

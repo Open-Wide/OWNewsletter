@@ -178,6 +178,46 @@
         <source>You must choose a list for subscription.</source>
         <translation>Vous devez sélectionner au moins une newsletter.</translation>
     </message>
+    <message>
+        <source>Node not found.</source>
+        <translation>Noeud non trouvé.</translation>
+    </message>
+    <message>
+        <source>Newsletter configuration not found.</source>
+        <translation>La configuration de la newsletter est manquante.</translation>
+    </message>
+    <message>
+        <source>Newsletter edition configuration not found.</source>
+        <translation>La configuration de l&apos; édition de newsletter est manquante.</translation>
+    </message>
+    <message>
+        <source>Content node ID is missing.</source>
+        <translation>Le nodeID est manquant.</translation>
+    </message>
+    <message>
+        <source>Content object nor found.</source>
+        <translation>Contenu non trouvé.</translation>
+    </message>
+    <message>
+        <source>Content object ID is missing.</source>
+        <translation>Le contentObjectID est manquant.</translation>
+    </message>
+    <message>
+        <source>E-mail receivers are missing.</source>
+        <translation>Les e-mails des destinataires sont manquants.</translation>
+    </message>
+    <message>
+        <source>The sending date has no good format. Wanted YYYY-MM-DD.</source>
+        <translation>La date d'envoi de la newsletter n&apos; a pas le bon format. AAAA-MM-JJ demandé.</translation>
+    </message>
+    <message>
+        <source>Sending date is missing.</source>
+        <translation>La date l'envoi de la newsletter est manquante.</translation>
+    </message>
+    <message>
+        <source>The sending at this address failed: %address.</source>
+        <translation>L&apos;envoi à cette adresse a échoué : %address.</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/user</name>
@@ -540,15 +580,19 @@
 <context>
     <name>newsletter/send</name>
     <message>
-        <source>Send Test Newsletter</source>
+        <source>Send test newsletter</source>
         <translation>Envoyer la newsletter de test</translation>
     </message>
     <message>
-        <source>Send Newsletter</source>
-        <translation>Envoyer la newsletter</translation>
+        <source>Send newsletter soon as possible</source>
+        <translation>Envoyer la newsletter dès que possible</translation>
     </message>
     <message>
-        <source>Abort Newsletter</source>
+        <source>Send newsletter from this date</source>
+        <translation>Envoyer la newsletter à partir de cette date</translation>
+    </message>
+    <message>
+        <source>Abort newsletter</source>
         <translation>Annuler l'envoi de la newsletter</translation>
     </message>
 </context>
@@ -687,6 +731,45 @@
     <message>
         <source>E-mail subject</source>
         <translation>Sujet de l&apos;e-mail</translation>
+    </message>
+</context>
+<context>
+    <name>newsletter/send</name>
+    <message>
+        <source>Newsletter sending</source>
+        <translation>Envoi de la newsletter</translation>
+    </message>
+    <message>
+        <source>An error occurred during the sending of the newsletter</source>
+        <translation>Une erreur s'est poduite lors de l&apos;envoi de la newsletter</translation>
+    </message>
+    <message>
+        <source>The newsletter will be sent as soon as possible.</source>
+        <translation>La newsletter sera envoyé dès que possible.</translation>
+    </message>
+    <message>
+        <source>The newsletter will be sent from %sending_date.</source>
+        <translation>La newsletter sera envoyé à partir du %sending_date.</translation>
+    </message>
+    <message>
+        <source>An error occurred during the cancellation of the sending of the newsletter</source>
+        <translation>Une erreur s'est poduite lors de l&apos;annulation de l&apos;envoi de la newsletter</translation>
+    </message>
+    <message>
+        <source>The sending of the newsletter was cancelled.</source>
+        <translation>L&apos;envoi de la newsletter a été annulé.</translation>
+    </message>
+    <message>
+        <source>An error occurred during the sending of the newsletter of test</source>
+        <translation>Une erreur s'est poduite lors de l&apos;envoi de la newsletter de test</translation>
+    </message>
+    <message>
+        <source>The newsletter of test was successfully sent to these addresses: %addresses.</source>
+        <translation>La newsletter a été envoyé avec succès à ces adresses : %addresses.</translation>
+    </message>
+    <message>
+        <source>Back to newsletter</source>
+        <translation>Retour à la newsletter</translation>
     </message>
 </context>
 <context>

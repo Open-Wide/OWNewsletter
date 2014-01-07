@@ -138,14 +138,16 @@
 								<div class="block">
 									<div class="left">
 										<input type="text" name="TestReceiverEmail" value="{$newsletter_edition.newsletter.test_receiver_email_list|implode(';')}"  title="test1@example.com;test2@example.com" />
-										<input type="submit" class="defaultbutton" name="SendNewsletterTestButton" value="{"Send Test Newsletter"|i18n("newsletter/send")}">
+										<input type="submit" class="defaultbutton" name="SendNewsletterTestButton" value="{"Send test newsletter"|i18n("newsletter/send")}">
 									</div>
 									<div class="right">
 										{if $newsletter_edition.status|eq('draft')}
-											<input class="button" type="submit" name="SendNewsletterButton" value="{"Send Newsletter"|i18n("newsletter/send")}" />
+											<input class="button" type="submit" name="SendNewsletterSoonAsPossibleButton" value="{"Send newsletter soon as possible"|i18n("newsletter/send")}" /><br />
+											<input type="text" name="NewsletterSendingDate" value="" title="format YYYY-MM-DD">
+											<input class="button" type="submit" name="SendNewsletterFromDateButton" value="{"Send newsletter from this date"|i18n("newsletter/send")}" />
 										{/if}
 										{if $newsletter_edition.status|eq('process')}
-											<input class="button" type="submit" name="AbortNewsletterButton" value="{"Abort Newsletter"|i18n("newsletter/send")}" />
+											<input class="button" type="submit" name="AbortNewsletterButton" value="{"Abort newsletter"|i18n("newsletter/send")}" />
 										{/if}
 									</div>
 									<div class="break">
