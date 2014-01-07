@@ -2,7 +2,8 @@
  
 [ExtensionSettings]
 DesignExtensions[]=ownewsletter
-FrontendCSSFileList[]=newsletter.css
+
+[StylesheetSettings]
 BackendCSSFileList[]=newsletter.css
 
 
