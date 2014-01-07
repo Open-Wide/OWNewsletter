@@ -22,13 +22,13 @@
 .icon_s_confirmed {
 	background:-32px top;
 }
-.icon_s_approved {
+.icon_s_approved, .icon_mb_active {
 	background:-64px top;
 }
 .icon_s_removed, .icon_s_removed_by_user {
 	background:-96px top;
 }
-.icon_s_removed_by_admin {
+.icon_s_removed_by_admin, .icon_mb_inactive {
 	background:-128px top;
 }
 .icon_s_bounced, .icon_s_bounced_hard, .icon_s_bounced_soft {

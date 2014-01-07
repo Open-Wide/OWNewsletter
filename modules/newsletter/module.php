@@ -9,7 +9,8 @@ $ViewList['index'] = array(
 	'script' => 'index.php',
 	'functions' => array( 'index' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
-	'params' => array() );
+	'params' => array()
+);
 
 $ViewList['user'] = array(
 	'script' => 'user.php',
@@ -153,7 +154,46 @@ $ViewList['preview'] = array(
 	'script' => 'preview.php',
 	'functions' => array( 'preview' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
-	'params' => array( 'EditionContentobjectId' ) );
+	'params' => array(
+		'EditionContentobjectId'
+	)
+);
+
+$ViewList['mailbox'] = array(
+	'script' => 'mailbox.php',
+	'functions' => array( 'manage_mailbox' ),
+	'default_navigation_part' => 'eznewsletternavigationpart',
+	'params' => array( 'mailboxID'),
+	'single_post_actions' => array(
+		'CancelButton' => 'Cancel',
+		'SubmitMailboxButton' => 'SubmitMailbox',
+		'DisableMailboxButton' => 'DisableMailbox',
+		'EnableMailboxButton' => 'EnableMailbox',
+		'RemoveMailboxButton' => 'RemoveMailbox'
+	),
+	'post_action_parameters' => array(
+		'Cancel' => array(
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel'
+		),
+		'SubmitMailbox' => array(
+			'Mailbox' => 'Mailbox',
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		),
+		'DisableMailbox' => array(
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		),
+		'EnableMailbox' => array(
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		),
+		'RemoveMailbox' => array(
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		),
+	)
+);
 
 $FunctionList['subscribe'] = array();
 $FunctionList['configure'] = array();

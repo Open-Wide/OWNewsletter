@@ -50,6 +50,10 @@
         <source>Sending</source>
         <translation>Envoi</translation>
     </message>
+    <message>
+        <source>Mailboxes</source>
+        <translation>Boîtes de réception</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/menu</name>
@@ -774,6 +778,108 @@
     <message>
         <source>Back to newsletter</source>
         <translation>Retour à la newsletter</translation>
+    </message>
+</context>
+<context>
+	<name>newsletter/mailbox</name>
+    <message>
+        <source>Mailboxes</source>
+        <translation>Boîtes de réception</translation>
+    </message>
+    <message>
+        <source>Create mailbox</source>
+        <translation>Ajouter un boîte de réception</translation>
+    </message>
+    <message>
+        <source>E-mail</source>
+        <translation>E-mail</translation>
+    </message>
+    <message>
+        <source>Server</source>
+        <translation>Serveur</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Port</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>Utilisateur</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Mot de passe</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Type</translation>
+    </message>
+    <message>
+        <source>SSL</source>
+        <translation>SSL</translation>
+    </message>
+    <message>
+        <source>Delete e-mails from server</source>
+        <translation>Supprimer les e-mails du serveur</translation>
+    </message>
+    <message>
+        <source>Last connexion</source>
+        <translation>Dernière connexion</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation>Oui</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation>Non</translation>
+    </message>
+    <message>
+        <source>n/a</source>
+        <translation>n/a</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation>Modifier</translation>
+    </message>
+    <message>
+        <source>Disable</source>
+        <translation>Désactiver</translation>
+    </message>
+    <message>
+        <source>Enable</source>
+        <translation>Activer</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Supprimer</translation>
+    </message>
+    <message>
+        <source>Do you really want to delete this mailbox?</source>
+        <translation>Voulez-vous vraiment supprimer cette boîte de réception ?</translation>
+    </message>
+    <message>
+        <source>No mailbox</source>
+        <translation>Aucune boîte de réception</translation>
+    </message>
+    <message>
+        <source>Store and exit</source>
+        <translation>Enregistrer</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+</context>
+<context>
+	<name>newsletter/mailbox/status</name>
+    <message>
+        <source>Active</source>
+        <translation>Activée</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Désactivée</translation>
     </message>
 </context>
 <context>

@@ -716,6 +716,73 @@ $schema = array(
 			),
 		),
 	),
+	'ownl_mailbox' =>	array(
+		'name' => 'ownl_mailbox',
+		'fields' => array(
+			'id' => array(
+				'type' => 'auto_increment',
+				'default' => false,
+			),
+			'email' => array(
+				'length' => 255,
+				'type' => 'varchar',
+				'default' => NULL,
+			),
+			'server' => array(
+				'length' => 255,
+				'type' => 'varchar',
+				'default' => NULL,
+			),
+			'port' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+			'username' => array(
+				'length' => 255,
+				'type' => 'varchar',
+				'default' => NULL,
+			),
+			'password' => array(
+				'length' => 255,
+				'type' => 'varchar',
+				'default' => NULL,
+			),
+			'type' => array(
+				'length' => 10,
+				'type' => 'varchar',
+				'default' => 'imap',
+			),
+			'delete_mails_from_server' => array(
+				'length' => 1,
+				'type' => 'tinyint',
+				'not_null' => '1',
+				'default' => '0',
+			),
+			'is_ssl' => array(
+				'length' => 1,
+				'type' => 'tinyint',
+				'not_null' => '1',
+				'default' => '0',
+			),
+			'is_activated' => array(
+				'length' => 1,
+				'type' => 'tinyint',
+				'default' => '1',
+			),
+			'last_server_connect' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+		),
+		'indexes' => array(
+			'PRIMARY' => array(
+				'type' => 'primary',
+				'fields' => array( 'id' ),
+			),
+		),
+	),
 	'_info' => array(
 		'format' => 'generic',
 	),
