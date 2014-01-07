@@ -4,6 +4,9 @@ $module = $Params['Module'];
 $http = eZHTTPTool::instance();
 $tpl = eZTemplate::factory();
 $errors = array();
+
+$Result['path'] = array();
+
 /* Retrieval parameters */
 if ( $module->hasActionParameter( 'ContentNodeID' ) ) {
 	$contentNodeID = $module->actionParameter( 'ContentNodeID' );
@@ -19,6 +22,16 @@ if ( $module->hasActionParameter( 'ContentNodeID' ) ) {
 				break;
 			}
 		}
+		foreach ( $contentNode->attribute( 'path' ) as $path ) {
+			$Result['path'][] = array(
+				'url' => $path->attribute( 'url_alias' ),
+				'text' => $path->attribute( 'name' )
+			);
+		}
+		$Result['path'][] = array(
+				'url' => $contentNode->attribute( 'url_alias' ),
+				'text' => $contentNode->attribute( 'name' )
+			);
 		$contentParentNode = $contentNode->attribute( 'parent' );
 		$contentParentNodeDataMap = $contentParentNode->dataMap();
 		foreach ( $contentParentNodeDataMap as $attribute ) {
@@ -90,7 +103,7 @@ if ( !empty( $errors ) ) {
 	foreach ( $sendingResultList as $sendingResult ) {
 		if ( $sendingResult['send_result'] == false ) {
 			$errors[] = ezpI18n::tr( 'newsletter/warning_message', 'The sending at this address failed: %address.', null, array(
-				'%address' => $sendingResult['email_receiver'] ) );
+						'%address' => $sendingResult['email_receiver'] ) );
 			$tpl->setVariable( 'errors', $errors );
 		}
 	}
@@ -98,10 +111,12 @@ if ( !empty( $errors ) ) {
 }
 
 $Result['content'] = $tpl->fetch( "design:newsletter/send.tpl" );
-$Result['path'] = array(
-	array(
-		'url' => false,
-		'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Newsletter' ) ),
-	array(
-		'url' => false,
-		'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Dashboard' ) ) );
+
+$Result['path'][] = array(
+	'url' => false,
+	'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Newsletter' )
+);
+$Result['path'][] = array(
+	'url' => false,
+	'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Sending' )
+);

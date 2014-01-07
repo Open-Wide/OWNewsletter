@@ -44,7 +44,11 @@
     </message>
     <message>
         <source>Subscribe</source>
-        <translation>S'abonner</translation>
+        <translation>S&apos;abonner</translation>
+    </message>
+    <message>
+        <source>Sending</source>
+        <translation>Envoi</translation>
     </message>
 </context>
 <context>
@@ -208,11 +212,11 @@
     </message>
     <message>
         <source>The sending date has no good format. Wanted YYYY-MM-DD.</source>
-        <translation>La date d'envoi de la newsletter n&apos; a pas le bon format. AAAA-MM-JJ demandé.</translation>
+        <translation>La date d&apos;envoi de la newsletter n&apos; a pas le bon format. AAAA-MM-JJ demandé.</translation>
     </message>
     <message>
         <source>Sending date is missing.</source>
-        <translation>La date l'envoi de la newsletter est manquante.</translation>
+        <translation>La date l&apos;envoi de la newsletter est manquante.</translation>
     </message>
     <message>
         <source>The sending at this address failed: %address.</source>
@@ -593,7 +597,7 @@
     </message>
     <message>
         <source>Abort newsletter</source>
-        <translation>Annuler l'envoi de la newsletter</translation>
+        <translation>Annuler l&apos;envoi de la newsletter</translation>
     </message>
 </context>
 <context>
@@ -604,7 +608,7 @@
     </message>
     <message>
         <source>If you no longer wish to receive e-mail from our website, confirm your unsubscribe from our mailing lists.</source>
-        <translation>Si vous ne souhaitez plus recevoir d'e-mail de notre site, confirmer votre désabonnement à nos listes de diffusions</translation>
+        <translation>Si vous ne souhaitez plus recevoir d&apos;e-mail de notre site, confirmer votre désabonnement à nos listes de diffusions</translation>
     </message>
     <message>
         <source>Unsubscribe from all lists.</source>
@@ -635,7 +639,7 @@
     <name>newsletter/subscribe</name>
     <message>
         <source>Subscribe</source>
-        <translation>S'abonner</translation>
+        <translation>S&apos;abonner</translation>
     </message>
     <message>
         <source>No newsletter available.</source>
@@ -741,7 +745,7 @@
     </message>
     <message>
         <source>An error occurred during the sending of the newsletter</source>
-        <translation>Une erreur s'est poduite lors de l&apos;envoi de la newsletter</translation>
+        <translation>Une erreur s&apos;est poduite lors de l&apos;envoi de la newsletter</translation>
     </message>
     <message>
         <source>The newsletter will be sent as soon as possible.</source>
@@ -753,7 +757,7 @@
     </message>
     <message>
         <source>An error occurred during the cancellation of the sending of the newsletter</source>
-        <translation>Une erreur s'est poduite lors de l&apos;annulation de l&apos;envoi de la newsletter</translation>
+        <translation>Une erreur s&apos;est poduite lors de l&apos;annulation de l&apos;envoi de la newsletter</translation>
     </message>
     <message>
         <source>The sending of the newsletter was cancelled.</source>
@@ -761,7 +765,7 @@
     </message>
     <message>
         <source>An error occurred during the sending of the newsletter of test</source>
-        <translation>Une erreur s'est poduite lors de l&apos;envoi de la newsletter de test</translation>
+        <translation>Une erreur s&apos;est poduite lors de l&apos;envoi de la newsletter de test</translation>
     </message>
     <message>
         <source>The newsletter of test was successfully sent to these addresses: %addresses.</source>
@@ -1081,7 +1085,7 @@
     </message>
     <message>
         <source>E-mails count</source>
-        <translation>Nombre d'e-mails</translation>
+        <translation>Nombre d&apos;e-mails</translation>
     </message>
     <message>
         <source>E-mails sent</source>
@@ -1105,19 +1109,19 @@
     </message>
     <message>
         <source>E-mail queue creation</source>
-        <translation>Création de la file d'attente de messagerie</translation>
+        <translation>Création de la file d&apos;attente de messagerie</translation>
     </message>
     <message>
         <source>E-mail queue process start</source>
-        <translation>Début du traitement de la file d'attente</translation>
+        <translation>Début du traitement de la file d&apos;attente</translation>
     </message>
     <message>
         <source>E-mail queue process finish</source>
-        <translation>Fin du traitement de la file d'attente</translation>
+        <translation>Fin du traitement de la file d&apos;attente</translation>
     </message>
     <message>
         <source>Abort</source>
-        <translation>Annulation de l'envoi</translation>
+        <translation>Annulation de l&apos;envoi</translation>
     </message>
     <message>
         <source>n/a</source>
