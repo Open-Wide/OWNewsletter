@@ -1044,5 +1044,20 @@
         <source>E-mails</source>
         <translation>E-mails</translation>
     </message>
+    <message>
+        <source>Full screen</source>
+        <translation>Plein écran</translation>
+    </message>
+</context>
+<context>
+	<name>newsletter/skin/default</name>
+    <message>
+        <source>To unsubscribe from this newsletter please visit the following link</source>
+        <translation>Pour se désabonner de cette newsletter, veuillez visiter le lien suivant</translation>
+    </message>
+    <message>
+        <source>unsubscribe</source>
+        <translation>se désabonner</translation>
+    </message>
 </context>
 </TS>
