@@ -4,8 +4,12 @@
  * Cronjob newsletter_mailqueue_process.php
  */
 // Get all wait for process sending
-$sendingList = OWNewsletterSending::fetchList( array( 'status' => array( array( OWNewsletterSending::STATUS_WAIT_FOR_PROCESS,
-					OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_STARTED ) ) ) );
+$sendingList = OWNewsletterSending::fetchList( array(
+			'status' => array( array(
+					OWNewsletterSending::STATUS_WAIT_FOR_PROCESS,
+					OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_STARTED ) ),
+			'send_date' => array( '<=', time() )
+		) );
 
 // Create newsletterTracking object
 $newsletterTracking = OWNewsletterTracking::create();
@@ -25,9 +29,9 @@ foreach ( $sendingList as $sending ) {
 
 	$noSentItemCount = OWNewsletterSendingItem::countList( array(
 				'edition_contentobject_id' => $sending->attribute( 'edition_contentobject_id' ),
-				'status' => OWNewsletterSendingItem::STATUS_NEW 
+				'status' => OWNewsletterSendingItem::STATUS_NEW
 			) );
-	if( $noSentItemCount == 0 ) {
+	if ( $noSentItemCount == 0 ) {
 		$sending->setAttribute( 'status', OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_FINISHED );
 		$sending->store();
 	}
