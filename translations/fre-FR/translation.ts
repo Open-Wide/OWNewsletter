@@ -890,8 +890,8 @@
         <translation type="untranslated"></translation>
     </message>
     <message>
-        <source>Collect emails from bounce accounts and parse them. You may then accept the detected bounce status or manually adjust it.</source>
-        <translation>Revelever les e-mails à partir des boîtes de réception et les analyser. Vous pouvez alors accepter le statut de bounce détecté ou manuellement ajuster.</translation>
+        <source>Collect emails from bounce accounts and parse them.</source>
+        <translation>Revelever les e-mails à partir des boîtes de réception et les analyser.</translation>
     </message>
     <message>
         <source>Mailbox collect mail result</source>

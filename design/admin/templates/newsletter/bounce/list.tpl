@@ -35,7 +35,7 @@
                 <div class="box-content">
                     <div class="context-attributes">
                         <p>
-							{'Collect emails from bounce accounts and parse them. You may then accept the detected bounce status or manually adjust it.'|i18n( 'newsletter/bounce' )}
+							{'Collect emails from bounce accounts and parse them.'|i18n( 'newsletter/bounce' )}
                         </p>
                         <div class="block float-break">
                             {if is_set( $collect_mail_result )}<h3>{'Mailbox collect mail result'|i18n( 'newsletter/bounce' )}</h3>
