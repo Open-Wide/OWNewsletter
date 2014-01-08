@@ -1,5 +1,5 @@
 {def $page_uri = 'newsletter/blacklist'}
-<div class="newsletter newsletter-mailbox_item_list">
+<div class="newsletter newsletter-blacklist_list">
     <div class="context-block">
         <div class="box-header">
             <div class="box-tc">
