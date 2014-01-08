@@ -29,9 +29,9 @@ if ( $module->hasActionParameter( 'ContentNodeID' ) ) {
 			);
 		}
 		$Result['path'][] = array(
-				'url' => $contentNode->attribute( 'url_alias' ),
-				'text' => $contentNode->attribute( 'name' )
-			);
+			'url' => $contentNode->attribute( 'url_alias' ),
+			'text' => $contentNode->attribute( 'name' )
+		);
 		$contentParentNode = $contentNode->attribute( 'parent' );
 		$contentParentNodeDataMap = $contentParentNode->dataMap();
 		foreach ( $contentParentNodeDataMap as $attribute ) {
@@ -92,22 +92,46 @@ if ( !empty( $errors ) ) {
 	}
 	$tpl->setVariable( 'errors', $errors );
 } elseif ( $module->isCurrentAction( 'SendNewsletterSoonAsPossible' ) ) {
-	OWNewsletterSending::send( $newsletterEdition );
-} elseif ( $module->isCurrentAction( 'SendNewsletterFromDate' ) ) {
-	OWNewsletterSending::send( $newsletterEdition, $newsletterSendingDate );
-	$tpl->setVariable( 'newsletter_sending_date', $newsletterSendingDate );
-} elseif ( $module->isCurrentAction( 'AbortNewsletter' ) ) {
-	OWNewsletterSending::abort( $newsletterEdition );
-} elseif ( $module->isCurrentAction( 'SendNewsletterTest' ) ) {
-	$sendingResultList = OWNewsletterSending::sendTest( $newsletterEdition, $testReceiverEmail );
-	foreach ( $sendingResultList as $sendingResult ) {
-		if ( $sendingResult['send_result'] == false ) {
-			$errors[] = ezpI18n::tr( 'newsletter/warning_message', 'The sending at this address failed: %address.', null, array(
-						'%address' => $sendingResult['email_receiver'] ) );
-			$tpl->setVariable( 'errors', $errors );
-		}
+	try {
+		OWNewsletterSending::send( $newsletterEdition );
+	} catch ( OWNewsletterException $e ) {
+		$errors[] = ezpI18n::tr( 'newsletter/warning_message', 'Sending failed: %message', null, array(
+					'%message' => $e->getMessage() ) );
+		$tpl->setVariable( 'errors', $errors );
 	}
-	$tpl->setVariable( 'test_receiver_email', $testReceiverEmail );
+} elseif ( $module->isCurrentAction( 'SendNewsletterFromDate' ) ) {
+	try {
+		OWNewsletterSending::send( $newsletterEdition, $newsletterSendingDate );
+		$tpl->setVariable( 'newsletter_sending_date', $newsletterSendingDate );
+	} catch ( OWNewsletterException $e ) {
+		$errors[] = ezpI18n::tr( 'newsletter/warning_message', 'Sending failed: %message', null, array(
+					'%message' => $e->getMessage() ) );
+		$tpl->setVariable( 'errors', $errors );
+	}
+} elseif ( $module->isCurrentAction( 'AbortNewsletter' ) ) {
+	try {
+		OWNewsletterSending::abort( $newsletterEdition );
+	} catch ( OWNewsletterException $e ) {
+		$errors[] = ezpI18n::tr( 'newsletter/warning_message', 'Sending failed: %message', null, array(
+					'%message' => $e->getMessage() ) );
+		$tpl->setVariable( 'errors', $errors );
+	}
+} elseif ( $module->isCurrentAction( 'SendNewsletterTest' ) ) {
+	try {
+		$sendingResultList = OWNewsletterSending::sendTest( $newsletterEdition, $testReceiverEmail );
+		foreach ( $sendingResultList as $sendingResult ) {
+			if ( $sendingResult['send_result'] == false ) {
+				$errors[] = ezpI18n::tr( 'newsletter/warning_message', 'The sending at this address failed: %address.', null, array(
+							'%address' => $sendingResult['email_receiver'] ) );
+				$tpl->setVariable( 'errors', $errors );
+			}
+		}
+		$tpl->setVariable( 'test_receiver_email', $testReceiverEmail );
+	} catch ( OWNewsletterException $e ) {
+		$errors[] = ezpI18n::tr( 'newsletter/warning_message', 'Sending failed: %message', null, array(
+					'%message' => $e->getMessage() ) );
+		$tpl->setVariable( 'errors', $errors );
+	}
 }
 
 $Result['content'] = $tpl->fetch( "design:newsletter/send.tpl" );
