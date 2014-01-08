@@ -1,7 +1,6 @@
 <?php
 
 $module = $Params['Module'];
-$http = eZHTTPTool::instance();
 $tpl = eZTemplate::factory();
 $template = "design:newsletter/mailbox/list.tpl";
 
@@ -48,14 +47,15 @@ $mailboxRow = array(
 	'password' => '',
 	'type' => '',
 	'is_activated' => true,
-	'is_ssl' => true,
-	'delete_mails_from_server' => true
+	'is_ssl' => false,
+	'delete_mails_from_server' => false
 );
 if ( $Params['mailboxID'] && is_numeric( $Params['mailboxID'] ) ) {
 	$mailbox = OWNewsletterMailbox::fetch( $Params['mailboxID'] );
 	if ( $mailbox instanceof OWNewsletterMailbox ) {
 		$mailboxRow['id'] = $Params['mailboxID'];
 		$mailboxRow['last_server_connect'] = $mailbox->attribute( 'last_server_connect' );
+		$mailboxRow['is_activated'] = $mailbox->attribute( 'is_activated' );
 	} else {
 		unset( $mailbox );
 	}
@@ -66,7 +66,6 @@ if ( $module->hasActionParameter( 'Mailbox' ) ) {
 	$mailboxData = $module->actionParameter( 'Mailbox' );
 	foreach ( $mailboxData as $data => $value ) {
 		switch ( $data ) {
-			case 'is_activated':
 			case 'is_ssl':
 			case 'delete_mails_from_server' :
 				$mailboxRow[$data] = (boolean) $value;
