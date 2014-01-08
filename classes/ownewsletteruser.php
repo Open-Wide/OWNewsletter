@@ -279,7 +279,7 @@ class OWNewsletterUser extends eZPersistentObject {
 		$isOnBlacklist = OWNewsletterBlacklistItem::isEmailOnBlacklist( $this->attribute( 'email' ) );
 		if ( $isOnBlacklist ) {
 			// fix up status blacklisted if it is not set
-			if ( $status != CjwNewsletterUser::STATUS_BLACKLISTED ) {
+			if ( $status != OWNewsletterUser::STATUS_BLACKLISTED ) {
 				$this->setBlacklisted();
 				return true;
 			} else {
@@ -549,6 +549,12 @@ class OWNewsletterUser extends eZPersistentObject {
 		if ( isset( $conds['subscription'] ) ) {
 			$custom_tables = array( 'ownl_subscription' );
 			$custom_conds = ' AND ownl_user.id = ownl_subscription.newsletter_user_id';
+			foreach ( $conds as $field => $value ) {
+				if ( $field != 'subscription' ) {
+					$conds["ownl_user.$field"] = $value;
+					unset( $conds[$field] );
+				}
+			}
 			foreach ( $conds['subscription'] as $field => $value ) {
 				$conds["ownl_subscription.$field"] = $value;
 			}
@@ -695,6 +701,36 @@ class OWNewsletterUser extends eZPersistentObject {
 		} else {
 			$this->setAttribute( 'status', self::STATUS_REMOVED_SELF );
 			$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_REMOVED_SELF );
+		}
+		$this->store();
+	}
+
+	/**
+	 * Mark the user as bounced
+	 * 
+	 * @param boolean $isHardBounce
+	 * @return unknown_type
+	 */
+	public function setBounced( $isHardBounce = false ) {
+		$newsletterIni = eZINI::instance( 'newsletter.ini' );
+		$bounceThresholdValue = (int) $newsletterIni->variable( 'BounceSettings', 'BounceThresholdValue' );
+		$userBouncCount = $this->attribute( 'bounce_count' ) + 1;
+		$this->setAttribute( 'bounce_count', $userBouncCount );
+
+		OWNewsletterLog::writeDebug(
+				'OWNewsletterUser::setBounced', 'user', 'bounce_count', array( 'nl_user' => $this->attribute( 'id' ),
+			'bounce_count' => $userBouncCount ) );
+
+
+		// set all subscriptions and all open senditems to bounced
+		if ( $userBouncCount >= $bounceThresholdValue ) {
+			if ( $isHardBounce === true ) {
+				$this->setAttribute( 'status', self::STATUS_BOUNCED_HARD );
+				$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_BOUNCED_HARD );
+			} else {
+				$this->setAttribute( 'status', self::STATUS_BOUNCED_SOFT );
+				$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_BOUNCED_SOFT );
+			}
 		}
 		$this->store();
 	}
@@ -866,7 +902,7 @@ class OWNewsletterUser extends eZPersistentObject {
 		}
 		parent::remove( $conditions, $extraConditions );
 	}
-	
+
 	public function sendSubscriptionConfirmationMail() {
 		//TODO
 	}

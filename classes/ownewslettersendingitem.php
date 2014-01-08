@@ -142,6 +142,18 @@ class OWNewsletterSendingItem extends eZPersistentObject {
 	}
 
 	/**
+	 * Return object by hash
+	 *
+	 * @param string $hash
+	 * @return object
+	 */
+	static function fetchByHash( $hash ) {
+		$object = eZPersistentObject::fetchObject( self::definition(), null, array(
+					'hash' => $hash ), true );
+		return $object;
+	}
+
+	/**
 	 * Search all objects with custom conditions
 	 *
 	 * @param array $conds
@@ -198,7 +210,7 @@ class OWNewsletterSendingItem extends eZPersistentObject {
 					}
 
 					OWNewsletterLog::writeDebug(
-							'set status - OWNewsletterSendingItem::setAttribute', 'send_item', $this->attribute( 'id' ), array(
+							'set status - OWNewsletterSendingItem::setAttribute', 'send_item', $this->attribute( 'edition_contentobject_id' ), array(
 						'status_old' => $this->attribute( 'status' ),
 						'status_new' => $value,
 						'nl_user' => $this->attribute( 'newsletter_user_id' ) ) );

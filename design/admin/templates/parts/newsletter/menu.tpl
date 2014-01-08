@@ -14,7 +14,7 @@
         <ul>
             <li><a href={'/newsletter/user/'|ezurl}>{'Users'|i18n( 'newsletter/menu' )}{* User search*}</a></li>
             <li><a href={'/newsletter/blacklist'|ezurl}>{'Blacklists'|i18n( 'newsletter/menu' )}</a></li>
-            <li><a href={'/newsletter/mailbox_item_list'|ezurl}>{'Bounces'|i18n( 'newsletter/menu' )}</a></li>
+            <li><a href={'/newsletter/bounce'|ezurl}>{'Bounces'|i18n( 'newsletter/menu' )}</a></li>
         </ul>
 
     {* DESIGN: Content END *}</div></div></div></div></div></div>

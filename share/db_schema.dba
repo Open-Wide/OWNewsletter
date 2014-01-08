@@ -716,7 +716,7 @@ $schema = array(
 			),
 		),
 	),
-	'ownl_mailbox' =>	array(
+	'ownl_mailbox' => array(
 		'name' => 'ownl_mailbox',
 		'fields' => array(
 			'id' => array(
@@ -771,6 +771,87 @@ $schema = array(
 				'default' => '1',
 			),
 			'last_server_connect' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+		),
+		'indexes' => array(
+			'PRIMARY' => array(
+				'type' => 'primary',
+				'fields' => array( 'id' ),
+			),
+		),
+	),
+	'ownl_bounce' => array(
+		'name' => 'ownl_bounce',
+		'fields' => array(
+			'id' => array(
+				'type' => 'auto_increment',
+				'default' => false,
+			),
+			'mailbox_id' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+			'message_id' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+			'message_identifier' => array(
+				'length' => 50,
+				'type' => 'varchar',
+				'default' => NULL,
+			),
+			'message_size' => array(
+				'length' => 11,
+				'type' => 'int',
+				'not_null' => '1',
+				'default' => 0,
+			),
+			'created' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+			'processed' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+			'newsletter_user_id' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+			'edition_contentobject_id' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+			'bounce_code' => array(
+				'length' => 255,
+				'type' => 'varchar',
+				'default' => NULL,
+			),
+			'email_from' => array(
+				'length' => 255,
+				'type' => 'varchar',
+				'default' => NULL,
+			),
+			'email_to' => array(
+				'length' => 255,
+				'type' => 'varchar',
+				'default' => NULL,
+			),
+			'email_subject' => array(
+				'length' => 255,
+				'type' => 'varchar',
+				'default' => NULL,
+			),
+			'sending_date' => array(
 				'length' => 11,
 				'type' => 'int',
 				'default' => NULL,

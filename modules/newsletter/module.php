@@ -14,7 +14,7 @@ $ViewList['index'] = array(
 
 $ViewList['user'] = array(
 	'script' => 'user.php',
-	'functions' => array( 'manage_user' ),
+	'functions' => array( 'user' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
 	'ui_context' => 'navigation',
 	'params' => array( 'newsletterUserID', 'mailingListContentobjectID' ),
@@ -161,9 +161,9 @@ $ViewList['preview'] = array(
 
 $ViewList['mailbox'] = array(
 	'script' => 'mailbox.php',
-	'functions' => array( 'manage_mailbox' ),
+	'functions' => array( 'mailbox' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
-	'params' => array( 'mailboxID'),
+	'params' => array( 'mailboxID' ),
 	'single_post_actions' => array(
 		'CancelButton' => 'Cancel',
 		'SubmitMailboxButton' => 'SubmitMailbox',
@@ -195,18 +195,29 @@ $ViewList['mailbox'] = array(
 	)
 );
 
+$ViewList['bounce'] = array(
+	'script' => 'bounce.php',
+	'functions' => array( 'mailbox' ),
+	'default_navigation_part' => 'eznewsletternavigationpart',
+	'params' => array(),
+	'single_post_actions' => array(
+		'ConnectMailboxButton' => 'ConnectMailbox',
+		'ParseEmailsButton' => 'ParseEmails'
+	)
+);
+
 $FunctionList['subscribe'] = array();
 $FunctionList['configure'] = array();
 $FunctionList['unsubscribe'] = array();
-$FunctionList['manage_subscription'] = array();
-$FunctionList['manage_user'] = array();
+$FunctionList['subscription'] = array();
+$FunctionList['user'] = array();
 $FunctionList['preview'] = array();
 $FunctionList['archive'] = array();
 $FunctionList['index'] = array();
 $FunctionList['settings'] = array();
 $FunctionList['send'] = array();
-$FunctionList['manage_mailbox'] = array();
+$FunctionList['mailbox'] = array();
 $FunctionList['blacklist'] = array();
-$FunctionList['manage_import'] = array();
+$FunctionList['import'] = array();
 
 $FunctionList['admin'] = array(); // for display / hide of admin menue

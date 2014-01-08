@@ -54,6 +54,10 @@
         <source>Mailboxes</source>
         <translation>Boîtes de réception</translation>
     </message>
+    <message>
+        <source>Bounces</source>
+        <translation type="untranslated"></translation>
+    </message>
 </context>
 <context>
     <name>newsletter/menu</name>
@@ -225,6 +229,10 @@
     <message>
         <source>The sending at this address failed: %address.</source>
         <translation>L&apos;envoi à cette adresse a échoué : %address.</translation>
+    </message>
+    <message>
+        <source>Sending failed: %message</source>
+        <translation>Échec de l&apos;envoi : %message</translation>
     </message>
 </context>
 <context>
@@ -869,6 +877,117 @@
     <message>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+</context>
+<context>
+	<name>newsletter/bounce</name>
+    <message>
+        <source>Bounces</source>
+        <translation type="untranslated"></translation>
+    </message>
+    <message>
+        <source>Bounce</source>
+        <translation type="untranslated"></translation>
+    </message>
+    <message>
+        <source>Collect emails from bounce accounts and parse them. You may then accept the detected bounce status or manually adjust it.</source>
+        <translation>Revelever les e-mails à partir des boîtes de réception et les analyser. Vous pouvez alors accepter le statut de bounce détecté ou manuellement ajuster.</translation>
+    </message>
+    <message>
+        <source>Mailbox collect mail result</source>
+        <translation>Résultat de la collecte des e-mails des boîtes de réception</translation>
+    </message>
+    <message>
+        <source>Collection result for mailbox %mailbox_id.</source>
+        <translation>Résultat de la collecte des e-mails de la boîte de réception %mailbox_id.</translation>
+    </message>
+    <message>
+        <source>Added</source>
+        <translation>Ajouté</translation>
+    </message>
+    <message>
+        <source>Already exists</source>
+        <translation>Déjà existant</translation>
+    </message>
+    <message>
+        <source>Failed</source>
+        <translation>En échec</translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
+        <translation>Échec de la connexion</translation>
+    </message>
+    <message>
+        <source>Mailbox item parse result</source>
+        <translation>Résultat de l'analyse des e-mails</translation>
+    </message>
+    <message>
+        <source>E-mails parsed</source>
+        <translation>E-mails analysés</translation>
+    </message>
+    <message>
+        <source>Collect all mailboxes</source>
+        <translation>Relever les boîtes de réception</translation>
+    </message>
+    <message>
+        <source>Parse e-mails</source>
+        <translation>Analyser les e-mails</translation>
+    </message>
+    <message>
+        <source>Mailbox items</source>
+        <translation>Éléments des boîtes de réception</translation>
+    </message>
+    <message>
+        <source>Mailbox</source>
+        <translation>Boîte de réception</translation>
+    </message>
+    <message>
+        <source>Message</source>
+        <translation>Message</translation>
+    </message>
+    <message>
+        <source>Message identifier</source>
+        <translation>Identifiant</translation>
+    </message>
+    <message>
+        <source>Message size</source>
+        <translation>Taille du message</translation>
+    </message>
+    <message>
+        <source>Bounce code</source>
+        <translation type="untranslated"></translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>Abonné</translation>
+    </message>
+    <message>
+        <source>Subject</source>
+        <translation>Sujet</translation>
+    </message>
+    <message>
+        <source>From</source>
+        <translation>Expéditeur</translation>
+    </message>
+    <message>
+        <source>To</source>
+        <translation>Destinataire</translation>
+    </message>
+    <message>
+        <source>Sending date</source>
+        <translation>Date d'envoi</translation>
+    </message>
+    <message>
+        <source>Created</source>
+        <translation>Créé</translation>
+    </message>
+    <message>
+        <source>Processed</source>
+        <translation>Traité</translation>
+    </message>
+    <message>
+        <source>n/a</source>
+        <translation>n/a</translation>
     </message>
 </context>
 <context>
