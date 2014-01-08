@@ -206,6 +206,13 @@ $ViewList['bounce'] = array(
 	)
 );
 
+$ViewList['settings'] = array(
+	'script' => 'settings.php',
+	'functions' => array( 'settings' ),
+	'default_navigation_part' => 'eznewsletternavigationpart',
+	'params' => array()
+);
+
 $FunctionList['subscribe'] = array();
 $FunctionList['configure'] = array();
 $FunctionList['unsubscribe'] = array();
