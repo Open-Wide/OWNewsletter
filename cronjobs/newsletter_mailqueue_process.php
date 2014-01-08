@@ -5,10 +5,9 @@
  */
 // Get all wait for process sending
 $sendingList = OWNewsletterSending::fetchList( array(
-			'status' => array( array(
-					OWNewsletterSending::STATUS_WAIT_FOR_PROCESS,
-					OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_STARTED ) ),
-			'send_date' => array( '<=', time() )
+			'status' => array(  array( 
+					OWNewsletterSending::STATUS_MAILQUEUE_CREATED,
+					OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_STARTED ) )
 		) );
 
 // Create newsletterTracking object

@@ -3,16 +3,18 @@
 /**
  * Cronjob newsletter_mailqueue_create.php
  */
-
 // Get all wait for process sending
-$newsletterSendingWaitForProcessList = OWNewsletterSending::fetchList( array( 'status' => OWNewsletterSending::STATUS_WAIT_FOR_PROCESS ) );
+$newsletterSendingWaitForProcessList = OWNewsletterSending::fetchList( array(
+			'status' => OWNewsletterSending::STATUS_WAIT_FOR_PROCESS,
+			'send_date' => array( '<=', time() ) 
+	) );
 foreach ( $newsletterSendingWaitForProcessList as $newsletterSending ) {
 	$sendingTimestamp = $newsletterSending->attribute( 'send_date' );
 	if ( $sendingTimestamp < time() ) {
 		// Get all user with at least one approved subscription to on of the mailing list of the sending
 		$mailingListsIDs = $newsletterSending->attribute( 'mailing_lists_ids' );
 		$newsletterUserList = OWNewsletterUser::fetchListWithSubsricption( array(
-					'status' => OWNewsletterUser::STATUS_APPROVED,
+					'status' => OWNewsletterUser::STATUS_CONFIRMED,
 					'subscription' => array(
 						'status' => OWNewsletterSubscription::STATUS_APPROVED,
 						'mailing_list_contentobject_id' => array( $mailingListsIDs ) )
