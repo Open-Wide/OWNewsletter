@@ -240,11 +240,15 @@
     </message>
     <message>
         <source>Mailing list not found.</source>
-        <translation>Liste de diffusion non trouvée.</translation>
+        <translation>La liste de diffusion n&apos;a pas été trouvée.</translation>
     </message>
     <message>
         <source>Mailing list is missing.</source>
-        <translation>Liste de diffusion manquante.</translation>
+        <translation>La liste de diffusion est manquante.</translation>
+    </message>
+    <message>
+        <source>File is missing.</source>
+        <translation>Le fichier est manquante.</translation>
     </message>
 </context>
 <context>
@@ -1062,6 +1066,18 @@
     <message>
         <source>Cancel subscription import.</source>
         <translation>Annuler l&apos;import des abonnements.</translation>
+    </message>
+    <message>
+        <source>The import is completed.</source>
+        <translation>L&apos;import est terminé.</translation>
+    </message>
+    <message>
+        <source>For more imformation</source>
+        <translation>Pour plus d'imformation</translation>
+    </message>
+    <message>
+        <source>follow this link.</source>
+        <translation>suivez ce lien.</translation>
     </message>
 </context>
 <context>

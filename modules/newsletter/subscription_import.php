@@ -38,10 +38,15 @@ if ( empty( $mailingListID ) ) {
 				$binaryFile = eZHTTPFile::fetch( 'UploadFile' );
 				ini_set( 'auto_detect_line_endings', TRUE );
 				$handle = fopen( $binaryFile->Filename, 'r' );
+				OWScriptLogger::startLog( 'subscription_import' );
+				$rowCount = 0;
+				$createdCount = 0;
+				$subscriptionCount = 0;
 				while ( ($row = fgetcsv( $handle, 0, $columnDelimiter ) ) !== FALSE ) {
 					if ( !isset( $fileHeaders ) ) {
 						$fileHeaders = $row;
 					} else {
+						$rowCount++;
 						$userInfo = array( 'status' => OWNewsletterUser::STATUS_CONFIRMED );
 						foreach ( $row as $index => $field ) {
 							$fieldIdentifier = $fileHeaders[$index];
@@ -54,19 +59,28 @@ if ( empty( $mailingListID ) ) {
 									break;
 							}
 						}
-						if ( isset( $userInfo['email'] ) && !empty( $userInfo['email'] ) ) {
+						if ( isset( $userInfo['email'] ) && !empty( $userInfo['email'] ) && ezcMailTools::validateEmailAddress( $userInfo['email'] ) ) {
 							$user = OWNewsletterUser::fetchByEmail( $userInfo['email'] );
 							if ( !$user instanceof OWNewsletterUser ) {
 								$user = OWNewsletterUser::createOrUpdate( $userInfo, 'import' );
+								OWScriptLogger::logNotice( "Row #$rowCount : user created (" . $userInfo['email'] . ")", 'process_row' );
+								$createdCount++;
 							}
 							$user->subscribeTo( $mailingListID, OWNewsletterSubscription::STATUS_APPROVED, 'import' );
+							OWScriptLogger::logNotice( "Row #$rowCount : user subscribe to the mailing list", 'process_row' );
+							$subscriptionCount++;
+						} else {
+							OWScriptLogger::logError( "Row #$rowCount : failed to import, e-mail is missing or invalid", 'process_row' );
 						}
 					}
 				}
+				OWScriptLogger::logNotice( "$rowCount rows processed" . PHP_EOL . "$subscriptionCount subscriptions created or updated" . PHP_EOL . "$createdCount users created", 'treatment_completed' );
+				$logger = OWScriptLogger::instance();
+				$tpl->setVariable( 'log_url', 'owscriptlogger/logs/' . $logger->attribute( 'id' ) );
+				ini_set( 'auto_detect_line_endings', FALSE );
+			} else {
+				$tpl->setVariable( 'warning', ezpI18n::tr( 'newsletter/warning_message', 'File is missing.' ) );
 			}
-			ini_set( 'auto_detect_line_endings', FALSE );
-		} else {
-			$tpl->setVariable( 'warning', ezpI18n::tr( 'newsletter/warning_message', 'File is missing.' ) );
 		}
 	} else {
 		$tpl->setVariable( 'warning', ezpI18n::tr( 'newsletter/warning_message', 'Mailing list not found.' ) );

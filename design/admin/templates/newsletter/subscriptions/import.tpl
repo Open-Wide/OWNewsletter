@@ -16,6 +16,15 @@
 											<h2>{$warning|wash}</h2>
 										</div>
 									{/if}
+									{if is_set($log_url)}
+										<div class="message-notice">
+											<h2>
+												{"The import is completed."|i18n( 'newsletter/subscription/import' )}
+												{"For more imformation"|i18n( 'newsletter/subscription/import' )},
+												<a href={$log_url|ezurl()}>{"follow this link."|i18n( 'newsletter/subscription/import' )}</a>q
+											</h2>
+										</div>
+									{/if}
 								</div>
 							</div>
 						</div>
