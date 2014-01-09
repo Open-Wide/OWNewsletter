@@ -426,9 +426,9 @@ class OWNewsletterUser extends eZPersistentObject {
 		$return = array();
 		$approvedSubscriptions = $this->attribute( 'approved_subscriptions' );
 		foreach ( $approvedSubscriptions as $approvedSubscription ) {
-			$return[] = $approvedSubscription->attribute( 'mailing_list' );
+			$return[$approvedSubscription->attribute( 'mailing_list' )->attribute('id')] = $approvedSubscription->attribute( 'mailing_list' );
 		}
-		return array_unique( $return );
+		return array_values( $return );
 	}
 
 	/*	 * **********************

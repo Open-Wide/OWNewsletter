@@ -5,13 +5,15 @@
  */
 // Get all wait for process sending
 $sendingList = OWNewsletterSending::fetchList( array(
-			'status' => array(  array( 
+			'status' => array( array(
 					OWNewsletterSending::STATUS_MAILQUEUE_CREATED,
 					OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_STARTED ) )
 		) );
 
 // Create newsletterTracking object
 $newsletterTracking = OWNewsletterTracking::create();
+
+OWScriptLogger::startLog( 'mailqueue_process' );
 
 foreach ( $sendingList as $sending ) {
 	// set startdate only at the first time
@@ -33,5 +35,8 @@ foreach ( $sendingList as $sending ) {
 	if ( $noSentItemCount == 0 ) {
 		$sending->setAttribute( 'status', OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_FINISHED );
 		$sending->store();
+		OWScriptLogger::logNotice( "Mailqueue process finished", 'mailqueue_process' );
+	} else {
+		OWScriptLogger::logNotice( "The treatment of mailqueue will continue at the next script", 'mailqueue_process' );
 	}
 }

@@ -130,27 +130,31 @@ class OWNewsletterMail {
 		$this->setTransportMethodCronjobFromIni();
 		$sendingItemList = OWNewsletterSendingItem::fetchList( array( 'edition_contentobject_id' => $this->newsletterSending->attribute( 'edition_contentobject_id' ) ), $limit );
 		$sendResult = array();
+		OWScriptLogger::logNotice( count( $sendingItemList ) . "items in the mailqueue", 'prepare_sending' );
 		foreach ( $sendingItemList as $sendingIndex => $sendingItem ) {
 			$sendingItem->sync();
+			$newsletterUser = $sendingItem->attribute( 'newsletter_user' );
+			$receiverEmail = $newsletterUser->attribute( 'email' );
 			if ( $sendingItem->attribute( 'status' ) == OWNewsletterSendingItem::STATUS_NEW ) {
-				$newsletterUser = $sendingItem->attribute( 'newsletter_user' );
 				// Assign newsletter user to tracking
 				if ( $tracker ) {
 					$tracker->setNewsletterUser( $newsletterUser );
 				}
-
-				$receiverEmail = $newsletterUser->attribute( 'email' );
 				$receiverName = $newsletterUser->attribute( 'email_name' );
 
 				// ### configure hash
 				$newsletterConfigureHash = $newsletterUser->attribute( 'hash' );
 				$newsletterUnsubscribeHash = $newsletterUser->attribute( 'hash' );
 
-				$searchArray = array( '#_hash_unsubscribe_#',
-					'#_hash_configure_#' );
+				$searchArray = array(
+					'#_hash_unsubscribe_#',
+					'#_hash_configure_#'
+				);
 
-				$replaceArray = array( $newsletterUnsubscribeHash,
-					$newsletterConfigureHash );
+				$replaceArray = array(
+					$newsletterUnsubscribeHash,
+					$newsletterConfigureHash
+				);
 
 				$subject = $originalSubject;
 				$HTMLBody = $originalHTMLBody;
@@ -185,10 +189,14 @@ class OWNewsletterMail {
 				$sendResult[$sendingIndex] = $this->sendEmail( $receiverEmail, $receiverName );
 				if ( $sendResult[$sendingIndex]['send_result'] == false ) {
 					$sendingItem->setAttribute( 'status', OWNewsletterSendingItem::STATUS_ABORT );
+					OWScriptLogger::logError( "Sending the newsletter to $receiverEmail failed", 'process_sending' );
 				} else {
 					$sendingItem->setAttribute( 'status', OWNewsletterSendingItem::STATUS_SEND );
+					OWScriptLogger::logNotice( "Sending the newsletter to $receiverEmail succeeded", 'process_sending' );
 				}
 				$sendingItem->store();
+			} else {
+				OWScriptLogger::logWarning( "Mailqueue item status change. The newsletter will not be sent to $receiverEmail", 'process_sending' );
 			}
 		}
 		return $sendResult;
@@ -241,27 +249,21 @@ class OWNewsletterMail {
 			$mail->build();
 			$transport = new OWNewsletterTransport( $transportMethod );
 			$sendResult = $transport->send( $mail );
-			$emailResult = array( 
+			$emailResult = array(
 				'send_result' => $sendResult,
 				'sender_email' => $this->senderEmail,
 				'email_receiver' => $emailReceiver,
 				'email_subject' => $this->subject,
 				'email_charset' => $emailCharset,
 				'transport_method' => $transportMethod );
-			if ( $sendResult ) {
-				OWNewsletterLog::writeInfo( 'Email send ok', 'OWNewsletterMail', 'sendEmail', $emailResult );
-			} else {
-				OWNewsletterLog::writeError( 'Email send failed', 'OWNewsletterMail', 'sendEmail', $emailResult );
-			}
 		} else {
-			$emailResult = array( 
+			$emailResult = array(
 				'send_result' => false,
 				'sender_email' => $this->senderEmail,
 				'email_receiver' => $emailReceiver,
 				'email_subject' => $this->subject,
 				'email_charset' => $emailCharset,
 				'transport_method' => $transportMethod );
-			OWNewsletterLog::writeError( 'Email send failed', 'OWNewsletterMail', 'sendEmail', $emailResult );
 		}
 		return $emailResult;
 	}
