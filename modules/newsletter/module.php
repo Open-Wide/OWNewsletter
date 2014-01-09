@@ -217,7 +217,22 @@ $ViewList['subscription_import'] = array(
 	'script' => 'subscription_import.php',
 	'functions' => array( 'subscription_import' ),
 	'default_navigation_part' => 'eznewsletternavigationpart',
-	'params' => array()
+	'params' => array( 'mailingListID' ),
+	'single_post_actions' => array(
+		'CancelButton' => 'Cancel',
+		'ImportButton' => 'Import'
+	),
+	'post_action_parameters' => array(
+		'Cancel' => array(
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel'
+		),
+		'Import' => array(
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess',
+			'ColumnDelimiter' => 'ColumnDelimiter',
+			'UploadFile' => 'UploadFile'
+		),
+	)
 );
 
 $ViewList['subscription_export'] = array(

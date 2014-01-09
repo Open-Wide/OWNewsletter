@@ -60,7 +60,7 @@
     </message>
     <message>
         <source>Import subscriptions</source>
-        <translation>Import d&apos;abonnements</translation>
+        <translation>Import des abonnements</translation>
     </message>
     <message>
         <source>Export subscriptions</source>
@@ -1031,6 +1031,37 @@
     <message>
         <source>Cancel subscription export.</source>
         <translation>Annuler l'export des abonnements</translation>
+    </message>
+</context>
+<context>
+    <name>newsletter/subscription/import</name>
+    <message>
+        <source>Import subscriptions</source>
+        <translation>Import des abonnements</translation>
+    </message>
+    <message>
+        <source>Column delimiter</source>
+        <translation>Séparateur de colonnes</translation>
+    </message>
+    <message>
+        <source>Upload file</source>
+        <translation>Fichier</translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation>Importer</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <source>Import subscriptions.</source>
+        <translation>Importer les abonnements.</translation>
+    </message>
+    <message>
+        <source>Cancel subscription import.</source>
+        <translation>Annuler l&apos;import des abonnements.</translation>
     </message>
 </context>
 <context>

@@ -48,7 +48,7 @@ if ( empty( $mailingListID ) ) {
 			header( 'Content-Type: text/csv' );
 			header( 'Content-Disposition: attachment;filename=subscriptions.csv' );
 			$fp = fopen( 'php://output', 'w' );
-			fputcsv( $fp, $subscriptionFields );
+			fputcsv( $fp, $subscriptionFields, $columnDelimiter );
 			foreach ( $exportUserList as $exportUser ) {
 				$row = array();
 				foreach ( $subscriptionFields as $field ) {
