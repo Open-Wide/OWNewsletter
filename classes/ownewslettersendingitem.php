@@ -247,7 +247,7 @@ class OWNewsletterSendingItem extends eZPersistentObject {
 	 * @param interger $status
 	 */
 	static function create( OWNewsletterSending $newsletterSending, OWNewsletterUser $newsletterUser, $status = OWNewsletterSendingItem::STATUS_NEW ) {
-		$approvedMailingLists = $newsletterUser->attribute( 'approved_miling_lists' );
+		$approvedMailingLists = $newsletterUser->attribute( 'approved_mailing_lists' );
 		$approvedMailingListIDs = array();
 		foreach ( $approvedMailingLists as $approvedMailingList ) {
 			$approvedMailingListIDs[] = $approvedMailingList->attribute( 'id' );

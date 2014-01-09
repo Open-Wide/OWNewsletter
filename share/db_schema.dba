@@ -130,21 +130,11 @@ $schema = array(
 				'not_null' => '1',
 				'default' => '',
 			),
-			'import_id' => array(
-				'length' => 11,
-				'type' => 'int',
-				'not_null' => '1',
-				'default' => 0,
-			),
 		),
 		'indexes' => array(
 			'PRIMARY' => array(
 				'type' => 'primary',
 				'fields' => array( 'mailing_list_contentobject_id', 'newsletter_user_id' ),
-			),
-			'import_id' => array(
-				'type' => 'non-unique',
-				'fields' => array( 'import_id' ),
 			),
 			'mailing_list_contentobject_id' => array(
 				'type' => 'non-unique',
@@ -270,11 +260,6 @@ $schema = array(
 				'type' => 'varchar',
 				'default' => NULL,
 			),
-			'import_id' => array(
-				'length' => 11,
-				'type' => 'int',
-				'default' => NULL,
-			),
 			'bounce_count' => array(
 				'length' => 4,
 				'type' => 'tinyint',
@@ -293,10 +278,6 @@ $schema = array(
 			'ez_user_id' => array(
 				'type' => 'non-unique',
 				'fields' => array( 'ez_user_id' ),
-			),
-			'import_id' => array(
-				'type' => 'non-unique',
-				'fields' => array( 'import_id' ),
 			),
 			'email' => array(
 				'type' => 'unique',

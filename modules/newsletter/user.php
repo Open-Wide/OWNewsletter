@@ -87,7 +87,7 @@ if ( $module->hasActionParameter( 'NewsletterUser' ) ) {
 		$error = $e->getMessage();
 	}
 	if ( $newsletterUserObject instanceof OWNewsletterUser ) {
-		$tpl->setVariable( 'subscription_array', $newsletterUserObject->attribute( 'subscription_array' ) );
+		$tpl->setVariable( 'subscription_list', $newsletterUserObject->attribute( 'subscription_list' ) );
 	}
 	if ( isset( $error ) ) {
 		$tpl->setVariable( 'warning_array', array( $error ) );
@@ -117,7 +117,7 @@ if ( $module->isCurrentAction( 'SubscribeNewsletterUser' ) ) {
 } elseif ( $module->isCurrentAction( 'SubmitNewsletterUser' ) ) { /* If press SubmitNewsletterUser button to access or validate form */
 	if ( isset( $newsletterUser ) ) { /* edit user */
 		$tpl->setVariable( 'newsletter_user', $newsletterUser );
-		$tpl->setVariable( 'subscription_array', $newsletterUser->attribute( 'subscription_array' ) );
+		$tpl->setVariable( 'subscription_list', $newsletterUser->attribute( 'subscription_list' ) );
 		$Result['path'][] = array( 'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Edit' ) );
 	} else { /* new user */
 		$tpl->setVariable( 'newsletter_user', $newsletterUserRow );

@@ -143,16 +143,6 @@
                                         {/if}
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th>
-                                        {'Import id'|i18n( ( 'newsletter/user' ) )}
-                                    </th>
-                                    <td>
-                                        {if $subscription.import_id|ne(0)}
-											<a href={concat( 'newsletter/import_view/', $subscription.import_id )|ezurl()}>{$subscription.import_id|wash()}</a>
-                                        {/if}
-                                    </td>
-                                </tr>
                             </table>
 						</div>
 					</div>

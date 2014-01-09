@@ -87,3 +87,11 @@ div.user_search form {
 div#content-newsletter-actions div.block div.right {
 	width: auto;
 }
+
+div.class-newsletter_mailing_list div.block div.right {
+	width: auto;
+}
+
+div.newsletter-subscription_export label {
+	vertical-align: top;
+}

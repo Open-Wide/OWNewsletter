@@ -132,10 +132,6 @@
                                     <td>{$newsletter_user.bounce_count|wash()}</td>
                                 </tr>
                                 <tr>
-                                    <th>{'Import id'|i18n( 'newsletter/user' )}</th>
-                                    <td>{$newsletter_user.import_id|wash()}</td>
-                                </tr>
-                                <tr>
                                     <th>{'Note'|i18n( 'newsletter/user' )}</th>
                                     <td>{$newsletter_user.note|nl2br}</td>
                                 </tr>
@@ -184,8 +180,8 @@
 				</div>
 			</div>
 		</div>{* =============  list of all subscriptions ============ *}
-		{def $subscription_array = $newsletter_user.subscription_array
-             $subscription_array_count = $subscription_array|count}
+		{def $subscription_list = $newsletter_user.subscription_list
+             $subscription_list_count = $subscription_list|count}
 		<div class="context-block">
 			<div class="box-header">
 				<div class="box-tc">
@@ -193,7 +189,7 @@
 						<div class="box-mr">
 							<div class="box-tl">
 								<div class="box-tr">
-									<h2 class="context-title">{'Subscriptions'|i18n( 'newsletter/user' )} [{$subscription_array_count}]</h2>
+									<h2 class="context-title">{'Subscriptions'|i18n( 'newsletter/user' )} [{$subscription_list_count}]</h2>
 									<div class="header-subline">
 									</div>
 								</div>
@@ -207,7 +203,7 @@
 					<div class="box-content">
 						<div class="context-attributes">
 
-							{if $subscription_array_count|gt(0)}
+							{if $subscription_list_count|gt(0)}
 								<div class="overflow-table">
 									<table class="list" cellspacing="0">
 										<tr>
@@ -236,7 +232,7 @@
 												{* actions *}
 											</th>
 										</tr>
-										{foreach $subscription_array as $subscription sequence array( bglight, bgdark ) as $style}
+										{foreach $subscription_list as $subscription sequence array( bglight, bgdark ) as $style}
 											<tr class="{$style}">
 												<td>
 													<a href={$subscription.mailing_list.main_node.url_alias|ezurl}>{$subscription.mailing_list.name|wash()} </a>

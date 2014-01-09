@@ -213,6 +213,36 @@ $ViewList['settings'] = array(
 	'params' => array()
 );
 
+$ViewList['subscription_import'] = array(
+	'script' => 'subscription_import.php',
+	'functions' => array( 'subscription_import' ),
+	'default_navigation_part' => 'eznewsletternavigationpart',
+	'params' => array()
+);
+
+$ViewList['subscription_export'] = array(
+	'script' => 'subscription_export.php',
+	'functions' => array( 'subscription_export' ),
+	'default_navigation_part' => 'eznewsletternavigationpart',
+	'params' => array( 'mailingListID' ),
+	'single_post_actions' => array(
+		'CancelButton' => 'Cancel',
+		'ExportButton' => 'Export'
+	),
+	'post_action_parameters' => array(
+		'Cancel' => array(
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel'
+		),
+		'Export' => array(
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess',
+			'ColumnDelimiter' => 'ColumnDelimiter',
+			'SubscriptionStatus' => 'SubscriptionStatus',
+			'SubscriptionFields' => 'SubscriptionFields'
+		),
+	)
+);
+
 $FunctionList['subscribe'] = array();
 $FunctionList['configure'] = array();
 $FunctionList['unsubscribe'] = array();
@@ -225,6 +255,7 @@ $FunctionList['settings'] = array();
 $FunctionList['send'] = array();
 $FunctionList['mailbox'] = array();
 $FunctionList['blacklist'] = array();
-$FunctionList['import'] = array();
+$FunctionList['subscription_import'] = array();
+$FunctionList['subscription_export'] = array();
 
 $FunctionList['admin'] = array(); // for display / hide of admin menue

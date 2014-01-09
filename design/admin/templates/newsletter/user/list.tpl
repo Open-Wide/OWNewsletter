@@ -179,15 +179,15 @@
 										</td>
 										<td title="{'Approved'|i18n( 'newsletter/user/status' )} / {'All'|i18n( 'newsletter/user' )}">
 											{def $approved_subscribtion_count = 0
-												 $subscription_array = $newsletter_user.subscription_array}
-											{foreach $subscription_array as $subscription}
+												 $subscription_list = $newsletter_user.subscription_list}
+											{foreach $subscription_list as $subscription}
 												{if $subscription.status|eq( 2 )}
 													{set $approved_subscribtion_count = $approved_subscribtion_count|inc}
 												{/if}
 
 											{/foreach}
-											<b>{$approved_subscribtion_count}</b> / {$subscription_array|count}
-											{undef $approved_subscribtion_count $subscription_array}
+											<b>{$approved_subscribtion_count}</b> / {$subscription_list|count}
+											{undef $approved_subscribtion_count $subscription_list}
 										</td>
 										<td>
 											<img src={'1x1.gif'|ezimage} alt="{$newsletter_user.status_name}" title="{$newsletter_user.status_name}" class="icon12 icon_s_{$newsletter_user.status_identifier}" />

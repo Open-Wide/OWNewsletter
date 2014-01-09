@@ -98,12 +98,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 					'name' => 'RemoteId',
 					'datatype' => 'string',
 					'default' => '',
-					'required' => true ),
-				'import_id' => array(
-					'name' => 'ImportId',
-					'datatype' => 'integer',
-					'default' => 0,
-					'required' => false ),
+					'required' => true )
 			),
 			'function_attributes' => array(
 				'id' => 'getId',

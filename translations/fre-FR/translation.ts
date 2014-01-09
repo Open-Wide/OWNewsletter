@@ -58,6 +58,14 @@
         <source>Bounces</source>
         <translation type="untranslated"></translation>
     </message>
+    <message>
+        <source>Import subscriptions</source>
+        <translation>Import d&apos;abonnements</translation>
+    </message>
+    <message>
+        <source>Export subscriptions</source>
+        <translation>Export des abonnements</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/menu</name>
@@ -84,10 +92,6 @@
     <message>
         <source>E-mail accounts</source>
         <translation>Comptes emails</translation>
-    </message>
-    <message>
-        <source>Imports</source>
-        <translation>Imports</translation>
     </message>
     <message>
         <source>Subscription form</source>
@@ -233,6 +237,14 @@
     <message>
         <source>Sending failed: %message</source>
         <translation>Échec de l&apos;envoi : %message</translation>
+    </message>
+    <message>
+        <source>Mailing list not found.</source>
+        <translation>Liste de diffusion non trouvée.</translation>
+    </message>
+    <message>
+        <source>Mailing list is missing.</source>
+        <translation>Liste de diffusion manquante.</translation>
     </message>
 </context>
 <context>
@@ -383,10 +395,6 @@
     </message>
     <message>
         <source>Remote id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Import id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -919,7 +927,7 @@
     </message>
     <message>
         <source>Mailbox item parse result</source>
-        <translation>Résultat de l'analyse des e-mails</translation>
+        <translation>Résultat de l&apos;analyse des e-mails</translation>
     </message>
     <message>
         <source>E-mails parsed</source>
@@ -975,7 +983,7 @@
     </message>
     <message>
         <source>Sending date</source>
-        <translation>Date d'envoi</translation>
+        <translation>Date d&apos;envoi</translation>
     </message>
     <message>
         <source>Created</source>
@@ -988,6 +996,41 @@
     <message>
         <source>n/a</source>
         <translation>n/a</translation>
+    </message>
+</context>
+<context>
+	<name>newsletter/subscription/export</name>
+    <message>
+        <source>Export subscriptions</source>
+        <translation>Export des abonnements</translation>
+    </message>
+    <message>
+        <source>Column delimiter</source>
+        <translation>Séparateur de colonnes</translation>
+    </message>
+    <message>
+        <source>Subscription status</source>
+        <translation>Statut des abonnements</translation>
+    </message>
+    <message>
+        <source>Export fields</source>
+        <translation>Champs à exporter</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation>Exporter</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Anuuler</translation>
+    </message>
+    <message>
+        <source>Export subscriptions.</source>
+        <translation>Exporter les abonnements</translation>
+    </message>
+    <message>
+        <source>Cancel subscription export.</source>
+        <translation>Annuler l'export des abonnements</translation>
     </message>
 </context>
 <context>
@@ -1359,6 +1402,14 @@
     <message>
         <source>Full screen</source>
         <translation>Plein écran</translation>
+    </message>
+    <message>
+        <source>Import subscriptions</source>
+        <translation>Importer des abonnements</translation>
+    </message>
+    <message>
+        <source>Export subscriptions</source>
+        <translation>Exporter les abonnements</translation>
     </message>
 </context>
 <context>

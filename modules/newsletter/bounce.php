@@ -21,7 +21,7 @@ $Result['path'] = array(
 		'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Bounces' ) ) );
 
 /* Retrieval of cancal and success redirect URLs */
-$redirectUrlCancel = $redirectUrlSuccess = 'newsletter/user';
+$redirectUrlCancel = $redirectUrlSuccess = 'newsletter/bounce';
 if ( $module->hasActionParameter( 'RedirectUrlActionCancel' ) ) {
 	$redirectUrlCancel = $module->actionParameter( 'RedirectUrlActionCancel' );
 }

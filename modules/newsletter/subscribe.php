@@ -4,7 +4,7 @@ $module = $Params['Module'];
 $tpl = eZTemplate::factory();
 
 /* Retrieval of cancel and success redirect URLs */
-$redirectUrlCancel = $redirectUrlSuccess = 'newsletter/user';
+$redirectUrlCancel = $redirectUrlSuccess = 'newsletter/subscribe';
 if ( $module->hasActionParameter( 'RedirectUrlActionCancel' ) ) {
 	$redirectUrlCancel = $module->actionParameter( 'RedirectUrlActionCancel' );
 }

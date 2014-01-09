@@ -152,11 +152,6 @@ class OWNewsletterUser extends eZPersistentObject {
 					'datatype' => 'string',
 					'default' => '',
 					'required' => false ),
-				'import_id' => array(
-					'name' => 'ImportId',
-					'datatype' => 'integer',
-					'default' => '',
-					'required' => false ),
 				'bounce_count' => array(
 					'name' => 'BounceCount',
 					'datatype' => 'integer',
@@ -177,7 +172,7 @@ class OWNewsletterUser extends eZPersistentObject {
 				'is_removed_self' => 'isRemovedSelf',
 				'is_removed' => 'isRemoved',
 				'is_on_blacklist' => 'isOnBlacklist',
-				'subscription_array' => 'getSubscriptionArray',
+				'subscription_list' => 'getSubscriptionArray',
 				'email_name' => 'getEmailName',
 				'creator' => 'getCreatorUserObject',
 				'modifier' => 'getModifierUserObject',
@@ -186,7 +181,7 @@ class OWNewsletterUser extends eZPersistentObject {
 				'status_identifier' => 'getStatusIdentifier',
 				'active_subscriptions' => 'getActiveSubscriptions',
 				'approved_subscriptions' => 'getApprovedSubscriptions',
-				'approved_miling_lists' => 'getApprovedMailingLists',
+				'approved_mailing_lists' => 'getApprovedMailingLists',
 			),
 			'class_name' => 'OWNewsletterUser',
 			'name' => 'ownl_user' );
@@ -600,7 +595,7 @@ class OWNewsletterUser extends eZPersistentObject {
 	 * @param array $newSubscriptionList
 	 */
 	public function updateSubscriptionList( $newSubscriptionList, $context = 'default' ) {
-		$currentSubscriptionList = $this->attribute( 'subscription_array' );
+		$currentSubscriptionList = $this->attribute( 'subscription_list' );
 		foreach ( $newSubscriptionList as $newSubscription ) {
 			if ( $newSubscription['status'] > -1 ) {
 				$newSubscription['newsletter_user_id'] = $this->attribute( 'id' );
@@ -883,7 +878,7 @@ class OWNewsletterUser extends eZPersistentObject {
 	 */
 	function remove( $conditions = null, $extraConditions = null ) {
 // remove subscriptions
-		$currentNewsletterSubscriptionObjects = $this->attribute( 'subscription_array' );
+		$currentNewsletterSubscriptionObjects = $this->attribute( 'subscription_list' );
 
 		OWNewsletterLog::writeNotice( 'OWNewsletterUser::remove', 'user', 'remove', array(
 			'nl_user' => $this->attribute( 'id' ),

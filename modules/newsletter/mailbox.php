@@ -22,7 +22,7 @@ $Result['path'] = array(
 		'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Mailboxes' ) ) );
 
 /* Retrieval of cancal and success redirect URLs */
-$redirectUrlCancel = $redirectUrlSuccess = 'newsletter/user';
+$redirectUrlCancel = $redirectUrlSuccess = 'newsletter/mailbox';
 if ( $module->hasActionParameter( 'RedirectUrlActionCancel' ) ) {
 	$redirectUrlCancel = $module->actionParameter( 'RedirectUrlActionCancel' );
 }

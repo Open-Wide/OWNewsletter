@@ -25,7 +25,6 @@
 						<div class="box-content">
 							<ul>
 								<li><a href={'/newsletter/mailbox'|ezurl()}>{'E-mail accounts'|i18n( 'newsletter/menu' )}</a></li>
-								<li><a href={'/newsletter/import'|ezurl()}>{'Imports'|i18n( 'newsletter/menu' )}</a></li>
 								<li><a href={'/newsletter/subscribe/'|ezurl()}>{'Subscription form'|i18n( 'newsletter/menu' )}</a></li>
 								<li><a href={'/newsletter/settings'|ezurl()}>{'INI Settings'|i18n( 'newsletter/menu' )}</a></li>
 							</ul>

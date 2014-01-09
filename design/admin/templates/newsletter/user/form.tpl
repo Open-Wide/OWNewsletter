@@ -176,8 +176,8 @@
 																	$is_removed = false()
 																	$td_counter = 0
 																	$modified = 0}
-																{if is_set( $subscription_array[ $mailing_list_id ] )}
-																	{set $subscription = $subscription_array[ $mailing_list_id ]
+																{if is_set( $subscription_list[ $mailing_list_id ] )}
+																	{set $subscription = $subscription_list[ $mailing_list_id ]
 																		$created = $subscription.created
 																		$confirmed = $subscription.confirmed
 																		$removed = $subscription.removed
@@ -243,7 +243,7 @@
 																<td>
 																	{if $modified|ne(0)}{'Modified'|i18n( 'newsletter/user' )}: {$modified|datetime( 'custom', '%j.%m.%Y %H:%i' )}{/if}
 																</td>
-																{undef $mailing_list_id $list_content $subscription_array $subscription $created $confirmed $subscription $removed $approved $bounced $blacklisted $status $is_removed $td_counter $modified}
+																{undef $mailing_list_id $list_content $subscription_list $subscription $created $confirmed $subscription $removed $approved $bounced $blacklisted $status $is_removed $td_counter $modified}
 															</tr>
 														{/foreach}
 													</table>

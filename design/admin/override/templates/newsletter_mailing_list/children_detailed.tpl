@@ -8,15 +8,28 @@
 	{set $page_uri = concat( $page_uri, '/(offset)/', $view_parameters.offset )}
 {/if}
 
-<div id="action-controls-container">
-	<div id="action-controls">
-		<form name="CreateNewNewsletterUser" method="post" style="display:inline;" action={'newsletter/user'|ezurl}>
-			<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
-			<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
-			<input type="text" name="Email" />
-			<input type="hidden" name="MailingListContentObjectID" value='{$node.contentobject_id}'/>
-			<input class="button" type="submit" name="SubscribeNewsletterUserButton" value="{'Subscribe this user to the mailing list'|i18n( 'design/admin/node/view/full' )}" />
-		</form>
+<div class="context-block">
+	<div class="box-header"></div>
+	<div class="box-content">
+		<div class="block">
+			<div class="left">
+				<form name="CreateNewNewsletterUser" method="post" style="display:inline;" action={'newsletter/user'|ezurl}>
+					<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
+					<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
+					<input type="text" name="Email" />
+					<input type="hidden" name="MailingListContentObjectID" value='{$node.contentobject_id}'/>
+					<input class="button" type="submit" name="SubscribeNewsletterUserButton" value="{'Subscribe this user to the mailing list'|i18n( 'design/admin/node/view/full' )}" />
+				</form></div>
+			<div class="right">
+				<form name="ImportSubscription" method="post" style="display:inline;" action={concat('newsletter/subscription_import/',$node.contentobject_id)|ezurl}>
+					<input class="button" type="submit" name="GoOnImportSubscriptionButton" value="{'Import subscriptions'|i18n( 'design/admin/node/view/full' )}">
+				</form>
+				<form name="ExportSubscription" method="post" style="display:inline;" action={concat('newsletter/subscription_export/',$node.contentobject_id)|ezurl}>
+					<input class="button" type="submit" name="GoOnExportSubscriptionButton" value="{'Export subscriptions'|i18n( 'design/admin/node/view/full' )}">
+				</form>
+			</div>
+			<div class="break"></div>
+		</div>
 	</div>
 </div>
 <div id="content-sub-items-list" class="content-navigation-childlist">
