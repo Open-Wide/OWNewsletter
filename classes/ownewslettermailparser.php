@@ -76,9 +76,6 @@ class OWNewsletterMailParser {
 		try {
 			$ezcMailObjectArray = $this->MailParser->parseMail( $set );
 		} catch ( Exception $e ) {
-			OWNewsletterLog::writeError(
-					'OWNewsletterMailParser::parse', 'parseMail', 'ezcMailParser->parseMail-failed', array(
-				'error-code' => $e->getMessage() ) );
 			return false;
 		}
 

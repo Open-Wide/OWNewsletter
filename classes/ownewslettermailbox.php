@@ -175,23 +175,12 @@ class OWNewsletterMailbox extends eZPersistentObject {
 								$mailboxesProcessArray[$mailbox->attribute( 'id' )] = $mailbox->fetchMails();
 								$mailbox->disconnect();
 							} catch ( Exception $e ) {
-								OWNewsletterLog::writeError(
-										'CjwNewsletterMailparser::parse', 'parseMail', 'ezcMailParser->parseMail-failed', array(
-									'error-code' => $e->getMessage() ) );
 								return $e->getMessage();
 							}
 						} else {
 							$mailboxesProcessArray[$mailbox->attribute( 'id' )] = 'connection failed' . $connectResult;
-							OWNewsletterLog::writeError(
-									'OWNewsletterMailbox::collectMailsFromActiveMailboxes', 'mailbox', 'connect-failed', array(
-								'error_code' => $connectResult,
-								'mailbox_id' => $mailbox->attribute( 'id' ) )
-							);
 						}
 					} catch ( Exception $e ) {
-						OWNewsletterLog::writeError(
-								'OWNewsletterMailbox::collectMailsFromActiveMailboxes', 'mailbox', 'connect-failed-other', array(
-							'error-code' => $e->getMessage() ) );
 						return $e->getMessage();
 					}
 				}
@@ -254,14 +243,9 @@ class OWNewsletterMailbox extends eZPersistentObject {
 					$ezcTransportObject = new ezcMailPop3Transport( $server, $port, $options );
 					break;
 				default:
-					OWNewsletterLog::writeError(
-							'OWNewsletterMailbox::connect', 'mailbox', 'connect-failed', array( 'error-code' => $e->getMessage() ) );
 					return $e->getMessage();
 			}
 		} catch ( Exception $e ) {
-			OWNewsletterLog::writeError(
-					'authenticate ezcMailTransport OWNewsletterMailbox::connect', 'mailbox', 'connect-failed', array(
-				'error-code' => $e->getMessage() ) );
 			return $e->getMessage();
 		}
 
@@ -269,9 +253,6 @@ class OWNewsletterMailbox extends eZPersistentObject {
 			// authenticate twise is not allowed
 			$ezcTransportObject->authenticate( $userName, $password );
 		} catch ( Exception $e ) {
-			OWNewsletterLog::writeError(
-					'OWNewsletterMailbox::connect', 'mailbox', 'authenticate-failed', array_merge( array(
-				'error-code' => $e->getMessage() ), $settingArray ) );
 			return $e->getMessage();
 		}
 
@@ -289,14 +270,8 @@ class OWNewsletterMailbox extends eZPersistentObject {
 			$this->setAttribute( 'last_server_connect', time() );
 			$this->store();
 
-			OWNewsletterLog::writeDebug(
-					'OWNewsletterMailbox::connect', 'mailbox', 'connect-ok', $settingArray );
-
 			return $ezcTransportObject;
 		} catch ( Exception $e ) {
-			OWNewsletterLog::writeError(
-					'OWNewsletterMailbox::connect', 'mailbox', 'selectBox-failed', array( 'error-code' => $e->getMessage() ) );
-
 			return $e->getMessage();
 		}
 	}
@@ -332,9 +307,6 @@ class OWNewsletterMailbox extends eZPersistentObject {
 				// array( 1 => '000001fc4420e93a', 2 => '000001fd4420e93a' );
 				$uniqueIdentifierArray = $transport->listUniqueIdentifiers();
 			} catch ( Exception $e ) {
-				OWNewsletterLog::writeError(
-						'OWNewsletterMailbox::fetchMails', 'mailbox', 'listUniqueIdentifiers-failed', array(
-					'error-code' => $e->getMessage() ) );
 			}
 
 			try {
@@ -342,9 +314,6 @@ class OWNewsletterMailbox extends eZPersistentObject {
 				// array( 2 => 1700, 5 => 1450 );
 				$messageIdArray = $transport->listMessages();
 			} catch ( Exception $e ) {
-				OWNewsletterLog::writeError(
-						'OWNewsletterMailbox::fetchMails', 'mailbox', 'listMessages-failed', array(
-					'error-code' => $e->getMessage() ) );
 			}
 
 			// array( message_id => message_identifier )

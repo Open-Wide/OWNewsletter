@@ -73,7 +73,6 @@ class OWNewsletterTransport
         try
         {
             $transport->send( $ezcMailComposerObject );
-            // OWNewsletterLog::writeInfo( 'email send ok', 'OWNewsletterTransport', 'send' );
 
             return true;
         }

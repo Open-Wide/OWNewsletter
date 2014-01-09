@@ -208,13 +208,6 @@ class OWNewsletterSendingItem extends eZPersistentObject {
 							$this->setAttribute( 'processed', time() );
 							break;
 					}
-
-					OWNewsletterLog::writeDebug(
-							'set status - OWNewsletterSendingItem::setAttribute', 'send_item', $this->attribute( 'edition_contentobject_id' ), array(
-						'status_old' => $this->attribute( 'status' ),
-						'status_new' => $value,
-						'nl_user' => $this->attribute( 'newsletter_user_id' ) ) );
-
 					return eZPersistentObject::setAttribute( $attr, $value );
 				} break;
 			default:

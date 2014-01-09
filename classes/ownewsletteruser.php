@@ -646,10 +646,6 @@ class OWNewsletterUser extends eZPersistentObject {
 	 * @return void
 	 */
 	public function setNonBlacklisted() {
-		OWNewsletterLog::writeDebug(
-				'OWNewsletterUser::setNonBlacklisted', 'user', 'blacklist', array( 'nl_user' => $this->attribute( 'id' ) )
-		);
-
 		// we determine the actual status by checking the various timestamps
 		if ( $this->attribute( 'confirmed' ) != 0 ) {
 			if ( $this->attribute( 'bounced' ) != 0 || $this->attribute( 'removed' ) != 0 ) {
@@ -711,12 +707,6 @@ class OWNewsletterUser extends eZPersistentObject {
 		$bounceThresholdValue = (int) $newsletterIni->variable( 'BounceSettings', 'BounceThresholdValue' );
 		$userBouncCount = $this->attribute( 'bounce_count' ) + 1;
 		$this->setAttribute( 'bounce_count', $userBouncCount );
-
-		OWNewsletterLog::writeDebug(
-				'OWNewsletterUser::setBounced', 'user', 'bounce_count', array( 'nl_user' => $this->attribute( 'id' ),
-			'bounce_count' => $userBouncCount ) );
-
-
 		// set all subscriptions and all open senditems to bounced
 		if ( $userBouncCount >= $bounceThresholdValue ) {
 			if ( $isHardBounce === true ) {
@@ -805,27 +795,6 @@ class OWNewsletterUser extends eZPersistentObject {
 								// setAllNewsletterUserRelatedItemsToStatus
 							} break;
 					}
-
-					$statusOld = $this->attribute( 'status' );
-					$statusNew = $value;
-
-					if ( $statusOld != $statusNew ) {
-						OWNewsletterLog::writeNotice(
-								'set OWNewsletterUser::setAttribute', 'user', 'status', array(
-							'nl_user' => $this->attribute( 'id' ),
-							'status_old' => $statusOld,
-							'status_new' => $statusNew,
-							'modifier' => eZUser::currentUserID() )
-						);
-					} else {
-						OWNewsletterLog::writeDebug(
-								'set OWNewsletterUser::setAttribute', 'user', 'status', array(
-							'nl_user' => $this->attribute( 'id' ),
-							'status_old' => $statusOld,
-							'status_new' => $statusNew,
-							'modifier' => eZUser::currentUserID() )
-						);
-					}
 					return eZPersistentObject::setAttribute( $attr, $value );
 				} break;
 			default:
@@ -879,14 +848,6 @@ class OWNewsletterUser extends eZPersistentObject {
 	function remove( $conditions = null, $extraConditions = null ) {
 // remove subscriptions
 		$currentNewsletterSubscriptionObjects = $this->attribute( 'subscription_list' );
-
-		OWNewsletterLog::writeNotice( 'OWNewsletterUser::remove', 'user', 'remove', array(
-			'nl_user' => $this->attribute( 'id' ),
-			'subscription_count' => count( $currentNewsletterSubscriptionObjects ),
-			'subscriptions_to_remove' => implode( '|', array_keys( $currentNewsletterSubscriptionObjects ) ),
-			'modifier' => eZUser::currentUserID() )
-		);
-
 		foreach ( $currentNewsletterSubscriptionObjects as $subscription ) {
 			$subscription->remove();
 		}

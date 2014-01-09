@@ -431,25 +431,6 @@ class OWNewsletterSubscription extends eZPersistentObject {
 						} break;
 				}
 				$this->setAttribute( 'modified', $currentTimeStamp );
-
-				$statusOld = $this->attribute( 'status' );
-				$statusNew = $val;
-
-				if ( $statusOld != $statusNew ) {
-					OWNewsletterLog::writeNotice( 'OWNewsletterSubscription::setAttribute', 'subscription', 'status', array(
-						'status_old' => $statusOld,
-						'status_new' => $statusNew,
-						'list_id' => $this->attribute( 'mailing_list_contentobject_id' ),
-						'nl_user' => $this->attribute( 'newsletter_user_id' ),
-						'modifier' => eZUser::currentUserID() ) );
-				} else {
-					OWNewsletterLog::writeDebug( 'OWNewsletterSubscription::setAttribute', 'subscription', 'status', array(
-						'status_old' => $statusOld,
-						'status_new' => $statusNew,
-						'list_id' => $this->attribute( 'mailing_list_contentobject_id' ),
-						'nl_user' => $this->attribute( 'newsletter_user_id' ),
-						'modifier' => eZUser::currentUserID() ) );
-				}
 				parent::setAttribute( $attr, $val );
 				break;
 			default:
