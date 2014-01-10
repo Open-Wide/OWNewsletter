@@ -1,4 +1,4 @@
-<div class="newsletter newsletter-subscribe">
+<div class="newsletter newsletter-configure">
     <div class="border-box">
 		<div class="border-tl"><div class="border-tr"><div class="border-tc"></div></div></div>
 		<div class="border-ml"><div class="border-mr"><div class="border-mc float-break">
@@ -22,13 +22,13 @@
 								'limitation', hash() 
 							) )}
 
-					<h1>{'Subscribe'|i18n( 'newsletter/subscribe' )}</h1>
+					<h1>{'Configure'|i18n( 'newsletter/configure' )}</h1>
 					{if or( $newsletter_system_list|count()|eq(0), $newsletter_mailing_list_count|eq(0) )}
 						<div class="block">
-							<p>{'No newsletter available.'|i18n( 'newsletter/subscribe' )} </p>
+							<p>{'No newsletter available.'|i18n( 'newsletter/configure' )} </p>
 						</div>
 					{else}
-						<form name="subscribe" method="post" action={'/newsletter/subscribe'|ezurl()}>
+						<form name="configure" method="post" action={concat('/newsletter/configure/',$newsletter_user.hash)|ezurl()}>
 							{if and( is_set( $warning_array ), $warning_array|count|ne( 0 ) )}
 								<div class="block">
 									<div class="message-warning">
@@ -41,27 +41,21 @@
 									</div>
 								</div>
 							{/if}
-							
-							{if is_set( $existing_newsletter_user )}
-								{'You are already subscribed to our newsletter.'|i18n( 'newsletter/subscribe' )}
-								{'To change your subscription'|i18n( 'newsletter/subscribe' )},
-								<a href={concat('newsletter/configure/',$existing_newsletter_user.hash)|ezurl()}>{'follow this link.'|i18n( 'newsletter/subscribe' )}</a>
-							{/if}
 
 							<div class="block header">
-								<p><b>{'Subscribe now to one or more of our newsletters.'|i18n( 'newsletter/subscribe' )}</b></p>
+								<p><b>{'Configure now to one or more of our newsletters.'|i18n( 'newsletter/configure' )}</b></p>
 							</div>
 
 							{* E-mail. *}
-							<p>{'* mandatory fields'|i18n( 'newsletter/subscribe' )}</p>
+							<p>{'* mandatory fields'|i18n( 'newsletter/configure' )}</p>
 							<div class="block">
-								<label for="Subscription_Email">{"E-mail"|i18n( 'newsletter/subscribe' )} *:</label>
-								<input class="halfbox" id="Subscription_Email" type="text" name="NewsletterUser[email]" value="{$newsletter_user.email|email}" title="{'Your e-mail.'|i18n( 'newsletter/subscribe' )}" />
+								<label for="Subscription_Email">{"E-mail"|i18n( 'newsletter/configure' )} *:</label>
+								<input class="halfbox" id="Subscription_Email" type="text" name="NewsletterUser[email]" value="{$newsletter_user.email|email}" title="{'Your e-mail.'|i18n( 'newsletter/configure' )}" />
 							</div>
 
 							{* salutation *}
 							<div class="block" id="nl-salutation">
-								<label>{"Salutation"|i18n( 'newsletter/subscribe' )}:</label>
+								<label>{"Salutation"|i18n( 'newsletter/configure' )}:</label>
 								{foreach $available_salutation_array as $salutation_id => $salutation_name}
 									<input type="radio" name="NewsletterUser[salutation]" value="{$salutation_id|wash}"{if and( is_set( $newsletter_user.salutation ), $newsletter_user.salutation|eq( $salutation_id ) )} checked="checked"{/if} title="{$salutation_name|wash}" />{$salutation_name|wash}&nbsp;
 								{/foreach}
@@ -69,20 +63,20 @@
 
 							{* First name. *}
 							<div class="block">
-								<label for="Subscription_FirstName">{"First name"|i18n( 'newsletter/subscribe' )}:</label>
-								<input class="halfbox" id="Subscription_FirstName" type="text" name="NewsletterUser[first_name]" value="{$newsletter_user.first_name|wash}" title="{'Your first name.'|i18n( 'newsletter/subscribe' )}" />
+								<label for="Subscription_FirstName">{"First name"|i18n( 'newsletter/configure' )}:</label>
+								<input class="halfbox" id="Subscription_FirstName" type="text" name="NewsletterUser[first_name]" value="{$newsletter_user.first_name|wash}" title="{'Your first name.'|i18n( 'newsletter/configure' )}" />
 							</div>
 
 							{* Last name. *}
 							<div class="block">
-								<label for="Subscription_LastName">{"Last name"|i18n( 'newsletter/subscribe' )}:</label>
-								<input class="halfbox" id="Subscription_LastName" type="text" name="NewsletterUser[last_name]" value="{$newsletter_user.last_name|wash}" title="{'Your last name.'|i18n( 'newsletter/subscribe' )}" />
+								<label for="Subscription_LastName">{"Last name"|i18n( 'newsletter/configure' )}:</label>
+								<input class="halfbox" id="Subscription_LastName" type="text" name="NewsletterUser[last_name]" value="{$newsletter_user.last_name|wash}" title="{'Your last name.'|i18n( 'newsletter/configure' )}" />
 							</div>
 
 							{* Organisation. *}
 							<div class="block">
-								<label for="Subscription_Organisation">{"Organisation"|i18n( 'newsletter/subscribe' )}:</label>
-								<input class="halfbox" id="Subscription_Organisation" type="text" name="NewsletterUser[organisation]" value="{$newsletter_user.organisation|wash}" title="{'Your organisation.'|i18n( 'newsletter/subscribe' )}" />
+								<label for="Subscription_Organisation">{"Organisation"|i18n( 'newsletter/configure' )}:</label>
+								<input class="halfbox" id="Subscription_Organisation" type="text" name="NewsletterUser[organisation]" value="{$newsletter_user.organisation|wash}" title="{'Your organisation.'|i18n( 'newsletter/configure' )}" />
 							</div>
 							<div class="block">
 								{foreach $newsletter_system_list as $newsletter_system}
@@ -102,11 +96,10 @@
 												{def $newsletter_mailing_list_id = $newsletter_mailing_list.contentobject_id}
 												<tr>
 													<td valign="top" class="newsletter-list">
-														<input type="checkbox" name="NewsletterUser[mailing_list][]" value="{$newsletter_mailing_list_id}" />
 														{if $newsletter_mailing_list_list_count|eq(1)}
 															<input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}" checked="checked" title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
 														{else}
-															<input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}"{if $newsletter_user.subscription_list|contains( $newsletter_mailing_list_id )} checked="checked"{/if} title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
+															<input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}"{if $newsletter_user.active_mailing_list_ids|contains( $newsletter_mailing_list_id )} checked="checked"{/if} title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
 														{/if}
 													</td>
 												</tr>
@@ -121,14 +114,14 @@
 							<div class="block">
 								<input type="hidden" name="RedirectUrlActionCancel" value="{$redirect_url_action_cancel}" />
 								<input type="hidden" name="RedirectUrlActionSuccess" value="{$redirect_url_action_success}" />
-								<input class="button" type="submit" name="SubscribeButton" value="{'Subscribe'|i18n( 'newsletter/subscribe' )}" title="{'Add to subscription.'|i18n( 'newsletter/subscribe' )}" />
-								<a href={$node_url|ezurl()}><input class="button" type="submit" name="CancelButton" value="{'Cancel'|i18n( 'newsletter/subscribe' )}" /></a>
+								<input class="button" type="submit" name="ConfigureButton" value="{'Configure'|i18n( 'newsletter/configure' )}" title="{'Add to subscription.'|i18n( 'newsletter/configure' )}" />
+								<a href={$node_url|ezurl()}><input class="button" type="submit" name="CancelButton" value="{'Cancel'|i18n( 'newsletter/configure' )}" /></a>
 							</div>
 
 
 							<div class="block footer">
-								<h3>{'Data Protection'|i18n( 'newsletter/subscribe' )}:</h3>
-								<p>{'Your e-mail address will under no circumstances be passed on to unauthorized third parties.'|i18n( 'newsletter/subscribe' )}</p>
+								<h3>{'Data Protection'|i18n( 'newsletter/configure' )}:</h3>
+								<p>{'Your e-mail address will under no circumstances be passed on to unauthorized third parties.'|i18n( 'newsletter/configure' )}</p>
 							</div>
 						</form>
 					{/if}

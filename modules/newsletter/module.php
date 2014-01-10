@@ -150,6 +150,24 @@ $ViewList['unsubscribe'] = array(
 	)
 );
 
+$ViewList['configure'] = array(
+	'script' => 'configure.php',
+	'functions' => array( 'configure' ),
+	'default_navigation_part' => 'eznewsletternavigationpart',
+	'params' => array( 'Hash' ),
+	'single_post_actions' => array(
+		'ConfigureButton' => 'Configure',
+		'CancelButton' => 'Cancel'
+	),
+	'post_action_parameters' => array(
+		'Configure' => array(
+			'NewsletterUser' => 'NewsletterUser',
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		)
+	)
+);
+
 $ViewList['preview'] = array(
 	'script' => 'preview.php',
 	'functions' => array( 'preview' ),
