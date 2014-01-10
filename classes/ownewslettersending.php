@@ -316,6 +316,22 @@ class OWNewsletterSending extends eZPersistentObject {
 		parent::storeObject( $this, $fieldFilters );
 	}
 
+	/**
+	 * Remove object and all its sending items
+	 * 
+	 * @param type $conditions
+	 * @param type $extraConditions
+	 */
+	public function remove( $conditions = null, $extraConditions = null ) {
+		parent::remove( $conditions, $extraConditions );
+		$itemList = OWNewsletterSendingItem::fetchList( array(
+					'edition_contentobject_id' => $this->attribute( 'edition_contentobject_id' )
+				) );
+		foreach ( $itemList as $item ) {
+			$item->remove();
+		}
+	}
+
 	/*	 * **********************
 	 * PERSISTENT METHODS
 	 * ********************** */

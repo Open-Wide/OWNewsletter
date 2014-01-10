@@ -157,7 +157,6 @@ class OWNewsletterMailingListType extends eZDataType {
 		if ( $version !== null ) {
 			$object = OWNewsletterMailingList::fetch( $objectAttribute->attribute( "id" ), $version );
 			if ( $object instanceof OWNewsletterMailingList ) {
-				die();
 				$object->remove();
 			}
 		} else {

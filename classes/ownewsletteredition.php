@@ -165,7 +165,7 @@ class OWNewsletterEdition extends eZPersistentObject {
 				break;
 		}
 	}
-	
+
 	/*	 * **********************
 	 * FETCH METHODS
 	 * ********************** */
@@ -212,10 +212,48 @@ class OWNewsletterEdition extends eZPersistentObject {
 		return $object;
 	}
 
+	/**
+	 * Search all objects with custom conditions
+	 *
+	 * @param array $conds
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @param boolean $asObject
+	 * @return array
+	 */
+	static function fetchList( $conds = array(), $limit = false, $offset = false, $asObject = true ) {
+		$sortArr = null;
+		$limitArr = null;
+
+		if ( (int) $limit != 0 ) {
+			$limitArr = array(
+				'limit' => $limit,
+				'offset' => $offset );
+		}
+		$objectList = eZPersistentObject::fetchObjectList( self::definition(), null, $conds, $sortArr, $limitArr, $asObject, null, null, null, null );
+		return $objectList;
+	}
+
+	/**
+	 * Count all object with custom conditions
+	 *
+	 * @param array $conds
+	 * @return interger
+	 */
+	static function countList( $conds = array() ) {
+		$objectList = eZPersistentObject::count( self::definition(), $conds );
+		return $objectList;
+	}
+
 	/*	 * **********************
 	 * OBJECT METHODS
 	 * ********************** */
 
+	/**
+	 * Store object in the database
+	 * 
+	 * @param type $fieldFilters
+	 */
 	public function store( $fieldFilters = null ) {
 		$sending = $this->attribute( 'sending' );
 		try {
@@ -228,6 +266,21 @@ class OWNewsletterEdition extends eZPersistentObject {
 			eZDebug::writeError( "Fail to create sending object : " . $e->getMessage(), "Newsletter edition store" );
 		}
 		parent::store( $fieldFilters );
+	}
+
+	/**
+	 * Remove object and all its subscriptions if last
+	 * 
+	 * @param type $conditions
+	 * @param type $extraConditions
+	 */
+	public function remove( $conditions = null, $extraConditions = null ) {
+		parent::remove( $conditions, $extraConditions );
+		if ( self::count( self::definition(), array( 'contentobject_id' => $this->attribute( 'contentobject_id' ) ) ) == 0 ) {
+			if ( $this->attribute( 'sending' ) instanceof OWNewsletterSending ) {
+				$this->attribute( 'sending' )->remove();
+			}
+		}
 	}
 
 	/*	 * **********************

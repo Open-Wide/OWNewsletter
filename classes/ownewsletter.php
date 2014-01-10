@@ -213,6 +213,39 @@ class OWNewsletter extends eZPersistentObject {
 		return $object;
 	}
 
+	/**
+	 * Search all objects with custom conditions
+	 *
+	 * @param array $conds
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @param boolean $asObject
+	 * @return array
+	 */
+	static function fetchList( $conds = array(), $limit = false, $offset = false, $asObject = true ) {
+		$sortArr = null;
+		$limitArr = null;
+
+		if ( (int) $limit != 0 ) {
+			$limitArr = array(
+				'limit' => $limit,
+				'offset' => $offset );
+		}
+		$objectList = eZPersistentObject::fetchObjectList( self::definition(), null, $conds, $sortArr, $limitArr, $asObject, null, null, null, null );
+		return $objectList;
+	}
+
+	/**
+	 * Count all object with custom conditions
+	 *
+	 * @param array $conds
+	 * @return interger
+	 */
+	static function countList( $conds = array() ) {
+		$objectList = eZPersistentObject::count( self::definition(), $conds );
+		return $objectList;
+	}
+
 	/*	 * **********************
 	 * OBJECT METHODS
 	 * ********************** */

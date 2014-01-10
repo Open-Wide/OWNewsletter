@@ -156,10 +156,19 @@ class OWNewsletterEditionType extends eZDataType {
 	/**
 	 * @see kernel/classes/eZDataType#deleteStoredObjectAttribute($objectAttribute, $version)
 	 */
-	function deleteStoredObjectAttribute( $contentObjectAttribute, $version = null ) {
-		$object = OWNewsletterEdition::fetch( $contentObjectAttribute->attribute( "id" ), $contentObjectAttribute->attribute( "version" ) );
-		if ( is_object( $object ) ) {
-			$object->remove();
+	function deleteStoredObjectAttribute( $objectAttribute, $version = null ) {
+		if ( $version !== null ) {
+			$object = OWNewsletterEdition::fetch( $objectAttribute->attribute( "id" ), $version );
+			if ( $object instanceof OWNewsletterEdition ) {
+				$object->remove();
+			}
+		} else {
+			$objectList = OWNewsletterEdition::fetchList( array(
+						'contentobject_attribute_id' => $objectAttribute->attribute( "id" )
+					) );
+			foreach ( $objectList as $object ) {
+				$object->remove();
+			}
 		}
 	}
 

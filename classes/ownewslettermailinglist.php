@@ -164,6 +164,12 @@ class OWNewsletterMailingList extends eZPersistentObject {
 	 * OBJECT METHODS
 	 * ********************** */
 
+	/**
+	 * Remove object and all its subscriptions if last
+	 * 
+	 * @param type $conditions
+	 * @param type $extraConditions
+	 */
 	public function remove( $conditions = null, $extraConditions = null ) {
 		parent::remove( $conditions, $extraConditions );
 		if ( self::count( self::definition(), array( 'contentobject_id' => $this->attribute( 'contentobject_id' ) ) ) == 0 ) {

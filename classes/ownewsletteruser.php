@@ -894,8 +894,8 @@ class OWNewsletterUser extends eZPersistentObject {
 	 */
 	function remove( $conditions = null, $extraConditions = null ) {
 // remove subscriptions
-		$currentNewsletterSubscriptionObjects = $this->attribute( 'subscription_list' );
-		foreach ( $currentNewsletterSubscriptionObjects as $subscription ) {
+		$subscriptionList = $this->attribute( 'subscription_list' );
+		foreach ( $subscriptionList as $subscription ) {
 			$subscription->remove();
 		}
 		$blackListItem = OWNewsletterBlacklistItem::fetchByEmail( $this->attribute( 'email' ) );
@@ -903,9 +903,15 @@ class OWNewsletterUser extends eZPersistentObject {
 			$blackListItem->setAttribute( 'newsletter_user_id', 0 );
 			$blackListItem->store();
 		}
+		$itemList = OWNewsletterSendingItem::fetchList( array(
+					'newsletter_user_id' => $this->attribute( 'id' )
+				) );
+		foreach ( $itemList as $item ) {
+			$item->remove();
+		}
 		parent::remove( $conditions, $extraConditions );
 	}
-
+	
 	public function sendConfirmationMail() {
 		$mail = new OWNewsletterMail();
 		$mail->sendConfirmationMail( $this );
