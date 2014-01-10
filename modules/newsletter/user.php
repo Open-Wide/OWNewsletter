@@ -42,8 +42,13 @@ $tpl->setVariable( 'redirect_url_action_success', $redirectUrlSuccess );
 
 /* If press Cancel button */
 if ( $module->isCurrentAction( 'Cancel' ) ) {
-	$module->redirectTo( $redirectUrlCancel );
+	return $module->redirectTo( $redirectUrlCancel );
 }
+
+
+$newsletterIni = eZINI::instance( 'newsletter.ini' );
+$requiredFields = $newsletterIni->variable( 'NewsletterUserSettings', 'RequiredFields' );
+$tpl->setVariable( 'required_fields', $requiredFields );
 
 /* Initilize newsletter user row data */
 $newsletterUserRow = array(
@@ -83,17 +88,32 @@ if ( $module->hasActionParameter( 'NewsletterUser' ) ) {
 				break;
 		}
 	}
+	$attributeWarningList = array();
+	$warningList = array();
+	foreach ( $requiredFields as $requiredField ) {
+		if ( !isset( $newsletterUserRow[$requiredField] ) || empty( $newsletterUserRow[$requiredField] ) ) {
+			$attributeWarningList[] = $requiredField;
+			$warningList[] = 'Some fields are in error, please correct.';
+		}
+	}
 	try {
 		$newsletterUserObject = OWNewsletterUser::createOrUpdate( $newsletterUserRow, 'user_edit' );
-		$newsletterUserObject->updateSubscriptionList( $newsletterUserRow['subscription_list'], 'user_edit' );
+		try {
+			$newsletterUserObject->updateSubscriptionList( $newsletterUserRow['subscription_list'], 'user_edit' );
+		} catch ( Exception $e ) {
+			$attributeWarningList[] = 'subscription_list';
+			$error = $e->getMessage();
+		}
+		if ( $newsletterUserObject instanceof OWNewsletterUser ) {
+			$tpl->setVariable( 'subscription_list', $newsletterUserObject->attribute( 'subscription_list' ) );
+		}
 	} catch ( Exception $e ) {
+		$attributeWarningList[] = 'email';
 		$error = $e->getMessage();
 	}
-	if ( $newsletterUserObject instanceof OWNewsletterUser ) {
-		$tpl->setVariable( 'subscription_list', $newsletterUserObject->attribute( 'subscription_list' ) );
-	}
-	if ( isset( $error ) ) {
-		$tpl->setVariable( 'warning_array', array( $error ) );
+	if ( !empty( $warningList ) )  {
+		$tpl->setVariable( 'attribute_warning_array', $attributeWarningList );
+		$tpl->setVariable( 'warning_array', array_unique( $warningList ) );
 	} else {
 		$module->redirectTo( $redirectUrlSuccess );
 	}

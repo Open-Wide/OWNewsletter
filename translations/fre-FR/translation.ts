@@ -258,6 +258,10 @@
         <source>A user with this email already exists</source>
         <translation>Ce e-mail est déjà utilisé.</translation>
     </message>
+    <message>
+        <source>Some fields are in error, please correct.</source>
+        <translation>Certains champs sont en erreur, veuillez les corriger.</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/user</name>

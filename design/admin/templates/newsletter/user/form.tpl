@@ -79,17 +79,17 @@
 											</td>
 										</tr>
 									{/if}
-									<tr>
+									<tr {if $attribute_warning_array|contains('email')}class="nl-error"{/if}>
 										<th>
-											{'E-mail'|i18n( 'newsletter/user' )}
+											{'E-mail'|i18n( 'newsletter/user' )} *
 										</th>
 										<td>
 											<input  class="halfbox" type="text" name="NewsletterUser[email]" value="{$newsletter_user.email|wash}">
 										</td>
 									</tr>
-									<tr>
+									<tr {if $attribute_warning_array|contains('salutation')}class="nl-error"{/if}>
 										<th>
-											{'Salutation'|i18n( 'newsletter/user' )}
+											{'Salutation'|i18n( 'newsletter/user' )} {if $required_fields|contains('salutation')}*{/if}
 										</th>
 										<td title="{'Salutation'|i18n( 'newsletter/user' )}">
 											{foreach $available_salutation_array as $salutation_id => $salutataion_name}
@@ -97,28 +97,20 @@
 											{/foreach}
 										</td>
 									</tr>
-									<tr>
+									<tr {if $attribute_warning_array|contains('first_name')}class="nl-error"{/if}>
 										<th>
-											{'First name'|i18n( 'newsletter/user' )}
+											{'First name'|i18n( 'newsletter/user' )} {if $required_fields|contains('first_name')}*{/if}
 										</th>
 										<td>
 											<input class="halfbox" type="text" name="NewsletterUser[first_name]" value="{$newsletter_user.first_name|wash}" title="{'First name of newsletter user.'|i18n( 'newsletter/user' )}"
 										</td>
 									</tr>
-									<tr>
+									<tr {if $attribute_warning_array|contains('last_name')}class="nl-error"{/if}>
 										<th>
-											{'Last name'|i18n( 'newsletter/user' )}
+											{'Last name'|i18n( 'newsletter/user' )} {if $required_fields|contains('last_name')}*{/if}
 										</th>
 										<td>
 											<input class="halfbox" type="text" name="NewsletterUser[last_name]" value="{$newsletter_user.last_name|wash}" title="{'Last name of newsletter user.'|i18n( 'newsletter/user' )}"
-										</td>
-									</tr>
-									<tr>
-										<th>
-											{'Organisation'|i18n( 'newsletter/user' )}
-										</th>
-										<td>
-											<input class="halfbox" type="text" name="NewsletterUser[organisation]" value="{$newsletter_user.organisation|wash}" title="{'Organisation of newsletter user.'|i18n( 'newsletter/user' )}"
 										</td>
 									</tr>
 									<tr>

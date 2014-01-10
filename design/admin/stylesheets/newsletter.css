@@ -95,3 +95,7 @@ div.class-newsletter_mailing_list div.block div.right {
 div.newsletter-subscription_export label {
 	vertical-align: top;
 }
+
+.nl-error td {
+	background-color: #FFCCD6;
+}
