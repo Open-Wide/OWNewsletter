@@ -47,6 +47,10 @@
         <translation>S&apos;abonner</translation>
     </message>
     <message>
+        <source>Configure</source>
+        <translation>Configurer</translation>
+    </message>
+    <message>
         <source>Sending</source>
         <translation>Envoi</translation>
     </message>
@@ -191,7 +195,7 @@
         <translation>Vous devez saisir une adresse e-mail valide.</translation>
     </message>
     <message>
-        <source>You must choose a list for subscription.</source>
+        <source>You must select at least one newsletter.</source>
         <translation>Vous devez sélectionner au moins une newsletter.</translation>
     </message>
     <message>
@@ -249,6 +253,10 @@
     <message>
         <source>File is missing.</source>
         <translation>Le fichier est manquante.</translation>
+    </message>
+    <message>
+        <source>A user with this email already exists</source>
+        <translation>Ce e-mail est déjà utilisé.</translation>
     </message>
 </context>
 <context>
@@ -753,6 +761,81 @@
 		<source>You will soon receive an e-mail to confirm your e-mail address.</source>
 		<translation>Vous recevrez bientôt un e-mail pour confirmer votre adresse e-mail.</translation>
 	</message>
+</context>
+<context>
+    <name>newsletter/configure</name>
+    <message>
+        <source>Configure</source>
+        <translation>Configuration</translation>
+    </message>
+    <message>
+        <source>No newsletter available.</source>
+        <translation>Aucune newsletter disponible.</translation>
+    </message>
+    <message>
+        <source>Configure your subscription to our newsletter.</source>
+        <translation>Configurer vos abonnements à nos newsletter.</translation>
+    </message>
+    <message>
+        <source>E-mail</source>
+        <translation>E-mail</translation>
+    </message>
+    <message>
+        <source>Your e-mail.</source>
+        <translation>Votre e-mail.</translation>
+    </message>
+    <message>
+        <source>Salutation</source>
+        <translation>Civilité</translation>
+    </message>
+    <message>
+        <source>First name</source>
+        <translation>Prénom</translation>
+    </message>
+    <message>
+        <source>Your first name.</source>
+        <translation>Votre prénom.</translation>
+    </message>
+    <message>
+        <source>Last name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <source>Your last name</source>
+        <translation>Votre nom</translation>
+    </message>
+    <message>
+        <source>Organisation</source>
+        <translation>Organisation</translation>
+    </message>
+    <message>
+        <source>Your organisation.</source>
+        <translation>Votre organisation.</translation>
+    </message>
+    <message>
+        <source>Your last name</source>
+        <translation>Votre nom</translation>
+    </message>
+    <message>
+        <source>Newsletter</source>
+        <translation>Newsletter</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <source>Data Protection</source>
+        <translation>Protection des données</translation>
+    </message>
+    <message>
+        <source>Your e-mail address will under no circumstances be passed on to unauthorized third parties.</source>
+        <translation>Votre adresse e-mail ne sera en aucun cas transmise à un tiers.</translation>
+    </message>
+    <message>
+        <source>* mandatory fields</source>
+        <translation>* champs obligatoires</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/preview</name>

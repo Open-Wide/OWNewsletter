@@ -47,32 +47,48 @@ if ( $module->isCurrentAction( 'Configure' ) && $module->hasActionParameter( 'Ne
 	if ( empty( $newsletterUserRow['subscription_list'] ) ) {
 		$warningMessages[] = array(
 			'field_key' => ezpI18n::tr( 'newsletter/configure', 'Newsletter' ),
-			'message' => ezpI18n::tr( 'newsletter/warning_message', 'You must choose a list for subscription.' ) );
+			'message' => ezpI18n::tr( 'newsletter/warning_message', 'You must select at least one newsletter.' ) );
 	}
 	if ( empty( $warningMessages ) ) {
 		try {
 			$newsletterUser = OWNewsletterUser::createOrUpdate( $newsletterUserRow, 'configure' );
-		} catch ( OWNewsletterException $e ) {
-			$warningMessages[] = $e->getMessage();
+		} catch ( Exception $e ) {
+			$warningMessages[] = array(
+				'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'E-mail' ),
+				'message' => ezpI18n::tr( 'newsletter/warning_message', $e->getMessage() )
+			);
 		}
+		if( !empty( $newsletterUserRow['subscription_list'] ) ) {
 		$unsubscribeList = array_diff( $newsletterUserRow['mailing_list'], $newsletterUserRow['subscription_list'] );
 		foreach ( $unsubscribeList as $unsubscribe ) {
 			try {
 				$newsletterUser->unsubscribeFrom( $unsubscribe );
-			} catch ( OWNewsletterException $e ) {
-				$warningMessages[] = $e->getMessage();
+			} catch ( Exception $e ) {
+				$warningMessages[] = array(
+					'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'Newsletter' ),
+					'message' => ezpI18n::tr( 'newsletter/warning_message', $e->getMessage() )
+				);
 			}
 		}
 		foreach ( $newsletterUserRow['subscription_list'] as $subscription ) {
 			try {
 				$newsletterUser->subscribeTo( $subscription, OWNewsletterSubscription::STATUS_PENDING, 'configure' );
-			} catch ( OWNewsletterException $e ) {
-				$warningMessages[] = $e->getMessage();
+			} catch ( Exception $e ) {
+				$warningMessages[] = array(
+					'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'Newsletter' ),
+					'message' => ezpI18n::tr( 'newsletter/warning_message', $e->getMessage() )
+				);
 			}
 		}
-	} else {
-		$tpl->setVariable( 'warning_array', $warningMessages );
+		} else {
+			$warningMessages[] = array(
+				'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'Newsletter' ),
+				'message' => ezpI18n::tr( 'newsletter/warning_message', 'You must select at least one newsletter.' ) );
+		}
 	}
+}
+if ( !empty( $warningMessages ) ) {
+	$tpl->setVariable( 'warning_array', $warningMessages );
 }
 $tpl->setVariable( 'newsletter_user', $newsletterUser );
 $tpl->setVariable( 'available_salutation_array', OWNewsletterUser::getAvailablesSalutationsFromIni() );

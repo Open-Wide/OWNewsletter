@@ -43,7 +43,7 @@
 							{/if}
 
 							<div class="block header">
-								<p><b>{'Configure now to one or more of our newsletters.'|i18n( 'newsletter/configure' )}</b></p>
+								<p><b>{'Configure your subscription to our newsletter.'|i18n( 'newsletter/configure' )}</b></p>
 							</div>
 
 							{* E-mail. *}

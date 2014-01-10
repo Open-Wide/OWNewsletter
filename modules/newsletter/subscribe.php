@@ -41,7 +41,7 @@ if ( $module->isCurrentAction( 'Subscribe' ) ) {
 		if ( empty( $newsletterUserRow['subscription_list'] ) ) {
 			$warningMessages[] = array(
 				'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'Newsletter' ),
-				'message' => ezpI18n::tr( 'newsletter/warning_message', 'You must choose a list for subscription.' ) );
+				'message' => ezpI18n::tr( 'newsletter/warning_message', 'You must select at least one newsletter.' ) );
 		}
 		$newsletterUser = OWNewsletterUser::fetchByEmail( $newsletterUserRow['email'] );
 		if( $newsletterUser instanceof OWNewsletterUser ) {
