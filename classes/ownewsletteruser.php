@@ -716,7 +716,6 @@ class OWNewsletterUser extends eZPersistentObject {
 			$this->setAttribute( 'status', self::STATUS_REMOVED_ADMIN );
 			$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_REMOVED_ADMIN );
 		} else {
-			$this->setAttribute( 'status', self::STATUS_REMOVED_SELF );
 			$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_REMOVED_SELF );
 		}
 		$this->store();
@@ -751,7 +750,7 @@ class OWNewsletterUser extends eZPersistentObject {
 	 * 
 	 * @return void
 	 */
-	public function setConfirmed(  ) {
+	public function setConfirmed() {
 		$this->setAttribute( 'status', self::STATUS_CONFIRMED );
 		$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_CONFIRMED );
 		$this->store();
@@ -804,33 +803,37 @@ class OWNewsletterUser extends eZPersistentObject {
 			case 'status': {
 					$currentTimeStamp = time();
 					switch ( $value ) {
-						case self::STATUS_CONFIRMED : {
-								$this->setAttribute( 'confirmed', $currentTimeStamp );
-								// if a user is confirmed reset bounce count
-								$this->resetBounceCount();
-							} break;
+						case self::STATUS_CONFIRMED :
+							$this->setAttribute( 'confirmed', $currentTimeStamp );
+							// if a user is confirmed reset bounce count
+							$this->resetBounceCount();
+							break;
 
 						case self::STATUS_BOUNCED_SOFT :
-						case self::STATUS_BOUNCED_HARD : {
-								$this->setAttribute( 'bounced', $currentTimeStamp );
-								// set all subscriptions and all open senditems to bounced
-								// see
-								// setBounced
-								// setAllNewsletterUserRelatedItemsToStatus
-							} break;
+						case self::STATUS_BOUNCED_HARD :
+							$this->setAttribute( 'bounced', $currentTimeStamp );
+							// set all subscriptions and all open senditems to bounced
+							// see
+							// setBounced
+							// setAllNewsletterUserRelatedItemsToStatus
+							break;
 						case self::STATUS_REMOVED_ADMIN :
 						case self::STATUS_REMOVED_SELF : {
 								$this->setAttribute( 'removed', $currentTimeStamp );
 								// set all subscriptions and all open senditems to removed
-							//
-                    } break;
-						case self::STATUS_BLACKLISTED : {
-								$this->setAttribute( 'blacklisted', $currentTimeStamp );
-								// set all subscriptions and all open senditems to blacklisted
-								// see
-								// setBlacklisted
-								// setAllNewsletterUserRelatedItemsToStatus
-							} break;
+								//
+								break;
+							}
+						case self::STATUS_REMOVED_SELF :
+							$value = $this->attribute( 'status' );
+							break;
+						case self::STATUS_BLACKLISTED :
+							$this->setAttribute( 'blacklisted', $currentTimeStamp );
+							// set all subscriptions and all open senditems to blacklisted
+							// see
+							// setBlacklisted
+							// setAllNewsletterUserRelatedItemsToStatus
+							break;
 					}
 					return eZPersistentObject::setAttribute( $attr, $value );
 				} break;
@@ -911,7 +914,7 @@ class OWNewsletterUser extends eZPersistentObject {
 		}
 		parent::remove( $conditions, $extraConditions );
 	}
-	
+
 	public function sendConfirmationMail() {
 		$mail = new OWNewsletterMail();
 		$mail->sendConfirmationMail( $this );
