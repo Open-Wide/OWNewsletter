@@ -16,7 +16,8 @@ class OWNewsletterMailingList extends eZPersistentObject {
 	 * @return void
 	 */
 	static function definition() {
-		return array( 'fields' => array( 'contentobject_attribute_id' => array(
+		return array( 'fields' => array(
+				'contentobject_attribute_id' => array(
 					'name' => 'ContentObjectAttributeId',
 					'datatype' => 'integer',
 					'default' => 0,
@@ -51,6 +52,7 @@ class OWNewsletterMailingList extends eZPersistentObject {
 			'function_attributes' => array(
 				'siteaccess_list' => 'getSiteaccessList',
 				'available_siteaccess_list' => 'getAvailableSiteAccessList',
+				'subscriptions' => 'getSubscriptions',
 			),
 			'class_name' => 'OWNewsletterMailingList',
 			'name' => 'ownl_mailing_list' );
@@ -95,6 +97,13 @@ class OWNewsletterMailingList extends eZPersistentObject {
 		return $availableSiteAccessListInfoArray;
 	}
 
+	/**
+	 * Returns all subscriptions of the mailing list
+	 */
+	public function getSubscriptions() {
+		return OWNewsletterSubscription::fetchList( array( 'mailing_list_contentobject_id' => $this->attribute( 'contentobject_id' ) ) );
+	}
+
 	/*	 * **********************
 	 * FETCH METHODS
 	 * ********************** */
@@ -129,9 +138,40 @@ class OWNewsletterMailingList extends eZPersistentObject {
 		return null;
 	}
 
+	/**
+	 * Search all objects with custom conditions
+	 *
+	 * @param array $conds
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @param boolean $asObject
+	 * @return array
+	 */
+	static function fetchList( $conds = array(), $limit = false, $offset = false, $asObject = true ) {
+		$sortArr = null;
+		$limitArr = null;
+
+		if ( (int) $limit != 0 ) {
+			$limitArr = array(
+				'limit' => $limit,
+				'offset' => $offset );
+		}
+		$objectList = eZPersistentObject::fetchObjectList( self::definition(), null, $conds, $sortArr, $limitArr, $asObject, null, null, null, null );
+		return $objectList;
+	}
+
 	/*	 * **********************
 	 * OBJECT METHODS
 	 * ********************** */
+
+	public function remove( $conditions = null, $extraConditions = null ) {
+		parent::remove( $conditions, $extraConditions );
+		if ( self::count( self::definition(), array( 'contentobject_id' => $this->attribute( 'contentobject_id' ) ) ) == 0 ) {
+			foreach ( $this->attribute( 'subscriptions' ) as $subscriptions ) {
+				$subscriptions->remove();
+			}
+		}
+	}
 
 	/*	 * **********************
 	 * PERSISTENT METHODS
@@ -140,7 +180,6 @@ class OWNewsletterMailingList extends eZPersistentObject {
 	/*	 * **********************
 	 * OTHER METHODS
 	 * ********************** */
-
 }
 
 ?>

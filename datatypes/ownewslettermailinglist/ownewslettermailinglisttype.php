@@ -31,7 +31,7 @@ class OWNewsletterMailingListType extends eZDataType {
 		$postListData = array();
 		$postListData['siteaccess_list'] = $http->hasPostVariable( $prefix . 'SiteaccessList' . $postfix ) ? $http->postVariable( $prefix . 'SiteaccessList' . $postfix ) : array();
 		$postListData['auto_approve_registered_user'] = $http->postVariable( $prefix . 'AutoApproveRegisterdUser' . $postfix );
-		
+
 
 		$listObject = new OWNewsletterMailingList( array(
 			'contentobject_attribute_id' => $contentObjectAttribute->attribute( 'id' ),
@@ -153,10 +153,20 @@ class OWNewsletterMailingListType extends eZDataType {
 	 * (non-PHPdoc)
 	 * @see kernel/classes/eZDataType#deleteStoredObjectAttribute($objectAttribute, $version)
 	 */
-	function deleteStoredObjectAttribute( $contentObjectAttribute, $version = null ) {
-		$object = OWNewsletterMailingList::fetch( $contentObjectAttribute->attribute( "id" ), $contentObjectAttribute->attribute( "version" ) );
-		if ( is_object( $object ) ) {
-			$object->remove();
+	function deleteStoredObjectAttribute( $objectAttribute, $version = null ) {
+		if ( $version !== null ) {
+			$object = OWNewsletterMailingList::fetch( $objectAttribute->attribute( "id" ), $version );
+			if ( $object instanceof OWNewsletterMailingList ) {
+				die();
+				$object->remove();
+			}
+		} else {
+			$objectList = OWNewsletterMailingList::fetchList( array(
+						'contentobject_attribute_id' => $objectAttribute->attribute( "id" )
+					) );
+			foreach ( $objectList as $object ) {
+				$object->remove();
+			}
 		}
 	}
 
