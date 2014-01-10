@@ -763,6 +763,25 @@
 	</message>
 </context>
 <context>
+    <name>newsletter/confirmation/mail</name>
+	<message>
+		<source>Confirmation of subscription to our newsletters</source>
+		<translation>Confirmation de l'abonnement à nos newsletters</translation>
+	</message>
+	<message>
+		<source>Hello %name</source>
+		<translation>Bonjour %name</translation>
+	</message>
+	<message>
+		<source>To activate or edit your subscription, please visit</source>
+		<translation>Pour activer ou modifier votre profil, veuillez suivre</translation>
+	</message>
+	<message>
+		<source>this link</source>
+		<translation>ce lien</translation>
+	</message>
+</context>
+<context>
     <name>newsletter/configure</name>
     <message>
         <source>Configure</source>

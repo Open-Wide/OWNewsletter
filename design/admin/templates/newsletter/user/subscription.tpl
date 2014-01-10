@@ -42,7 +42,7 @@
                                         {'Mailing list'|i18n( ( 'newsletter/user' ) )}
                                     </th>
                                     <td>
-                                        <a href={$subscription.mailing_list.main_node.url_alias|ezurl()}>{$subscription.mailing_list.name|wash()}</a>
+                                        <a href={$subscription.mailing_list_contentobject.main_node.url_alias|ezurl()}>{$subscription.mailing_list_contentobject.name|wash()}</a>
                                     </td>
                                 </tr>
                                 <tr>

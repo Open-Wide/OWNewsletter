@@ -8,6 +8,15 @@ $newsletterUser = OWNewsletterUser::fetchByHash( $Params['Hash'] );
 if ( !$newsletterUser instanceof OWNewsletterUser || $newsletterUser->isOnBlacklist() ) {
 	return $module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel' );
 }
+switch ( $newsletterUser->attribute( 'status' ) ) {
+	case OWNewsletterUser::STATUS_BLACKLISTED :
+	case OWNewsletterUser::STATUS_REMOVED_ADMIN :
+	case OWNewsletterUser::STATUS_REMOVED_SELF :
+		return $module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel' );
+	case OWNewsletterUser::STATUS_PENDING:
+		$newsletterUser->setConfirmed();
+		break;
+}
 
 /* Retrieval of cancel and success redirect URLs */
 $redirectUrlCancel = $redirectUrlSuccess = 'newsletter/configure/' . $Params['Hash'];
@@ -58,28 +67,28 @@ if ( $module->isCurrentAction( 'Configure' ) && $module->hasActionParameter( 'Ne
 				'message' => ezpI18n::tr( 'newsletter/warning_message', $e->getMessage() )
 			);
 		}
-		if( !empty( $newsletterUserRow['subscription_list'] ) ) {
-		$unsubscribeList = array_diff( $newsletterUserRow['mailing_list'], $newsletterUserRow['subscription_list'] );
-		foreach ( $unsubscribeList as $unsubscribe ) {
-			try {
-				$newsletterUser->unsubscribeFrom( $unsubscribe );
-			} catch ( Exception $e ) {
-				$warningMessages[] = array(
-					'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'Newsletter' ),
-					'message' => ezpI18n::tr( 'newsletter/warning_message', $e->getMessage() )
-				);
+		if ( !empty( $newsletterUserRow['subscription_list'] ) ) {
+			$unsubscribeList = array_diff( $newsletterUserRow['mailing_list'], $newsletterUserRow['subscription_list'] );
+			foreach ( $unsubscribeList as $unsubscribe ) {
+				try {
+					$newsletterUser->unsubscribeFrom( $unsubscribe );
+				} catch ( Exception $e ) {
+					$warningMessages[] = array(
+						'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'Newsletter' ),
+						'message' => ezpI18n::tr( 'newsletter/warning_message', $e->getMessage() )
+					);
+				}
 			}
-		}
-		foreach ( $newsletterUserRow['subscription_list'] as $subscription ) {
-			try {
-				$newsletterUser->subscribeTo( $subscription, OWNewsletterSubscription::STATUS_PENDING, 'configure' );
-			} catch ( Exception $e ) {
-				$warningMessages[] = array(
-					'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'Newsletter' ),
-					'message' => ezpI18n::tr( 'newsletter/warning_message', $e->getMessage() )
-				);
+			foreach ( $newsletterUserRow['subscription_list'] as $subscription ) {
+				try {
+					$newsletterUser->subscribeTo( $subscription, OWNewsletterSubscription::STATUS_PENDING, 'configure' );
+				} catch ( Exception $e ) {
+					$warningMessages[] = array(
+						'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'Newsletter' ),
+						'message' => ezpI18n::tr( 'newsletter/warning_message', $e->getMessage() )
+					);
+				}
 			}
-		}
 		} else {
 			$warningMessages[] = array(
 				'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'Newsletter' ),

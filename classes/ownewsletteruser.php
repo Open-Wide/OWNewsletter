@@ -180,10 +180,10 @@ class OWNewsletterUser extends eZPersistentObject {
 				'status_name' => 'getStatusString',
 				'status_identifier' => 'getStatusIdentifier',
 				'active_subscriptions' => 'getActiveSubscriptions',
-				'active_mailing_lists' => 'getActiveMailingLists',
-				'active_mailing_list_ids' => 'getActiveMailingListIDs',
+				'active_mailing_list_contentobjects' => 'getActiveMailingLists',
+				'active_mailing_list_contentobject_ids' => 'getActiveMailingListIDs',
 				'approved_subscriptions' => 'getApprovedSubscriptions',
-				'approved_mailing_lists' => 'getApprovedMailingLists',
+				'approved_mailing_list_contentobjects' => 'getApprovedMailingLists',
 			),
 			'class_name' => 'OWNewsletterUser',
 			'name' => 'ownl_user' );
@@ -428,7 +428,7 @@ class OWNewsletterUser extends eZPersistentObject {
 		$return = array();
 		$approvedSubscriptions = $this->attribute( 'approved_subscriptions' );
 		foreach ( $approvedSubscriptions as $approvedSubscription ) {
-			$return[$approvedSubscription->attribute( 'mailing_list' )->attribute( 'id' )] = $approvedSubscription->attribute( 'mailing_list' );
+			$return[$approvedSubscription->attribute( 'mailing_list_contentobject' )->attribute( 'id' )] = $approvedSubscription->attribute( 'mailing_list_contentobject' );
 		}
 		return $return;
 	}
@@ -442,7 +442,7 @@ class OWNewsletterUser extends eZPersistentObject {
 		$return = array();
 		$activeSubscriptions = $this->attribute( 'active_subscriptions' );
 		foreach ( $activeSubscriptions as $activeSubscription ) {
-			$return[$activeSubscription->attribute( 'mailing_list' )->attribute( 'id' )] = $activeSubscription->attribute( 'mailing_list' );
+			$return[$activeSubscription->attribute( 'mailing_list_contentobject' )->attribute( 'id' )] = $activeSubscription->attribute( 'mailing_list_contentobject' );
 		}
 		return $return;
 	}
@@ -453,7 +453,7 @@ class OWNewsletterUser extends eZPersistentObject {
 	 * @return array of OWNewsletterMailingList
 	 */
 	function getActiveMailingListIDs() {
-		$activeMailingLists = $this->attribute( 'active_mailing_lists' );
+		$activeMailingLists = $this->attribute( 'active_mailing_list_contentobjects' );
 		return array_keys( $activeMailingLists );
 	}
 
@@ -747,6 +747,17 @@ class OWNewsletterUser extends eZPersistentObject {
 	}
 
 	/**
+	 * Mark the user as confirmed
+	 * 
+	 * @return void
+	 */
+	public function setConfirmed(  ) {
+		$this->setAttribute( 'status', self::STATUS_CONFIRMED );
+		$this->setAllNewsletterUserRelatedItemsToStatus( self::STATUS_CONFIRMED );
+		$this->store();
+	}
+
+	/**
 	 * set Modifed data if somebody store content
 	 * (non-PHPdoc)
 	 * @see kernel/classes/eZPersistentObject#store($fieldFilters)
@@ -895,8 +906,9 @@ class OWNewsletterUser extends eZPersistentObject {
 		parent::remove( $conditions, $extraConditions );
 	}
 
-	public function sendSubscriptionConfirmationMail() {
-		//TODO
+	public function sendConfirmationMail() {
+		$mail = new OWNewsletterMail();
+		$mail->sendConfirmationMail( $this );
 	}
 
 	/*	 * **********************
@@ -1027,7 +1039,7 @@ class OWNewsletterUser extends eZPersistentObject {
 			case self::STATUS_BOUNCED_SOFT:
 			case self::STATUS_BOUNCED_HARD:
 			case self::STATUS_BLACKLISTED:
-				// update active subscriptions
+			case self::STATUS_CONFIRMED:
 				$activeSubscriptionList = OWNewsletterSubscription::fetchActiveList( array( 'newsletter_user_id' => $this->attribute( 'id' ) ) );
 				foreach ( $activeSubscriptionList as $subscription ) {
 					if ( $subscription->attribute( 'status' ) != $status ) {

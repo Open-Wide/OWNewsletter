@@ -51,7 +51,7 @@ if ( $module->isCurrentAction( 'Subscribe' ) ) {
 			foreach ( $newsletterUserRow['subscription_list'] as $subscription ) {
 				$newsletterUser->subscribeTo( $subscription, OWNewsletterSubscription::STATUS_PENDING, 'subscribe' );
 			}
-			$newsletterUser->sendSubscriptionConfirmationMail( );
+			$newsletterUser->sendConfirmationMail( );
 			$tpl->setVariable( 'existing_newsletter_user', $newsletterUser );
 			$template = 'design:newsletter/subscribe/success.tpl';
 		} else {

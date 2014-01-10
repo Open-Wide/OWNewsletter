@@ -235,7 +235,7 @@
 										{foreach $subscription_list as $subscription sequence array( bglight, bgdark ) as $style}
 											<tr class="{$style}">
 												<td>
-													<a href={$subscription.mailing_list.main_node.url_alias|ezurl}>{$subscription.mailing_list.name|wash()} </a>
+													<a href={$subscription.mailing_list_contentobject.main_node.url_alias|ezurl}>{$subscription.mailing_list_contentobject.name|wash()} </a>
 												</td>
 												<td>
 													<img src={'1x1.gif'|ezimage} alt="{$subscription.status_name}" title="{$subscription.status_name}" class="icon12 icon_s_{$subscription.status_identifier}" />

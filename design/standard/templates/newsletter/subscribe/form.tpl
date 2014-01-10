@@ -102,7 +102,7 @@
 												{def $newsletter_mailing_list_id = $newsletter_mailing_list.contentobject_id}
 												<tr>
 													<td valign="top" class="newsletter-list">
-														<input type="checkbox" name="NewsletterUser[mailing_list][]" value="{$newsletter_mailing_list_id}" />
+														<input type="hidden" name="NewsletterUser[mailing_list][]" value="{$newsletter_mailing_list_id}" />
 														{if $newsletter_mailing_list_list_count|eq(1)}
 															<input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}" checked="checked" title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
 														{else}

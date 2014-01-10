@@ -103,7 +103,8 @@ class OWNewsletterSubscription extends eZPersistentObject {
 			'function_attributes' => array(
 				'id' => 'getId',
 				'newsletter_user' => 'getNewsletterUserObject',
-				'mailing_list' => 'getMailingListObject',
+				'mailing_list' => 'getMailingList',
+				'mailing_list_contentobject' => 'getMailingListContentObject',
 				'is_removed' => 'isRemoved',
 				'is_removed_self' => 'isRemovedSelf',
 				'is_blacklisted' => 'isBlacklisted',
@@ -144,11 +145,21 @@ class OWNewsletterSubscription extends eZPersistentObject {
 	}
 
 	/**
-	 * Return user newsletterListObject
+	 * Return mailing list object
 	 *
-	 * @return object
+	 * @return OWNewsletterMailingList
 	 */
-	function getMailingListObject() {
+	function getMailingList() {
+		$object = OWNewsletterMailingList::fetchLastVersion( $this->attribute( 'mailing_list_contentobject_id' ) );
+		return $object;
+	}
+
+	/**
+	 * Return mailing list content object
+	 *
+	 * @return eZContentObject
+	 */
+	function getMailingListContentObject() {
 		$object = eZContentObject::fetch( $this->attribute( 'mailing_list_contentobject_id' ) );
 		return $object;
 	}
