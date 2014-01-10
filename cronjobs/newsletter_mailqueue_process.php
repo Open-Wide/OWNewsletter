@@ -25,18 +25,21 @@ foreach ( $sendingList as $sending ) {
 	$newsletterIni = new eZINI( 'newsletter.ini' );
 	$limit = $newsletterIni->variable( 'NewsletterMailSettings', 'EmailsBySendingSession' );
 
-	$mail = new OWNewsletterMail();
-	$mail->sendNewsletter( $sending, $limit, $newsletterTracking );
-
 	$noSentItemCount = OWNewsletterSendingItem::countList( array(
 				'edition_contentobject_id' => $sending->attribute( 'edition_contentobject_id' ),
 				'status' => OWNewsletterSendingItem::STATUS_NEW
 			) );
-	if ( $noSentItemCount == 0 ) {
-		$sending->setAttribute( 'status', OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_FINISHED );
-		$sending->store();
-		OWScriptLogger::logNotice( "Mailqueue process finished", 'mailqueue_process' );
-	} else {
-		OWScriptLogger::logNotice( "The treatment of mailqueue will continue at the next script", 'mailqueue_process' );
+	while ( $noSentItemCount > 0 ) {
+		$mail = new OWNewsletterMail();
+		$mail->sendNewsletter( $sending, $limit, $newsletterTracking );
+
+		$noSentItemCount = OWNewsletterSendingItem::countList( array(
+					'edition_contentobject_id' => $sending->attribute( 'edition_contentobject_id' ),
+					'status' => OWNewsletterSendingItem::STATUS_NEW
+				) );
+		 usleep( $newsletterIni->variable('NewsletterMailSettings', 'DelayBeforeNextSendingSession')*1000000 );
 	}
+	$sending->setAttribute( 'status', OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_FINISHED );
+	$sending->store();
+	OWScriptLogger::logNotice( "Mailqueue process finished", 'mailqueue_process' );
 }
