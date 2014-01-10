@@ -88,7 +88,7 @@ class OWNewsletterFunctionCollection {
 	 * @param integer $offset
 	 * @return array of OWNewsletterSubscription
 	 */
-	static function fetchUsers( $mailing_list_contentobject_id, $user_status, $subscription_status, $limit, $offset ) {
+	static function fetchUsers( $mailing_list_contentobject_id, $user_status, $subscription_status, $email, $limit, $offset ) {
 		$conds = array();
 		if ( $mailing_list_contentobject_id !== FALSE ) {
 			$conds['subscription']['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
@@ -100,6 +100,9 @@ class OWNewsletterFunctionCollection {
 		if ( is_string( $subscription_status ) ) {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
+		}
+		if( !empty( $email )) {
+			$conds['email'] = array('like', "%$email%");
 		}
 		return array( 'result' => OWNewsletterUser::fetchListWithSubsricption( $conds, $limit, $offset ) );
 	}
@@ -112,7 +115,7 @@ class OWNewsletterFunctionCollection {
 	 * @param string $subscription_status
 	 * @return integer
 	 */
-	static function countUsers( $mailing_list_contentobject_id, $user_status, $subscription_status ) {
+	static function countUsers( $mailing_list_contentobject_id, $user_status, $subscription_status, $email ) {
 		$conds = array();
 		if ( $mailing_list_contentobject_id !== FALSE ) {
 			$conds['subscription']['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
@@ -124,6 +127,9 @@ class OWNewsletterFunctionCollection {
 		if ( is_string( $subscription_status ) ) {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
+		}
+		if( !empty( $email )) {
+			$conds['email'] = array('like', "%$email%");
 		}
 		return array( 'result' => OWNewsletterUser::countListWithSubsricption( $conds ) );
 	}

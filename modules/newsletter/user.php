@@ -14,6 +14,9 @@ $viewParameters = array( 'status' => FALSE, 'offset' => 0 );
 if ( is_array( $Params['UserParameters'] ) ) {
 	$viewParameters = array_merge( $viewParameters, $Params['UserParameters'] );
 }
+if ( $module->hasActionParameter( 'SearchUserEmail' ) ) {
+	$viewParameters['search_user_email'] = $module->actionParameter( 'SearchUserEmail' );
+}
 $tpl->setVariable( 'view_parameters', $viewParameters );
 
 /* Initilize module result */

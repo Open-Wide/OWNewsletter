@@ -26,7 +26,8 @@ $ViewList['user'] = array(
 		'RemoveNewsletterUserButton' => 'RemoveNewsletterUser',
 		'RemoveForGoodNewsletterUserButton' => 'RemoveForGoodNewsletterUser',
 		'ApproveSubscriptionButton' => 'ApproveSubscription',
-		'RemoveSubscriptionButton' => 'RemoveSubscription'
+		'RemoveSubscriptionButton' => 'RemoveSubscription',
+		'UserSearchButton' => 'UserSearch'
 	),
 	'post_action_parameters' => array(
 		'Cancel' => array(
@@ -57,6 +58,9 @@ $ViewList['user'] = array(
 		),
 		'RemoveSubscription' => array(
 			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+		),
+		'UserSearch' => array(
+			'SearchUserEmail' => 'SearchUserEmail'
 		)
 	)
 );

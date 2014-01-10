@@ -15,7 +15,8 @@
 	{/if}
 	{def $all_user_list_count = fetch( 'newsletter', 'user_count' )
 		$user_list_count = fetch( 'newsletter', 'user_count', hash( 
-					'user_status', $view_parameters.status
+					'user_status', $view_parameters.status,
+					'email', $view_parameters['search_user_email']
 				) )
 		$base_uri = 'newsletter/user'
 		$page_uri = $base_uri
@@ -138,8 +139,8 @@
 							</div>
 							<div class="right">
 								<form action={$base_uri|ezurl()} name="UserList" method="post">
-									<input disabled="disabled" type="text" name="SearchUserEmail" value="{if is_set($view_parameters['search_user_email'])}{$view_parameters['search_user_email']}{/if}">
-									<input disabled="disabled" class="button" type="submit" name="SubmitUserSearch" value="{'Search for existing user'|i18n( 'newsletter/user' )}">
+									<input type="text" name="SearchUserEmail" value="{if is_set($view_parameters['search_user_email'])}{$view_parameters['search_user_email']}{/if}">
+									<input class="button" type="submit" name="UserSearchButton" value="{'Search for existing user'|i18n( 'newsletter/user' )}">
 								</form>
 							</div>
 						</div>
@@ -148,6 +149,7 @@
 					{if $user_list_count}
 						{def $user_list = fetch('newsletter', 'user_list', hash( 
 							'user_status', $view_parameters.status,
+							'email', $view_parameters['search_user_email'],
 							'offset', $view_parameters.offset,
 							'limit', $limit
 						) )}
