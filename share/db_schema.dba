@@ -173,20 +173,6 @@ $schema = array(
 				'type' => 'varchar',
 				'default' => NULL,
 			),
-			'organisation' => array(
-				'length' => 255,
-				'type' => 'varchar',
-				'default' => NULL,
-			),
-			'birthday' => array(
-				'length' => 10,
-				'type' => 'varchar',
-				'default' => NULL,
-			),
-			'data_xml' => array(
-				'type' => 'text',
-				'default' => false,
-			),
 			'hash' => array(
 				'length' => 255,
 				'type' => 'varchar',
@@ -265,7 +251,7 @@ $schema = array(
 				'type' => 'tinyint',
 				'default' => '0',
 			),
-			'data_text' => array(
+			'serialized_data' => array(
 				'type' => 'text',
 				'default' => false,
 			),
