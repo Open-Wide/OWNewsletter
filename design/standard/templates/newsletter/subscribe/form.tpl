@@ -34,14 +34,14 @@
 									<div class="message-warning">
 										<h2>{'Input did not validate'|i18n('newsletter/warning_message')}</h2>
 										<ul>
-											{foreach $warning_array as $message_array_item}
-												<li>{if $message_array_item.field_key|eq('')|not}<span class="key">{$message_array_item.field_key|wash}: </span>{/if}<span class="text">{$message_array_item.message|wash()}</span></li>
-											{/foreach}
+											{foreach $warning_array as $message}
+												<li><span class="text">{$message|i18n('newsletter/warning_message')}</span></li>
+												{/foreach}
 										</ul>
 									</div>
 								</div>
 							{/if}
-							
+
 							{if is_set( $existing_newsletter_user )}
 								{'You are already subscribed to our newsletter.'|i18n( 'newsletter/subscribe' )}
 								{'To change your subscription'|i18n( 'newsletter/subscribe' )},
@@ -54,37 +54,32 @@
 
 							{* E-mail. *}
 							<p>{'* mandatory fields'|i18n( 'newsletter/subscribe' )}</p>
-							<div class="block">
+							<div class="block {if $attribute_warning_array|contains('email')}nl-error{/if}">
 								<label for="Subscription_Email">{"E-mail"|i18n( 'newsletter/subscribe' )} *:</label>
 								<input class="halfbox" id="Subscription_Email" type="text" name="NewsletterUser[email]" value="{$newsletter_user.email|email}" title="{'Your e-mail.'|i18n( 'newsletter/subscribe' )}" />
 							</div>
 
 							{* salutation *}
-							<div class="block" id="nl-salutation">
-								<label>{"Salutation"|i18n( 'newsletter/subscribe' )}:</label>
+							<div class="block {if $attribute_warning_array|contains('salutation')}nl-error{/if}" id="nl-salutation">
+								<label>{"Salutation"|i18n( 'newsletter/subscribe' )} {if $required_fields|contains('salutation')}*{/if}:</label>
 								{foreach $available_salutation_array as $salutation_id => $salutation_name}
 									<input type="radio" name="NewsletterUser[salutation]" value="{$salutation_id|wash}"{if and( is_set( $newsletter_user.salutation ), $newsletter_user.salutation|eq( $salutation_id ) )} checked="checked"{/if} title="{$salutation_name|wash}" />{$salutation_name|wash}&nbsp;
 								{/foreach}
 							</div>
 
 							{* First name. *}
-							<div class="block">
-								<label for="Subscription_FirstName">{"First name"|i18n( 'newsletter/subscribe' )}:</label>
+							<div class="block {if $attribute_warning_array|contains('first_name')}nl-error{/if}">
+								<label for="Subscription_FirstName">{"First name"|i18n( 'newsletter/subscribe' )} {if $required_fields|contains('first_name')}*{/if}:</label>
 								<input class="halfbox" id="Subscription_FirstName" type="text" name="NewsletterUser[first_name]" value="{$newsletter_user.first_name|wash}" title="{'Your first name.'|i18n( 'newsletter/subscribe' )}" />
 							</div>
 
 							{* Last name. *}
-							<div class="block">
-								<label for="Subscription_LastName">{"Last name"|i18n( 'newsletter/subscribe' )}:</label>
+							<div class="block {if $attribute_warning_array|contains('last_name')}nl-error{/if}">
+								<label for="Subscription_LastName">{"Last name"|i18n( 'newsletter/subscribe' )} {if $required_fields|contains('last_name')}*{/if}:</label>
 								<input class="halfbox" id="Subscription_LastName" type="text" name="NewsletterUser[last_name]" value="{$newsletter_user.last_name|wash}" title="{'Your last name.'|i18n( 'newsletter/subscribe' )}" />
 							</div>
 
-							{* Organisation. *}
-							<div class="block">
-								<label for="Subscription_Organisation">{"Organisation"|i18n( 'newsletter/subscribe' )}:</label>
-								<input class="halfbox" id="Subscription_Organisation" type="text" name="NewsletterUser[organisation]" value="{$newsletter_user.organisation|wash}" title="{'Your organisation.'|i18n( 'newsletter/subscribe' )}" />
-							</div>
-							<div class="block">
+							<div class="block {if $attribute_warning_array|contains('subscription_list')}nl-error{/if}">
 								{foreach $newsletter_system_list as $newsletter_system}
 									{def $newsletter_mailing_list_list = fetch( 'content', 'tree', hash(
 											'parent_node_id', $newsletter_system.node_id,

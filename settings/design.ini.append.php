@@ -4,7 +4,8 @@
 DesignExtensions[]=ownewsletter
 
 [StylesheetSettings]
-BackendCSSFileList[]=newsletter.css
+FrontendCSSFileList[]=newsletter.css
+BackendCSSFileList[]=newsletter_admin.css
 
 
  */

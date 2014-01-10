@@ -19,6 +19,10 @@ if ( $module->isCurrentAction( 'Cancel' ) ) {
 	$module->redirectTo( $redirectUrlCancel );
 }
 
+$newsletterIni = eZINI::instance( 'newsletter.ini' );
+$requiredFields = $newsletterIni->variable( 'NewsletterUserSettings', 'RequiredFields' );
+$tpl->setVariable( 'required_fields', $requiredFields );
+
 $newsletterUserRow = array(
 	'email' => '',
 	'salutation' => '',
@@ -32,30 +36,37 @@ $template = 'design:newsletter/subscribe/form.tpl';
 if ( $module->isCurrentAction( 'Subscribe' ) ) {
 	if ( $module->hasActionParameter( 'NewsletterUser' ) ) {
 		$newsletterUserRow = array_merge( $newsletterUserRow, $module->actionParameter( 'NewsletterUser' ) );
-		$warningMessages = array();
+
+		$attributeWarningList = array();
+		$warningList = array();
+		foreach ( $requiredFields as $requiredField ) {
+			if ( !isset( $newsletterUserRow[$requiredField] ) || empty( $newsletterUserRow[$requiredField] ) ) {
+				$attributeWarningList[] = $requiredField;
+				$warningList[] = 'Some fields are in error, please correct.';
+			}
+		}
 		if ( empty( $newsletterUserRow['email'] ) ) {
-			$warningMessages[] = array(
-				'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'E-mail' ),
-				'message' => ezpI18n::tr( 'newsletter/warning_message', 'You must provide a valid email address.' ) );
+			$attributeWarningList[] = 'email';
+			$warningList[] = 'Some fields are in error, please correct.';
 		}
 		if ( empty( $newsletterUserRow['subscription_list'] ) ) {
-			$warningMessages[] = array(
-				'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'Newsletter' ),
-				'message' => ezpI18n::tr( 'newsletter/warning_message', 'You must select at least one newsletter.' ) );
+			$attributeWarningList[] = 'subscription_list';
+			$warningList[] = 'You must select at least one newsletter.';
 		}
 		$newsletterUser = OWNewsletterUser::fetchByEmail( $newsletterUserRow['email'] );
-		if( $newsletterUser instanceof OWNewsletterUser ) {
+		if ( $newsletterUser instanceof OWNewsletterUser ) {
 			$tpl->setVariable( 'existing_newsletter_user', $newsletterUser );
-		} elseif ( empty( $warningMessages ) && !$newsletterUser ) {
+		} elseif ( empty( $warningList ) && !$newsletterUser ) {
 			$newsletterUser = OWNewsletterUser::createOrUpdate( $newsletterUserRow, 'subscribe' );
 			foreach ( $newsletterUserRow['subscription_list'] as $subscription ) {
 				$newsletterUser->subscribeTo( $subscription, OWNewsletterSubscription::STATUS_PENDING, 'subscribe' );
 			}
-			$newsletterUser->sendConfirmationMail( );
+			$newsletterUser->sendConfirmationMail();
 			$tpl->setVariable( 'existing_newsletter_user', $newsletterUser );
 			$template = 'design:newsletter/subscribe/success.tpl';
 		} else {
-			$tpl->setVariable( 'warning_array', $warningMessages );
+			$tpl->setVariable( 'attribute_warning_array', $attributeWarningList );
+			$tpl->setVariable( 'warning_array', array_unique( $warningList ) );
 		}
 	}
 }
