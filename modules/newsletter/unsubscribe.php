@@ -18,7 +18,7 @@ if ( count( $activeSubscriptions ) == 0 ) {
 } else if ( $module->isCurrentAction( 'Cancel' ) ) {
 	$module->redirectTo( '/' );
 } else {
-	$template = 'design:newsletter/unsubscribe/confirmation.tpl';
+	$template = 'design:newsletter/unsubscribe/form.tpl';
 }
 
 $tpl->setVariable( 'newsletter_user', $newsletterUser );

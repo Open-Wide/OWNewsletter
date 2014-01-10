@@ -27,7 +27,7 @@ $newsletterUserRow = array(
 	'status' => OWNewsletterUser::STATUS_PENDING,
 	'subscription_list' => array(),
 );
-$template = 'design:newsletter/subscribe/confirmation.tpl';
+$template = 'design:newsletter/subscribe/form.tpl';
 
 if ( $module->isCurrentAction( 'Subscribe' ) ) {
 	if ( $module->hasActionParameter( 'NewsletterUser' ) ) {
