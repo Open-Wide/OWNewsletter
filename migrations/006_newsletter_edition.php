@@ -27,6 +27,11 @@ class OWNewsletter_005_NewsletterEdition {
 			'can_translate' => FALSE,
 			'data_type_string' => 'ezxmltext'
 		) );
+        $migration->addAttribute( 'configuration', array(
+            'can_translate' => FALSE,
+            'data_type_string' => 'ownewsletteredition',
+            'is_searchable' => FALSE
+        ) );
 
 		$migration->addToContentClassGroup( 'Newsletter Editions' );
 		$migration->end();

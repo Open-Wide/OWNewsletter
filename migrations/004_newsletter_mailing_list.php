@@ -21,6 +21,11 @@ class OWNewsletter_004_NewsletterMailingList {
 		$migration->addAttribute( 'short_description', array(
             'data_type_string' => 'ezxmltext'
         ) );
+        $migration->addAttribute( 'configuration', array(
+            'can_translate' => FALSE,
+            'data_type_string' => 'ownewslettermailinglist',
+            'is_searchable' => FALSE
+        ) );
 		
 		$migration->addToContentClassGroup( 'Newsletter' );
 		$migration->end();
