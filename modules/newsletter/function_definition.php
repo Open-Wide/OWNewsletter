@@ -105,6 +105,16 @@ $FunctionList['user_count'] = array(
 	)
 );
 
+$FunctionList['user_additional_fields'] = array(
+	'name' => 'list',
+	'operation_types' => array( 'read' ),
+	'call_method' => array(
+		'class' => 'OWNewsletterFunctionCollection',
+		'method' => 'fetchUserAdditionalFields' ),
+	'parameter_type' => 'standard',
+	'parameters' => array(	)
+);
+
 $FunctionList['subscription_list'] = array(
 	'name' => 'list',
 	'operation_types' => array( 'read' ),

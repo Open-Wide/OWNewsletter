@@ -13,7 +13,7 @@
 				<ul>
 					{foreach $warning_array as $message}
 						<li><span class="text">{$message|i18n('newsletter/warning_message')}</span></li>
-					{/foreach}
+						{/foreach}
 				</ul>
 			</div>
 		</div>
@@ -111,6 +111,15 @@
 										</th>
 										<td>
 											<input class="halfbox" type="text" name="NewsletterUser[last_name]" value="{$newsletter_user.last_name|wash}" title="{'Last name of newsletter user.'|i18n( 'newsletter/user' )}"
+										</td>
+									</tr>
+									<tr>
+										<th>{'Additional data'|i18n( 'newsletter/user' )}</th>
+										<td>
+											{def $additional_fields = fetch('newsletter', 'user_additional_fields')}
+											{foreach $additional_fields as $field_identifier => $field_configuration}
+												{include uri=concat('design:newsletter/additional_fields/',$field_configuration.type,'.tpl') field_identifier=$field_identifier field_configuration=$field_configuration newsletter_user=$newsletter_user attribute_warning_array=$attribute_warning_array}
+											{/foreach}
 										</td>
 									</tr>
 									<tr>

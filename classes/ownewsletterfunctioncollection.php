@@ -101,8 +101,8 @@ class OWNewsletterFunctionCollection {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
 		}
-		if( !empty( $email )) {
-			$conds['email'] = array('like', "%$email%");
+		if ( !empty( $email ) ) {
+			$conds['email'] = array( 'like', "%$email%" );
 		}
 		return array( 'result' => OWNewsletterUser::fetchListWithSubsricption( $conds, $limit, $offset ) );
 	}
@@ -128,10 +128,15 @@ class OWNewsletterFunctionCollection {
 			$subscription_status = self::getSubscriptionStatus( $subscription_status );
 			$conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
 		}
-		if( !empty( $email )) {
-			$conds['email'] = array('like', "%$email%");
+		if ( !empty( $email ) ) {
+			$conds['email'] = array( 'like', "%$email%" );
 		}
 		return array( 'result' => OWNewsletterUser::countListWithSubsricption( $conds ) );
+	}
+
+	static function fetchUserAdditionalFields() {
+		$object = new OWNewsletterUser();
+		return array( 'result' => $object->attribute( 'additional_fields' ) );
 	}
 
 	/**

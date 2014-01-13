@@ -79,6 +79,10 @@
 								<input class="halfbox" id="Subscription_LastName" type="text" name="NewsletterUser[last_name]" value="{$newsletter_user.last_name|wash}" title="{'Your last name.'|i18n( 'newsletter/subscribe' )}" />
 							</div>
 
+							{def $additional_fields = fetch('newsletter', 'user_additional_fields')}
+							{foreach $additional_fields as $field_identifier => $field_configuration}
+								{include uri=concat('design:newsletter/additional_fields/',$field_configuration.type,'.tpl') field_identifier=$field_identifier field_configuration=$field_configuration newsletter_user=$newsletter_user attribute_warning_array=$attribute_warning_array}
+							{/foreach}
 							<div class="block {if $attribute_warning_array|contains('subscription_list')}nl-error{/if}">
 								{foreach $newsletter_system_list as $newsletter_system}
 									{def $newsletter_mailing_list_list = fetch( 'content', 'tree', hash(

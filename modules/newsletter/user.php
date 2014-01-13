@@ -51,6 +51,7 @@ $requiredFields = $newsletterIni->variable( 'NewsletterUserSettings', 'RequiredF
 $tpl->setVariable( 'required_fields', $requiredFields );
 
 /* Initilize newsletter user row data */
+$tmpUser = new OWNewsletterUser();
 $newsletterUserRow = array(
 	'first_name' => '',
 	'last_name' => '',
@@ -60,7 +61,8 @@ $newsletterUserRow = array(
 	'note' => '',
 	'status' => OWNewsletterUser::STATUS_CONFIRMED,
 	'id_array' => array(),
-	'mailing_list_array' => array()
+	'mailing_list_array' => array(),
+	'additional_data' => $tmpUser->attribute( 'additional_data' )
 );
 if ( $Params['newsletterUserID'] && is_numeric( $Params['newsletterUserID'] ) ) {
 	$newsletterUser = OWNewsletterUser::fetch( $Params['newsletterUserID'] );
@@ -84,6 +86,7 @@ if ( $module->hasActionParameter( 'NewsletterUser' ) ) {
 				break;
 			case 'note' :
 			case 'subscription_list':
+			case 'additional_data':
 				$newsletterUserRow[$data] = $value;
 				break;
 		}
@@ -96,8 +99,14 @@ if ( $module->hasActionParameter( 'NewsletterUser' ) ) {
 			$warningList[] = 'Some fields are in error, please correct.';
 		}
 	}
+	$validateAdditionalData = $tmpUser->validateAdditionalData( $newsletterUserRow['additional_data'] );
+	if ( $validateAdditionalData !== false ) {
+		$attributeWarningList = array_merge( $attributeWarningList, $validateAdditionalData['warning_field'] );
+		$warningList = array_merge( $warningList, $validateAdditionalData['warning_message'] );
+	}
 	try {
 		$newsletterUserObject = OWNewsletterUser::createOrUpdate( $newsletterUserRow, 'user_edit' );
+		$newsletterUserObject->setAdditionalData( $newsletterUserRow['additional_data'] );
 		try {
 			$newsletterUserObject->updateSubscriptionList( $newsletterUserRow['subscription_list'], 'user_edit' );
 		} catch ( Exception $e ) {
@@ -111,7 +120,7 @@ if ( $module->hasActionParameter( 'NewsletterUser' ) ) {
 		$attributeWarningList[] = 'email';
 		$error = $e->getMessage();
 	}
-	if ( !empty( $warningList ) )  {
+	if ( !empty( $warningList ) ) {
 		$tpl->setVariable( 'attribute_warning_array', $attributeWarningList );
 		$tpl->setVariable( 'warning_array', array_unique( $warningList ) );
 	} else {

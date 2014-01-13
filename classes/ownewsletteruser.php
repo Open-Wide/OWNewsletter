@@ -169,6 +169,8 @@ class OWNewsletterUser extends eZPersistentObject {
 				'active_mailing_list_contentobject_ids' => 'getActiveMailingListIDs',
 				'approved_subscriptions' => 'getApprovedSubscriptions',
 				'approved_mailing_list_contentobjects' => 'getApprovedMailingLists',
+				'additional_fields' => 'getAdditionalFields',
+				'additional_data' => 'getAdditionalData'
 			),
 			'class_name' => 'OWNewsletterUser',
 			'name' => 'ownl_user' );
@@ -442,6 +444,241 @@ class OWNewsletterUser extends eZPersistentObject {
 		return array_keys( $activeMailingLists );
 	}
 
+	/**
+	 * Get additional fields from newsletter.ini
+	 */
+	function getAdditionalFields() {
+		$additionalFields = array();
+		$newsletterIni = eZINI::instance( 'newsletter.ini' );
+		$iniAdditionalFieldList = $newsletterIni->variable( 'NewsletterUserSettings', 'AdditionalFields' );
+		$trans = eZCharTransform::instance();
+		foreach ( $iniAdditionalFieldList as $iniAdditionalField ) {
+			$additionalFieldGroup = "AdditionalField_$iniAdditionalField";
+			if ( $newsletterIni->hasGroup( $additionalFieldGroup ) ) {
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'Label' ) ) {
+					$additionalFields[$iniAdditionalField]['label'] = $newsletterIni->variable( $additionalFieldGroup, 'Label' );
+				} else {
+					$additionalFields[$iniAdditionalField]['label'] = $iniAdditionalField;
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'Required' ) ) {
+					$additionalFields[$iniAdditionalField]['required'] = $newsletterIni->variable( $additionalFieldGroup, 'Required' ) == 'true' ? true : false;
+				} else {
+					$additionalFields[$iniAdditionalField]['required'] = false;
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'Type' ) ) {
+					$additionalFields[$iniAdditionalField]['type'] = $newsletterIni->variable( $additionalFieldGroup, 'Type' );
+				} else {
+					$additionalFields[$iniAdditionalField]['type'] = 'string';
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'HelpMessage' ) ) {
+					$additionalFields[$iniAdditionalField]['help_message'] = $newsletterIni->variable( $additionalFieldGroup, 'HelpMessage' );
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'DefaultValue' ) ) {
+					$additionalFields[$iniAdditionalField]['default_value'] = $newsletterIni->variable( $additionalFieldGroup, 'DefaultValue' );
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'MinSelected' ) ) {
+					$additionalFields[$iniAdditionalField]['min_selected'] = $newsletterIni->variable( $additionalFieldGroup, 'MinSelected' );
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'MaxSelected' ) ) {
+					$additionalFields[$iniAdditionalField]['max_selected'] = $newsletterIni->variable( $additionalFieldGroup, 'MaxSelected' );
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'Min' ) ) {
+					$additionalFields[$iniAdditionalField]['min'] = $newsletterIni->variable( $additionalFieldGroup, 'Min' );
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'Max' ) ) {
+					$additionalFields[$iniAdditionalField]['max'] = $newsletterIni->variable( $additionalFieldGroup, 'Max' );
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'MinLenght' ) ) {
+					$additionalFields[$iniAdditionalField]['min_lenght'] = $newsletterIni->variable( $additionalFieldGroup, 'MinLenght' );
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'MaxLenght' ) ) {
+					$additionalFields[$iniAdditionalField]['max_lenght'] = $newsletterIni->variable( $additionalFieldGroup, 'MaxLenght' );
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'Format' ) ) {
+					$additionalFields[$iniAdditionalField]['format'] = $newsletterIni->variable( $additionalFieldGroup, 'Format' );
+				} else {
+					$additionalFields[$iniAdditionalField]['format'] = 'YYYY-MM-DD';
+				}
+				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'SelectOptions' ) ) {
+					$iniValues = $newsletterIni->variable( $additionalFieldGroup, 'SelectOptions' );
+					$fixValues = array();
+					foreach ( $iniValues as $key => $name ) {
+						if ( is_string( $key ) ) {
+							$fixValues[$trans->transformByGroup( $name, 'identifier' )] = $name;
+						} else {
+							$fixValues[$key] = $name;
+						}
+					}
+					$additionalFields[$iniAdditionalField]['select_options'] = $fixValues;
+				}
+				if ( isset( $additionalFields[$iniAdditionalField]['default_value'] ) ) {
+					switch ( $additionalFields[$iniAdditionalField]['type'] ) {
+						case 'integer':
+							$additionalFields[$iniAdditionalField]['default_value'] = (int) $additionalFields[$iniAdditionalField]['default_value'];
+							break;
+						case 'checkbox':
+							$additionalFields[$iniAdditionalField]['default_value'] = $additionalFields[$iniAdditionalField]['default_value'] == 'true' ? true : false;
+							break;
+						case 'multiselect':
+							$additionalFields[$iniAdditionalField]['default_value'] = explode( ';', $additionalFields[$iniAdditionalField]['default_value'] );
+							foreach ( $additionalFields[$iniAdditionalField]['default_value'] as $index => $defaultValue ) {
+								$additionalFields[$iniAdditionalField]['default_value'][$index] = $trans->transformByGroup( $defaultValue, 'identifier' );
+							}
+							break;
+						case 'select':
+							$additionalFields[$iniAdditionalField]['default_value'] = $trans->transformByGroup( $additionalFields[$iniAdditionalField]['default_value'], 'identifier' );
+							break;
+					}
+				}
+			}
+		}
+		return $additionalFields;
+	}
+
+	public function getAdditionalData() {
+		$additionalData = unserialize( $this->attribute( 'serialized_data' ) );
+		if ( $additionalData == false ) {
+			$additionalData = array();
+		}
+		$additionalFields = $this->getAdditionalFields();
+		foreach ( $additionalFields as $fieldIdentifier => $fieldConfiguration ) {
+			if ( isset( $fieldConfiguration['default_value'] ) && !isset( $additionalData[$fieldIdentifier] ) ) {
+				$additionalData[$fieldIdentifier] = $fieldConfiguration['default_value'];
+			}
+		}
+		return $additionalData;
+	}
+
+	public function validateAdditionalData( $newAdditionalData ) {
+		$errors = array(
+			'warning_field' => array(),
+			'warning_message' => array() );
+		$additionalFields = $this->getAdditionalFields();
+		foreach ( $additionalFields as $fieldIdentifier => $fieldConfiguration ) {
+			if ( $fieldConfiguration['required'] == true && (!isset( $newAdditionalData[$fieldIdentifier] ) || empty( $newAdditionalData[$fieldIdentifier] ) ) ) {
+				$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+				$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field is required', null, array(
+							'%fieldname' => $fieldConfiguration['label'] ) );
+			} else {
+				switch ( $fieldConfiguration['type'] ) {
+					case 'integer':
+						if ( isset( $fieldConfiguration['min'] ) && (int) $newAdditionalData[$fieldIdentifier] < $fieldConfiguration['min'] ) {
+							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field must be greater than %value', null, array(
+										'%fieldname' => $fieldConfiguration['label'],
+										'%value' => $fieldConfiguration['min'] ) );
+						}
+						if ( isset( $fieldConfiguration['max'] ) && (int) $newAdditionalData[$fieldIdentifier] > $fieldConfiguration['max'] ) {
+							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field" be lower than %value', null, array(
+										'%fieldname' => $fieldConfiguration['label'],
+										'%value' => $fieldConfiguration['max'] ) );
+						}
+						break;
+					case 'multiselect':
+						if ( isset( $fieldConfiguration['min_selected'] ) && count( $newAdditionalData[$fieldIdentifier] ) < $fieldConfiguration['min_selected'] ) {
+							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must select at least %value values', null, array(
+										'%fieldname' => $fieldConfiguration['label'],
+										'%value' => $fieldConfiguration['min_selected'] ) );
+						}
+						if ( isset( $fieldConfiguration['max_selected'] ) && count( $newAdditionalData[$fieldIdentifier] ) > $fieldConfiguration['max_selected'] ) {
+							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must select at most %value values', null, array(
+										'%fieldname' => $fieldConfiguration['label'],
+										'%value' => $fieldConfiguration['max_selected'] ) );
+						}
+						break;
+					case 'string':
+					case 'text':
+						if ( isset( $fieldConfiguration['min_lenght'] ) && strlen( $newAdditionalData[$fieldIdentifier] ) < $fieldConfiguration['min_lenght'] ) {
+							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must enter a text of at least %value characters', null, array(
+										'%fieldname' => $fieldConfiguration['label'],
+										'%value' => $fieldConfiguration['min_lenght'] ) );
+						}
+						if ( isset( $fieldConfiguration['max_lenght'] ) && strlen( $newAdditionalData[$fieldIdentifier] ) > $fieldConfiguration['max_lenght'] ) {
+							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must enter a text of at most %value characters', null, array(
+										'%fieldname' => $fieldConfiguration['label'],
+										'%value' => $fieldConfiguration['max_lenght'] ) );
+						}
+						break;
+					case 'date':
+					case 'datetime':
+						$initialDate = array(
+							'AAAA' => 0,
+							'MM' => 0,
+							'DD' => 0,
+							'HH' => 0,
+							'mm' => 0,
+							'ss' => 0
+						);
+						$format = $fieldConfiguration['format'];
+						$formatScanReplace = array(
+							'AAAA' => '%4s',
+							'MM' => '%2s',
+							'DD' => '%2s',
+							'HH' => '%2s',
+							'mm' => '%2s',
+							'ss' => '%2s',
+						);
+						$formatScan = str_replace( array_keys( $formatScanReplace ), array_values( $formatScanReplace ), $format );
+						$dateKeys = sscanf( $format, $formatScan );
+
+						$valuesScanReplace = array(
+							'%4s' => '%04d',
+							'%2s' => '%02d'
+						);
+						$valueScan = str_replace( array_keys( $valuesScanReplace ), array_values( $valuesScanReplace ), $formatScan );
+						$dateValues = sscanf( $newAdditionalData[$fieldIdentifier], $valueScan );
+						if ( array_search( null, $dateValues ) !== FALSE ) {
+							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The date is nor valid', null, array(
+										'%fieldname' => $fieldConfiguration['label'] ) );
+						} else {
+							$date = array_merge( $initialDate, array_combine( $dateKeys, $dateValues ) );
+							$timestamp = mktime( $date['HH'], $date['mm'], $date['ss'], $date['MM'], $date['DD'], $date['AAAA'] );
+							if ( $timestamp === FALSE ) {
+								$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+								$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The date is nor valid', null, array(
+											'%fieldname' => $fieldConfiguration['label'] ) );
+							} else {
+								$strftimeFormatReplace = array(
+									'AAAA' => '%Y',
+									'MM' => '%m',
+									'DD' => '%d',
+									'HH' => '%H',
+									'mm' => '%M',
+									'ss' => '%i',
+								);
+								$strftimeFormat = str_replace( array_keys( $strftimeFormatReplace ), array_values( $strftimeFormatReplace ), $format );
+								$strftimeDate = strftime( $strftimeFormat, $timestamp );
+								if ( $strftimeDate != $newAdditionalData[$fieldIdentifier] ) {
+									$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+									$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The date is nor valid', null, array(
+												'%fieldname' => $fieldConfiguration['label'] ) );
+								}
+							}
+						}
+				}
+			}
+		}
+		if ( empty( $errors['warning_field'] ) ) {
+			return false;
+		}
+		return $errors;
+	}
+
+	public function setAdditionalData( $newAdditionalData ) {
+		if ( $this->validateAdditionalData( $newAdditionalData ) === false ) {
+			$this->setAttribute( 'serialized_data', serialize( $newAdditionalData ) );
+			$this->store();
+			return $this;
+		}
+		return false;
+	}
+
 	/*	 * **********************
 	 * FETCH METHODS
 	 * ********************** */
@@ -616,7 +853,9 @@ class OWNewsletterUser extends eZPersistentObject {
 					$error = 'Failed to create or update subscription';
 				}
 			}
-			unset( $currentSubscriptionList[$newSubscription['mailing_list_contentobject_id']] );
+			if ( isset( $newSubscription['mailing_list_contentobject_id'] ) && isset( $currentSubscriptionList[$newSubscription['mailing_list_contentobject_id']] ) ) {
+				unset( $currentSubscriptionList[$newSubscription['mailing_list_contentobject_id']] );
+			}
 		}
 		foreach ( $currentSubscriptionList as $currentSubscription ) {
 			$currentSubscription->remove();

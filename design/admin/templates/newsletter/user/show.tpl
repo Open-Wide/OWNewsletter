@@ -48,8 +48,13 @@
                                     <td>{$newsletter_user.last_name|wash()}</td>
                                 </tr>
                                 <tr>
-                                    <th>{'Organisation'|i18n( 'newsletter/user' )}</th>
-                                    <td>{$newsletter_user.organisation|wash()}</td>
+                                    <th>{'Additional data'|i18n( 'newsletter/user' )}</th>
+                                    <td>
+										{def $additional_fields = fetch('newsletter', 'user_additional_fields')}
+										{foreach $additional_fields as $field_identifier => $field_configuration}
+											{include uri=concat('design:newsletter/additional_fields_view/',$field_configuration.type,'.tpl') field_identifier=$field_identifier field_configuration=$field_configuration newsletter_user=$newsletter_user}
+										{/foreach}
+									</td>
                                 </tr>
                                 <tr>
                                     <th>{'Status'|i18n( 'newsletter/user' )}</th>
@@ -161,7 +166,7 @@
 												<input {if $newsletter_user.is_removed|not()}class="button-disabled"{else}class="button"{/if} 
 																							 type="submit" name="RemoveForGoodNewsletterUserButton" value="{'Remove for good'|i18n( 'newsletter/user' )}" onclick="return confirm('{'Do you really want to delete this user?'|i18n( 'newsletter/user' )|wash()}');" />
 											</form>
-											
+
 											<form id="submit_blacklist_{$newsletter_user.id}}" method="post" style="display:inline;" action={'newsletter/blacklist'|ezurl()}>
 												<input type="hidden" name="RedirectUrlActionSuccess" value={$page_uri} />
 												<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />

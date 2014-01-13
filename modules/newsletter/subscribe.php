@@ -23,6 +23,7 @@ $newsletterIni = eZINI::instance( 'newsletter.ini' );
 $requiredFields = $newsletterIni->variable( 'NewsletterUserSettings', 'RequiredFields' );
 $tpl->setVariable( 'required_fields', $requiredFields );
 
+$tmpUser = new OWNewsletterUser();
 $newsletterUserRow = array(
 	'email' => '',
 	'salutation' => '',
@@ -30,7 +31,9 @@ $newsletterUserRow = array(
 	'last_name' => '',
 	'status' => OWNewsletterUser::STATUS_PENDING,
 	'subscription_list' => array(),
+	'additional_data' => $tmpUser->attribute( 'additional_data' )
 );
+
 $template = 'design:newsletter/subscribe/form.tpl';
 
 if ( $module->isCurrentAction( 'Subscribe' ) ) {
@@ -53,11 +56,17 @@ if ( $module->isCurrentAction( 'Subscribe' ) ) {
 			$attributeWarningList[] = 'subscription_list';
 			$warningList[] = 'You must select at least one newsletter.';
 		}
+		$validateAdditionalData = $tmpUser->validateAdditionalData( $newsletterUserRow['additional_data'] );
+		if ( $validateAdditionalData !== false ) {
+			$attributeWarningList = array_merge( $attributeWarningList, $validateAdditionalData['warning_field'] );
+			$warningList = array_merge( $warningList, $validateAdditionalData['warning_message'] );
+		}
 		$newsletterUser = OWNewsletterUser::fetchByEmail( $newsletterUserRow['email'] );
 		if ( $newsletterUser instanceof OWNewsletterUser ) {
 			$tpl->setVariable( 'existing_newsletter_user', $newsletterUser );
 		} elseif ( empty( $warningList ) && !$newsletterUser ) {
 			$newsletterUser = OWNewsletterUser::createOrUpdate( $newsletterUserRow, 'subscribe' );
+			$newsletterUser->setAdditionalData( $newsletterUserRow['additional_data'] );
 			foreach ( $newsletterUserRow['subscription_list'] as $subscription ) {
 				$newsletterUser->subscribeTo( $subscription, OWNewsletterSubscription::STATUS_PENDING, 'subscribe' );
 			}
