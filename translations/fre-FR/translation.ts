@@ -578,6 +578,10 @@
         <source>No subscription</source>
         <translation>Aucun abonnement</translation>
     </message>
+    <message>
+        <source>Additional data</source>
+        <translation>Données supplémentaires</translation>
+    </message>
 </context>
 <context>
     <name>newsletter/blacklist</name>
