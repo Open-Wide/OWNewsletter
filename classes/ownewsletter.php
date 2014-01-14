@@ -155,16 +155,21 @@ class OWNewsletter extends eZPersistentObject {
 	 * @return array
 	 */
 	function getAvailableMailingLists() {
+		
 		$contentObject = eZContentObject::fetch( $this->attribute( 'contentobject_id' ) );
-		$contentObjectMainNode = $contentObject->attribute( 'main_node' );
-		$contentObjectParentNodeID = $contentObjectMainNode->attribute( 'parent_node_id' );
-		$mailingListList = eZFunctionHandler::execute( 'content', 'tree', array(
-					'parent_node_id' => $contentObjectParentNodeID,
-					'class_filter_type' => 'include',
-					'class_filter_array' => array( 'newsletter_mailing_list' ),
-					'sort_by' => array( 'name', true )
-				) );
-		return $mailingListList;
+		$currentContentObject = $contentObject->attribute('current');
+		$contentObjectNewsletterNode = $currentContentObject->attribute( 'temp_main_node' );
+		if ( $contentObjectNewsletterNode instanceof eZContentObjectTreeNode ) {
+			$contentObjectNewsletterSystemNodeID = $contentObjectNewsletterNode->attribute( 'parent_node_id' );
+			$mailingListList = eZFunctionHandler::execute( 'content', 'tree', array(
+						'parent_node_id' => $contentObjectNewsletterSystemNodeID,
+						'class_filter_type' => 'include',
+						'class_filter_array' => array( 'newsletter_mailing_list' ),
+						'sort_by' => array( 'name', false )
+					) );
+			return $mailingListList;
+		}
+		return array();
 	}
 
 	/*	 * **********************
