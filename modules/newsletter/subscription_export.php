@@ -51,8 +51,20 @@ if ( empty( $mailingListID ) ) {
 			fputcsv( $fp, $subscriptionFields, $columnDelimiter );
 			foreach ( $exportUserList as $exportUser ) {
 				$row = array();
+				$userAdditionalData = $exportUser->attribute( 'additional_data' );
 				foreach ( $subscriptionFields as $field ) {
-					if ( $exportUser->hasAttribute( $field ) ) {
+					if ( strpos( $field, 'additional_data_' ) === 0 ) {
+						$fieldIdentifier = substr( $field, 16 );
+						if ( isset( $userAdditionalData[$fieldIdentifier] ) ) {
+							if ( is_array( $userAdditionalData[$fieldIdentifier] ) ) {
+								$row[] = implode( ';', $userAdditionalData[$fieldIdentifier] );
+							} else {
+								$row[] = $userAdditionalData[$fieldIdentifier];
+							}
+						} else {
+							$row[] = 'n/a';
+						}
+					} elseif ( $exportUser->hasAttribute( $field ) ) {
 						switch ( $field ) {
 							case 'created':
 							case 'modified':
@@ -86,6 +98,8 @@ if ( empty( $mailingListID ) ) {
 							case 'subscription_list':
 							case 'active_subscriptions':
 							case 'approved_subscriptions':
+							case 'additional_fields':
+							case 'additional_data':
 								$row[] = 'n/a';
 								break;
 							case 'approved_mailing_lists':
@@ -124,7 +138,13 @@ $tpl->setVariable( 'redirect_url_action_cancel', $redirectUrlCancel );
 $tpl->setVariable( 'redirect_url_action_success', $redirectUrlSuccess );
 
 $userDefinition = OWNewsletterUser::definition();
-$fieldList = array_merge( array_keys( $userDefinition['fields'] ), array_keys( $userDefinition['function_attributes'] ) );
+$tmpUser = new OWNewsletterUser();
+$additionalFields = array_keys( $tmpUser->attribute( 'additional_fields' ) );
+$func = function($value) {
+	return 'additional_data_' . $value;
+};
+$additionalFields = array_map( $func, $additionalFields );
+$fieldList = array_merge( array_keys( $userDefinition['fields'] ), array_keys( $userDefinition['function_attributes'] ), $additionalFields );
 sort( $fieldList );
 $tpl->setVariable( 'available_field_list', $fieldList );
 $tpl->setVariable( 'column_delimiter', $columnDelimiter );
