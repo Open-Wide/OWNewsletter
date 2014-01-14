@@ -496,8 +496,6 @@ class OWNewsletterUser extends eZPersistentObject {
 				}
 				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'Format' ) ) {
 					$additionalFields[$iniAdditionalField]['format'] = $newsletterIni->variable( $additionalFieldGroup, 'Format' );
-				} else {
-					$additionalFields[$iniAdditionalField]['format'] = 'YYYY-MM-DD';
 				}
 				if ( $newsletterIni->hasVariable( $additionalFieldGroup, 'SelectOptions' ) ) {
 					$iniValues = $newsletterIni->variable( $additionalFieldGroup, 'SelectOptions' );
@@ -529,6 +527,11 @@ class OWNewsletterUser extends eZPersistentObject {
 							$additionalFields[$iniAdditionalField]['default_value'] = $trans->transformByGroup( $additionalFields[$iniAdditionalField]['default_value'], 'identifier' );
 							break;
 					}
+				}
+				if( $additionalFields[$iniAdditionalField]['type'] == 'date' && !isset( $additionalFields[$iniAdditionalField]['format'] )) {
+					$additionalFields[$iniAdditionalField]['format'] = 'YYYY-MM-DD';
+				} elseif( $additionalFields[$iniAdditionalField]['type'] == 'datetime' && !isset( $additionalFields[$iniAdditionalField]['format'] )) {
+					$additionalFields[$iniAdditionalField]['format'] = 'YYYY-MM-DD HH:mm:ss';
 				}
 			}
 		}
@@ -562,17 +565,23 @@ class OWNewsletterUser extends eZPersistentObject {
 			} else {
 				switch ( $fieldConfiguration['type'] ) {
 					case 'integer':
-						if ( isset( $fieldConfiguration['min'] ) && (int) $newAdditionalData[$fieldIdentifier] < $fieldConfiguration['min'] ) {
+						if ( !is_numeric( $newAdditionalData[$fieldIdentifier] ) ) {
 							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field must be greater than %value', null, array(
-										'%fieldname' => $fieldConfiguration['label'],
-										'%value' => $fieldConfiguration['min'] ) );
-						}
-						if ( isset( $fieldConfiguration['max'] ) && (int) $newAdditionalData[$fieldIdentifier] > $fieldConfiguration['max'] ) {
-							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field" be lower than %value', null, array(
-										'%fieldname' => $fieldConfiguration['label'],
-										'%value' => $fieldConfiguration['max'] ) );
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field must be an integer.', null, array(
+										'%fieldname' => $fieldConfiguration['label'] ) );
+						} else {
+							if ( isset( $fieldConfiguration['min'] ) && (int) $newAdditionalData[$fieldIdentifier] < $fieldConfiguration['min'] ) {
+								$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+								$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field must be greater than %value', null, array(
+											'%fieldname' => $fieldConfiguration['label'],
+											'%value' => $fieldConfiguration['min'] ) );
+							}
+							if ( isset( $fieldConfiguration['max'] ) && (int) $newAdditionalData[$fieldIdentifier] > $fieldConfiguration['max'] ) {
+								$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
+								$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field" be lower than %value', null, array(
+											'%fieldname' => $fieldConfiguration['label'],
+											'%value' => $fieldConfiguration['max'] ) );
+							}
 						}
 						break;
 					case 'multiselect':
@@ -607,7 +616,7 @@ class OWNewsletterUser extends eZPersistentObject {
 					case 'date':
 					case 'datetime':
 						$initialDate = array(
-							'AAAA' => 0,
+							'YYYY' => 0,
 							'MM' => 0,
 							'DD' => 0,
 							'HH' => 0,
@@ -616,7 +625,7 @@ class OWNewsletterUser extends eZPersistentObject {
 						);
 						$format = $fieldConfiguration['format'];
 						$formatScanReplace = array(
-							'AAAA' => '%4s',
+							'YYYY' => '%4s',
 							'MM' => '%2s',
 							'DD' => '%2s',
 							'HH' => '%2s',
@@ -638,14 +647,14 @@ class OWNewsletterUser extends eZPersistentObject {
 										'%fieldname' => $fieldConfiguration['label'] ) );
 						} else {
 							$date = array_merge( $initialDate, array_combine( $dateKeys, $dateValues ) );
-							$timestamp = mktime( $date['HH'], $date['mm'], $date['ss'], $date['MM'], $date['DD'], $date['AAAA'] );
+							$timestamp = mktime( $date['HH'], $date['mm'], $date['ss'], $date['MM'], $date['DD'], $date['YYYY'] );
 							if ( $timestamp === FALSE ) {
 								$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
 								$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The date is nor valid', null, array(
 											'%fieldname' => $fieldConfiguration['label'] ) );
 							} else {
 								$strftimeFormatReplace = array(
-									'AAAA' => '%Y',
+									'YYYY' => '%Y',
 									'MM' => '%m',
 									'DD' => '%d',
 									'HH' => '%H',
