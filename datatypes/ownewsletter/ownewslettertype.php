@@ -226,11 +226,6 @@ class OWNewsletterType extends eZDataType {
 				$object->remove();
 			}
 		}
-		
-		$object = OWNewsletter::fetch( $contentObjectAttribute->attribute( "id" ), $contentObjectAttribute->attribute( "version" ) );
-		if ( is_object( $object ) ) {
-			$object->remove();
-		}
 	}
 
 	/**

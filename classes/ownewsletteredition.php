@@ -82,15 +82,20 @@ class OWNewsletterEdition extends eZPersistentObject {
 	 */
 	public function getAvailableMailingLists() {
 		$contentObject = eZContentObject::fetch( $this->attribute( 'contentobject_id' ) );
-		$contentObjectMainNode = $contentObject->attribute( 'main_node' );
-		$contentObjectParentNodeID = $contentObjectMainNode->attribute( 'parent' )->attribute( 'parent_node_id' );
-		$mailingListList = eZFunctionHandler::execute( 'content', 'tree', array(
-					'parent_node_id' => $contentObjectParentNodeID,
-					'class_filter_type' => 'include',
-					'class_filter_array' => array( 'newsletter_mailing_list' ),
-					'sort_by' => array( 'name', false )
-				) );
-		return $mailingListList;
+		$currentContentObject = $contentObject->attribute('current');
+		$contentObjectNewsletterEditionNode = $currentContentObject->attribute( 'temp_main_node' );
+		if ( $contentObjectNewsletterEditionNode instanceof eZContentObjectTreeNode ) {
+			$contentObjectNewsletterNode = $contentObjectNewsletterEditionNode->attribute( 'parent' );
+			$contentObjectNewsletterSystemNodeID = $contentObjectNewsletterNode->attribute( 'parent_node_id' );
+			$mailingListList = eZFunctionHandler::execute( 'content', 'tree', array(
+						'parent_node_id' => $contentObjectNewsletterSystemNodeID,
+						'class_filter_type' => 'include',
+						'class_filter_array' => array( 'newsletter_mailing_list' ),
+						'sort_by' => array( 'name', false )
+					) );
+			return $mailingListList;
+		}
+		return array();
 	}
 
 	/**
@@ -100,12 +105,15 @@ class OWNewsletterEdition extends eZPersistentObject {
 	 */
 	public function getNewsletter() {
 		$contentObject = eZContentObject::fetch( $this->attribute( 'contentobject_id' ) );
-		$contentObjectMainNode = $contentObject->attribute( 'main_node' );
-		$contentObjectParentNode = $contentObjectMainNode->attribute( 'parent' );
-		$dataMap = $contentObjectParentNode->dataMap();
-		foreach ( $dataMap as $attribute ) {
-			if ( $attribute->attribute( 'data_type_string' ) == 'ownewsletter' ) {
-				return $attribute->content();
+		$currentContentObject = $contentObject->attribute('current');
+		$contentObjectNewsletterEditionNode = $currentContentObject->attribute( 'temp_main_node' );
+		if ( $contentObjectNewsletterEditionNode instanceof eZContentObjectTreeNode ) {
+			$contentObjectNewsletterNode = $contentObjectNewsletterEditionNode->attribute( 'parent' );
+			$dataMap = $contentObjectNewsletterNode->dataMap();
+			foreach ( $dataMap as $attribute ) {
+				if ( $attribute->attribute( 'data_type_string' ) == 'ownewsletter' ) {
+					return $attribute->content();
+				}
 			}
 		}
 	}
