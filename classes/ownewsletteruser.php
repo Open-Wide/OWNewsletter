@@ -560,7 +560,7 @@ class OWNewsletterUser extends eZPersistentObject {
 		foreach ( $additionalFields as $fieldIdentifier => $fieldConfiguration ) {
 			if ( $fieldConfiguration['required'] == true && (!isset( $newAdditionalData[$fieldIdentifier] ) || empty( $newAdditionalData[$fieldIdentifier] ) ) ) {
 				$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-				$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field is required', null, array(
+				$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field is required.', null, array(
 							'%fieldname' => $fieldConfiguration['label'] ) );
 			} else {
 				switch ( $fieldConfiguration['type'] ) {
@@ -572,13 +572,13 @@ class OWNewsletterUser extends eZPersistentObject {
 						} else {
 							if ( isset( $fieldConfiguration['min'] ) && (int) $newAdditionalData[$fieldIdentifier] < $fieldConfiguration['min'] ) {
 								$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-								$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field must be greater than %value', null, array(
+								$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field must be greater than %value.', null, array(
 											'%fieldname' => $fieldConfiguration['label'],
 											'%value' => $fieldConfiguration['min'] ) );
 							}
 							if ( isset( $fieldConfiguration['max'] ) && (int) $newAdditionalData[$fieldIdentifier] > $fieldConfiguration['max'] ) {
 								$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-								$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field" be lower than %value', null, array(
+								$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field" be lower than %value.', null, array(
 											'%fieldname' => $fieldConfiguration['label'],
 											'%value' => $fieldConfiguration['max'] ) );
 							}
@@ -587,13 +587,13 @@ class OWNewsletterUser extends eZPersistentObject {
 					case 'multiselect':
 						if ( isset( $fieldConfiguration['min_selected'] ) && count( $newAdditionalData[$fieldIdentifier] ) < $fieldConfiguration['min_selected'] ) {
 							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must select at least %value values', null, array(
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must select at least %value values.', null, array(
 										'%fieldname' => $fieldConfiguration['label'],
 										'%value' => $fieldConfiguration['min_selected'] ) );
 						}
 						if ( isset( $fieldConfiguration['max_selected'] ) && count( $newAdditionalData[$fieldIdentifier] ) > $fieldConfiguration['max_selected'] ) {
 							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must select at most %value values', null, array(
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must select at most %value values.', null, array(
 										'%fieldname' => $fieldConfiguration['label'],
 										'%value' => $fieldConfiguration['max_selected'] ) );
 						}
@@ -602,13 +602,13 @@ class OWNewsletterUser extends eZPersistentObject {
 					case 'text':
 						if ( isset( $fieldConfiguration['min_lenght'] ) && strlen( $newAdditionalData[$fieldIdentifier] ) < $fieldConfiguration['min_lenght'] ) {
 							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must enter a text of at least %value characters', null, array(
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must enter a text of at least %value characters.', null, array(
 										'%fieldname' => $fieldConfiguration['label'],
 										'%value' => $fieldConfiguration['min_lenght'] ) );
 						}
 						if ( isset( $fieldConfiguration['max_lenght'] ) && strlen( $newAdditionalData[$fieldIdentifier] ) > $fieldConfiguration['max_lenght'] ) {
 							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must enter a text of at most %value characters', null, array(
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : You must enter a text of at most %value characters.', null, array(
 										'%fieldname' => $fieldConfiguration['label'],
 										'%value' => $fieldConfiguration['max_lenght'] ) );
 						}
@@ -643,14 +643,14 @@ class OWNewsletterUser extends eZPersistentObject {
 						$dateValues = sscanf( $newAdditionalData[$fieldIdentifier], $valueScan );
 						if ( array_search( null, $dateValues ) !== FALSE ) {
 							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The date is nor valid', null, array(
+							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The date is not valid.', null, array(
 										'%fieldname' => $fieldConfiguration['label'] ) );
 						} else {
 							$date = array_merge( $initialDate, array_combine( $dateKeys, $dateValues ) );
 							$timestamp = mktime( $date['HH'], $date['mm'], $date['ss'], $date['MM'], $date['DD'], $date['YYYY'] );
 							if ( $timestamp === FALSE ) {
 								$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-								$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The date is nor valid', null, array(
+								$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The date is not valid.', null, array(
 											'%fieldname' => $fieldConfiguration['label'] ) );
 							} else {
 								$strftimeFormatReplace = array(
@@ -665,7 +665,7 @@ class OWNewsletterUser extends eZPersistentObject {
 								$strftimeDate = strftime( $strftimeFormat, $timestamp );
 								if ( $strftimeDate != $newAdditionalData[$fieldIdentifier] ) {
 									$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
-									$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The date is nor valid', null, array(
+									$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The date is not valid.', null, array(
 												'%fieldname' => $fieldConfiguration['label'] ) );
 								}
 							}

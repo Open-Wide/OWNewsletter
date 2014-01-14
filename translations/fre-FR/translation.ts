@@ -262,6 +262,39 @@
         <source>Some fields are in error, please correct.</source>
         <translation>Certains champs sont en erreur, veuillez les corriger.</translation>
     </message>
+    <message>
+        <source>%fieldname : The field is required.</source>
+        <translation>%fieldname : Ce champ est requis.</translation>
+    </message>
+    <message>
+        <source>%fieldname : The field must be an integer.</source>
+        <translation>%fieldname : Ce champ doit être un entier.</translation>
+    </message>
+    <message>
+        <source>%fieldname : The field must be greater than %value.</source>
+        <translation>%fieldname : Ce champ doit être plus grand que %value.</translation>
+    </message>
+    <message>
+        <source>%fieldname : The field" be lower than %value.</source>
+        <translation>%fieldname : Ce champ doit être plus petit que %value.</translation>
+    </message>
+    <message>
+        <source>%fieldname : You must select at least %value values.</source>
+        <translation>%fieldname : Vous devez saisir au moins %value valeurs.</translation>
+    </message>
+    <message>
+        <source>%fieldname : You must enter a text of at least %value characters.</source>
+        <translation>%fieldname : Le texte doit être d&apos;au moins %value caractères.</translation>
+    </message>
+    <message>
+        <source>%fieldname : You must enter a text of at most %value characters.</source>
+        <translation>%fieldname : Le texte doit être ne doit pas excéder %value caractères.</translation>
+    </message>
+    <message>
+        <source>%fieldname : The date is not valid</source>
+        <translation>%fieldname : La date n'est pas valide.</translation>
+    </message>
+	
 </context>
 <context>
     <name>newsletter/user</name>
