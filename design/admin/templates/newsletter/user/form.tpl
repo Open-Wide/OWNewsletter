@@ -191,7 +191,7 @@
 																		$status_id_array_enabled = $status_id_array_enabled|append( $status )|unique}
 																{/if}
 																<td width="300">
-																	<input type="hidden" name="NewsletterUser[subscription][{$index}][mailing_list_contentobject_id]" value="{$mailing_list_id}" title="" />
+																	<input type="hidden" name="NewsletterUser[subscription_list][{$index}][mailing_list_contentobject_id]" value="{$mailing_list_id}" title="" />
 																	{$mailing_list_node.data_map.title.content|wash}
 																</td>
 																<td>
