@@ -528,9 +528,9 @@ class OWNewsletterUser extends eZPersistentObject {
 							break;
 					}
 				}
-				if( $additionalFields[$iniAdditionalField]['type'] == 'date' && !isset( $additionalFields[$iniAdditionalField]['format'] )) {
+				if ( $additionalFields[$iniAdditionalField]['type'] == 'date' && !isset( $additionalFields[$iniAdditionalField]['format'] ) ) {
 					$additionalFields[$iniAdditionalField]['format'] = 'YYYY-MM-DD';
-				} elseif( $additionalFields[$iniAdditionalField]['type'] == 'datetime' && !isset( $additionalFields[$iniAdditionalField]['format'] )) {
+				} elseif ( $additionalFields[$iniAdditionalField]['type'] == 'datetime' && !isset( $additionalFields[$iniAdditionalField]['format'] ) ) {
 					$additionalFields[$iniAdditionalField]['format'] = 'YYYY-MM-DD HH:mm:ss';
 				}
 			}
@@ -562,9 +562,10 @@ class OWNewsletterUser extends eZPersistentObject {
 				$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
 				$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field is required.', null, array(
 							'%fieldname' => $fieldConfiguration['label'] ) );
-			} else {
+			} elseif ( !empty( $newAdditionalData[$fieldIdentifier] ) ) {
 				switch ( $fieldConfiguration['type'] ) {
 					case 'integer':
+
 						if ( !is_numeric( $newAdditionalData[$fieldIdentifier] ) ) {
 							$errors['warning_field'][] = 'additional_data_' . $fieldIdentifier;
 							$errors['warning_message'][] = ezpI18n::tr( 'newsletter/warning_messages', '%fieldname : The field must be an integer.', null, array(

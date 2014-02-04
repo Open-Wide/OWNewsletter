@@ -112,6 +112,9 @@ tr.newsletter-bounce-item
     font-weight: bold;
 }
 
+.nl-error {
+	background-color: #FFD8E0;
+}
 
 table.list .nl-error {
 	background-color: #FFD8E0;
