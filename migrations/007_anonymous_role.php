@@ -18,4 +18,4 @@ class OWNewsletter_007_AnonymousRole {
         $migration->removePolicy( 'newsletter', 'unsubscribe' );
         $migration->end( );
     }
-
+}
