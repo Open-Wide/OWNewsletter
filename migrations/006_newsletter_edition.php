@@ -3,7 +3,7 @@
 /**
 * Create Newsletter Edition content class
 */
-class OWNewsletter_005_NewsletterEdition {
+class OWNewsletter_006_NewsletterEdition {
 
 	public function up() {
 		$migration = new OWMigrationContentClass( );
