@@ -99,7 +99,7 @@
     </message>
     <message>
         <source>Subscription form</source>
-        <translation>Formulaire de abonnement</translation>
+        <translation>Formulaire d&apos;abonnement</translation>
     </message>
     <message>
         <source>INI Settings</source>
