@@ -14,7 +14,7 @@
 		{if $newsletter_node_list}
 			{foreach $newsletter_node_list as $newsletter_node sequence array( 'bglight', 'bgdark' ) as $style}
 				<tr class="{$style}">
-					<td width="61%" align="left">{'newsletter'|class_icon( 'small' )} <a href={$newsletter_listnode.url_alias|ezurl}>{$newsletter_node.name|wash()} / {$newsletter_node.data_map.title.content|wash()}</a></td>
+					<td width="61%" align="left">{'newsletter'|class_icon( 'small' )} <a href={$newsletter_node.url_alias|ezurl}>{$newsletter_node.name|wash()} / {$newsletter_node.data_map.title.content|wash()}</a></td>
 					<td align="left" width="39%" nowrap>
 						{if and( $newsletter_node.can_create, $newsletter_edition_class_list)}
 							{'Create edition here'|i18n( 'newsletter/index' )} :
