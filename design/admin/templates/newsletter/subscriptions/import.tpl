@@ -21,7 +21,7 @@
 											<h2>
 												{"The import is completed."|i18n( 'newsletter/subscription/import' )}
 												{"For more imformation"|i18n( 'newsletter/subscription/import' )},
-												<a href={$log_url|ezurl()}>{"follow this link."|i18n( 'newsletter/subscription/import' )}</a>q
+												<a href={$log_url|ezurl()}>{"follow this link."|i18n( 'newsletter/subscription/import' )}</a>
 											</h2>
 										</div>
 									{/if}
