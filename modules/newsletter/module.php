@@ -242,16 +242,25 @@ $ViewList['subscription_import'] = array(
 	'params' => array( 'mailingListID' ),
 	'single_post_actions' => array(
 		'CancelButton' => 'Cancel',
+		'PreviewButton' => 'Preview',
 		'ImportButton' => 'Import'
 	),
 	'post_action_parameters' => array(
 		'Cancel' => array(
 			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel'
 		),
+		'Preview' => array(
+			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
+			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess',
+			'ColumnDelimiter' => 'ColumnDelimiter',
+			'FirstLineIsColumnHeadings' => 'FirstLineIsColumnHeadings',
+			'UploadFile' => 'UploadFile'
+		),
 		'Import' => array(
 			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
 			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess',
 			'ColumnDelimiter' => 'ColumnDelimiter',
+			'FirstLineIsColumnHeadings' => 'FirstLineIsColumnHeadings',
 			'UploadFile' => 'UploadFile'
 		),
 	)

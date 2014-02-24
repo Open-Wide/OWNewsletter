@@ -30,14 +30,61 @@ if ( empty( $mailingListID ) ) {
 			'url' => false,
 			'text' => $node->attribute( 'name' ) );
 		$redirectUrlCancel = $redirectUrlSuccess = 'newsletter/subscription_import/' . $mailingListID;
-		if ( $module->isCurrentAction( 'Import' ) ) {
-			if ( $module->hasActionParameter( 'ColumnDelimiter' ) ) {
-				$columnDelimiter = $module->actionParameter( 'ColumnDelimiter' );
-			}
+		if ( $module->hasActionParameter( 'ColumnDelimiter' ) ) {
+			$columnDelimiter = $module->actionParameter( 'ColumnDelimiter' );
+		}
+		$tpl->setVariable( 'column_delimiter', $columnDelimiter );
+		if ( !$module->hasActionParameter( 'FirstLineIsColumnHeadings' ) ) {
+			$fileHeaders = array( 'email', 'first_name', 'last_name', 'salutation' );
+			$tpl->setVariable( 'first_line_is_column_headings', false );
+		} else {
+			$tpl->setVariable( 'first_line_is_column_headings', true );
+		}
+		if ( $module->isCurrentAction( 'Preview' ) ) {
 			if ( eZHTTPFile::canFetch( 'UploadFile' ) ) {
 				$binaryFile = eZHTTPFile::fetch( 'UploadFile' );
+				$suffix = pathinfo( $binaryFile->attribute( 'original_filename' ), PATHINFO_EXTENSION );
+				$binaryFile->store( 'ow_newsletter', $suffix );
+				$tpl->setVariable( 'upload_file', $binaryFile->attribute( 'filename' ) );
 				ini_set( 'auto_detect_line_endings', TRUE );
-				$handle = fopen( $binaryFile->Filename, 'r' );
+				$handle = fopen( realpath( $binaryFile->attribute( 'filename' ) ), 'r' );
+				$rowCount = 0;
+				$preview = array();
+				while ( ($row = fgetcsv( $handle, 0, $columnDelimiter ) ) !== FALSE ) {
+					if ( !isset( $fileHeaders ) ) {
+						$fileHeaders = $row;
+					} else {
+						$rowCount++;
+						$rowPreview = array(
+							'row_number' => $rowCount,
+							'email' => false,
+							'first_name' => false,
+							'last_name' => false,
+							'salutation' => false,
+						);
+						foreach ( $row as $index => $field ) {
+							$fieldIdentifier = $fileHeaders[$index];
+							switch ( $fieldIdentifier ) {
+								case 'email':
+								case 'first_name':
+								case 'last_name':
+								case 'salutation':
+									$rowPreview[$fieldIdentifier] = $field;
+									break;
+							}
+						}
+						$preview[] = $rowPreview;
+					}
+				}
+				$tpl->setVariable( 'preview', $preview );
+			} else {
+				$tpl->setVariable( 'warning', ezpI18n::tr( 'newsletter/warning_message', 'File is missing.' ) );
+			}
+		} elseif ( $module->isCurrentAction( 'Import' ) ) {
+			if ( $module->hasActionParameter( 'UploadFile' ) ) {
+				$binaryFile = $module->actionParameter( 'UploadFile' );
+				ini_set( 'auto_detect_line_endings', TRUE );
+				$handle = fopen( $binaryFile, 'r' );
 				OWScriptLogger::startLog( 'subscription_import' );
 				$rowCount = 0;
 				$createdCount = 0;
@@ -78,14 +125,13 @@ if ( empty( $mailingListID ) ) {
 				$logger = OWScriptLogger::instance();
 				$tpl->setVariable( 'log_url', 'owscriptlogger/logs/' . $logger->attribute( 'id' ) );
 				ini_set( 'auto_detect_line_endings', FALSE );
-			} else {
-				$tpl->setVariable( 'warning', ezpI18n::tr( 'newsletter/warning_message', 'File is missing.' ) );
 			}
 		}
 	} else {
 		$tpl->setVariable( 'warning', ezpI18n::tr( 'newsletter/warning_message', 'Mailing list not found.' ) );
 	}
 }
+
 /* Retrieval of cancal and success redirect URLs */
 if ( $module->hasActionParameter( 'RedirectUrlActionCancel' ) ) {
 	$redirectUrlCancel = $module->actionParameter( 'RedirectUrlActionCancel' );
