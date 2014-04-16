@@ -119,9 +119,9 @@ class OWNewsletterSending extends eZPersistentObject {
 					'datatype' => 'string',
 					'default' => '',
 					'required' => true ),
-				'personalize_content' => array(
-					'name' => 'PersonalizeContent',
-					'datatype' => 'integer',
+				'serialized_mail_personalizations' => array(
+					'name' => 'SerializedMailPersonalizations',
+					'datatype' => 'text',
 					'default' => 0,
 					'required' => false ),
 				'send_date' => array(
@@ -138,6 +138,7 @@ class OWNewsletterSending extends eZPersistentObject {
 				'statistics' => 'getStatistics',
 				'output' => 'getOutput',
 				'mailing_lists_ids' => 'getMailingListIDs',
+                'mail_personalizations' => 'unserializeMailPersonalizations',
 			),
 			'class_name' => 'OWNewsletterSending',
 			'name' => 'ownl_sending' );
@@ -227,6 +228,15 @@ class OWNewsletterSending extends eZPersistentObject {
 	public function getMailingListIDs() {
 		return OWNewsletterUtils::stringToArray( $this->attribute( 'mailing_lists_string' ) );
 	}
+    
+    /**
+     * Unserialize serialized_mail_personalizations attribute
+     * 
+     * @return array
+     */
+    public function unserializeMailPersonalizations() {
+        return unserialize( $this->attribute( 'serialized_mail_personalizations' ) );
+    }
 
 	/*	 * **********************
 	 * FETCH METHODS
@@ -369,7 +379,7 @@ class OWNewsletterSending extends eZPersistentObject {
 			'hash' => OWNewsletterUtils::generateUniqueMd5Hash( $hashString ),
 			'sender_email' => $newsletter->attribute( 'sender_email' ),
 			'sender_name' => $newsletter->attribute( 'sender_name' ),
-			'personalize_content' => $newsletter->attribute( 'personalize_content' )
+			'serialized_mail_personalizations' => $newsletter->attribute( 'serialized_mail_personalizations' )
 		);
 		$object = new OWNewsletterSending( $row );
 		$object->setAttribute( 'serialized_output', $object->getSerializedOutput() );

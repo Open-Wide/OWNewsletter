@@ -390,11 +390,10 @@ $schema = array(
 				'not_null' => '1',
 				'default' => 'default',
 			),
-			'personalize_content' => array(
-				'length' => 1,
-				'type' => 'tinyint',
-				'not_null' => '1',
-				'default' => '0',
+			'serialized_mail_personalizations' => array(
+				'type' => 'text',
+				'not_null' => '0',
+				'default' => false,
 			),
 			'user_data_fields' => array(
 				'type' => 'text',
@@ -602,11 +601,10 @@ $schema = array(
 				'not_null' => '1',
 				'default' => '',
 			),
-			'personalize_content' => array(
-				'length' => 1,
-				'type' => 'tinyint',
-				'not_null' => '1',
-				'default' => '0',
+			'serialized_mail_personalizations' => array(
+				'type' => 'text',
+				'not_null' => '0',
+				'default' => false,
 			),
 			'send_date' => array(
 				'length' => 11,
