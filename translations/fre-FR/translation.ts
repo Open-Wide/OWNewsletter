@@ -916,11 +916,11 @@
 		</message>
 		<message>
 			<source>The newsletter will be sent as soon as possible.</source>
-			<translation>La newsletter sera envoyé dès que possible.</translation>
+			<translation>La newsletter sera envoyée dès que possible.</translation>
 		</message>
 		<message>
 			<source>The newsletter will be sent from %sending_date.</source>
-			<translation>La newsletter sera envoyé à partir du %sending_date.</translation>
+			<translation>La newsletter sera envoyée à partir du %sending_date.</translation>
 		</message>
 		<message>
 			<source>An error occurred during the cancellation of the sending of the newsletter</source>
@@ -1480,12 +1480,12 @@
 			<translation>Nom de l&apos;habillage de la newsletter</translation>
 		</message>
 		<message>
-			<source>Personalize newsletter if data are available?</source>
-			<translation>Personnaliser la newsletter si les données sont disponibles?</translation>
+			<source>Enable newsletter personalization if data are available</source>
+			<translation>Activer les personnalisations de la newsletter si les données sont disponibles</translation>
 		</message>
 		<message>
-			<source>Personalize content</source>
-			<translation>Personnaliser la newsletter</translation>
+			<source>Personalizations enabled</source>
+			<translation>Personnalisations activées</translation>
 		</message>
 		<message>
 			<source>Default mailing list selection</source>

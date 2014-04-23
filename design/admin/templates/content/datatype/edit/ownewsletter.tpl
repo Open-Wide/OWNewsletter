@@ -14,7 +14,7 @@
      $sender_email = $newsletter_object.sender_email
      $test_receiver_email = $newsletter_object.test_receiver_email_list|implode(';')
      $skin_name = $newsletter_object.skin_name
-     $personalize_content = $newsletter_object.personalize_content
+     $mail_personalizations = $newsletter_object.mail_personalizations
 	 $available_mailing_lists = $newsletter_object.available_mailing_lists
      }
 {* default value main_siteaccess *}
@@ -81,8 +81,13 @@
 {/foreach}
 
 <hr>
-<label>{'Personalize newsletter if data are available?'|i18n('newsletter/datatype/ownewsletter')} {*# {$personalize_content} #*}</label>
-<input type="radio" name="{$attribute_base}_{$datatype_name}_PersonalizeContent_{$attribute.id}" value="0"{$personalize_content|choose(' checked', '')} /> {'No'|i18n('newsletter/datatype/ownewsletter')}
-<input type="radio" name="{$attribute_base}_{$datatype_name}_PersonalizeContent_{$attribute.id}" value="1"{$personalize_content|choose('', ' checked')} /> {'Yes'|i18n('newsletter/datatype/ownewsletter')}
+<label>{'Enable newsletter personalization if data are available'|i18n('newsletter/datatype/ownewsletter')} {*# {$mail_personalizations} #*}</label>
+<select name="{$attribute_base}_{$datatype_name}_MailPersonalizations_{$attribute.id}" multiple="multiple">
+{foreach ezini('NewsletterMailPersonalizations','AvailableMailPersonalizations','newsletter.ini') as $personalization}
+    <option value="{$personalization}" {if $mail_personalizations|contains($personalization)}selected="selected"{/if}>
+        {ezini(concat($personalization,'-MailPersonalizationSettings'),'Name','newsletter.ini')}
+    </option>
+{/foreach}
+</select>
 {undef}
 

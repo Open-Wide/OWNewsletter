@@ -240,15 +240,17 @@ class OWNewsletterSendingItem extends eZPersistentObject {
 	 * @param interger $status
 	 */
 	static function create( OWNewsletterSending $newsletterSending, OWNewsletterUser $newsletterUser, $status = OWNewsletterSendingItem::STATUS_NEW ) {
-		$approvedMailingLists = $newsletterUser->attribute( 'approved_mailing_lists' );
-		$approvedMailingListIDs = array();
-		foreach ( $approvedMailingLists as $approvedMailingList ) {
-			$approvedMailingListIDs[] = $approvedMailingList->attribute( 'id' );
-		}
+		$approvedSubscriptions = $newsletterUser->attribute( 'approved_subscriptions' );
+		$approvedSubscriptionIDs = array();
+        if( $approvedSubscriptions ) {
+            foreach ( $approvedSubscriptions as $approvedSubscription ) {
+                $approvedSubscriptionIDs[] = $approvedSubscription->attribute( 'id' );
+            }
+        }
 		$row = array(
 			'edition_contentobject_id' => (int) $newsletterSending->attribute( 'edition_contentobject_id' ),
 			'newsletter_user_id' => (int) $newsletterUser->attribute( 'id' ),
-			'subscription_ids_string' => OWNewsletterUtils::arrayToString( array_intersect( $newsletterSending->attribute( 'mailing_lists_ids' ), $approvedMailingListIDs ) ),
+			'subscription_ids_string' => OWNewsletterUtils::arrayToString( array_intersect( $newsletterSending->attribute( 'mailing_lists_ids' ), $approvedSubscriptionIDs ) ),
 			'hash' => OWNewsletterUtils::generateUniqueMd5Hash( $newsletterSending->attribute( 'edition_contentobject_id' ) . '-' . $newsletterUser->attribute( 'id' ) )
 		);
 

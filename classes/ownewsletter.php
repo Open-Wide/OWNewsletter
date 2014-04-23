@@ -62,9 +62,9 @@ class OWNewsletter extends eZPersistentObject {
 					'datatype' => 'string',
 					'default' => 'default',
 					'required' => true ),
-				'personalize_content' => array(
-					'name' => 'PersonalizeContent',
-					'datatype' => 'integer',
+				'serialized_mail_personalizations' => array(
+					'name' => 'SerializedMailPersonalizations',
+					'datatype' => 'text',
 					'default' => 0,
 					'required' => false ),
 				'user_data_fields' => array(
@@ -80,6 +80,7 @@ class OWNewsletter extends eZPersistentObject {
 			),
 			'keys' => array( 'contentobject_attribute_id', 'contentobject_attribute_version' ),
 			'function_attributes' => array(
+                'mail_personalizations' => 'unserializeMailPersonalizations',
 				'default_mailing_lists_ids' => 'getDefaultMailingListsIDs',
 				'test_receiver_email_list' => 'getTestReceiverEmailList',
 				'available_siteaccess_list' => 'getAvailableSiteAccessList',
@@ -93,7 +94,17 @@ class OWNewsletter extends eZPersistentObject {
 	 * FUNCTION ATTRIBUTES
 	 * ********************** */
 
-	/**
+    /**
+     * Unserialize serialized_mail_personalizations attribute
+     * 
+     * @return array
+     */
+    public function unserializeMailPersonalizations() {
+        $serialized = $this->attribute( 'serialized_mail_personalizations' ) ;
+        return empty( $serialized ) ? array() : unserialize( $serialized );
+    }
+    
+    /**
 	 * Transform string to array for default_mailing_lists_ids attribute
 	 * 
 	 * @return array
