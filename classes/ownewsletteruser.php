@@ -502,7 +502,7 @@ class OWNewsletterUser extends eZPersistentObject {
 					$fixValues = array();
 					foreach ( $iniValues as $key => $name ) {
 						if ( is_string( $key ) ) {
-							$fixValues[$trans->transformByGroup( $name, 'identifier' )] = $name;
+							$fixValues[$trans->transformByGroup( $key, 'identifier' )] = $name;
 						} else {
 							$fixValues[$key] = $name;
 						}
@@ -526,6 +526,9 @@ class OWNewsletterUser extends eZPersistentObject {
 						case 'select':
 							$additionalFields[$iniAdditionalField]['default_value'] = $trans->transformByGroup( $additionalFields[$iniAdditionalField]['default_value'], 'identifier' );
 							break;
+                        case 'radio':
+                            $additionalFields[$iniAdditionalField]['default_value'] = $trans->transformByGroup( $additionalFields[$iniAdditionalField]['default_value'], 'identifier' );
+                            break;
 					}
 				}
 				if ( $additionalFields[$iniAdditionalField]['type'] == 'date' && !isset( $additionalFields[$iniAdditionalField]['format'] ) ) {
