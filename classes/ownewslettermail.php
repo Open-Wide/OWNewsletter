@@ -79,17 +79,68 @@ class OWNewsletterMail {
         $this->senderEmail = trim( $this->newsletterSending->attribute( 'sender_email' ) );
         $this->senderName = $this->newsletterSending->attribute( 'sender_name' );
         if ( isset( $output['subject'] ) ) {
-            $this->subject = $output['subject'];
+            $originalSubject = $output['subject'];
         }
         if ( isset( $output['body'] ) && isset( $output['body']['html'] ) ) {
-            $this->HTMLBody = $output['body']['html'];
+            $originalHTMLBody = $output['body']['html'];
         }
         if ( isset( $output['body'] ) && isset( $output['body']['text'] ) ) {
-            $this->plainTextBody = $output['body']['text'];
+            $originalPlainTextBody = $output['body']['text'];
         }
         if ( isset( $output['content_type'] ) ) {
             $this->contentType = $output['content_type'];
         }
+
+        $newsletterUser = OWNewsletterUser::fetchByEmail($emailReceivers[0]);
+        if($newsletterUser instanceof OWNewsletterUser) {
+            $mailPersonalizations = $this->newsletterSending->attribute( 'mail_personalizations' );
+            $searchArray = array(
+                '#_hash_unsubscribe_#',
+                '#_hash_configure_#'
+            );
+
+            $newsletterConfigureHash = $newsletterUser->attribute( 'hash' );
+            $newsletterUnsubscribeHash = $newsletterUser->attribute( 'hash' );
+
+            $replaceArray = array(
+                $newsletterUnsubscribeHash,
+                $newsletterConfigureHash
+            );
+
+
+            $subject = $originalSubject;
+            $HTMLBody = $originalHTMLBody;
+            $plainTextBody = $originalPlainTextBody;
+
+            $newsletterINI = eZINI::instance( 'newsletter.ini' );
+
+            if ( !empty( $mailPersonalizations ) ) {
+                foreach ( $mailPersonalizations as $mailPersonalization ) {
+                    if ( $newsletterINI->hasVariable( "$mailPersonalization-MailPersonalizationSettings", 'Class' ) ) {
+                        $mailPersonalizationClass = $newsletterINI->variable( "$mailPersonalization-MailPersonalizationSettings", 'Class' );
+
+                        if ( is_callable( "$mailPersonalizationClass::applyOnSubject" ) ) {
+                            $subject = call_user_func_array( "$mailPersonalizationClass::applyOnSubject", array( $subject, $newsletterUser ) );
+                        }
+                        if ( is_callable( "$mailPersonalizationClass::applyOnHTMLBody" ) ) {
+                            $HTMLBody = call_user_func_array( "$mailPersonalizationClass::applyOnHTMLBody", array( $HTMLBody, $newsletterUser ) );
+                        }
+                        if ( is_callable( "$mailPersonalizationClass::applyOnPlainTextBody" ) ) {
+                            $plainTextBody = call_user_func_array( "$mailPersonalizationClass::applyOnPlainTextBody", array( $plainTextBody, $newsletterUser ) );
+                        }
+                    }
+                }
+            }
+
+            $this->subject = str_replace( $searchArray, $replaceArray, $subject );
+            $this->HTMLBody = str_replace( $searchArray, $replaceArray, $HTMLBody );
+            $this->plainTextBody = str_replace( $searchArray, $replaceArray, $plainTextBody );
+        } else {
+            $this->subject = $originalSubject;
+            $this->HTMLBody = $originalHTMLBody;
+            $this->plainTextBody = $originalPlainTextBody;
+        }
+
         $this->setTransportMethodPreviewFromIni();
         $sendResult = array();
         foreach ( $emailReceivers as $emailReceiver ) {
