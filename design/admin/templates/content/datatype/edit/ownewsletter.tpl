@@ -82,7 +82,7 @@
 
 <hr>
 <label>{'Enable newsletter personalization if data are available'|i18n('newsletter/datatype/ownewsletter')} {*# {$mail_personalizations} #*}</label>
-<select name="{$attribute_base}_{$datatype_name}_MailPersonalizations_{$attribute.id}" multiple="multiple">
+<select name="{$attribute_base}_{$datatype_name}_MailPersonalizations_{$attribute.id}[]" multiple="multiple">
 {foreach ezini('NewsletterMailPersonalizations','AvailableMailPersonalizations','newsletter.ini') as $personalization}
     <option value="{$personalization}" {if $mail_personalizations|contains($personalization)}selected="selected"{/if}>
         {ezini(concat($personalization,'-MailPersonalizationSettings'),'Name','newsletter.ini')}
