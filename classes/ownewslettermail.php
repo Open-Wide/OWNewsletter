@@ -120,13 +120,13 @@ class OWNewsletterMail {
                         $mailPersonalizationClass = $newsletterINI->variable( "$mailPersonalization-MailPersonalizationSettings", 'Class' );
 
                         if ( is_callable( "$mailPersonalizationClass::applyOnSubject" ) ) {
-                            $subject = call_user_func_array( "$mailPersonalizationClass::applyOnSubject", array( $subject, $newsletterUser ) );
+                            $subject = call_user_func_array( "$mailPersonalizationClass::applyOnSubject", array( $subject, $newsletterUser, $newsletterSending) );
                         }
                         if ( is_callable( "$mailPersonalizationClass::applyOnHTMLBody" ) ) {
-                            $HTMLBody = call_user_func_array( "$mailPersonalizationClass::applyOnHTMLBody", array( $HTMLBody, $newsletterUser ) );
+                            $HTMLBody = call_user_func_array( "$mailPersonalizationClass::applyOnHTMLBody", array( $HTMLBody, $newsletterUser, $newsletterSending ) );
                         }
                         if ( is_callable( "$mailPersonalizationClass::applyOnPlainTextBody" ) ) {
-                            $plainTextBody = call_user_func_array( "$mailPersonalizationClass::applyOnPlainTextBody", array( $plainTextBody, $newsletterUser ) );
+                            $plainTextBody = call_user_func_array( "$mailPersonalizationClass::applyOnPlainTextBody", array( $plainTextBody, $newsletterUser, $newsletterSending ) );
                         }
                     }
                 }
@@ -247,13 +247,13 @@ class OWNewsletterMail {
                         if ( $newsletterINI->hasVariable( "$mailPersonalization-MailPersonalizationSettings", 'Class' ) ) {
                             $mailPersonalizationClass = $newsletterINI->variable( "$mailPersonalization-MailPersonalizationSettings", 'Class' );
                             if ( is_callable( "$mailPersonalizationClass::applyOnSubject" ) ) {
-                                $subject = call_user_func_array( "$mailPersonalizationClass::applyOnSubject", array( $subject, $newsletterUser ) );
+                                $subject = call_user_func_array( "$mailPersonalizationClass::applyOnSubject", array( $subject, $newsletterUser, $newsletterSending ) );
                             }
                             if ( is_callable( "$mailPersonalizationClass::applyOnHTMLBody" ) ) {
-                                $HTMLBody = call_user_func_array( "$mailPersonalizationClass::applyOnHTMLBody", array( $HTMLBody, $newsletterUser ) );
+                                $HTMLBody = call_user_func_array( "$mailPersonalizationClass::applyOnHTMLBody", array( $HTMLBody, $newsletterUser, $newsletterSending ) );
                             }
                             if ( is_callable( "$mailPersonalizationClass::applyOnPlainTextBody" ) ) {
-                                $plainTextBody = call_user_func_array( "$mailPersonalizationClass::applyOnPlainTextBody", array( $plainTextBody, $newsletterUser ) );
+                                $plainTextBody = call_user_func_array( "$mailPersonalizationClass::applyOnPlainTextBody", array( $plainTextBody, $newsletterUser, $newsletterSending ) );
                             }
                         }
                     }
