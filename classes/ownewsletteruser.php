@@ -288,6 +288,20 @@ class OWNewsletterUser extends eZPersistentObject {
 		return $listSubscriptionArray;
 	}
 
+    /**
+     * Returns all subcriptions for the current user, which Active status
+     *
+     * @return array
+     */
+    function getSubscriptionActiveArray() {
+        $listSubscriptionArray = array();
+        $subscriptionArray = OWNewsletterSubscription::fetchActiveList( array( 'newsletter_user_id' => (int) $this->attribute( 'id' ) ) );
+        foreach ( $subscriptionArray as $subscriptionObject ) {
+            $listSubscriptionArray[$subscriptionObject->attribute( 'mailing_list_contentobject_id' )] = $subscriptionObject;
+        }
+        return $listSubscriptionArray;
+    }
+
 	/**
 	 * Return the name which will display in email  e.g. Max Mustermman
 	 *
