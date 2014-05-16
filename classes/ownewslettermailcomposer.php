@@ -447,7 +447,9 @@ class OWNewsletterMailComposer extends ezcMail
                 $mainPart->appendPart( $part );
             }
         }
-
+        if( $mainPart === false ){
+                return false;
+        }
         $this->body = $mainPart;
     }
 
