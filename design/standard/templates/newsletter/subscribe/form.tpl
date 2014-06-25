@@ -96,7 +96,7 @@
 										) )}
 									{if $newsletter_mailing_list_list|count()|gt(0)}
 										<h2>{attribute_view_gui attribute=$newsletter_system.data_map.title}</h2>
-										<table bo	rder="0" width="100%">
+										<table border="0" width="100%">
 											{foreach $newsletter_mailing_list_list as $newsletter_mailing_list sequence array( 'bglight', 'bgdark' ) as $style}
 												{def $newsletter_mailing_list_id = $newsletter_mailing_list.contentobject_id}
 												<tr>
@@ -109,7 +109,7 @@
 														{/if}
 													</td>
 												</tr>
-												{undef $newsletter_mailing_list_id }
+												{undef $newsletter_mailing_list_id}
 											{/foreach}
 										</table>
 									{/if}
