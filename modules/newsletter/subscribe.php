@@ -2,6 +2,7 @@
 
 $module = $Params['Module'];
 $tpl = eZTemplate::factory();
+$http = eZHTTPTool::instance();
 
 /* Retrieval of cancel and success redirect URLs */
 $redirectUrlCancel = $redirectUrlSuccess = 'newsletter/subscribe';
@@ -25,7 +26,7 @@ $tpl->setVariable( 'required_fields', $requiredFields );
 
 $tmpUser = new OWNewsletterUser();
 $newsletterUserRow = array(
-    'email' => '',
+    'email' => $http->hasGetVariable( 'email' ) ? $http->getVariable( 'email' ) : '',
     'salutation' => '',
     'first_name' => '',
     'last_name' => '',
