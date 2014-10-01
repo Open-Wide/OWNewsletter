@@ -1413,6 +1413,11 @@
 			<comment>Datatype name</comment>
 			<translation>Configuration de la newsletter</translation>
 		</message>
+		<message>
+			<source>Newsletter Edition</source>
+			<comment>Datatype name</comment>
+			<translation>Newsletter Edition</translation>
+		</message>
 	</context>
 	<context>
 		<name>newsletter/datatype/ownewslettermailinglist</name>
