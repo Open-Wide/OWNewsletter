@@ -20,6 +20,7 @@ Shown[]
 Shown[default]=true
 Shown[navigation]=true
 Shown[browse]=false
+PolicyList[]=newsletter/index
 
 [MenuSettings]
 HideLeftMenuClasses[]=newsletter_list
