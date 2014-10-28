@@ -79,7 +79,7 @@
 				{/if}
 			</tr>
 
-			{undef $child_name $node_content $newsletter_edition $newsletter_edition.status $newsletter_edition.is_draft}
+			{undef $child_name $node_content $newsletter_edition}
         {/foreach}
     </table>
 </div>
