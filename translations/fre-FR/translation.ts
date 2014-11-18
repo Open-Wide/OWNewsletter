@@ -784,7 +784,7 @@
 		</message>
 		<message>
 			<source>You are already subscribed to our newsletter.</source>
-			<translation>Vous ètes déjà abonné à une de nos newsletter</translation>
+			<translation>Vous ètes déjà abonné à une de nos newsletters.</translation>
 		</message>
 		<message>
 			<source>To change your subscription</source>

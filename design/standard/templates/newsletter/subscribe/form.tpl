@@ -28,6 +28,14 @@
 							<p>{'No newsletter available.'|i18n( 'newsletter/subscribe' )} </p>
 						</div>
 					{else}
+                                            
+                                                {if is_set( $existing_newsletter_user )}
+                                                        {'You are already subscribed to our newsletter.'|i18n( 'newsletter/subscribe' )}
+                                                        <br/><br/>
+                                                        {'To change your subscription'|i18n( 'newsletter/subscribe' )},
+                                                        <a href={concat('newsletter/configure/',$existing_newsletter_user.hash)|ezurl()}>{'follow this link.'|i18n( 'newsletter/subscribe' )}</a>
+                                                {else}                                            
+                                            
 						<form name="subscribe" method="post" action={'/newsletter/subscribe'|ezurl()}>
 							{if and( is_set( $warning_array ), $warning_array|count|ne( 0 ) )}
 								<div class="block">
@@ -42,11 +50,12 @@
 								</div>
 							{/if}
 
-							{if is_set( $existing_newsletter_user )}
-								{'You are already subscribed to our newsletter.'|i18n( 'newsletter/subscribe' )}
-								{'To change your subscription'|i18n( 'newsletter/subscribe' )},
-								<a href={concat('newsletter/configure/',$existing_newsletter_user.hash)|ezurl()}>{'follow this link.'|i18n( 'newsletter/subscribe' )}</a>
-							{/if}
+
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
 
 							<div class="block header">
 								<p><b>{'Subscribe now to one or more of our newsletters.'|i18n( 'newsletter/subscribe' )}</b></p>
@@ -130,6 +139,7 @@
 								<p>{'Your e-mail address will under no circumstances be passed on to unauthorized third parties.'|i18n( 'newsletter/subscribe' )}</p>
 							</div>
 						</form>
+                                                {/if}      
 					{/if}
 				</div></div></div>
 		<div class="border-bl"><div class="border-br"><div class="border-bc"></div></div></div>
