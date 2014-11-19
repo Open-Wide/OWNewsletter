@@ -823,6 +823,17 @@
 		</message>
 	</context>
 	<context>
+		<name>newsletter/confirmation</name>
+		<message>
+			<source>Your subscription has been confirmed.</source>
+			<translation>Votre abonnement a bien été confirmé.</translation>
+		</message>
+		<message>
+			<source>Your subscription has been already confirmed.</source>
+			<translation>Votre abonnement a déjà été confirmé.</translation>
+		</message>
+	</context>        
+	<context>
 		<name>newsletter/configure</name>
 		<message>
 			<source>Configure</source>

@@ -2,5 +2,5 @@
 
 <p>
 	{'To activate or edit your subscription, please visit'|i18n( 'newsletter/confirmation/mail')}
-	<a href="{concat('/newsletter/configure/', $newsletter_user.hash)|ezurl('no', 'full')}">{'this link'|i18n( 'newsletter/confirmation/mail')}.</a>
+	<a href="{concat('/newsletter/confirmation/', $newsletter_user.hash)|ezurl('no', 'full')}">{'this link'|i18n( 'newsletter/confirmation/mail')}.</a>
 </p>

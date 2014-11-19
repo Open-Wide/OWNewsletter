@@ -172,6 +172,13 @@ $ViewList['configure'] = array(
 	)
 );
 
+$ViewList['confirmation'] = array(
+	'script' => 'confirmation.php',
+	'functions' => array( 'confirmation' ),
+	'default_navigation_part' => 'eznewsletternavigationpart',
+	'params' => array( 'Hash' )
+);
+
 $ViewList['preview'] = array(
 	'script' => 'preview.php',
 	'functions' => array( 'preview' ),
@@ -291,6 +298,7 @@ $ViewList['subscription_export'] = array(
 
 $FunctionList['subscribe'] = array();
 $FunctionList['configure'] = array();
+$FunctionList['confirmation'] = array();
 $FunctionList['unsubscribe'] = array();
 $FunctionList['subscription'] = array();
 $FunctionList['user'] = array();
