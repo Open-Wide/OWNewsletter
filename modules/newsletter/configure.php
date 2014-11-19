@@ -14,7 +14,8 @@ switch ( $newsletterUser->attribute( 'status' ) ) {
 	case OWNewsletterUser::STATUS_REMOVED_SELF :
 		return $module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel' );
 	case OWNewsletterUser::STATUS_PENDING:
-		$newsletterUser->setConfirmed();
+                $redirectUrlConfirmation = 'newsletter/confirmation/' . $Params['Hash'];
+                $module->redirectTo( $redirectUrlConfirmation );
 		break;
 }
 
