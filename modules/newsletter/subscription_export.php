@@ -44,7 +44,7 @@ if ( empty( $mailingListID ) ) {
 			if ( $module->hasActionParameter( 'ColumnDelimiter' ) ) {
 				$columnDelimiter = $module->actionParameter( 'ColumnDelimiter' );
 			}
-			$exportUserList = OWNewsletterUser::fetchListWithSubsricption( array( 'subscription' => $exportConds ) );
+			$exportUserList = OWNewsletterUser::fetchListWithSubscription( array( 'subscription' => $exportConds ) );
 			header( 'Content-Type: text/csv' );
 			header( 'Content-Disposition: attachment;filename=subscriptions.csv' );
 			$fp = fopen( 'php://output', 'w' );

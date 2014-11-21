@@ -52,7 +52,7 @@
 				
 				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'subscription_status', 'pending'
+								'filter_status', 'pending'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_pending_subscription_list">
                     <span class="openclose"></span>
@@ -64,7 +64,7 @@
 				
 				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'subscription_status', 'confirmed'
+								'filter_status', 'confirmed'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_confirmed_subscription_list">
                     <span class="openclose"></span>
@@ -76,7 +76,7 @@
 				
 				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'subscription_status', 'approved'
+								'filter_status', 'approved'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_approved_subscription_list">
                     <span class="openclose"></span>
@@ -88,7 +88,7 @@
 				
 				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'subscription_status', 'bounced'
+								'filter_status', 'bounced'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_bounced_subscription_list">
                     <span class="openclose"></span>
@@ -100,7 +100,20 @@
 				
 				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'subscription_status', 'removed'
+								'filter_status', 'inactived'
+							) )}
+                <li id="n{$newsletter_mailing_list_node_id}_inactived_subscription_list">
+                    <span class="openclose"></span>
+                    <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_inactived" />
+                    <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/inactived')|ezurl}>
+                        <span class="node-name-normal">{'Inactived'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
+                    </a>
+                </li>
+                
+                
+				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
+								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
+								'filter_status', 'removed'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_removed_subscription_list">
                     <span class="openclose"></span>
@@ -108,11 +121,12 @@
                     <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/removed')|ezurl}>
                         <span class="node-name-normal">{'Removed'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
                     </a>
-                </li>
+                </li>                
+                
 				
 				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'subscription_status', 'blacklisted'
+								'filter_status', 'blacklisted'
 							) )}
                 <li id="n{$newsletter_mailing_list_node_id}_blacklisted_subscription_list">
                     <span class="openclose"></span>

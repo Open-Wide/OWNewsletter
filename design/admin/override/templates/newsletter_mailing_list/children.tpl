@@ -15,7 +15,7 @@
 		) )
      $children_count = fetch( 'newsletter', 'subscription_count', hash(
 			'mailing_list_contentobject_id', $node.contentobject_id,
-			'subscription_status', $view_parameters.status
+			'filter_status', $view_parameters.status
 		) )
      $priority    = and( eq( $node.sort_array[0][0], 'priority' ), $node.can_edit, $children_count )
 	 $subscription_status = $view_parameters.status}
@@ -109,6 +109,15 @@
 								<img src={'1x1.gif'|ezimage} alt="{'Bounced'|i18n('newsletter/subscription/status')}" title="{'Bounced'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_bounced" /> {'Bounced'|i18n('newsletter/subscription/status')}
 							</a>
 						{/if}
+						{if $subscription_status|eq('inactived')}
+							<span class="current">
+								<img src={'1x1.gif'|ezimage} alt="{'Inactived'|i18n('newsletter/subscription/status')}" title="{'Inactived'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_inactived" /> {'Inactived'|i18n('newsletter/subscription/status')}
+							</span>
+						{else}
+							<a href={concat($node.url_alias, '/(status)/inactived' )|ezurl}>
+								<img src={'1x1.gif'|ezimage} alt="{'Inactived'|i18n('newsletter/subscription/status')}" title="{'Inactived'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_inactived" /> {'Inactived'|i18n('newsletter/subscription/status')}
+							</a>
+						{/if}                                                
 						{if $subscription_status|eq('removed')}
 							<span class="current">
 								<img src={'1x1.gif'|ezimage} alt="{'Removed'|i18n('newsletter/subscription/status')}" title="{'Removed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_removed" /> {'Removed'|i18n('newsletter/subscription/status')}

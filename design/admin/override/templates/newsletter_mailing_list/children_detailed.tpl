@@ -60,7 +60,7 @@
 						{if $children_count|gt(0)}
 							{def $subscription_list = fetch( 'newsletter', 'subscription_list', hash(
 									'mailing_list_contentobject_id', $node.contentobject_id,
-									'subscription_status', $view_parameters.status,
+									'filter_status', $view_parameters.status,
 									'limit', $limit,
 									'offset', $view_parameters.offset
 								) )}
@@ -94,8 +94,13 @@
 													{undef $user_object}
 												{/if}
 											</td>
-											<td>
-												<img src={'16x16.gif'|ezimage} alt="{$subscription.status_name|wash}" class="icon12 icon_s_{$subscription.status_identifier}" title="{$subscription.status_name|wash} ({$subscription.status|wash})" />
+											<td> 
+                                                                                            
+            
+												<img src={'16x16.gif'|ezimage} 
+                                                                                                     alt="{cond( not(eq($subscription.newsletter_user.status_identifier,'confirmed')) , $subscription.newsletter_user.status_name|wash , $subscription.status_name|wash)}" 
+                                                                                                     class="icon12 icon_s_{cond( not(eq($subscription.newsletter_user.status_identifier,'confirmed')) , $subscription.newsletter_user.status_identifier , $subscription.status_identifier)}" 
+                                                                                                     title="{cond( not(eq($subscription.newsletter_user.status_identifier,'confirmed')) , $subscription.newsletter_user.status_name|wash , $subscription.status_name|wash)} ({cond( not(eq($subscription.newsletter_user.status_identifier,'confirmed')) , $subscription.newsletter_user.status , $subscription.status)})" />
 											</td>
 											<td>
 												{cond( $subscription.modified|gt(0), $subscription.modified|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}

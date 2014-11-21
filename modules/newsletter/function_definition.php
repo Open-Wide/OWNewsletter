@@ -129,7 +129,7 @@ $FunctionList['subscription_list'] = array(
 			'required' => false,
 			'default' => false ),
 		array(
-			'name' => 'subscription_status',
+			'name' => 'filter_status',
 			'type' => 'string',
 			'required' => false,
 			'default' => false ),
@@ -159,7 +159,7 @@ $FunctionList['subscription_count'] = array(
 			'required' => false,
 			'default' => false ),
 		array(
-			'name' => 'subscription_status',
+			'name' => 'filter_status',
 			'type' => 'string',
 			'required' => false,
 			'default' => false ), )

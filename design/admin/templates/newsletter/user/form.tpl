@@ -186,7 +186,7 @@
 																		$bounced = $subscription.bounced
 																		$blacklisted = $subscription.blacklisted
 																		$status = $subscription.status
-																		$is_removed = $subscription.is_removed
+																		$is_inactived = $subscription.is_inactived
 																		$modified = $subscription.modified
 																		$status_id_array_enabled = $status_id_array_enabled|append( $status )|unique}
 																{/if}
@@ -244,7 +244,7 @@
 																<td>
 																	{if $modified|ne(0)}{'Modified'|i18n( 'newsletter/user' )}: {$modified|datetime( 'custom', '%j.%m.%Y %H:%i' )}{/if}
 																</td>
-																{undef $mailing_list_id $list_content $subscription_list $subscription $created $confirmed $subscription $removed $approved $bounced $blacklisted $status $is_removed $td_counter $modified}
+																{undef $mailing_list_id $list_content $subscription_list $subscription $created $confirmed $subscription $removed $approved $bounced $blacklisted $status $is_inactived $td_counter $modified}
 															</tr>
 														{/foreach}
 													</table>

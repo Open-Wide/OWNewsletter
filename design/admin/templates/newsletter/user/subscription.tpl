@@ -124,11 +124,11 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        {'Removed'|i18n('newsletter/user')}
+                                        {'Inactived'|i18n('newsletter/user')}
                                     </th>
                                     <td>
-                                        {if $subscription.removed|ne(0)}
-                                            {$subscription.removed|l10n( shortdatetime )}
+                                        {if $subscription.inactived|ne(0)}
+                                            {$subscription.inactived|l10n( shortdatetime )}
                                         {/if}
                                     </td>
                                 </tr>
@@ -169,7 +169,7 @@
 												<form class="inline" action={concat( '/newsletter/user/', $subscription.id )|ezurl()} method="post">
 													<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
 													<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
-													<input  {if $subscription.can_be_removed|not()}class="button-disabled" disabled="disabled"{else}class="button"{/if} type="submit" value="{'Remove'|i18n('newsletter/user')}" title="{'Remove subscription'|i18n('newsletter/user')}" name="RemoveSubscriptionButton" />
+													<input  {if $subscription.can_be_inactived|not()}class="button-disabled" disabled="disabled"{else}class="button"{/if} type="submit" value="{'Remove'|i18n('newsletter/user')}" title="{'Remove subscription'|i18n('newsletter/user')}" name="RemoveSubscriptionButton" />
 												</form>
 										</div>
 									</div>

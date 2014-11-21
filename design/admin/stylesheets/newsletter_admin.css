@@ -31,6 +31,9 @@
 .icon_s_removed_by_admin, .icon_mb_inactive {
 	background:-128px top;
 }
+.icon_s_inactived {
+	background:-224px top;
+}
 .icon_s_bounced, .icon_s_bounced_hard, .icon_s_bounced_soft {
 	background:-160px top;
 }

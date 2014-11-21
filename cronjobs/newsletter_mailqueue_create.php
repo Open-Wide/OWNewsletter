@@ -23,7 +23,7 @@ foreach ( $newsletterSendingWaitForProcessList as $newsletterSending ) {
         if ( $developmentMode ) {
             $newsletterUserList = array();
             foreach ( $authorizedDomainNameList as $authorizedDomainName ) {
-                $newsletterUserList = array_merge( $newsletterUserList, OWNewsletterUser::fetchListWithSubsricption( array(
+                $newsletterUserList = array_merge( $newsletterUserList, OWNewsletterUser::fetchListWithSubscription( array(
                             'email' => array( 'like', "%@$authorizedDomainName" ),
                             'status' => OWNewsletterUser::STATUS_CONFIRMED,
                             'subscription' => array(
@@ -32,7 +32,7 @@ foreach ( $newsletterSendingWaitForProcessList as $newsletterSending ) {
                         ) ) );
             }
         } else {
-            $newsletterUserList = OWNewsletterUser::fetchListWithSubsricption( array(
+            $newsletterUserList = OWNewsletterUser::fetchListWithSubscription( array(
                         'status' => OWNewsletterUser::STATUS_CONFIRMED,
                         'subscription' => array(
                             'status' => OWNewsletterSubscription::STATUS_APPROVED,

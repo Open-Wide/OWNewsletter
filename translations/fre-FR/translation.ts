@@ -1327,6 +1327,10 @@
 			<translation>Supprimé par un administrateur</translation>
 		</message>
 		<message>
+			<source>Inactived</source>
+			<translation>Désactivé</translation>
+		</message>                
+		<message>
 			<source>Bounced soft</source>
 			<translation type="unfinished"></translation>
 		</message>

@@ -222,9 +222,9 @@ class OWNewsletterBlacklistItem extends eZPersistentObject {
 		}
 	}
 
-	/*	 * **********************
+	/************************
 	 * OTHER METHODS
-	 * ********************** */
+	 * ***********************/
 
 	/**
 	 * generate emailHash for mail

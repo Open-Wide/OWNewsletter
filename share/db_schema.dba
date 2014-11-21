@@ -106,19 +106,13 @@ $schema = array(
 				'not_null' => '1',
 				'default' => 0,
 			),
-			'confirmed' => array(
-				'length' => 11,
-				'type' => 'int',
-				'not_null' => '1',
-				'default' => 0,
-			),
 			'approved' => array(
 				'length' => 11,
 				'type' => 'int',
 				'not_null' => '1',
 				'default' => 0,
 			),
-			'removed' => array(
+			'inactived' => array(
 				'length' => 11,
 				'type' => 'int',
 				'not_null' => '1',
