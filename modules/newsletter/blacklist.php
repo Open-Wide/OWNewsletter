@@ -25,18 +25,18 @@ if ( $module->isCurrentAction( 'Cancel' ) ) {
 	$module->redirectTo( $redirectUrlCancel );
 }
 
-if ( $module->isCurrentAction( 'AddBacklistItem' ) ) {
+if ( $module->isCurrentAction( 'AddBlacklistItem' ) ) {
 	if ( $module->hasActionParameter( 'Email' ) ) {
 		OWNewsletterBlacklistItem::addToBlacklist( $module->actionParameter( 'Email' ) );
 		$module->redirectTo( $redirectUrlSuccess );
 	} else {
 		$tpl->setVariable( 'error', 'Email is required' );
 	}
-} elseif ( $module->isCurrentAction( 'RemoveBacklistItem' ) ) {
+} elseif ( $module->isCurrentAction( 'RemoveBlacklistItem' ) ) {
 	if ( $module->hasActionParameter( 'Email' ) ) {
 		OWNewsletterBlacklistItem::removeFromBlacklist( $module->actionParameter( 'Email' ) );
 		$module->redirectTo( $redirectUrlSuccess );
-	} else {
+	} else { 
 		$tpl->setVariable( 'error', 'Email is required' );
 	}
 } else {

@@ -171,9 +171,9 @@
 												<input type="hidden" name="RedirectUrlActionSuccess" value={$page_uri} />
 												<input type="hidden" name="Email" value="{$newsletter_user.email|wash()}" />
 												{if $newsletter_user.status_identifier|ne('blacklisted')}
-													<input class="button" type="submit" name="AddBacklistItemButton" value="{'Add to blacklist'|i18n( 'newsletter/user' )}" />
+													<input class="button" type="submit" name="AddBlacklistItemButton" value="{'Add to blacklist'|i18n( 'newsletter/user' )}" />
 												{else}
-													<input class="button" type="submit" name="RemoveBacklistItemButton" value="{'Remove from blacklist'|i18n( 'newsletter/user' )}" />
+													<input class="button" type="submit" name="RemoveBlacklistItemButton" value="{'Remove from blacklist'|i18n( 'newsletter/user' )}" />
 												{/if}
 											</form>
 										</div>

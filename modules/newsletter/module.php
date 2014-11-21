@@ -73,18 +73,18 @@ $ViewList['blacklist'] = array(
 	'params' => array(),
 	'single_post_actions' => array(
 		'CancelButton' => 'Cancel',
-		'AddBacklistItemButton' => 'AddBacklistItem',
-		'RemoveBacklistItemButton' => 'RemoveBacklistItem'
+		'AddBlacklistItemButton' => 'AddBlacklistItem',
+		'RemoveBlacklistItemButton' => 'RemoveBlacklistItem'
 	),
 	'post_action_parameters' => array(
 		'Cancel' => array(
 			'RedirectUrlActionCancel' => 'RedirectUrlActionCancel'
 		),
-		'AddBacklistItem' => array(
+		'AddBlacklistItem' => array(
 			'Email' => 'Email',
 			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
 		),
-		'RemoveBacklistItem' => array(
+		'RemoveBlacklistItem' => array(
 			'Email' => 'Email',
 			'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
 		)
