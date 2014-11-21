@@ -96,11 +96,15 @@
 											</td>
 											<td> 
                                                                                             
-            
+                                                                                            
+                                                                                            {cond( eq($subscription.newsletter_user.status_identifier,'confirmed') ,  cond( eq($subscription.status_identifier,'pending'), $subscription.newsletter_user.status_name|wash,  $subscription.status_name|wash)  , $subscription.newsletter_user.status_name|wash )}
+                                                                                            
+                                                                                            
+                                                                                                
 												<img src={'16x16.gif'|ezimage} 
-                                                                                                     alt="{cond( not(eq($subscription.newsletter_user.status_identifier,'confirmed')) , $subscription.newsletter_user.status_name|wash , $subscription.status_name|wash)}" 
-                                                                                                     class="icon12 icon_s_{cond( not(eq($subscription.newsletter_user.status_identifier,'confirmed')) , $subscription.newsletter_user.status_identifier , $subscription.status_identifier)}" 
-                                                                                                     title="{cond( not(eq($subscription.newsletter_user.status_identifier,'confirmed')) , $subscription.newsletter_user.status_name|wash , $subscription.status_name|wash)} ({cond( not(eq($subscription.newsletter_user.status_identifier,'confirmed')) , $subscription.newsletter_user.status , $subscription.status)})" />
+                                                                                                     alt="{cond( eq($subscription.newsletter_user.status_identifier,'confirmed') ,  cond( eq($subscription.status_identifier,'pending'), $subscription.newsletter_user.status_name|wash,  $subscription.status_name|wash)  , $subscription.newsletter_user.status_name|wash )}" 
+                                                                                                     class="icon12 icon_s_{cond( eq($subscription.newsletter_user.status_identifier,'confirmed') ,  cond( eq($subscription.status_identifier,'pending'), $subscription.newsletter_user.status_identifier,  $subscription.status_identifier)  , $subscription.newsletter_user.status_identifier )}" 
+                                                                                                     title="{cond( eq($subscription.newsletter_user.status_identifier,'confirmed') ,  cond( eq($subscription.status_identifier,'pending'), $subscription.newsletter_user.status_name|wash,  $subscription.status_name|wash)  , $subscription.newsletter_user.status_name|wash )} ({cond( eq($subscription.newsletter_user.status_identifier,'confirmed') ,  cond( eq($subscription.status_identifier,'pending'), $subscription.newsletter_user.status,  $subscription.status)  , $subscription.newsletter_user.status )})" />
 											</td>
 											<td>
 												{cond( $subscription.modified|gt(0), $subscription.modified|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}

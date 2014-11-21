@@ -169,15 +169,15 @@ class OWNewsletterFunctionCollection {
                                 break;
                             case 'confirmed':
                                 $conds['user']['status'] = OWNewsletterUser::STATUS_CONFIRMED;
-                                $conds['ownl_subscription.status'] = OWNewsletterSubscription::STATUS_PENDING;
+                                $conds['status'] = OWNewsletterSubscription::STATUS_PENDING;
                                 break;
                             case 'approved':
                                 $conds['user']['status'] = OWNewsletterUser::STATUS_CONFIRMED;
-                                $conds['ownl_subscription.status'] = OWNewsletterSubscription::STATUS_APPROVED;
+                                $conds['status'] = OWNewsletterSubscription::STATUS_APPROVED;
                                 break;   
                             case 'inactived':
                                 $conds['user']['status'] = OWNewsletterUser::STATUS_CONFIRMED;
-                                $conds['ownl_subscription.status'] = OWNewsletterSubscription::STATUS_INACTIVED;
+                                $conds['status'] = OWNewsletterSubscription::STATUS_INACTIVED;
                                 break;     
                         }
 		}            
