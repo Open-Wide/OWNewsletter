@@ -926,6 +926,7 @@ class OWNewsletterUser extends eZPersistentObject {
         // we determine the actual status by checking the various timestamps
         if ($this->attribute('confirmed') != 0) {
             if ($this->attribute('bounced') != 0 || $this->attribute('removed') != 0) {
+                
                 if ($this->attribute('removed') > $this->attribute('bounced')) {
                     $this->setRemoved();
                 } else {
@@ -947,12 +948,6 @@ class OWNewsletterUser extends eZPersistentObject {
             }
         }
         $this->setAttribute('blacklisted', 0);
-
-        // set all subscriptions and all open senditems to blacklisted
-        /*foreach (OWNewsletterSubscription::fetchListByNewsletterUserId($this->attribute('id')) as $subscription) {
-            $subscription->setNonBlacklisted();
-        }*/
-
         $this->store();
     }
 
@@ -966,6 +961,7 @@ class OWNewsletterUser extends eZPersistentObject {
         if ($byAdmin == true) {
             $this->setAttribute('status', self::STATUS_REMOVED_ADMIN);
         } else {
+            $this->setAttribute('status', self::STATUS_REMOVED_SELF);
         }
         $this->store();
     }
