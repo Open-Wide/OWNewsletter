@@ -185,4 +185,22 @@ $FunctionList['available_filter_status'] = array(
 	'parameters' => array()
 );
 
-
+$FunctionList['filter_status_name'] = array(
+	'name' => 'list',
+	'operation_types' => array( 'read' ),
+	'call_method' => array(
+		'class' => 'OWNewsletterFunctionCollection',
+		'method' => 'filterStatusName' ),
+	'parameter_type' => 'standard',
+	'parameters' => array(
+		array(
+			'name' => 'user_status',
+			'type' => 'integer',
+			'required' => true,
+			'default' => 0 ),
+		array(
+			'name' => 'subscription_status',
+			'type' => 'integer',
+			'required' => true,
+			'default' => 0 ), )
+);

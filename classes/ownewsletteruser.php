@@ -830,6 +830,7 @@ class OWNewsletterUser extends eZPersistentObject {
             }
             unset($conds['subscription']);
         }
+        
         $objectList = eZPersistentObject::fetchObjectList(self::definition(), array(), $conds, $sortArr, $limitArr, $asObject, null, $custom_fields, $custom_tables, $custom_conds);
         return $objectList;
     }

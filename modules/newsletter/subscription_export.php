@@ -15,8 +15,10 @@ $Result['path'] = array(
 
 
 $redirectUrlCancel = $redirectUrlSuccess = 'newsletter/subscription_export';
-$subscriptionStatus = array( OWNewsletterSubscription::STATUS_APPROVED );
-$userStatus = array( OWNewsletterUser::STATUS_CONFIRMED );
+
+$subscriptionStatus = array( 'pending' );
+$userStatus = array( 'confirmed' );
+
 $subscriptionFields = array( "email" );
 $columnDelimiter = ";";
 $mailingListID = $Params['mailingListID'];
@@ -32,12 +34,43 @@ if ( empty( $mailingListID ) ) {
 			'text' => $node->attribute( 'name' ) );
 		$redirectUrlCancel = $redirectUrlSuccess = 'newsletter/subscription_export/' . $mailingListID;
 		if ( $module->isCurrentAction( 'Export' ) ) {
-			$exportConds = array( 'mailing_list_contentobject_id' => $mailingListID );
+                        
+                        $exportConds['subscription']['mailing_list_contentobject_id'] = $mailingListID;
+                        
 			if ( $module->hasActionParameter( 'SubscriptionStatus' ) ) {
+                            
 				$subscriptionStatus = $module->actionParameter( 'SubscriptionStatus' );
-				if ( !empty( $subscriptionStatus ) ) {
-					$exportConds['status'] = array( $subscriptionStatus );
-				}
+                                if(is_array($subscriptionStatus) && isset($subscriptionStatus[0]) ){
+                                    $filterStatus = $subscriptionStatus[0];
+                                }else{
+                                    $filterStatus = 'approved';
+                                }
+
+                                switch($filterStatus){
+                                    case 'pending':
+                                        $exportConds['status'] = OWNewsletterUser::STATUS_PENDING;
+                                        break;
+                                    case 'bounced':
+                                    case 'removed':
+                                    case 'blacklisted':
+                                        $userStatus = OWNewsletterFunctionCollection::getUserStatus($subscriptionStatus);
+                                        $exportConds['status'] = is_array($userStatus) ? array($userStatus) : (int) $userStatus;
+                                        break;
+                                    case 'confirmed':
+                                        $exportConds['status'] = OWNewsletterUser::STATUS_CONFIRMED;
+                                        $exportConds['subscription']['status'] = OWNewsletterSubscription::STATUS_PENDING;
+                                        break;
+                                    case 'approved':
+                                        $exportConds['status'] = OWNewsletterUser::STATUS_CONFIRMED;
+                                        $exportConds['subscription']['status'] = OWNewsletterSubscription::STATUS_APPROVED;
+                                        break;
+                                    case 'inactived':
+                                        $exportConds['status'] = OWNewsletterUser::STATUS_CONFIRMED;
+                                        $exportConds['subscription']['status'] = OWNewsletterSubscription::STATUS_INACTIVED;
+                                        break;
+                                }
+                               
+                                
 			}
 			if ( $module->hasActionParameter( 'SubscriptionFields' ) ) {
 				$subscriptionFields = array_merge( $subscriptionFields, $module->actionParameter( 'SubscriptionFields' ) );
@@ -45,7 +78,9 @@ if ( empty( $mailingListID ) ) {
 			if ( $module->hasActionParameter( 'ColumnDelimiter' ) ) {
 				$columnDelimiter = $module->actionParameter( 'ColumnDelimiter' );
 			}
-			$exportUserList = OWNewsletterUser::fetchListWithSubscription( array( 'subscription' => $exportConds ) );
+
+			$exportUserList = OWNewsletterUser::fetchListWithSubscription( $exportConds );
+
 			header( 'Content-Type: text/csv' );
 			header( 'Content-Disposition: attachment;filename=subscriptions.csv' );
 			$fp = fopen( 'php://output', 'w' );
@@ -123,6 +158,8 @@ if ( empty( $mailingListID ) ) {
 			}
 			fclose( $fp );
 			eZExecution::cleanExit();
+                        
+                        
 		}
 	} else {
 		$tpl->setVariable( 'warning', ezpI18n::tr( 'newsletter/warning_message', 'Mailing list not found.' ) );

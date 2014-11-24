@@ -1184,7 +1184,7 @@
 		</message>
 		<message>
 			<source>Cancel</source>
-			<translation>Anuuler</translation>
+			<translation>Annuler</translation>
 		</message>
 		<message>
 			<source>Export subscriptions.</source>

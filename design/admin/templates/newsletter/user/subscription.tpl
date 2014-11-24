@@ -1,4 +1,5 @@
 {def	$page_uri = concat( 'newsletter/user/', $subscription.newsletter_user_id, '/', $subscription.mailing_list_contentobject_id )}
+                        
 <div class="newsletter newsletter-subscription_view">
     <div class="context-block">
         <div class="box-header">
@@ -50,7 +51,7 @@
                                         {'Newsletter user'|i18n('newsletter/user')}
                                     </th>
                                     <td>
-                                        <a href={concat('newsletter/user/',$subscription.newsletter_user_id )|ezurl()}>{$subscription.newsletter_user.name|wash()} &lt;{$subscription.newsletter_user.email|wash()}&gt;</a> ({$subscription.newsletter_user.status_name})
+                                        <a href={concat('newsletter/user/',$subscription.newsletter_user_id )|ezurl()}>{$subscription.newsletter_user.name|wash()} &lt;{$subscription.newsletter_user.email|wash()}&gt;</a> ({$subscription.newsletter_user.status_name|wash})
                                     </td>
                                 </tr>
                                 <tr>

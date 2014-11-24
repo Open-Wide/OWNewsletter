@@ -300,8 +300,55 @@ class OWNewsletterFunctionCollection {
                 'inactived'     => ezpI18n::tr('newsletter/subscription/status', 'Inactived'),
                 'removed'       => ezpI18n::tr('newsletter/user/status', 'Removed'),
                 'bounced'       => ezpI18n::tr('newsletter/user/status', 'Bounced'),
-                'blacklisted'   => ezpI18n::tr('newsletter/user/status', 'Blacklist'),         
+                'blacklisted'   => ezpI18n::tr('newsletter/user/status', 'Blacklisted'),         
             ));
     }
-
+    
+    
+    static function filterStatusName($user_status,$subscription_status){
+        
+        $filterStatusName = "";
+        
+        $userStatusArray = OWNewsletterUser::getAvailableStatus('name');
+        $subscriptionStatusArray = OWNewsletterSubscription::getAvailableStatus('name');
+        
+        switch($user_status){
+            
+            case OWNewsletterUser::STATUS_PENDING: 
+                $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_PENDING];
+                break;
+            case OWNewsletterUser::STATUS_CONFIRMED: 
+                
+                switch($subscription_status){
+                    case OWNewsletterSubscription::STATUS_PENDING:
+                        $filterStatusName = $subscriptionStatusArray[OWNewsletterSubscription::STATUS_PENDING];
+                        break;
+                    case OWNewsletterSubscription::STATUS_APPROVED:
+                        $filterStatusName = $subscriptionStatusArray[OWNewsletterSubscription::STATUS_APPROVED];
+                        break;
+                    case OWNewsletterSubscription::STATUS_INACTIVED:
+                        $filterStatusName = $subscriptionStatusArray[OWNewsletterSubscription::STATUS_INACTIVED];
+                        break;
+                }
+                
+                break;
+            case OWNewsletterUser::STATUS_BOUNCED_SOFT: 
+                $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_BOUNCED_SOFT];
+                break;
+            case OWNewsletterUser::STATUS_BOUNCED_HARD: 
+                $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_BOUNCED_HARD];
+                break;
+            case OWNewsletterUser::STATUS_REMOVED_SELF: 
+                $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_REMOVED_SELF];
+                break;
+            case OWNewsletterUser::STATUS_REMOVED_ADMIN: 
+                $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_REMOVED_ADMIN];
+                break;
+            case OWNewsletterUser::STATUS_BLACKLISTED: 
+                $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_BLACKLISTED];
+                break;
+        }
+        
+        return $filterStatusName;
+    }
 }
