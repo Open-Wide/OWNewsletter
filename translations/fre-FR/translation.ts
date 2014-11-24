@@ -582,6 +582,10 @@
 			<source>Additional data</source>
 			<translation>Données supplémentaires</translation>
 		</message>
+		<message>
+			<source>Inactived</source>
+			<translation>Désactivé</translation>
+		</message>                 
 	</context>
 	<context>
 		<name>newsletter/blacklist</name>

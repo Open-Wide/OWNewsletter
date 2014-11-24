@@ -85,7 +85,18 @@
                         <span class="node-name-normal">{'Approved'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
                     </a>
                 </li>
-				
+				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
+								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
+								'filter_status', 'inactived'
+							) )}
+                <li id="n{$newsletter_mailing_list_node_id}_inactived_subscription_list">
+                    <span class="openclose"></span>
+                    <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_inactived" />
+                    <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/inactived')|ezurl}>
+                        <span class="node-name-normal">{'Inactived'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
+                    </a>
+                </li>
+                				
 				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
 								'filter_status', 'bounced'
@@ -98,18 +109,7 @@
                     </a>
                 </li>
 				
-				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
-								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'filter_status', 'inactived'
-							) )}
-                <li id="n{$newsletter_mailing_list_node_id}_inactived_subscription_list">
-                    <span class="openclose"></span>
-                    <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_inactived" />
-                    <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/inactived')|ezurl}>
-                        <span class="node-name-normal">{'Inactived'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
-                    </a>
-                </li>
-                
+
                 
 				{set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,

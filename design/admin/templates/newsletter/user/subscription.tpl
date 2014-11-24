@@ -23,9 +23,9 @@
                         <div class="block float-break">
 
                             {if $message|ne('')}
-								<div class="message">
-									<h2>{$message|wash()}</h2>
-								</div>
+                                <div class="message">
+                                    <h2>{$message|wash()}</h2>
+                                </div>
                             {/if}
 
                             <table class="list">
@@ -58,7 +58,7 @@
                                         {'Status'|i18n('newsletter/user')}
                                     </th>
                                     <td>
-                                        {$subscription.status_name|wash()}
+                                        {cond( eq($subscription.newsletter_user.status_identifier,'confirmed') ,  cond( eq($subscription.status_identifier,'pending'), $subscription.newsletter_user.status_name|wash,  $subscription.status_name|wash)  , $subscription.newsletter_user.status_name|wash )}
                                     </td>
                                 </tr>
                                 <tr>
@@ -144,41 +144,41 @@
                                     </td>
                                 </tr>
                             </table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="controlbar">
-				<div class="box-bc">
-					<div class="box-ml">
-						<div class="box-mr">
-							<div class="box-tc">
-								<div class="box-bl">
-									<div class="box-br">
-										{* Edit *}
-										<div class="left">
-											<form class="inline" action={concat( '/newsletter/user/', $subscription.id )|ezurl()} method="post">
-												<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
-												<input  {if $subscription.can_be_approved}class="button"{else}class="button-disabled" disabled="disabled"{/if} type="submit" value="{'Approve'|i18n('newsletter/user')}" name="ApproveSubscriptionButton" title="{'Approve subscription'|i18n( 'newsletter/user' )}" />
-											</form>
-											<form class="inline" action={concat( 'newsletter/user/', $subscription.newsletter_user.id )|ezurl()} method="post">
-												<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
-												<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
-												<input class="button" type="submit" value="{'Edit'|i18n( 'newsletter/user' )}" title="{'Edit newsletter user'|i18n('newsletter/user')}" name="SubmitNewsletterUserButton" />
-											</form>
-												<form class="inline" action={concat( '/newsletter/user/', $subscription.id )|ezurl()} method="post">
-													<input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
-													<input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
-													<input  {if $subscription.can_be_inactived|not()}class="button-disabled" disabled="disabled"{else}class="button"{/if} type="submit" value="{'Remove'|i18n('newsletter/user')}" title="{'Remove subscription'|i18n('newsletter/user')}" name="RemoveSubscriptionButton" />
-												</form>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="controlbar">
+                <div class="box-bc">
+                    <div class="box-ml">
+                        <div class="box-mr">
+                            <div class="box-tc">
+                                <div class="box-bl">
+                                    <div class="box-br">
+                                        {* Edit *}
+                                        <div class="left">
+                                            <form class="inline" action={concat( '/newsletter/user/', $subscription.id )|ezurl()} method="post">
+                                                <input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
+                                                <input  {if $subscription.can_be_approved}class="button"{else}class="button-disabled" disabled="disabled"{/if} type="submit" value="{'Approve'|i18n('newsletter/user')}" name="ApproveSubscriptionButton" title="{'Approve subscription'|i18n( 'newsletter/user' )}" />
+                                            </form>
+                                            <form class="inline" action={concat( 'newsletter/user/', $subscription.newsletter_user.id )|ezurl()} method="post">
+                                                <input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
+                                                <input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
+                                                <input class="button" type="submit" value="{'Edit'|i18n( 'newsletter/user' )}" title="{'Edit newsletter user'|i18n('newsletter/user')}" name="SubmitNewsletterUserButton" />
+                                            </form>
+                                            <form class="inline" action={concat( '/newsletter/user/', $subscription.id )|ezurl()} method="post">
+                                                <input type="hidden" name="RedirectUrlActionCancel" value="{$page_uri}" />
+                                                <input type="hidden" name="RedirectUrlActionSuccess" value="{$page_uri}" />
+                                                <input  {if $subscription.can_be_inactived|not()}class="button-disabled" disabled="disabled"{else}class="button"{/if} type="submit" value="{'Remove'|i18n('newsletter/user')}" title="{'Remove subscription'|i18n('newsletter/user')}" name="RemoveSubscriptionButton" />
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

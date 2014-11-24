@@ -16,6 +16,7 @@ $Result['path'] = array(
 
 $redirectUrlCancel = $redirectUrlSuccess = 'newsletter/subscription_export';
 $subscriptionStatus = array( OWNewsletterSubscription::STATUS_APPROVED );
+$userStatus = array( OWNewsletterUser::STATUS_CONFIRMED );
 $subscriptionFields = array( "email" );
 $columnDelimiter = ";";
 $mailingListID = $Params['mailingListID'];

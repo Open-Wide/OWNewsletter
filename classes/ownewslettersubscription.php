@@ -3,9 +3,7 @@
 class OWNewsletterSubscription extends eZPersistentObject {
 
     const STATUS_PENDING = 0;
-
     const STATUS_APPROVED = 2;
-
     const STATUS_INACTIVED = 5;
 
     /**
@@ -225,9 +223,9 @@ class OWNewsletterSubscription extends eZPersistentObject {
         return $statusIdentifier;
     }
 
-    /************************
+    /*     * **********************
      * FETCH METHODS
-     ************************/
+     * ********************** */
 
     /**
      * Return object by id
@@ -266,7 +264,6 @@ class OWNewsletterSubscription extends eZPersistentObject {
         return $objectList;
     }
 
-    
     /**
      * Fetch subscription by custom parameters and user custom parameters
      *
@@ -308,9 +305,8 @@ class OWNewsletterSubscription extends eZPersistentObject {
         }
         $objectList = eZPersistentObject::fetchObjectList(self::definition(), array(), $conds, $sortArr, $limitArr, $asObject, null, $custom_fields, $custom_tables, $custom_conds);
         return $objectList;
-    }    
-    
-    
+    }
+
     /**
      * Count all subscriptions with custom conditions
      *
@@ -357,7 +353,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
         $objectList = eZPersistentObject::fetchObjectList(self::definition(), null, $conds, $sortArr, $limitArr, $asObject, null, null, null, null);
         return $objectList;
     }
-    
+
     /*     * **********************
      * OBJECT METHODS
      * ********************** */
@@ -405,42 +401,61 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @see kernel/classes/eZPersistentObject#setAttribute($attr, $val)
      */
     function setAttribute($attr, $val) {
+        \eZLog::write("setAttribute $attr, $val", "ownewsletterEvol.log");
         switch ($attr) {
             case 'status':
+                
+                \eZLog::write("setAttribute case status", "ownewsletterEvol.log");
+                
                 // only update timestamp and status if status id is changed
                 if ($this->attribute('status') == $val) {
+                    
+                    \eZLog::write("setAttribute === return ", "ownewsletterEvol.log");
+                    
                     return;
                 }
+
                 $currentTimeStamp = time();
+                \eZLog::write("currentTimeStamp $currentTimeStamp", "ownewsletterEvol.log");
+                
                 // set status timestamps
                 switch ($val) {
-                    case self::STATUS_PENDING : {
-                            $this->setAttribute('inactived', 0);
-                            $mailingList = $this->attribute('mailing_list');
+                    case self::STATUS_PENDING :
+                        
+                        \eZLog::write("STATUS_PENDING", "ownewsletterEvol.log");
+                        
+                        parent::setAttribute('inactived', 0);
+                        $mailingList = $this->attribute('mailing_list');
 
-                            // set approve automatically if defined in list config
-                            if (is_object($mailingList) and (boolean) $mailingList->attribute('auto_approve_registered_user') == true) {
-                                $this->setAttribute('approved', $currentTimeStamp);
-                                $val = self::STATUS_APPROVED;
-                            } else {
-                                // if subscription status is changed from approved to confirmed the approved timestamp should be removed
-                                $this->setAttribute('approved', 0);
-                            }
-                        } break;
+                        // set approve automatically if defined in list config
+                        if (is_object($mailingList) and (boolean) $mailingList->attribute('auto_approve_registered_user') == true) {
+                            parent::setAttribute('approved', $currentTimeStamp);
+                            $val = self::STATUS_APPROVED;
+                        } else {
+                            // if subscription status is changed from approved to confirmed the approved timestamp should be removed
+                            parent::setAttribute('approved', 0);
+                        }
+                        break;
 
-                    case self::STATUS_APPROVED: {
-                            $this->setAttribute('approved', $currentTimeStamp);
-                            $this->setAttribute('inactived', 0);
-                        } break;
+                    case self::STATUS_APPROVED :
+                        \eZLog::write("STATUS_APPROVED", "ownewsletterEvol.log");
+                        
+                        parent::setAttribute('approved', $currentTimeStamp);
+                        parent::setAttribute('inactived', 0);
+                        break;
 
-                    case self::STATUS_INACTIVED: {
-                            $this->setAttribute('inactived', $currentTimeStamp);
-                        } break;
+                    case self::STATUS_INACTIVED :
+                        \eZLog::write("STATUS_INACTIVED", "ownewsletterEvol.log");
+                        parent::setAttribute('inactived', $currentTimeStamp);
+                        break;
                 }
-                $this->setAttribute('modified', $currentTimeStamp);
+                \eZLog::write("modified $currentTimeStamp", "ownewsletterEvol.log");
+
+                parent::setAttribute('modified', $currentTimeStamp);
                 parent::setAttribute($attr, $val);
                 break;
             default:
+                \eZLog::write("default $attr, $val ", "ownewsletterEvol.log");
                 parent::setAttribute($attr, $val);
                 break;
         }
@@ -464,11 +479,11 @@ class OWNewsletterSubscription extends eZPersistentObject {
         $this->store();
     }
 
-    /*************************************
+    /*     * ***********************************
      * 
      * PERSISTENT METHODS
      * 
-     *************************************/
+     * *********************************** */
 
     /**
      * Create new OWNewsletterSubscription object
@@ -481,11 +496,16 @@ class OWNewsletterSubscription extends eZPersistentObject {
         self::validateSubscriptionData($dataArray);
         if (!isset($dataArray['status'])) {
             $dataArray['status'] = self::STATUS_PENDING;
+        }else{
+            // kill status for call setAttribute('status')
+            $newStatus = $dataArray['status'];
+            unset($dataArray['status']);
         }
         $newsletterUserId = $dataArray['newsletter_user_id'];
         $row = array_merge(array(
             'modified' => time(),
             'modifier_contentobject_id' => eZUser::currentUserID()), $dataArray);
+        
         $object = new OWNewsletterSubscription($row);
         if ($object->attribute('created') == 0) {
             $object->setAttribute('created', time());
@@ -493,7 +513,8 @@ class OWNewsletterSubscription extends eZPersistentObject {
             $object->setAttribute('hash', OWNewsletterUtils::generateUniqueMd5Hash($newsletterUserId));
             $object->setAttribute('remote_id', 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash($newsletterUserId));
         }
-        $object->setAttribute('status', $dataArray['status']);
+        
+        $object->setAttribute('status', $newStatus);
         $object->store();
         return $object;
     }
@@ -553,5 +574,6 @@ class OWNewsletterSubscription extends eZPersistentObject {
             );
         }
     }
-
+  
+    
 }
