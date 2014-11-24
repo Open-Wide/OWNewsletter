@@ -234,7 +234,7 @@ class OWNewsletterFunctionCollection {
      * @param string $status
      * @return integer
      */
-    static protected function getUserStatus($status) {
+    static function getUserStatus($status) {
         switch ($status) {
             case 'pending':
                 return OWNewsletterUser::STATUS_PENDING;
@@ -268,7 +268,7 @@ class OWNewsletterFunctionCollection {
      * @param string $status
      * @return integer
      */
-    static protected function getSubscriptionStatus($status) {
+    static function getSubscriptionStatus($status) {
         switch ($status) {
             case 'pending':
                 return OWNewsletterSubscription::STATUS_PENDING;

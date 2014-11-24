@@ -501,9 +501,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
             $object->setAttribute('remote_id', 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash($newsletterUserId));
         }
         
-        
         $object->setAttribute('status', $newStatus);
-       
         $object->store();
         return $object;
     }

@@ -53,7 +53,7 @@ if ( empty( $mailingListID ) ) {
                                     case 'bounced':
                                     case 'removed':
                                     case 'blacklisted':
-                                        $userStatus = OWNewsletterFunctionCollection::getUserStatus($subscriptionStatus);
+                                        $userStatus = OWNewsletterFunctionCollection::getUserStatus($filterStatus);
                                         $exportConds['status'] = is_array($userStatus) ? array($userStatus) : (int) $userStatus;
                                         break;
                                     case 'confirmed':
