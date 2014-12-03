@@ -342,12 +342,12 @@ function formatTextLink( $content, $textLinkFormat = "[ %url_text: %url_link ]" 
 function compressHTML( $html ) {
 	$search = array(
 		'/([^\S\n])+/s',  // shorten multiple whitespace sequences
-		'/(?:(?:\r\n|\r|\n)\s*){2}/s'  // shorten multiple whitespace sequences
+		'/(?:(?:\r\n|\r|\n)\s*){2}/s'  // shorten multiple line breaks
 	);
 
 	$replace = array(
 		'\\1',
-        "\r\n"
+		"\r\n"
 	);
 
 	return preg_replace( $search, $replace, $html );
