@@ -19,8 +19,7 @@ switch ( $newsletterUser->attribute( 'status' ) ) {
 		break;
 }
 
-// Si on a valide le status de pending à confirm alors on affiche la page de validation 
-
+/* if the status progresses from Pending to confirm then displays the validation page */
 
 /* Retrieval of cancel and success redirect URLs */
 $redirectUrlCancel = $redirectUrlSuccess = 'newsletter/configure/' . $Params['Hash'];

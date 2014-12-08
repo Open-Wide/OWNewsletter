@@ -403,14 +403,14 @@ class OWNewsletterSubscription extends eZPersistentObject {
     function setAttribute($attr, $val) {
         switch ($attr) {
             case 'status':
-                
+
                 // only update timestamp and status if status id is changed
                 if ($this->attribute('status') === $val) {
                     return;
                 }
 
                 $currentTimeStamp = time();
-                
+
                 // set status timestamps
                 switch ($val) {
                     case self::STATUS_PENDING :
@@ -483,7 +483,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
         self::validateSubscriptionData($dataArray);
         if (!isset($dataArray['status'])) {
             $newStatus = self::STATUS_PENDING;
-        }else{
+        } else {
             // kill status for call setAttribute('status')
             $newStatus = $dataArray['status'];
             unset($dataArray['status']);
@@ -492,7 +492,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
         $row = array_merge(array(
             'modified' => time(),
             'modifier_contentobject_id' => eZUser::currentUserID()), $dataArray);
-        
+
         $object = new OWNewsletterSubscription($row);
         if ($object->attribute('created') == 0) {
             $object->setAttribute('created', time());
@@ -500,12 +500,12 @@ class OWNewsletterSubscription extends eZPersistentObject {
             $object->setAttribute('hash', OWNewsletterUtils::generateUniqueMd5Hash($newsletterUserId));
             $object->setAttribute('remote_id', 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash($newsletterUserId));
         }
-        
+
         $object->setAttribute('status', $newStatus);
         $object->store();
         return $object;
     }
-  
+
     /**
      * Check if the data passed to create or update a subscription are correct
      * 
@@ -561,6 +561,5 @@ class OWNewsletterSubscription extends eZPersistentObject {
             );
         }
     }
-  
-    
+
 }
