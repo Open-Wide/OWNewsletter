@@ -1,5 +1,5 @@
 {def	$page_uri = concat( 'newsletter/user/', $subscription.newsletter_user_id, '/', $subscription.mailing_list_contentobject_id )}
-                        
+
 <div class="newsletter newsletter-subscription_view">
     <div class="context-block">
         <div class="box-header">

@@ -2,12 +2,12 @@
 {def $edition_data_map = $contentobject.data_map}
 
 {if $edition_data_map.title.has_content}
-<h1>{$edition_data_map.title.content|wash()}</h1>
+    <h1>{$edition_data_map.title.content|wash()}</h1>
 {/if}
 
 {* Text *}
 {if $edition_data_map.description.has_content}
-     {attribute_view_gui attribute=$edition_data_map.description}
+    {attribute_view_gui attribute=$edition_data_map.description}
 {/if}
 
 <hr>

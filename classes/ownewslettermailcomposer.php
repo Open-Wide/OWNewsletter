@@ -132,8 +132,8 @@
  * @package ow_newsletter
  * @mainclass
  */
-class OWNewsletterMailComposer extends ezcMail
-{
+class OWNewsletterMailComposer extends ezcMail {
+
     /**
      * Holds the attachments filenames.
      *
@@ -155,14 +155,12 @@ class OWNewsletterMailComposer extends ezcMail
      *
      * @param ezcMailComposerOptions $options
      */
-    public function __construct( ezcMailComposerOptions $options = null )
-    {
+    public function __construct( ezcMailComposerOptions $options = null ) {
         $this->properties['plainText'] = null;
         $this->properties['htmlText'] = null;
         $this->properties['charset'] = 'us-ascii';
         $this->properties['encoding'] = ezcMail::EIGHT_BIT;
-        if ( $options === null )
-        {
+        if( $options === null ) {
             $options = new ezcMailComposerOptions();
         }
 
@@ -180,10 +178,8 @@ class OWNewsletterMailComposer extends ezcMail
      * @param mixed $value
      * @ignore
      */
-    public function __set( $name, $value )
-    {
-        switch ( $name )
-        {
+    public function __set( $name, $value ) {
+        switch( $name ) {
             case 'plainText':
             case 'htmlText':
             case 'charset':
@@ -192,8 +188,7 @@ class OWNewsletterMailComposer extends ezcMail
                 break;
 
             case 'options':
-                if ( !$value instanceof ezcMailComposerOptions )
-                {
+                if( !$value instanceof ezcMailComposerOptions ) {
                     throw new ezcBaseValueException( $name, $value, 'ezcMailComposerOptions' );
                 }
 
@@ -214,10 +209,8 @@ class OWNewsletterMailComposer extends ezcMail
      * @return mixed
      * @ignore
      */
-    public function __get( $name )
-    {
-        switch ( $name )
-        {
+    public function __get( $name ) {
+        switch( $name ) {
             case 'plainText':
             case 'htmlText':
             case 'charset':
@@ -239,10 +232,8 @@ class OWNewsletterMailComposer extends ezcMail
      * @return bool
      * @ignore
      */
-    public function __isset( $name )
-    {
-        switch ( $name )
-        {
+    public function __isset( $name ) {
+        switch( $name ) {
             case 'plainText':
             case 'htmlText':
             case 'charset':
@@ -285,14 +276,10 @@ class OWNewsletterMailComposer extends ezcMail
      *            the Mail component. Use addFileAttachment() and
      *            addStringAttachment() instead.
      */
-    public function addAttachment( $fileName, $content = null, $contentType = null, $mimeType = null, ezcMailContentDispositionHeader $contentDisposition = null )
-    {
-        if ( is_null( $content ) )
-        {
+    public function addAttachment( $fileName, $content = null, $contentType = null, $mimeType = null, ezcMailContentDispositionHeader $contentDisposition = null ) {
+        if( is_null( $content ) ) {
             $this->addFileAttachment( $fileName, $contentType, $mimeType, $contentDisposition );
-        }
-        else
-        {
+        } else {
             $this->addStringAttachment( $fileName, $content, $contentType, $mimeType, $contentDisposition );
         }
     }
@@ -317,20 +304,13 @@ class OWNewsletterMailComposer extends ezcMail
      * @param string $mimeType
      * @param ezcMailContentDispositionHeader $contentDisposition
      */
-    public function addFileAttachment( $fileName, $contentType = null, $mimeType = null, ezcMailContentDispositionHeader $contentDisposition = null )
-    {
-        if ( is_readable( $fileName ) )
-        {
+    public function addFileAttachment( $fileName, $contentType = null, $mimeType = null, ezcMailContentDispositionHeader $contentDisposition = null ) {
+        if( is_readable( $fileName ) ) {
             $this->attachments[] = array( $fileName, null, $contentType, $mimeType, $contentDisposition );
-        }
-        else
-        {
-            if ( file_exists( $fileName ) )
-            {
+        } else {
+            if( file_exists( $fileName ) ) {
                 throw new ezcBaseFilePermissionException( $fileName, ezcBaseFileException::READ );
-            }
-            else
-            {
+            } else {
                 throw new ezcBaseFileNotFoundException( $fileName );
             }
         }
@@ -356,8 +336,7 @@ class OWNewsletterMailComposer extends ezcMail
      * @param string $mimeType
      * @param ezcMailContentDispositionHeader $contentDisposition
      */
-    public function addStringAttachment( $fileName, $content, $contentType = null, $mimeType = null, ezcMailContentDispositionHeader $contentDisposition = null )
-    {
+    public function addStringAttachment( $fileName, $content, $contentType = null, $mimeType = null, ezcMailContentDispositionHeader $contentDisposition = null ) {
         $this->attachments[] = array( $fileName, $content, $contentType, $mimeType, $contentDisposition );
     }
 
@@ -369,29 +348,23 @@ class OWNewsletterMailComposer extends ezcMail
      * @throws ezcBaseFileNotFoundException
      *         if any of the attachment files can not be found.
      */
-    public function build()
-    {
+    public function build() {
         $mainPart = false;
 
         // create the text part if there is one
-        if ( $this->plainText != '' )
-        {
+        if( $this->plainText != '' ) {
             $mainPart = new ezcMailText( $this->plainText, $this->charset );
         }
 
         // create the HTML part if there is one
         $htmlPart = false;
-        if ( $this->htmlText != '' )
-        {
+        if( $this->htmlText != '' ) {
             $htmlPart = $this->generateHtmlPart();
 
             // create a MultiPartAlternative if a text part exists
-            if ( $mainPart != false )
-            {
+            if( $mainPart != false ) {
                 $mainPart = new ezcMailMultipartAlternative( $mainPart, $htmlPart );
-            }
-            else
-            {
+            } else {
                 $mainPart = $htmlPart;
             }
         }
@@ -400,55 +373,37 @@ class OWNewsletterMailComposer extends ezcMail
         // special case, mail with no text and one attachment.
         // A fix for issue #14220 was added by wrapping the attachment in
         // an ezcMailMultipartMixed part
-        if ( $mainPart == false && count( $this->attachments ) == 1 )
-        {
-            if ( isset( $this->attachments[0][1] ) )
-            {
-                if ( is_resource( $this->attachments[0][1] ) )
-                {
+        if( $mainPart == false && count( $this->attachments ) == 1 ) {
+            if( isset( $this->attachments[0][1] ) ) {
+                if( is_resource( $this->attachments[0][1] ) ) {
                     $mainPart = new ezcMailMultipartMixed( new ezcMailStreamFile( $this->attachments[0][0], $this->attachments[0][1], $this->attachments[0][2], $this->attachments[0][3] ) );
-                }
-                else
-                {
+                } else {
                     $mainPart = new ezcMailMultipartMixed( new ezcMailVirtualFile( $this->attachments[0][0], $this->attachments[0][1], $this->attachments[0][2], $this->attachments[0][3] ) );
                 }
-            }
-            else
-            {
+            } else {
                 $mainPart = new ezcMailMultipartMixed( new ezcMailFile( $this->attachments[0][0], $this->attachments[0][2], $this->attachments[0][3] ) );
             }
             $mainPart->contentDisposition = $this->attachments[0][4];
-        }
-        else if ( count( $this->attachments ) > 0 )
-        {
-            $mainPart = ( $mainPart == false )
-                ? new ezcMailMultipartMixed()
-                : new ezcMailMultipartMixed( $mainPart );
+        } else if( count( $this->attachments ) > 0 ) {
+            $mainPart = ( $mainPart == false ) ? new ezcMailMultipartMixed() : new ezcMailMultipartMixed( $mainPart );
 
             // add the attachments to the mixed part
-            foreach ( $this->attachments as $attachment )
-            {
-                if ( isset( $attachment[1] ) )
-                {
-                    if ( is_resource( $attachment[1] ) )
-                    {
+            foreach( $this->attachments as $attachment ) {
+                if( isset( $attachment[1] ) ) {
+                    if( is_resource( $attachment[1] ) ) {
                         $part = new ezcMailStreamFile( $attachment[0], $attachment[1], $attachment[2], $attachment[3] );
-                    }
-                    else
-                    {
+                    } else {
                         $part = new ezcMailVirtualFile( $attachment[0], $attachment[1], $attachment[2], $attachment[3] );
                     }
-                }
-                else
-                {
+                } else {
                     $part = new ezcMailFile( $attachment[0], $attachment[2], $attachment[3] );
                 }
                 $part->contentDisposition = $attachment[4];
                 $mainPart->appendPart( $part );
             }
         }
-        if( $mainPart === false ){
-                return false;
+        if( $mainPart === false ) {
+            return false;
         }
         $this->body = $mainPart;
     }
@@ -465,36 +420,32 @@ class OWNewsletterMailComposer extends ezcMail
      *         if $fileName could not be read.
      * @return ezcMailPart
      */
-    private function generateHtmlPart()
-    {
+    private function generateHtmlPart() {
         $result = false;
-        if ( $this->htmlText != '' )
-        {
+        if( $this->htmlText != '' ) {
             $matches = array();
-            if ( $this->options->automaticImageInclude === true )
-            {
+            if( $this->options->automaticImageInclude === true ) {
                 /*
-                 1.7.1 regex is buggy filename are not extract correctly
-                 http://issues.ez.no/IssueView.php?Id=16612&
+                  1.7.1 regex is buggy filename are not extract correctly
+                  http://issues.ez.no/IssueView.php?Id=16612&
 
-                 preg_match_all( '(
-                    <img \\s+[^>]*
-                        src\\s*=\\s*
-                            (?:
-                                (?# Match quoted attribute)
-                                ([\'"])file://(?P<quoted>[^>]+)\\1
+                  preg_match_all( '(
+                  <img \\s+[^>]*
+                  src\\s*=\\s*
+                  (?:
+                  (?# Match quoted attribute)
+                  ([\'"])file://(?P<quoted>[^>]+)\\1
 
-                                (?# Match unquoted attribute, which may not contain spaces)
-                            |   file://(?P<unquoted>[^>\\s]+)
-                        )
-                    [^>]* >)ix', $htmlText, $matches );
+                  (?# Match unquoted attribute, which may not contain spaces)
+                  |   file://(?P<unquoted>[^>\\s]+)
+                  )
+                  [^>]* >)ix', $htmlText, $matches );
 
 
                  * */
 
                 // OW Newsletter regex change only find all  file://ezroot/
                 // so it is secure
-
                 // recognize file://ezroot/ and pick out the image, add it as a part and then..:)
                 preg_match_all( "/<img[\s\*\s]src=[\'\"]file:\/\/ezroot\/([^ >\'\"]+)/i", $this->htmlText, $matches );
 
@@ -504,8 +455,7 @@ class OWNewsletterMailComposer extends ezcMail
 
             $result = new ezcMailText( $this->htmlText, $this->charset, $this->encoding );
             $result->subType = "html";
-            if ( count( $matches ) > 0 )
-            {
+            if( count( $matches ) > 0 ) {
                 $htmlPart = $result;
                 // wrap already existing message in an alternative part
                 $result = new ezcMailMultipartRelated( $result );
@@ -513,27 +463,20 @@ class OWNewsletterMailComposer extends ezcMail
                 // create a filepart and add it to the related part
                 // also store the ID for each part since we need those
                 // when we replace the originals in the HTML message.
-                foreach ( $matches as $fileName )
-                {
-                    if ( is_readable( $fileName ) )
-                    {
+                foreach( $matches as $fileName ) {
+                    if( is_readable( $fileName ) ) {
                         // @todo waiting for fix of the fileinfo extension
                         // $contents = file_get_contents( $fileName );
                         $mimeType = null;
                         $contentType = null;
-                        if ( ezcBaseFeatures::hasExtensionSupport( 'fileinfo' ) )
-                        {
+                        if( ezcBaseFeatures::hasExtensionSupport( 'fileinfo' ) ) {
                             // if fileinfo extension is available
                             $filePart = new ezcMailFile( $fileName );
-                        }
-                        elseif ( ezcMailTools::guessContentType( $fileName, $contentType, $mimeType ) )
-                        {
+                        } elseif( ezcMailTools::guessContentType( $fileName, $contentType, $mimeType ) ) {
                             // if fileinfo extension is not available try to get content/mime type
                             // from the file extension
                             $filePart = new ezcMailFile( $fileName, $contentType, $mimeType );
-                        }
-                        else
-                        {
+                        } else {
                             // fallback in case fileinfo is not available and could not get content/mime
                             // type from file extension
                             $filePart = new ezcMailFile( $fileName, "application", "octet-stream" );
@@ -541,15 +484,10 @@ class OWNewsletterMailComposer extends ezcMail
                         $cid = $result->addRelatedPart( $filePart );
                         // replace the original file reference with a reference to the cid
                         $this->htmlText = str_replace( 'file://ezroot/' . $fileName, 'cid:' . $cid, $this->htmlText );
-                    }
-                    else
-                    {
-                        if ( file_exists( $fileName ) )
-                        {
+                    } else {
+                        if( file_exists( $fileName ) ) {
                             throw new ezcBaseFilePermissionException( $fileName, ezcBaseFileException::READ );
-                        }
-                        else
-                        {
+                        } else {
                             throw new ezcBaseFileNotFoundException( $fileName );
                         }
                         // throw
@@ -561,5 +499,5 @@ class OWNewsletterMailComposer extends ezcMail
         }
         return $result;
     }
+
 }
-?>

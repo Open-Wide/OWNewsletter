@@ -1,15 +1,15 @@
 <?php
+
 /**
  * Generate output and mail
  */
-class OWNewsletterTransport
-{
+class OWNewsletterTransport {
 
     /**
-    * Holds the properties of this class.
-    *
-    * @var array(string=>mixed)
-    */
+     * Holds the properties of this class.
+     *
+     * @var array(string=>mixed)
+     */
     protected $properties = array();
 
     /**
@@ -18,8 +18,7 @@ class OWNewsletterTransport
      * @param string $transportMethod
      * @return void
      */
-    function __construct( $transportMethod = 'file' )
-    {
+    function __construct( $transportMethod = 'file' ) {
         $this->transportMethod = $transportMethod;
     }
 
@@ -29,57 +28,43 @@ class OWNewsletterTransport
      * @param object $ezcMailComposerObject
      * @return error message / boolean
      */
-    public function send( ezcMail $ezcMailComposerObject )
-    {
+    public function send( ezcMail $ezcMailComposerObject ) {
         $iniTransport = $this->transportMethod;
         $newsletterINI = eZINI::instance( 'newsletter.ini' );
 
-        switch ( $iniTransport )
-        {
-            case 'smtp':
-            {
-                // read smtp settings from ini
-                $smtpTransportServer = $newsletterINI->variable( 'NewsletterMailSettings', 'SmtpTransportServer' );
-                $smtpTransportPort = $newsletterINI->variable( 'NewsletterMailSettings', 'SmtpTransportPort' );
-                $smtpTransportUser = $newsletterINI->variable( 'NewsletterMailSettings', 'SmtpTransportUser' );
-                $smtpTransportPassword = $newsletterINI->variable( 'NewsletterMailSettings', 'SmtpTransportPassword' );
-                $smtpTransportConnectionType = $newsletterINI->variable( 'NewsletterMailSettings', 'SmtpTransportConnectionType' );
+        switch( $iniTransport ) {
+            case 'smtp': {
+                    // read smtp settings from ini
+                    $smtpTransportServer = $newsletterINI->variable( 'NewsletterMailSettings', 'SmtpTransportServer' );
+                    $smtpTransportPort = $newsletterINI->variable( 'NewsletterMailSettings', 'SmtpTransportPort' );
+                    $smtpTransportUser = $newsletterINI->variable( 'NewsletterMailSettings', 'SmtpTransportUser' );
+                    $smtpTransportPassword = $newsletterINI->variable( 'NewsletterMailSettings', 'SmtpTransportPassword' );
+                    $smtpTransportConnectionType = $newsletterINI->variable( 'NewsletterMailSettings', 'SmtpTransportConnectionType' );
 
-                $options = new ezcMailSmtpTransportOptions();
-                if( $smtpTransportConnectionType )
-                {
-                    $options->connectionType = $smtpTransportConnectionType;
-                }
-                $transport = new ezcMailSmtpTransport(  $smtpTransportServer,
-                                                        $smtpTransportUser,
-                                                        $smtpTransportPassword,
-                                                        $smtpTransportPort,
-                                                        $options );
-
-            } break;
-            case 'file':
-            {
-                // var/log/mail
-                $mailDir = $newsletterINI->variable( 'NewsletterMailSettings', 'FileTransportMailDir' );
-                $transport = new OWNewsletterTransportFile( $mailDir );
-            } break;
+                    $options = new ezcMailSmtpTransportOptions();
+                    if( $smtpTransportConnectionType ) {
+                        $options->connectionType = $smtpTransportConnectionType;
+                    }
+                    $transport = new ezcMailSmtpTransport( $smtpTransportServer, $smtpTransportUser, $smtpTransportPassword, $smtpTransportPort, $options );
+                } break;
+            case 'file': {
+                    // var/log/mail
+                    $mailDir = $newsletterINI->variable( 'NewsletterMailSettings', 'FileTransportMailDir' );
+                    $transport = new OWNewsletterTransportFile( $mailDir );
+                } break;
             case 'sendmail':
-            case 'mta':
-            {
-                $transport = new ezcMailMtaTransport();
-            } break;
+            case 'mta': {
+                    $transport = new ezcMailMtaTransport();
+                } break;
         }
 
-        try
-        {
+        try {
             $transport->send( $ezcMailComposerObject );
 
             return true;
-        }
-        catch ( ezcMailTransportException $e )
-        {
+        } catch( ezcMailTransportException $e ) {
             // error by transport with tracking
-            eZDebug::writeError( 'OWNewsletterTransport:send: ' . $e->getMessage()  );
+            eZDebug::writeError( 'OWNewsletterTransport:send: ' . $e->getMessage() );
             return $e;
         }
     }
@@ -98,13 +83,10 @@ class OWNewsletterTransport
      * @return void
      * @ignore
      */
-    public function __set( $name, $value )
-    {
-        switch ( $name )
-        {
+    public function __set( $name, $value ) {
+        switch( $name ) {
             case 'transportMethod':
-                if ( !(  in_array($value, array( 'file', 'smtp', 'sendmail' ) ) ) )
-                {
+                if( !( in_array( $value, array( 'file', 'smtp', 'sendmail' ) ) ) ) {
                     throw new ezcBaseValueException( 'transportMethod', $value, 'file, smtp, sendmail' );
                 }
                 $this->properties[$name] = $value;
@@ -125,10 +107,8 @@ class OWNewsletterTransport
      * @return mixed
      * @ignore
      */
-    public function __get( $name )
-    {
-        switch ( $name )
-        {
+    public function __get( $name ) {
+        switch( $name ) {
             case 'transportMethod':
                 return $this->properties[$name];
             default:
@@ -143,10 +123,8 @@ class OWNewsletterTransport
      * @return boolean
      * @ignore
      */
-    public function __isset( $name )
-    {
-        switch ( $name )
-        {
+    public function __isset( $name ) {
+        switch( $name ) {
             case 'transportMethod':
                 return isset( $this->properties[$name] );
 
@@ -156,5 +134,3 @@ class OWNewsletterTransport
     }
 
 }
-
-?>

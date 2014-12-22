@@ -12,8 +12,8 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @param array $row
      * @return void
      */
-    function __construct($row = array()) {
-        $this->eZPersistentObject($row);
+    function __construct( $row = array() ) {
+        $this->eZPersistentObject( $row );
     }
 
     /**
@@ -26,57 +26,57 @@ class OWNewsletterSubscription extends eZPersistentObject {
                     'name' => 'NewsletterUserId',
                     'datatype' => 'integer',
                     'default' => 0,
-                    'required' => true),
+                    'required' => true ),
                 'mailing_list_contentobject_id' => array(
                     'name' => 'ListContentObjectId',
                     'datatype' => 'integer',
                     'default' => 0,
-                    'required' => true),
+                    'required' => true ),
                 'hash' => array(
                     'name' => 'Hash',
                     'datatype' => 'string',
                     'default' => '',
-                    'required' => true),
+                    'required' => true ),
                 'status' => array(
                     'name' => 'Status',
                     'datatype' => 'integer',
                     'default' => self::STATUS_PENDING,
-                    'required' => true),
+                    'required' => true ),
                 'creator_contentobject_id' => array(
                     'name' => 'CreatorContentObjectId',
                     'datatype' => 'interger',
                     'default' => 0,
-                    'required' => true),
+                    'required' => true ),
                 'created' => array(
                     'name' => 'Created',
                     'datatype' => 'interger',
                     'default' => 0,
-                    'required' => true),
+                    'required' => true ),
                 'modifier_contentobject_id' => array(
                     'name' => 'ModifierContentObjectId',
                     'datatype' => 'integer',
                     'default' => 0,
-                    'required' => true),
+                    'required' => true ),
                 'modified' => array(
                     'name' => 'Modified',
                     'datatype' => 'integer',
                     'default' => 0,
-                    'required' => true),
+                    'required' => true ),
                 'approved' => array(
                     'name' => 'Approved',
                     'datatype' => 'integer',
                     'default' => 0,
-                    'required' => true),
+                    'required' => true ),
                 'inactived' => array(
                     'name' => 'Inactived',
                     'datatype' => 'integer',
                     'default' => 0,
-                    'required' => true),
+                    'required' => true ),
                 'remote_id' => array(
                     'name' => 'RemoteId',
                     'datatype' => 'string',
                     'default' => '',
-                    'required' => true)
+                    'required' => true )
             ),
             'function_attributes' => array(
                 'id' => 'getId',
@@ -91,10 +91,10 @@ class OWNewsletterSubscription extends eZPersistentObject {
                 'status_name' => 'getStatusName',
                 'status_identifier' => 'getStatusIdentifier',
             ),
-            'keys' => array('mailing_list_contentobject_id', 'newsletter_user_id'),
-            'sort' => array('created' => 'asc'),
+            'keys' => array( 'mailing_list_contentobject_id', 'newsletter_user_id' ),
+            'sort' => array( 'created' => 'asc' ),
             'class_name' => 'OWNewsletterSubscription',
-            'name' => 'ownl_subscription');
+            'name' => 'ownl_subscription' );
     }
 
     /*     * *************************
@@ -107,7 +107,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @return string ID
      */
     function getId() {
-        return $this->attribute('newsletter_user_id') . '/' . $this->attribute('mailing_list_contentobject_id');
+        return $this->attribute( 'newsletter_user_id' ) . '/' . $this->attribute( 'mailing_list_contentobject_id' );
     }
 
     /**
@@ -116,7 +116,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @return object
      */
     function getNewsletterUserObject() {
-        $userObject = OWNewsletterUser::fetch($this->attribute('newsletter_user_id'));
+        $userObject = OWNewsletterUser::fetch( $this->attribute( 'newsletter_user_id' ) );
         return $userObject;
     }
 
@@ -126,7 +126,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @return OWNewsletterMailingList
      */
     function getMailingList() {
-        $object = OWNewsletterMailingList::fetchLastVersion($this->attribute('mailing_list_contentobject_id'));
+        $object = OWNewsletterMailingList::fetchLastVersion( $this->attribute( 'mailing_list_contentobject_id' ) );
         return $object;
     }
 
@@ -136,7 +136,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @return eZContentObject
      */
     function getMailingListContentObject() {
-        $object = eZContentObject::fetch($this->attribute('mailing_list_contentobject_id'));
+        $object = eZContentObject::fetch( $this->attribute( 'mailing_list_contentobject_id' ) );
         return $object;
     }
 
@@ -146,7 +146,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @return boolean
      */
     function isInactived() {
-        $subscriptionStatus = $this->attribute('status');
+        $subscriptionStatus = $this->attribute( 'status' );
         return ( $subscriptionStatus == self::STATUS_INACTIVED ) ? true : false;
     }
 
@@ -156,7 +156,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @return booleean
      */
     function canBeApproved() {
-        return !in_array($this->attribute('status'), array(self::STATUS_APPROVED, self::STATUS_INACTIVED));
+        return !in_array( $this->attribute( 'status' ), array( self::STATUS_APPROVED, self::STATUS_INACTIVED ) );
     }
 
     /**
@@ -165,7 +165,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @return booleean
      */
     function canBeInactived() {
-        return !in_array($this->attribute('status'), array(self::STATUS_INACTIVED));
+        return !in_array( $this->attribute( 'status' ), array( self::STATUS_INACTIVED ) );
     }
 
     /**
@@ -174,7 +174,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @return unknown_type
      */
     function getCreatorUserObject() {
-        $user = eZContentObject::fetch($this->attribute('creator_contentobject_id'));
+        $user = eZContentObject::fetch( $this->attribute( 'creator_contentobject_id' ) );
         return $user;
     }
 
@@ -185,8 +185,8 @@ class OWNewsletterSubscription extends eZPersistentObject {
      */
     function getModifierUserObject() {
         $retVal = false;
-        if ($this->attribute('modifier_contentobject_id') != 0) {
-            $retVal = eZContentObject::fetch($this->attribute('modifier_contentobject_id'));
+        if( $this->attribute( 'modifier_contentobject_id' ) != 0 ) {
+            $retVal = eZContentObject::fetch( $this->attribute( 'modifier_contentobject_id' ) );
         }
         return $retVal;
     }
@@ -199,9 +199,9 @@ class OWNewsletterSubscription extends eZPersistentObject {
         $statusString = '-';
 
         $availableStatusArray = self::getAvailableStatus();
-        $currentStatusId = $this->attribute('status');
+        $currentStatusId = $this->attribute( 'status' );
 
-        if (array_key_exists($currentStatusId, $availableStatusArray)) {
+        if( array_key_exists( $currentStatusId, $availableStatusArray ) ) {
             $statusString = $availableStatusArray[$currentStatusId];
         }
         return $statusString;
@@ -214,10 +214,10 @@ class OWNewsletterSubscription extends eZPersistentObject {
     function getStatusIdentifier() {
         $statusIdentifier = '-';
 
-        $availableStatusArray = self::getAvailableStatus('identifier');
-        $currentStatusId = $this->attribute('status');
+        $availableStatusArray = self::getAvailableStatus( 'identifier' );
+        $currentStatusId = $this->attribute( 'status' );
 
-        if (array_key_exists($currentStatusId, $availableStatusArray)) {
+        if( array_key_exists( $currentStatusId, $availableStatusArray ) ) {
             $statusIdentifier = $availableStatusArray[$currentStatusId];
         }
         return $statusIdentifier;
@@ -234,10 +234,10 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @param integer $newsletter_user_id
      * @return object
      */
-    static function fetch($newsletter_user_id, $mailing_list_contentobject_id) {
-        $object = eZPersistentObject::fetchObject(self::definition(), null, array(
-                    'mailing_list_contentobject_id' => $mailing_list_contentobject_id,
-                    'newsletter_user_id' => $newsletter_user_id), true);
+    static function fetch( $newsletter_user_id, $mailing_list_contentobject_id ) {
+        $object = eZPersistentObject::fetchObject( self::definition(), null, array(
+                'mailing_list_contentobject_id' => $mailing_list_contentobject_id,
+                'newsletter_user_id' => $newsletter_user_id ), true );
         return $object;
     }
 
@@ -250,17 +250,17 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @param boolean $asObject
      * @return array
      */
-    static function fetchList($conds = array(), $limit = false, $offset = false, $asObject = true) {
+    static function fetchList( $conds = array(), $limit = false, $offset = false, $asObject = true ) {
         $sortArr = array(
-            'created' => 'desc');
+            'created' => 'desc' );
         $limitArr = null;
 
-        if ((int) $limit != 0) {
+        if( (int) $limit != 0 ) {
             $limitArr = array(
                 'limit' => $limit,
-                'offset' => $offset);
+                'offset' => $offset );
         }
-        $objectList = eZPersistentObject::fetchObjectList(self::definition(), null, $conds, $sortArr, $limitArr, $asObject, null, null, null, null);
+        $objectList = eZPersistentObject::fetchObjectList( self::definition(), null, $conds, $sortArr, $limitArr, $asObject, null, null, null, null );
         return $objectList;
     }
 
@@ -273,37 +273,37 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @param boolean $asObject
      * @return array
      */
-    static function fetchListWithUser($conds, $limit = false, $offset = false, $asObject = true) {
-        $sortArr = array('created' => 'desc');
+    static function fetchListWithUser( $conds, $limit = false, $offset = false, $asObject = true ) {
+        $sortArr = array( 'created' => 'desc' );
         $limitArr = null;
 
-        if ((int) $limit != 0) {
+        if( (int) $limit != 0 ) {
             $limitArr = array(
                 'limit' => $limit,
-                'offset' => $offset);
+                'offset' => $offset );
         }
         $def = self::definition();
-        $custom_fields = array_keys($def['fields']);
-        foreach ($custom_fields as $index => $field) {
+        $custom_fields = array_keys( $def['fields'] );
+        foreach( $custom_fields as $index => $field ) {
             $custom_fields[$index] = "ownl_subscription.$field as $field";
         }
         $custom_tables = null;
         $custom_conds = null;
-        if (isset($conds['user'])) {
-            $custom_tables = array('ownl_user');
+        if( isset( $conds['user'] ) ) {
+            $custom_tables = array( 'ownl_user' );
             $custom_conds = ' AND ownl_user.id = ownl_subscription.newsletter_user_id';
-            foreach ($conds as $field => $value) {
-                if ($field != 'user') {
+            foreach( $conds as $field => $value ) {
+                if( $field != 'user' ) {
                     $conds["ownl_subscription.$field"] = $value;
-                    unset($conds[$field]);
+                    unset( $conds[$field] );
                 }
             }
-            foreach ($conds['user'] as $field => $value) {
+            foreach( $conds['user'] as $field => $value ) {
                 $conds["ownl_user.$field"] = $value;
             }
-            unset($conds['user']);
+            unset( $conds['user'] );
         }
-        $objectList = eZPersistentObject::fetchObjectList(self::definition(), array(), $conds, $sortArr, $limitArr, $asObject, null, $custom_fields, $custom_tables, $custom_conds);
+        $objectList = eZPersistentObject::fetchObjectList( self::definition(), array(), $conds, $sortArr, $limitArr, $asObject, null, $custom_fields, $custom_tables, $custom_conds );
         return $objectList;
     }
 
@@ -313,8 +313,8 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @param array $conds
      * @return interger
      */
-    static function countList($conds = array()) {
-        $objectList = eZPersistentObject::count(self::definition(), $conds);
+    static function countList( $conds = array() ) {
+        $objectList = eZPersistentObject::count( self::definition(), $conds );
         return $objectList;
     }
 
@@ -325,8 +325,8 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @param boolean $asObject
      * @return array
      */
-    static function fetchListByNewsletterUserId($newsletterUserId, $asObject = true) {
-        return self::fetchList(array('newsletter_user_id' => (int) $newsletterUserId), false, false, $asObject);
+    static function fetchListByNewsletterUserId( $newsletterUserId, $asObject = true ) {
+        return self::fetchList( array( 'newsletter_user_id' => (int) $newsletterUserId ), false, false, $asObject );
     }
 
     /**
@@ -338,19 +338,19 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @param boolean $asObject
      * @return array
      */
-    static function fetchActiveList($conds = array(), $limit = false, $offset = false, $asObject = true) {
+    static function fetchActiveList( $conds = array(), $limit = false, $offset = false, $asObject = true ) {
         $sortArr = array(
-            'created' => 'desc');
+            'created' => 'desc' );
         $limitArr = null;
 
-        if ((int) $limit != 0) {
+        if( (int) $limit != 0 ) {
             $limitArr = array(
                 'limit' => $limit,
-                'offset' => $offset);
+                'offset' => $offset );
         }
-        $conds['status'] = array(array(self::STATUS_PENDING,
-                self::STATUS_APPROVED));
-        $objectList = eZPersistentObject::fetchObjectList(self::definition(), null, $conds, $sortArr, $limitArr, $asObject, null, null, null, null);
+        $conds['status'] = array( array( self::STATUS_PENDING,
+                self::STATUS_APPROVED ) );
+        $objectList = eZPersistentObject::fetchObjectList( self::definition(), null, $conds, $sortArr, $limitArr, $asObject, null, null, null, null );
         return $objectList;
     }
 
@@ -364,10 +364,10 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @return boolean
      */
     public function unsubscribe() {
-        if ($this->attribute('status') == self::STATUS_INACTIVED) {
+        if( $this->attribute( 'status' ) == self::STATUS_INACTIVED ) {
             return false;
         } else {
-            $this->setAttribute('status', self::STATUS_INACTIVED);
+            $this->setAttribute( 'status', self::STATUS_INACTIVED );
             $this->sync();
             $this->store();
             return true;
@@ -380,7 +380,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @return void
      */
     public function approve() {
-        $this->setAttribute('status', self::STATUS_APPROVED);
+        $this->setAttribute( 'status', self::STATUS_APPROVED );
         $this->sync();
         $this->store();
     }
@@ -391,7 +391,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @return void
      */
     public function removeByAdmin() {
-        $this->setAttribute('status', self::STATUS_INACTIVED);
+        $this->setAttribute( 'status', self::STATUS_INACTIVED );
         $this->sync();
         $this->store();
     }
@@ -400,50 +400,44 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * (non-PHPdoc)
      * @see kernel/classes/eZPersistentObject#setAttribute($attr, $val)
      */
-    function setAttribute($attr, $val) {
-        switch ($attr) {
+    function setAttribute( $attr, $val ) {
+        switch( $attr ) {
             case 'status':
-
                 // only update timestamp and status if status id is changed
-                if ($this->attribute('status') === $val) {
+                if( $this->attribute( 'status' ) === $val ) {
                     return;
                 }
-
                 $currentTimeStamp = time();
-
                 // set status timestamps
-                switch ($val) {
+                switch( $val ) {
                     case self::STATUS_PENDING :
-
-                        parent::setAttribute('inactived', 0);
-                        $mailingList = $this->attribute('mailing_list');
-
+                        parent::setAttribute( 'inactived', 0 );
+                        $mailingList = $this->attribute( 'mailing_list' );
                         // set approve automatically if defined in list config
-                        if (is_object($mailingList) and (boolean) $mailingList->attribute('auto_approve_registered_user') == true) {
-                            parent::setAttribute('approved', $currentTimeStamp);
-                            parent::setAttribute('inactived', 0);
+                        if( is_object( $mailingList ) and (boolean) $mailingList->attribute( 'auto_approve_registered_user' ) == true ) {
+                            parent::setAttribute( 'approved', $currentTimeStamp );
+                            parent::setAttribute( 'inactived', 0 );
                             $val = self::STATUS_APPROVED;
                         } else {
                             // if subscription status is changed from approved to confirmed the approved timestamp should be removed
-                            parent::setAttribute('approved', 0);
+                            parent::setAttribute( 'approved', 0 );
                         }
                         break;
 
                     case self::STATUS_APPROVED :
-                        parent::setAttribute('approved', $currentTimeStamp);
-                        parent::setAttribute('inactived', 0);
+                        parent::setAttribute( 'approved', $currentTimeStamp );
+                        parent::setAttribute( 'inactived', 0 );
                         break;
 
                     case self::STATUS_INACTIVED :
-                        parent::setAttribute('inactived', $currentTimeStamp);
+                        parent::setAttribute( 'inactived', $currentTimeStamp );
                         break;
                 }
-
-                parent::setAttribute('modified', $currentTimeStamp);
-                parent::setAttribute($attr, $val);
+                parent::setAttribute( 'modified', $currentTimeStamp );
+                parent::setAttribute( $attr, $val );
                 break;
             default:
-                parent::setAttribute($attr, $val);
+                parent::setAttribute( $attr, $val );
                 break;
         }
     }
@@ -454,15 +448,15 @@ class OWNewsletterSubscription extends eZPersistentObject {
     public function setNonBlacklisted() {
         $status = self::STATUS_PENDING;
         $lastActionDate = 0;
-        if ($this->attribute('approved') > $lastActionDate) {
+        if( $this->attribute( 'approved' ) > $lastActionDate ) {
             $status = self::STATUS_APPROVED;
-            $lastActionDate = $this->attribute('approved');
+            $lastActionDate = $this->attribute( 'approved' );
         }
-        if ($this->attribute('inactived') > $lastActionDate) {
+        if( $this->attribute( 'inactived' ) > $lastActionDate ) {
             $status = self::STATUS_INACTIVED;
-            $lastActionDate = $this->attribute('inactived');
+            $lastActionDate = $this->attribute( 'inactived' );
         }
-        $this->setAttribute('status', $status);
+        $this->setAttribute( 'status', $status );
         $this->store();
     }
 
@@ -479,29 +473,29 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @param unknown_type $status
      * @return object
      */
-    static function createOrUpdate($dataArray, $context = 'default') {
-        self::validateSubscriptionData($dataArray);
-        if (!isset($dataArray['status'])) {
+    static function createOrUpdate( $dataArray, $context = 'default' ) {
+        self::validateSubscriptionData( $dataArray );
+        if( !isset( $dataArray['status'] ) ) {
             $newStatus = self::STATUS_PENDING;
         } else {
             // kill status for call setAttribute('status')
             $newStatus = $dataArray['status'];
-            unset($dataArray['status']);
+            unset( $dataArray['status'] );
         }
         $newsletterUserId = $dataArray['newsletter_user_id'];
-        $row = array_merge(array(
+        $row = array_merge( array(
             'modified' => time(),
-            'modifier_contentobject_id' => eZUser::currentUserID()), $dataArray);
+            'modifier_contentobject_id' => eZUser::currentUserID() ), $dataArray );
 
-        $object = new OWNewsletterSubscription($row);
-        if ($object->attribute('created') == 0) {
-            $object->setAttribute('created', time());
-            $object->setAttribute('creator_contentobject_id', eZUser::currentUserID());
-            $object->setAttribute('hash', OWNewsletterUtils::generateUniqueMd5Hash($newsletterUserId));
-            $object->setAttribute('remote_id', 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash($newsletterUserId));
+        $object = new OWNewsletterSubscription( $row );
+        if( $object->attribute( 'created' ) == 0 ) {
+            $object->setAttribute( 'created', time() );
+            $object->setAttribute( 'creator_contentobject_id', eZUser::currentUserID() );
+            $object->setAttribute( 'hash', OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ) );
+            $object->setAttribute( 'remote_id', 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ) );
         }
 
-        $object->setAttribute('status', $newStatus);
+        $object->setAttribute( 'status', $newStatus );
         $object->store();
         return $object;
     }
@@ -512,12 +506,12 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @param array $dataArray
      * @throw InvalidArgumentException
      */
-    public static function validateSubscriptionData($dataArray) {
-        if (!isset($dataArray['newsletter_user_id']) || empty($dataArray['newsletter_user_id'])) {
-            throw new InvalidArgumentException('User ID is missing');
+    public static function validateSubscriptionData( $dataArray ) {
+        if( !isset( $dataArray['newsletter_user_id'] ) || empty( $dataArray['newsletter_user_id'] ) ) {
+            throw new InvalidArgumentException( 'User ID is missing' );
         }
-        if (!isset($dataArray['mailing_list_contentobject_id']) || empty($dataArray['mailing_list_contentobject_id'])) {
-            throw new InvalidArgumentException('Mailing list ID is missing');
+        if( !isset( $dataArray['mailing_list_contentobject_id'] ) || empty( $dataArray['mailing_list_contentobject_id'] ) ) {
+            throw new InvalidArgumentException( 'Mailing list ID is missing' );
         }
     }
 
@@ -530,9 +524,9 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * @param integer $newsletterUserId
      * @return object
      */
-    static function removeSubscriptionByNewsletterUserSelf($mailingListContentObjectId, $newsletterUserId) {
-        $existingSubscriptionObject = self::fetch($newsletterUserId, $mailingListContentObjectId);
-        if (is_object($existingSubscriptionObject)) {
+    static function removeSubscriptionByNewsletterUserSelf( $mailingListContentObjectId, $newsletterUserId ) {
+        $existingSubscriptionObject = self::fetch( $newsletterUserId, $mailingListContentObjectId );
+        if( is_object( $existingSubscriptionObject ) ) {
             $existingSubscriptionObject->unsubscribe();
         }
         return $existingSubscriptionObject;
@@ -546,12 +540,12 @@ class OWNewsletterSubscription extends eZPersistentObject {
      * get an array of all available subscription status id with translated Names
      * @return array
      */
-    static function getAvailableStatus($arrayInfo = 'name') {
-        if ($arrayInfo == 'name') {
+    static function getAvailableStatus( $arrayInfo = 'name' ) {
+        if( $arrayInfo == 'name' ) {
             return array(
-                self::STATUS_PENDING => ezpI18n::tr('newsletter/subscription/status', 'Pending'),
-                self::STATUS_APPROVED => ezpI18n::tr('newsletter/subscription/status', 'Approved'),
-                self::STATUS_INACTIVED => ezpI18n::tr('newsletter/subscription/status', 'Inactived'),
+                self::STATUS_PENDING => ezpI18n::tr( 'newsletter/subscription/status', 'Pending' ),
+                self::STATUS_APPROVED => ezpI18n::tr( 'newsletter/subscription/status', 'Approved' ),
+                self::STATUS_INACTIVED => ezpI18n::tr( 'newsletter/subscription/status', 'Inactived' ),
             );
         } else {
             return array(

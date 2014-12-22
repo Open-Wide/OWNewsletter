@@ -13,7 +13,8 @@ class OWNewsletterFunctionCollection {
      */
     static function fetchEditionClassList() {
         return array(
-            'result' => self::getEditionClassList());
+            'result' => self::getEditionClassList()
+        );
     }
 
     /**
@@ -23,16 +24,18 @@ class OWNewsletterFunctionCollection {
      */
     static function fetchEditionClassIdentifierList() {
         $classList = self::getEditionClassList();
-        if (!is_array($classList)) {
+        if( !is_array( $classList ) ) {
             return array(
-                'result' => false);
+                'result' => false
+            );
         }
         $result = array();
-        foreach ($classList as $class) {
-            $result[] = $class->attribute('identifier');
+        foreach( $classList as $class ) {
+            $result[] = $class->attribute( 'identifier' );
         }
         return array(
-            'result' => $result);
+            'result' => $result
+        );
     }
 
     /**
@@ -41,19 +44,19 @@ class OWNewsletterFunctionCollection {
      * @return array of eZContentClass
      */
     static protected function getEditionClassList() {
-        $ini = eZINI::instance('newsletter.ini');
-        if (!$ini->hasVariable('NewsletterSettings', 'NewsletterEditionContentClassGroup')) {
-            eZDebug::writeError("[NewsletterSettings]NewsletterEditionContentClassGroup is missing in newsletter.ini");
+        $ini = eZINI::instance( 'newsletter.ini' );
+        if( !$ini->hasVariable( 'NewsletterSettings', 'NewsletterEditionContentClassGroup' ) ) {
+            eZDebug::writeError( "[NewsletterSettings]NewsletterEditionContentClassGroup is missing in newsletter.ini" );
             return false;
         }
-        $classGroupName = $ini->variable('NewsletterSettings', 'NewsletterEditionContentClassGroup');
-        $classGroup = eZContentClassGroup::fetchByName($classGroupName);
-        if (!$classGroup instanceof eZContentClassGroup) {
-            eZDebug::writeError("Class group $classGroupName not found.");
+        $classGroupName = $ini->variable( 'NewsletterSettings', 'NewsletterEditionContentClassGroup' );
+        $classGroup = eZContentClassGroup::fetchByName( $classGroupName );
+        if( !$classGroup instanceof eZContentClassGroup ) {
+            eZDebug::writeError( "Class group $classGroupName not found." );
             return false;
         }
-        $classGroupID = $classGroup->attribute('id');
-        return eZContentClassClassGroup::fetchClassList(0, $classGroupID);
+        $classGroupID = $classGroup->attribute( 'id' );
+        return eZContentClassClassGroup::fetchClassList( 0, $classGroupID );
     }
 
     /**
@@ -62,20 +65,21 @@ class OWNewsletterFunctionCollection {
      * @return array of eZContentClass
      */
     static function fetchEditionClassGroupID() {
-        $ini = eZINI::instance('newsletter.ini');
-        if (!$ini->hasVariable('NewsletterSettings', 'NewsletterEditionContentClassGroup')) {
-            eZDebug::writeError("[NewsletterSettings]NewsletterEditionContentClassGroup is missing in newsletter.ini");
+        $ini = eZINI::instance( 'newsletter.ini' );
+        if( !$ini->hasVariable( 'NewsletterSettings', 'NewsletterEditionContentClassGroup' ) ) {
+            eZDebug::writeError( "[NewsletterSettings]NewsletterEditionContentClassGroup is missing in newsletter.ini" );
             return false;
         }
-        $classGroupName = $ini->variable('NewsletterSettings', 'NewsletterEditionContentClassGroup');
-        $classGroup = eZContentClassGroup::fetchByName($classGroupName);
-        if (!$classGroup instanceof eZContentClassGroup) {
-            eZDebug::writeError("Class group $classGroupName not found.");
+        $classGroupName = $ini->variable( 'NewsletterSettings', 'NewsletterEditionContentClassGroup' );
+        $classGroup = eZContentClassGroup::fetchByName( $classGroupName );
+        if( !$classGroup instanceof eZContentClassGroup ) {
+            eZDebug::writeError( "Class group $classGroupName not found." );
             $classGroupID = false;
         }
-        $classGroupID = $classGroup->attribute('id');
+        $classGroupID = $classGroup->attribute( 'id' );
         return array(
-            'result' => $classGroupID);
+            'result' => $classGroupID
+        );
     }
 
     /**
@@ -88,23 +92,25 @@ class OWNewsletterFunctionCollection {
      * @param integer $offset
      * @return array of OWNewsletterSubscription
      */
-    static function fetchUsers($mailing_list_contentobject_id, $user_status, $subscription_status, $email, $limit, $offset) {
+    static function fetchUsers( $mailing_list_contentobject_id, $user_status, $subscription_status, $email, $limit, $offset ) {
         $conds = array();
-        if ($mailing_list_contentobject_id !== FALSE) {
+        if( $mailing_list_contentobject_id !== FALSE ) {
             $conds['subscription']['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
         }
-        if (is_string($user_status)) {
-            $user_status = self::getUserStatus($user_status);
-            $conds['status'] = is_array($user_status) ? array($user_status) : (int) $user_status;
+        if( is_string( $user_status ) ) {
+            $user_status = self::getUserStatus( $user_status );
+            $conds['status'] = is_array( $user_status ) ? array( $user_status ) : (int) $user_status;
         }
-        if (is_string($subscription_status)) {
-            $subscription_status = self::getSubscriptionStatus($subscription_status);
-            $conds['subscription']['status'] = is_array($subscription_status) ? array($subscription_status) : (int) $subscription_status;
+        if( is_string( $subscription_status ) ) {
+            $subscription_status = self::getSubscriptionStatus( $subscription_status );
+            $conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
         }
-        if (!empty($email)) {
-            $conds['email'] = array('like', "%$email%");
+        if( !empty( $email ) ) {
+            $conds['email'] = array( 'like', "%$email%" );
         }
-        return array('result' => OWNewsletterUser::fetchListWithSubscription($conds, $limit, $offset));
+        return array( 
+            'result' => OWNewsletterUser::fetchListWithSubscription( $conds, $limit, $offset ) 
+        );
     }
 
     /**
@@ -115,28 +121,32 @@ class OWNewsletterFunctionCollection {
      * @param string $subscription_status
      * @return integer
      */
-    static function countUsers($mailing_list_contentobject_id, $user_status, $subscription_status, $email) {
+    static function countUsers( $mailing_list_contentobject_id, $user_status, $subscription_status, $email ) {
         $conds = array();
-        if ($mailing_list_contentobject_id !== FALSE) {
+        if( $mailing_list_contentobject_id !== FALSE ) {
             $conds['subscription']['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
         }
-        if (is_string($user_status)) {
-            $user_status = self::getUserStatus($user_status);
-            $conds['status'] = is_array($user_status) ? array($user_status) : (int) $user_status;
+        if( is_string( $user_status ) ) {
+            $user_status = self::getUserStatus( $user_status );
+            $conds['status'] = is_array( $user_status ) ? array( $user_status ) : (int) $user_status;
         }
-        if (is_string($subscription_status)) {
-            $subscription_status = self::getSubscriptionStatus($subscription_status);
-            $conds['subscription']['status'] = is_array($subscription_status) ? array($subscription_status) : (int) $subscription_status;
+        if( is_string( $subscription_status ) ) {
+            $subscription_status = self::getSubscriptionStatus( $subscription_status );
+            $conds['subscription']['status'] = is_array( $subscription_status ) ? array( $subscription_status ) : (int) $subscription_status;
         }
-        if (!empty($email)) {
-            $conds['email'] = array('like', "%$email%");
+        if( !empty( $email ) ) {
+            $conds['email'] = array( 'like', "%$email%" );
         }
-        return array('result' => OWNewsletterUser::countListWithSubscription($conds));
+        return array( 
+            'result' => OWNewsletterUser::countListWithSubscription( $conds ) 
+        );
     }
 
     static function fetchUserAdditionalFields() {
         $object = new OWNewsletterUser();
-        return array('result' => $object->attribute('additional_fields'));
+        return array( 
+            'result' => $object->attribute( 'additional_fields' ) 
+        );
     }
 
     /**
@@ -148,24 +158,22 @@ class OWNewsletterFunctionCollection {
      * @param integer $offset
      * @return array of OWNewsletterSubscription
      */
-    static function fetchSubscriptions($mailing_list_contentobject_id, $filter_status, $limit, $offset) {
-
+    static function fetchSubscriptions( $mailing_list_contentobject_id, $filter_status, $limit, $offset ) {
         $conds = array();
-
-        if ($mailing_list_contentobject_id !== FALSE) {
+        if( $mailing_list_contentobject_id !== FALSE ) {
             $conds['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
         }
-        if (is_string($filter_status)) {
+        if( is_string( $filter_status ) ) {
 
-            switch ($filter_status) {
+            switch( $filter_status ) {
                 case 'pending':
                     $conds['user']['status'] = OWNewsletterUser::STATUS_PENDING;
                     break;
                 case 'bounced':
                 case 'removed':
                 case 'blacklisted':
-                    $userStatus = self::getUserStatus($filter_status);
-                    $conds['user']['status'] = is_array($userStatus) ? array($userStatus) : (int) $userStatus;
+                    $userStatus = self::getUserStatus( $filter_status );
+                    $conds['user']['status'] = is_array( $userStatus ) ? array( $userStatus ) : (int) $userStatus;
                     break;
                 case 'confirmed':
                     $conds['user']['status'] = OWNewsletterUser::STATUS_CONFIRMED;
@@ -181,7 +189,9 @@ class OWNewsletterFunctionCollection {
                     break;
             }
         }
-        return array('result' => OWNewsletterSubscription::fetchListWithUser($conds, $limit, $offset));
+        return array( 
+            'result' => OWNewsletterSubscription::fetchListWithUser( $conds, $limit, $offset ) 
+        );
     }
 
     /**
@@ -191,24 +201,22 @@ class OWNewsletterFunctionCollection {
      * @param string $status
      * @return integer
      */
-    static function countSubscriptions($mailing_list_contentobject_id, $filter_status) {
-
+    static function countSubscriptions( $mailing_list_contentobject_id, $filter_status ) {
         $conds = array();
-
-        if ($mailing_list_contentobject_id !== FALSE) {
+        if( $mailing_list_contentobject_id !== FALSE ) {
             $conds['subscription']['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
         }
-        if (is_string($filter_status)) {
+        if( is_string( $filter_status ) ) {
 
-            switch ($filter_status) {
+            switch( $filter_status ) {
                 case 'pending':
                     $conds['ownl_user.status'] = OWNewsletterUser::STATUS_PENDING;
                     break;
                 case 'bounced':
                 case 'removed':
                 case 'blacklisted':
-                    $userStatus = self::getUserStatus($filter_status);
-                    $conds['ownl_user.status'] = is_array($userStatus) ? array($userStatus) : (int) $userStatus;
+                    $userStatus = self::getUserStatus( $filter_status );
+                    $conds['ownl_user.status'] = is_array( $userStatus ) ? array( $userStatus ) : (int) $userStatus;
                     break;
                 case 'confirmed':
                     $conds['ownl_user.status'] = OWNewsletterUser::STATUS_CONFIRMED;
@@ -225,8 +233,10 @@ class OWNewsletterFunctionCollection {
             }
         }
 
-        $result = OWNewsletterUser::countListWithSubscription($conds);
-        return array('result' => $result);
+        $result = OWNewsletterUser::countListWithSubscription( $conds );
+        return array( 
+            'result' => $result 
+        );
     }
 
     /**
@@ -234,8 +244,8 @@ class OWNewsletterFunctionCollection {
      * @param string $status
      * @return integer
      */
-    static function getUserStatus($status) {
-        switch ($status) {
+    static function getUserStatus( $status ) {
+        switch( $status ) {
             case 'pending':
                 return OWNewsletterUser::STATUS_PENDING;
             case 'confirmed':
@@ -243,7 +253,7 @@ class OWNewsletterFunctionCollection {
             case 'bounced':
                 return array(
                     OWNewsletterUser::STATUS_BOUNCED_SOFT,
-                    OWNewsletterUser::STATUS_BOUNCED_HARD);
+                    OWNewsletterUser::STATUS_BOUNCED_HARD );
             case 'bounced_soft':
                 return OWNewsletterUser::STATUS_BOUNCED_SOFT;
             case 'bounced_hard':
@@ -251,7 +261,7 @@ class OWNewsletterFunctionCollection {
             case 'removed':
                 return array(
                     OWNewsletterUser::STATUS_REMOVED_SELF,
-                    OWNewsletterUser::STATUS_REMOVED_ADMIN);
+                    OWNewsletterUser::STATUS_REMOVED_ADMIN );
             case 'removed_self':
                 return OWNewsletterUser::STATUS_REMOVED_SELF;
             case 'removed_admin':
@@ -268,8 +278,8 @@ class OWNewsletterFunctionCollection {
      * @param string $status
      * @return integer
      */
-    static function getSubscriptionStatus($status) {
-        switch ($status) {
+    static function getSubscriptionStatus( $status ) {
+        switch( $status ) {
             case 'pending':
                 return OWNewsletterSubscription::STATUS_PENDING;
             case 'approved':
@@ -285,7 +295,9 @@ class OWNewsletterFunctionCollection {
      * Fetch the list of all available subscription status
      */
     static function fetchAvailableSubscriptionStatus() {
-        return array('result' => OWNewsletterSubscription::getAvailableStatus());
+        return array( 
+            'result' => OWNewsletterSubscription::getAvailableStatus() 
+        );
     }
 
     /**
@@ -293,33 +305,27 @@ class OWNewsletterFunctionCollection {
      */
     static function fetchAvailableFilterStatus() {
 
-        return array('result' => array(
-                'pending'       => ezpI18n::tr('newsletter/subscription/status', 'Pending'),
-                'confirmed'     => ezpI18n::tr('newsletter/user/status', 'Confirmed'),
-                'approved'      => ezpI18n::tr('newsletter/subscription/status', 'Approved'),
-                'inactived'     => ezpI18n::tr('newsletter/subscription/status', 'Inactived'),
-                'removed'       => ezpI18n::tr('newsletter/user/status', 'Removed'),
-                'bounced'       => ezpI18n::tr('newsletter/user/status', 'Bounced'),
-                'blacklisted'   => ezpI18n::tr('newsletter/user/status', 'Blacklisted'),         
-            ));
+        return array( 'result' => array(
+                'pending' => ezpI18n::tr( 'newsletter/subscription/status', 'Pending' ),
+                'confirmed' => ezpI18n::tr( 'newsletter/user/status', 'Confirmed' ),
+                'approved' => ezpI18n::tr( 'newsletter/subscription/status', 'Approved' ),
+                'inactived' => ezpI18n::tr( 'newsletter/subscription/status', 'Inactived' ),
+                'removed' => ezpI18n::tr( 'newsletter/user/status', 'Removed' ),
+                'bounced' => ezpI18n::tr( 'newsletter/user/status', 'Bounced' ),
+                'blacklisted' => ezpI18n::tr( 'newsletter/user/status', 'Blacklisted' ),
+            ) );
     }
-    
-    
-    static function filterStatusName($user_status,$subscription_status){
-        
+
+    static function filterStatusName( $user_status, $subscription_status ) {
         $filterStatusName = "";
-        
-        $userStatusArray = OWNewsletterUser::getAvailableStatus('name');
-        $subscriptionStatusArray = OWNewsletterSubscription::getAvailableStatus('name');
-        
-        switch($user_status){
-            
-            case OWNewsletterUser::STATUS_PENDING: 
+        $userStatusArray = OWNewsletterUser::getAvailableStatus( 'name' );
+        $subscriptionStatusArray = OWNewsletterSubscription::getAvailableStatus( 'name' );
+        switch( $user_status ) {
+            case OWNewsletterUser::STATUS_PENDING:
                 $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_PENDING];
                 break;
-            case OWNewsletterUser::STATUS_CONFIRMED: 
-                
-                switch($subscription_status){
+            case OWNewsletterUser::STATUS_CONFIRMED:
+                switch( $subscription_status ) {
                     case OWNewsletterSubscription::STATUS_PENDING:
                         $filterStatusName = $subscriptionStatusArray[OWNewsletterSubscription::STATUS_PENDING];
                         break;
@@ -330,25 +336,24 @@ class OWNewsletterFunctionCollection {
                         $filterStatusName = $subscriptionStatusArray[OWNewsletterSubscription::STATUS_INACTIVED];
                         break;
                 }
-                
                 break;
-            case OWNewsletterUser::STATUS_BOUNCED_SOFT: 
+            case OWNewsletterUser::STATUS_BOUNCED_SOFT:
                 $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_BOUNCED_SOFT];
                 break;
-            case OWNewsletterUser::STATUS_BOUNCED_HARD: 
+            case OWNewsletterUser::STATUS_BOUNCED_HARD:
                 $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_BOUNCED_HARD];
                 break;
-            case OWNewsletterUser::STATUS_REMOVED_SELF: 
+            case OWNewsletterUser::STATUS_REMOVED_SELF:
                 $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_REMOVED_SELF];
                 break;
-            case OWNewsletterUser::STATUS_REMOVED_ADMIN: 
+            case OWNewsletterUser::STATUS_REMOVED_ADMIN:
                 $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_REMOVED_ADMIN];
                 break;
-            case OWNewsletterUser::STATUS_BLACKLISTED: 
+            case OWNewsletterUser::STATUS_BLACKLISTED:
                 $filterStatusName = $userStatusArray[OWNewsletterUser::STATUS_BLACKLISTED];
                 break;
         }
-        
         return $filterStatusName;
     }
+
 }

@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Storing a mail to a file
  */
-class OWNewsletterTransportFile implements ezcMailTransport
-{
+class OWNewsletterTransportFile implements ezcMailTransport {
+
     /**
      *
      * @var string
@@ -16,15 +17,11 @@ class OWNewsletterTransportFile implements ezcMailTransport
      * @param string $mailDir
      * @return void
      */
-    public function __construct( $mailDir = 'var/log/mail' )
-    {
+    public function __construct( $mailDir = 'var/log/mail' ) {
         // $this->mailDir = eZSys::siteDir().eZSys::varDirectory().'/log/mail';
-        if ( is_dir( $mailDir ) or eZDir::mkdir( $mailDir, false, true ) )
-        {
+        if( is_dir( $mailDir ) or eZDir::mkdir( $mailDir, false, true ) ) {
             $this->mailDir = $mailDir;
-        }
-        else
-        {
+        } else {
             // TODO Fehlerbehandlung wenn verzeichnis nicht angelegt werden kann
         }
     }
@@ -37,29 +34,21 @@ class OWNewsletterTransportFile implements ezcMailTransport
      * @param ezcMail $mail
      * @return void
      */
-    public function send( ezcMail $mail )
-    {
+    public function send( ezcMail $mail ) {
         $mail->appendExcludeHeaders( array( 'to', 'subject' ) );
         $headers = rtrim( $mail->generateHeaders() ); // rtrim removes the linebreak at the end, mail doesn't want it.
 
-        if ( ( count( $mail->to ) + count( $mail->cc ) + count( $mail->bcc ) ) < 1 )
-        {
+        if( ( count( $mail->to ) + count( $mail->cc ) + count( $mail->bcc ) ) < 1 ) {
             throw new ezcMailTransportException( 'No recipient addresses found in message header.' );
         }
         $emailReturnPath = '';
-        if ( isset( $mail->returnPath ) )
-        {
+        if( isset( $mail->returnPath ) ) {
             $emailReturnPath = $mail->returnPath->email;
         }
 
 
-        $success = $this->createMailFile( ezcMailTools::composeEmailAddresses( $mail->to ),
-                         $mail->getHeader( 'Subject' ),
-                         $mail->generateBody(),
-                         $headers,
-                         $emailReturnPath );
-        if ( $success === false )
-        {
+        $success = $this->createMailFile( ezcMailTools::composeEmailAddresses( $mail->to ), $mail->getHeader( 'Subject' ), $mail->generateBody(), $headers, $emailReturnPath );
+        if( $success === false ) {
             throw new ezcMailTransportException( 'The email could not be sent by sendmail' );
         }
     }
@@ -73,29 +62,28 @@ class OWNewsletterTransportFile implements ezcMailTransport
      * @param unknown_type $emailReturnPath
      * @return file
      */
-    function createMailFile( $receiver, $subject, $message, $extraHeaders, $emailReturnPath = '' )
-    {
+    function createMailFile( $receiver, $subject, $message, $extraHeaders, $emailReturnPath = '' ) {
         $sys = eZSys::instance();
-        $lineBreak =  ($sys->osType() == 'win32' ? "\r\n" : "\n" );
+        $lineBreak = ($sys->osType() == 'win32' ? "\r\n" : "\n" );
         // $separator =  ($sys->osType() == 'win32' ? "\\" : "/" );
         // $fileName = date("Ymd") .'-' .date("His").'-'.rand().'.mail';
-        $fileName = time().'-'.rand().'-ow_nl.mail';
+        $fileName = time() . '-' . rand() . '-ow_nl.mail';
         // $mailDir = eZSys::siteDir().eZSys::varDirectory().'/log/mail';
         // $mailDir = eZSys::siteDir().'var/log/mail';
 
-        $data = $extraHeaders.$lineBreak;
-        if ( $emailReturnPath != '')
-            $data .= "Return-Path: <".$emailReturnPath.">".$lineBreak;
+        $data = $extraHeaders . $lineBreak;
+        if( $emailReturnPath != '' )
+            $data .= "Return-Path: <" . $emailReturnPath . ">" . $lineBreak;
 
-        $data .= "To: ".$receiver.$lineBreak;
-        $data .= "Subject: ".$subject.$lineBreak;
+        $data .= "To: " . $receiver . $lineBreak;
+        $data .= "Subject: " . $subject . $lineBreak;
         // $data .= "From: ".$senderEmail.$lineBreak;
-        $data .=  $lineBreak;
+        $data .= $lineBreak;
         $data .= $message;
 
-        $data = preg_replace('/(\r\n|\r|\n)/', "\r\n", $data);
+        $data = preg_replace( '/(\r\n|\r|\n)/', "\r\n", $data );
 
         return eZFile::create( $fileName, $this->mailDir, $data );
     }
+
 }
-?>
