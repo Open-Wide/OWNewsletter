@@ -18,58 +18,58 @@
  */
 class OWNewsletterEditionFilter {
 
-	/**
-	 *
-	 * @param array $parameter
-	 * @return array
-	 */
-	function createSqlParts( $parameter ) {
-		$sqlCond = false;
-		$sqlTables = false;
-		$sqlColumns = false;
+    /**
+     *
+     * @param array $parameter
+     * @return array
+     */
+    function createSqlParts( $parameter ) {
+        $sqlCond = false;
+        $sqlTables = false;
+        $sqlColumns = false;
 
-		$status = FALSE;
+        $status = FALSE;
 
-		if ( array_key_exists( 'status', $parameter ) ) {
-			$status = $parameter['status'];
-		}
+        if( array_key_exists( 'status', $parameter ) ) {
+            $status = $parameter['status'];
+        }
 
-		if ( $status == 'draft' ) {
-			$sql = "SELECT c.edition_contentobject_id FROM ownl_sending c, ezcontentobject e
+        if( $status == 'draft' ) {
+            $sql = "SELECT c.edition_contentobject_id FROM ownl_sending c, ezcontentobject e
 					WHERE e.id = c.edition_contentobject_id
 					AND e.current_version = c.edition_contentobject_version 
 					AND c.status = " . OWNewsletterSending::STATUS_DRAFT;
-			$sqlCond .= ' ezcontentobject_tree.contentobject_id IN (' . $sql . ' ) AND ';
-			return array( 'tables' => $sqlTables, 'joins' => $sqlCond, 'columns' => $sqlColumns );
-		} else if ( $status == 'process' ) {
-			$sql = "SELECT c.edition_contentobject_id FROM ownl_sending c, ezcontentobject e
+            $sqlCond .= ' ezcontentobject_tree.contentobject_id IN (' . $sql . ' ) AND ';
+            return array( 'tables' => $sqlTables, 'joins' => $sqlCond, 'columns' => $sqlColumns );
+        } else if( $status == 'process' ) {
+            $sql = "SELECT c.edition_contentobject_id FROM ownl_sending c, ezcontentobject e
                     WHERE e.id = c.edition_contentobject_id
 					AND e.current_version = c.edition_contentobject_version
 					AND ( c.status = " . OWNewsletterSending::STATUS_WAIT_FOR_PROCESS .
-					" OR c.status = " . OWNewsletterSending::STATUS_MAILQUEUE_CREATED .
-					" OR c.status = " . OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_STARTED .
-					" )";
-			$sqlCond .= ' ezcontentobject_tree.contentobject_id IN (' . $sql . ' ) AND ';
-			return array( 'tables' => $sqlTables, 'joins' => $sqlCond, 'columns' => $sqlColumns );
-		} else if ( $status == 'archive' ) {
-			$sql = "SELECT c.edition_contentobject_id FROM ownl_sending c, ezcontentobject e
+                " OR c.status = " . OWNewsletterSending::STATUS_MAILQUEUE_CREATED .
+                " OR c.status = " . OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_STARTED .
+                " )";
+            $sqlCond .= ' ezcontentobject_tree.contentobject_id IN (' . $sql . ' ) AND ';
+            return array( 'tables' => $sqlTables, 'joins' => $sqlCond, 'columns' => $sqlColumns );
+        } else if( $status == 'archive' ) {
+            $sql = "SELECT c.edition_contentobject_id FROM ownl_sending c, ezcontentobject e
 					WHERE e.id = c.edition_contentobject_id
 					AND e.current_version = c.edition_contentobject_version
 					AND c.status = " . OWNewsletterSending::STATUS_MAILQUEUE_PROCESS_FINISHED;
-			$sqlCond .= ' ezcontentobject_tree.contentobject_id IN (' . $sql . ' ) AND ';
-			return array( 'tables' => $sqlTables, 'joins' => $sqlCond, 'columns' => $sqlColumns );
-		} else if ( $status == 'abort' ) {
+            $sqlCond .= ' ezcontentobject_tree.contentobject_id IN (' . $sql . ' ) AND ';
+            return array( 'tables' => $sqlTables, 'joins' => $sqlCond, 'columns' => $sqlColumns );
+        } else if( $status == 'abort' ) {
 
-			$sql = "SELECT c.edition_contentobject_id FROM ownl_sending c, ezcontentobject e
+            $sql = "SELECT c.edition_contentobject_id FROM ownl_sending c, ezcontentobject e
 					WHERE e.id = c.edition_contentobject_id
 					AND e.current_version = c.edition_contentobject_version
 					AND c.status = " . OWNewsletterSending::STATUS_ABORT;
-			$sqlCond .= ' ezcontentobject_tree.contentobject_id IN (' . $sql . ' ) AND ';
-			return array( 'tables' => $sqlTables, 'joins' => $sqlCond, 'columns' => $sqlColumns );
-		} else {
-			return array( 'tables' => false, 'joins' => false, 'columns' => false );
-		}
-	}
+            $sqlCond .= ' ezcontentobject_tree.contentobject_id IN (' . $sql . ' ) AND ';
+            return array( 'tables' => $sqlTables, 'joins' => $sqlCond, 'columns' => $sqlColumns );
+        } else {
+            return array( 'tables' => false, 'joins' => false, 'columns' => false );
+        }
+    }
 
 }
 

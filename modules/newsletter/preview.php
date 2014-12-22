@@ -5,31 +5,31 @@ $http = eZHTTPTool::instance();
 
 $editionContentobjectId = $Params['EditionContentobjectId'];
 $newsletterEdition = OWNewsletterEdition::fetchLastVersion( $editionContentobjectId );
-if ( $newsletterEdition->attribute( 'status' ) == OWNewsletterEdition::STATUS_DRAFT ) {
-	$sending = OWNewsletterSending::create( $newsletterEdition );
+if( $newsletterEdition->attribute( 'status' ) == OWNewsletterEdition::STATUS_DRAFT ) {
+    $sending = OWNewsletterSending::create( $newsletterEdition );
 } else {
-	$sending = OWNewsletterSending::fetch( $editionContentobjectId );
+    $sending = OWNewsletterSending::fetch( $editionContentobjectId );
 }
 
 $newsletterContent = '';
 $output = $sending->attribute( 'output' );
 
-if ( $output['content_type'] == 'text/html' ) {
-	$newsletterContent .= $output['body']['html'];
-} elseif ( $output['content_type'] == 'multipart/alternative' ) {
-	$newsletterContent .= $output['body']['html'];
-	$textContent = "<hr /><pre>" . $output['body']['text'] . "</pre></body>";
-	$newsletterContent = str_replace( '</body>', $textContent, $newsletterContent );
-} elseif ( $output['content_type'] == 'text/plain' ) {
-	if ( $showRawContent === false ) {
-		$newsletterContent .= '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+if( $output['content_type'] == 'text/html' ) {
+    $newsletterContent .= $output['body']['html'];
+} elseif( $output['content_type'] == 'multipart/alternative' ) {
+    $newsletterContent .= $output['body']['html'];
+    $textContent = "<hr /><pre>" . $output['body']['text'] . "</pre></body>";
+    $newsletterContent = str_replace( '</body>', $textContent, $newsletterContent );
+} elseif( $output['content_type'] == 'text/plain' ) {
+    if( $showRawContent === false ) {
+        $newsletterContent .= '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <title>newsletter - outputformat - text</title></head><body>
 <pre>' . $output['body']['text'] . '</pre></body></html>';
-	} else {
-		$newsletterContent = $output['body']['text'];
-	}
+    } else {
+        $newsletterContent = $output['body']['text'];
+    }
 } else {
-	return $module->handleError( eZError::KERNEL_NOT_FOUND, 'kernel' );
+    return $module->handleError( eZError::KERNEL_NOT_FOUND, 'kernel' );
 }
 
 $mailSubjectLabel = ezpI18n::tr( 'newsletter/preview', 'E-mail subject' );

@@ -57,9 +57,9 @@
         <ul>
             {foreach $newsletter_object.mail_personalizations as $personalization}
                 <li>{ezini(concat($personalization,'-MailPersonalizationSettings'),'Name','newsletter.ini')}</li>
-            {/foreach}
+                {/foreach}
         </ul>
-        
+
     </div>
 </div>
 

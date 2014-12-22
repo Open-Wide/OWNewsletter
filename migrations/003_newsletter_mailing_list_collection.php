@@ -1,19 +1,19 @@
 <?php
 
 /**
-* Create Newsletter Mailing List Collection content class
-*/
+ * Create Newsletter Mailing List Collection content class
+ */
 class OWNewsletter_003_NewsletterMailingListCollection {
- 
-    public function up( ) {
+
+    public function up() {
         $migration = new OWMigrationContentClass( );
         $migration->startMigrationOn( 'newsletter_mailing_list_collection' );
-        $migration->createIfNotExists( );
- 
+        $migration->createIfNotExists();
+
         $migration->always_available = TRUE;
         $migration->contentobject_name = '<short_title|title>';
         $migration->is_container = TRUE;
- 
+
         $migration->addAttribute( 'title', array(
             'is_required' => TRUE
         ) );
@@ -21,14 +21,15 @@ class OWNewsletter_003_NewsletterMailingListCollection {
         $migration->addAttribute( 'short_description', array(
             'data_type_string' => 'ezxmltext'
         ) );
- 
+
         $migration->addToContentClassGroup( 'Newsletter' );
-        $migration->end( );
+        $migration->end();
     }
- 
-    public function down( ) {
+
+    public function down() {
         $migration = new OWMigrationContentClass( );
         $migration->startMigrationOn( 'newsletter_mailing_list_collection' );
-        $migration->removeClass( );
+        $migration->removeClass();
     }
+
 }

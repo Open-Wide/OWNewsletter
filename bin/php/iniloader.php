@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 /**
  * File iniloader.php
  *
@@ -15,29 +14,25 @@
  * @subpackage phpscript
  * @filesource
  */
-
 require 'autoload.php';
 
 $cli = eZCLI::instance();
 $script = eZScript::instance( array( 'description' => ( "eZ Publish INI Reader\n\n" .
-                                                        "Read INI Files\n" .
-                                                        "\n" .
-                                                        "iniloader.php -s siteaccess site.ini" ),
-                                     'use-session' => false,
-                                     'use-modules' => true,
-                                     'use-extensions' => true ) );
+        "Read INI Files\n" .
+        "\n" .
+        "iniloader.php -s siteaccess site.ini" ),
+        'use-session' => false,
+        'use-modules' => true,
+        'use-extensions' => true ) );
 
 $script->startup();
-$options = $script->getOptions( "",
-                                "[ininame]",
-                                array() );
+$options = $script->getOptions( "", "[ininame]", array() );
 $script->initialize();
 $iniName = $options['arguments'][0];
-$ini = eZINI::instance('site.ini');
+$ini = eZINI::instance( 'site.ini' );
 
 //serialize( $ini );
 $cli->output( serialize( $ini ) );
 
 $script->shutdown();
-
 ?>
