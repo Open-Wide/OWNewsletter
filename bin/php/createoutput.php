@@ -79,13 +79,6 @@ $htmlMailImageInclude = 0;
 
 $urlArray = getUrlArray( $siteUrl, $currentHostName, $wwwDir );
 
-// textpart
-/* $template = 'design:newsletter/skin/' . $skinName . '/outputformat/text.tpl';
-  $content = $tpl->fetch( $template );
-  $content = generateAbsoluteLinks( $content, $urlArray );
-  $content = formatText( $content );
-  $newsletterEditionContent['text'] = $content; */
-// htmlpart
 $templateName = $contentObject->contentObject()->ClassIdentifier;
 $template = 'design:newsletter/skin/' . $skinName . '/output/' . $templateName . '.tpl';
 $content = $tpl->fetch( $template );
