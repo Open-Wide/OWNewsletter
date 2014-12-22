@@ -1,6 +1,6 @@
-#########################################
+=========================================
 OWNewsletter for eZ Publish documentation
-#########################################
+=========================================
 
 .. image:: https://github.com/Open-Wide/OWNewsletter/raw/master/doc/images/Open-Wide_logo.png
     :align: center
@@ -9,9 +9,8 @@ OWNewsletter for eZ Publish documentation
 :Requires: eZ Publish 4.x.x (not tested on 3.X)
 :Author: Open Wide http://www.openwide.fr
 
-************
 Presentation
-************
+============
 
 This extension provides a complete system to create and send newsletters.
 
@@ -19,9 +18,8 @@ LICENCE
 -------
 This eZ Publish extension is provided *as is*, in GPL v2 (see LICENCE).
 
-************
 Installation
-************
+============
 
 1. Clone the repository in the extension folder :
 
@@ -57,12 +55,11 @@ Installation
 
 6. Enable the cronjobs
 
-*****
 Usage
-*****
+=====
 
 Content tree
-============
+------------
 
 Create the following content tree in newsletter section :
 
@@ -98,7 +95,7 @@ Create the following content tree in newsletter section :
 ``Newsletter edition`` : it is the mail sending to the subscribers. You can select the mailing lists which send the edition.
 
 The Newsletter edition classes
-==============================
+------------------------------
 
 You can create as many Newsletter edition classes as you want as long as they :
 
@@ -108,7 +105,7 @@ You can create as many Newsletter edition classes as you want as long as they :
 The template email associated with your class is : newsletter/skin/<skinName>/output/<classIdentifier>.tpl
 
 Mail customisation
-==================
+------------------
 
 In ``newsletter.ini`` :
 
@@ -140,12 +137,11 @@ In the customisation class (``MyExtentionMyCustomisationMailPersonalization``), 
 For exemple, see the ``OWNewsletterUserInfoMailPersonalization`` class.
 
 Subscribtion form customisation
-===============================
+-------------------------------
 
 In the ``newsletter.ini``, you can add some fields to the subscription form. See the ``[NewsletterUserSettings]`` part for more info.
 
-*****
 Other
-*****
+=====
 
 Icons : http://neurovit.deviantart.com/art/simplicio-92311415
