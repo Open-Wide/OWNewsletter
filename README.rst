@@ -55,6 +55,8 @@ Installation
 
 5. Create a newsletter section associated with the newsletter navigation part.
 
+6. Enable the cronjobs
+
 *****
 Usage
 *****
