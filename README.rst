@@ -115,7 +115,7 @@ In ``newsletter.ini`` :
     AvailableMailPersonalizations[]=my_customisation
 
     [my_customisation-MailPersonalizationSettings]
-    Name=Add user info
+    Name=My customisation
     Class=MyExtentionMyCustomisationMailPersonalization
 
 In the customisation class (``MyExtentionMyCustomisationMailPersonalization``), implement the methods :
