@@ -333,17 +333,15 @@ function formatTextLink( $content, $textLinkFormat = "[ %url_text: %url_link ]" 
 }
 
 function compressHTML( $html ) {
-    $search = array(
-        '/\>[^\S\n ]+/s', // strip whitespaces after tags, except space
-        '/[^\S\n ]+\</s', // strip whitespaces before tags, except space
-        '/(\s)+/s'  // shorten multiple whitespace sequences
-    );
+	$search = array(
+		'/([^\S\n])+/s',  // shorten multiple whitespace sequences
+		'/(?:(?:\r\n|\r|\n)\s*){2}/s'  // shorten multiple line breaks
+	);
 
-    $replace = array(
-        '>',
-        '<',
-        '\\1'
-    );
+	$replace = array(
+		'\\1',
+		"\r\n"
+	);
 
-    return preg_replace( $search, $replace, $html );
+	return preg_replace( $search, $replace, $html );
 }
