@@ -1,9 +1,7 @@
 {* admin function - only show if user has policy: supporttools admin*}
 
-{def $has_admin_access = fetch( 'user', 'has_access_to', hash( 
-			'module', 'newsletter',
-			'function', 'admin' ) )}
-{if $has_admin_access}
+{def $adminMenu= fetch( 'user', 'has_access_to', hash( 'module',   'newsletter', 'function', 'admin'  ) ) }      
+{if eq($adminMenu,true)}
     <div class="box-header">
         <div class="box-tc">
             <div class="box-ml">
@@ -11,7 +9,6 @@
                     <div class="box-tl">
                         <div class="box-tr">
                             <h4>{'Settings'|i18n( 'newsletter/menu' )}</h4>
-
                         </div>
                     </div>
                 </div>

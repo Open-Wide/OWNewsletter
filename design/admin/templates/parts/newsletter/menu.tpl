@@ -4,7 +4,8 @@
 
         {include uri='design:parts/newsletter/newsletter_menu.tpl'}
 
-
+        {def $adminMenu= fetch( 'user', 'has_access_to', hash( 'module',   'newsletter', 'function', 'admin'  ) ) }      
+        {if eq($adminMenu,true)}
         {* DESIGN: Header START *}<div class="box-header"><div class="box-tc"><div class="box-ml"><div class="box-mr"><div class="box-tl"><div class="box-tr">
                                 <h4>{'Administer'|i18n( 'newsletter/menu' )}</h4>
 
@@ -18,7 +19,8 @@
                                 </ul>
 
                                 {* DESIGN: Content END *}</div></div></div></div></div></div>
-
+        {/if}
+                   
         {include uri='design:parts/newsletter/newsletter_menu_admin.tpl'}
 
     {/if}
