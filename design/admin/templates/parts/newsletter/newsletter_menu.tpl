@@ -5,10 +5,9 @@
                         </div></div></div></div></div></div>
     <div class="box-bc"><div class="box-ml"><div class="box-mr"><div class="box-bl"><div class="box-br"><div class="box-content">
                             <div id="contentstructure">
-                                {if ezpreference( 'admin_treemenu' )}
-                                    {include uri='design:parts/newsletter/contentstructuremenu/1_newsletter_structure_menu.tpl'}
-                                {/if}
+                                {include uri='design:parts/newsletter/contentstructuremenu/1_newsletter_structure_menu.tpl'}
                             </div>
+                      
                             <div id="widthcontrol-links" class="widthcontrol">
                                 <p>
                                     {switch match=ezpreference( 'admin_left_menu_width' )}
