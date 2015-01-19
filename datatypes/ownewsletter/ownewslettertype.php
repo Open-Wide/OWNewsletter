@@ -27,29 +27,29 @@ class OWNewsletterType extends eZDataType {
         $postfix = '_' . $contentObjectAttribute->attribute( 'id' );
 
         $mainSiteaccess = $http->postVariable( $prefix . 'MainSiteaccess' . $postfix );
-        if ( $mainSiteaccess == '' ) {
+        if( $mainSiteaccess == '' ) {
             $validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "Main Siteaccess must be set" );
         }
 
         $senderEmail = $http->postVariable( $prefix . 'SenderEmail' . $postfix );
-        if ( $senderEmail == '' || !eZMail::validate( $senderEmail ) ) {
+        if( $senderEmail == '' || !eZMail::validate( $senderEmail ) ) {
             $validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid sender email adress" );
         }
 
         $testReceiverEmail = $http->postVariable( $prefix . 'TestReceiverEmail' . $postfix );
-        if ( $testReceiverEmail == '' ) {
+        if( $testReceiverEmail == '' ) {
             $validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid test receiver email" );
         } else {
             $receiverList = explode( ';', $testReceiverEmail );
-            foreach ( $receiverList as $receiver ) {
-                if ( eZMail::validate( $receiver ) == false ) {
+            foreach( $receiverList as $receiver ) {
+                if( eZMail::validate( $receiver ) == false ) {
                     $validationErrorMesssageArray[] = ezpI18n::tr( 'newsletter/datatype/ownewsletter', "You have to set a valid receiver email adress >> %email", null, array(
-                                '%email' => $receiver ) );
+                            '%email' => $receiver ) );
                 }
             }
         }
 
-        if ( count( $validationErrorMesssageArray ) == 0 ) {
+        if( count( $validationErrorMesssageArray ) == 0 ) {
             return eZInputValidator::STATE_ACCEPTED;
         } else {
             $validationErrorMessage = implode( '<br \>', $validationErrorMesssageArray );
@@ -91,7 +91,7 @@ class OWNewsletterType extends eZDataType {
             'test_receiver_email_string' => OWNewsletterUtils::arrayToString( $postListData['test_receiver_email'] ),
             'skin_name' => $postListData['skin_name'],
             'serialized_mail_personalizations' => serialize( $postListData['mail_personalizations'] )
-                ) );
+            ) );
         $contentObjectAttribute->setContent( $newsletterObject );
         return true;
     }
@@ -103,10 +103,10 @@ class OWNewsletterType extends eZDataType {
      * @see kernel/classes/eZDataType#initializeObjectAttribute($objectAttribute, $currentVersion, $originalContentObjectAttribute)
      */
     function initializeObjectAttribute( $contentObjectAttribute, $currentVersion, $originalContentObjectAttribute ) {
-        if ( $currentVersion != false ) {
+        if( $currentVersion != false ) {
             $data = $originalContentObjectAttribute->attribute( 'content' );
 
-            if ( $data instanceof OWNewsletter ) {
+            if( $data instanceof OWNewsletter ) {
                 $data->setAttribute( 'contentobject_attribute_id', $contentObjectAttribute->attribute( 'id' ) );
                 $data->setAttribute( 'contentobject_attribute_version', $contentObjectAttribute->attribute( 'version' ) );
                 $data->setAttribute( 'contentobject_id', $contentObjectAttribute->attribute( 'contentobject_id' ) );
@@ -127,7 +127,7 @@ class OWNewsletterType extends eZDataType {
         $version = $contentObjectAttribute->attribute( 'version' );
 
         $dataObject = OWNewsletter::fetch( $id, $version );
-        if ( !is_object( $dataObject ) ) {
+        if( !is_object( $dataObject ) ) {
             $dataObject = new OWNewsletter();
             $dataObject->setAttribute( 'contentobject_attribute_id', $contentObjectAttribute->attribute( 'id' ) );
             $dataObject->setAttribute( 'contentobject_attribute_version', $contentObjectAttribute->attribute( 'version' ) );
@@ -169,17 +169,17 @@ class OWNewsletterType extends eZDataType {
 
         // enclose mainsiteaccess with '[]'
         $newSiteAccessArray = $content->attribute( 'siteaccess_array' );
-        foreach ( $newSiteAccessArray as $index => $siteAccessName ) {
-            if ( $siteAccessName == $mainSiteAccess ) {
+        foreach( $newSiteAccessArray as $index => $siteAccessName ) {
+            if( $siteAccessName == $mainSiteAccess ) {
                 $newSiteAccessArray[$index] = '[' . $siteAccessName . ']';
             }
         }
 
         $listTitle = $contentObjectAttribute->attribute( 'contentobject_id' )
-                . '; ' . implode( ', ', $content->attribute( 'output_format_array' ) )
-                . '; A' . $content->attribute( 'auto_approve_registered_user' )
-                . '; P' . $content->attribute( 'mail_personalizations' )
-                . '; ' . implode( ', ', $newSiteAccessArray );
+            . '; ' . implode( ', ', $content->attribute( 'output_format_array' ) )
+            . '; A' . $content->attribute( 'auto_approve_registered_user' )
+            . '; P' . $content->attribute( 'mail_personalizations' )
+            . '; ' . implode( ', ', $newSiteAccessArray );
         return $listTitle;
     }
 
@@ -201,7 +201,7 @@ class OWNewsletterType extends eZDataType {
      */
     function storeObjectAttribute( $contentObjectAttribute ) {
         $object = $contentObjectAttribute->Content;
-        if ( is_object( $object ) ) {
+        if( is_object( $object ) ) {
             $object->store();
             return true;
         }
@@ -213,16 +213,16 @@ class OWNewsletterType extends eZDataType {
      * @see kernel/classes/eZDataType#deleteStoredObjectAttribute($objectAttribute, $version)
      */
     function deleteStoredObjectAttribute( $objectAttribute, $version = null ) {
-        if ( $version !== null ) {
+        if( $version !== null ) {
             $object = OWNewsletter::fetch( $objectAttribute->attribute( "id" ), $version );
-            if ( $object instanceof OWNewsletterEdition ) {
+            if( $object instanceof OWNewsletterEdition ) {
                 $object->remove();
             }
         } else {
             $objectList = OWNewsletter::fetchList( array(
-                        'contentobject_attribute_id' => $objectAttribute->attribute( "id" )
-                    ) );
-            foreach ( $objectList as $object ) {
+                    'contentobject_attribute_id' => $objectAttribute->attribute( "id" )
+                ) );
+            foreach( $objectList as $object ) {
                 $object->remove();
             }
         }
@@ -240,10 +240,10 @@ class OWNewsletterType extends eZDataType {
         $node->setAttribute( 'name', $objectAttribute->contentClassAttributeName() );
         $node->setAttribute( 'type', $this->isA() );
 
-        if ( $this->Attributes["properties"]['object_serialize_map'] ) {
+        if( $this->Attributes["properties"]['object_serialize_map'] ) {
             $map = $this->Attributes["properties"]['object_serialize_map'];
-            foreach ( $map as $attributeName => $xmlName ) {
-                if ( $objectAttribute->hasAttribute( $attributeName ) ) {
+            foreach( $map as $attributeName => $xmlName ) {
+                if( $objectAttribute->hasAttribute( $attributeName ) ) {
                     $value = $objectAttribute->attribute( $attributeName );
                     $attributeNode = $dom->createElement( $xmlName, (string) $value );
                     $node->appendChild( $attributeNode );
@@ -270,12 +270,12 @@ class OWNewsletterType extends eZDataType {
     function unserializeContentObjectAttribute( $package, $objectAttribute, $attributeNode ) {
         $contentclassAttribute = $objectAttribute->attribute( 'contentclass_attribute' );
 
-        if ( $this->Attributes["properties"]['object_serialize_map'] ) {
+        if( $this->Attributes["properties"]['object_serialize_map'] ) {
             $map = $this->Attributes["properties"]['object_serialize_map'];
-            foreach ( $map as $attributeName => $xmlName ) {
-                if ( $objectAttribute->hasAttribute( $attributeName ) ) {
+            foreach( $map as $attributeName => $xmlName ) {
+                if( $objectAttribute->hasAttribute( $attributeName ) ) {
                     $elements = $attributeNode->getElementsByTagName( $xmlName );
-                    if ( $elements->length !== 0 ) {
+                    if( $elements->length !== 0 ) {
                         $value = $elements->item( 0 )->textContent;
                         $objectAttribute->setAttribute( $attributeName, $value );
                     } else {
@@ -289,7 +289,7 @@ class OWNewsletterType extends eZDataType {
             $oWNewsletterObjectSerialized = $attributeNode->getElementsByTagName( 'ownewsletter' )->item( 0 )->textContent;
             $oWNewsletterObject = unserialize( $oWNewsletterObjectSerialized );
 
-            if ( is_object( $oWNewsletterObject ) ) {
+            if( is_object( $oWNewsletterObject ) ) {
                 $oWNewsletterObject->setAttribute( 'contentobject_attribute_id', $objectAttribute->attribute( 'id' ) );
                 $oWNewsletterObject->setAttribute( 'contentobject_attribute_version', $objectAttribute->attribute( 'version' ) );
                 $oWNewsletterObject->setAttribute( 'contentobject_id', $objectAttribute->attribute( 'contentobject_id' ) );
@@ -312,7 +312,13 @@ class OWNewsletterType extends eZDataType {
     }
 
     function fromString( $contentObjectAttribute, $string ) {
-        return $contentObjectAttribute->setAttribute( 'content', unserialize( $string ) );
+        $contentObject = unserialize( $string );
+        $contentObject->setAttribute( 'contentobject_attribute_id', $contentObjectAttribute->attribute( 'id' ) );
+        $contentObject->setAttribute( 'contentobject_attribute_version', $contentObjectAttribute->attribute( 'version' ) );
+        $contentObject->setAttribute( 'contentobject_id', $contentObjectAttribute->attribute( 'contentobject_id' ) );
+        $contentObject->setAttribute( 'contentclass_id', $contentObjectAttribute->attribute( 'contentclass_attribute' )->attribute('contentclass_id') );
+        $contentObject->store();
+        return $contentObjectAttribute->setAttribute( 'content', $contentObject );
     }
 
 }

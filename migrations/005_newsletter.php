@@ -1,20 +1,19 @@
 <?php
 
 /**
-* Create Newsletter content class
-*/
- 
+ * Create Newsletter content class
+ */
 class OWNewsletter_005_Newsletter {
- 
-    public function up( ) {
+
+    public function up() {
         $migration = new OWMigrationContentClass( );
         $migration->startMigrationOn( 'newsletter' );
-        $migration->createIfNotExists( );
- 
+        $migration->createIfNotExists();
+
         $migration->always_available = TRUE;
         $migration->contentobject_name = '<short_title|title>';
         $migration->is_container = TRUE;
- 
+
         $migration->addAttribute( 'title', array(
             'is_required' => TRUE,
         ) );
@@ -27,14 +26,15 @@ class OWNewsletter_005_Newsletter {
             'data_type_string' => 'ownewsletter',
             'is_searchable' => FALSE
         ) );
- 
+
         $migration->addToContentClassGroup( 'Newsletter' );
-        $migration->end( );
+        $migration->end();
     }
- 
-    public function down( ) {
+
+    public function down() {
         $migration = new OWMigrationContentClass( );
         $migration->startMigrationOn( 'newsletter' );
-        $migration->removeClass( );
+        $migration->removeClass();
     }
+
 }

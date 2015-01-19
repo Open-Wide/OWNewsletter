@@ -68,7 +68,7 @@ class OWNewsletterMail {
     /**
      * Send test newsletter to tester email addresses
      *
-     * @param OWNewsletterSending $editonContentObjectVersion
+     * @param OWNewsletterSending $newsletterSending
      * @param array $emailReceivers
      * @return array
      */
@@ -78,21 +78,21 @@ class OWNewsletterMail {
         $output = $this->newsletterSending->attribute( 'output' );
         $this->senderEmail = trim( $this->newsletterSending->attribute( 'sender_email' ) );
         $this->senderName = $this->newsletterSending->attribute( 'sender_name' );
-        if ( isset( $output['subject'] ) ) {
+        if( isset( $output['subject'] ) ) {
             $originalSubject = $output['subject'];
         }
-        if ( isset( $output['body'] ) && isset( $output['body']['html'] ) ) {
+        if( isset( $output['body'] ) && isset( $output['body']['html'] ) ) {
             $originalHTMLBody = $output['body']['html'];
         }
-        if ( isset( $output['body'] ) && isset( $output['body']['text'] ) ) {
+        if( isset( $output['body'] ) && isset( $output['body']['text'] ) ) {
             $originalPlainTextBody = $output['body']['text'];
         }
-        if ( isset( $output['content_type'] ) ) {
+        if( isset( $output['content_type'] ) ) {
             $this->contentType = $output['content_type'];
         }
 
-        $newsletterUser = OWNewsletterUser::fetchByEmail($emailReceivers[0]);
-        if($newsletterUser instanceof OWNewsletterUser) {
+        $newsletterUser = OWNewsletterUser::fetchByEmail( $emailReceivers[0] );
+        if( $newsletterUser instanceof OWNewsletterUser ) {
             $mailPersonalizations = $this->newsletterSending->attribute( 'mail_personalizations' );
             $searchArray = array(
                 '#_hash_unsubscribe_#',
@@ -114,18 +114,18 @@ class OWNewsletterMail {
 
             $newsletterINI = eZINI::instance( 'newsletter.ini' );
 
-            if ( !empty( $mailPersonalizations ) ) {
-                foreach ( $mailPersonalizations as $mailPersonalization ) {
-                    if ( $newsletterINI->hasVariable( "$mailPersonalization-MailPersonalizationSettings", 'Class' ) ) {
+            if( !empty( $mailPersonalizations ) ) {
+                foreach( $mailPersonalizations as $mailPersonalization ) {
+                    if( $newsletterINI->hasVariable( "$mailPersonalization-MailPersonalizationSettings", 'Class' ) ) {
                         $mailPersonalizationClass = $newsletterINI->variable( "$mailPersonalization-MailPersonalizationSettings", 'Class' );
 
-                        if ( is_callable( "$mailPersonalizationClass::applyOnSubject" ) ) {
-                            $subject = call_user_func_array( "$mailPersonalizationClass::applyOnSubject", array( $subject, $newsletterUser, $newsletterSending) );
+                        if( is_callable( "$mailPersonalizationClass::applyOnSubject" ) ) {
+                            $subject = call_user_func_array( "$mailPersonalizationClass::applyOnSubject", array( $subject, $newsletterUser, $newsletterSending ) );
                         }
-                        if ( is_callable( "$mailPersonalizationClass::applyOnHTMLBody" ) ) {
+                        if( is_callable( "$mailPersonalizationClass::applyOnHTMLBody" ) ) {
                             $HTMLBody = call_user_func_array( "$mailPersonalizationClass::applyOnHTMLBody", array( $HTMLBody, $newsletterUser, $newsletterSending ) );
                         }
-                        if ( is_callable( "$mailPersonalizationClass::applyOnPlainTextBody" ) ) {
+                        if( is_callable( "$mailPersonalizationClass::applyOnPlainTextBody" ) ) {
                             $plainTextBody = call_user_func_array( "$mailPersonalizationClass::applyOnPlainTextBody", array( $plainTextBody, $newsletterUser, $newsletterSending ) );
                         }
                     }
@@ -143,7 +143,7 @@ class OWNewsletterMail {
 
         $this->setTransportMethodPreviewFromIni();
         $sendResult = array();
-        foreach ( $emailReceivers as $emailReceiver ) {
+        foreach( $emailReceivers as $emailReceiver ) {
             $sendResult[] = $this->sendEmail( $emailReceiver );
         }
         return $sendResult;
@@ -184,36 +184,36 @@ class OWNewsletterMail {
         $newsletterINI = eZINI::instance( 'newsletter.ini' );
 
         $this->newsletterSending = $newsletterSending;
-        if ( $tracker ) {
+        if( $tracker ) {
             $tracker->setEditionContentObjectId( $this->newsletterSending->attribute( 'edition_contentobject_id' ) );
         }
         $output = $this->newsletterSending->attribute( 'output' );
         $this->senderEmail = trim( $this->newsletterSending->attribute( 'sender_email' ) );
         $this->senderName = $this->newsletterSending->attribute( 'sender_name' );
         $mailPersonalizations = $this->newsletterSending->attribute( 'mail_personalizations' );
-        if ( isset( $output['subject'] ) ) {
+        if( isset( $output['subject'] ) ) {
             $originalSubject = $output['subject'];
         }
-        if ( isset( $output['body'] ) && isset( $output['body']['html'] ) ) {
+        if( isset( $output['body'] ) && isset( $output['body']['html'] ) ) {
             $originalHTMLBody = $output['body']['html'];
         }
-        if ( isset( $output['body'] ) && isset( $output['body']['text'] ) ) {
+        if( isset( $output['body'] ) && isset( $output['body']['text'] ) ) {
             $originalPlainTextBody = $output['body']['text'];
         }
-        if ( isset( $output['content_type'] ) ) {
+        if( isset( $output['content_type'] ) ) {
             $this->contentType = $output['content_type'];
         }
         $this->setTransportMethodCronjobFromIni();
         $sendingItemList = OWNewsletterSendingItem::fetchList( array( 'edition_contentobject_id' => $this->newsletterSending->attribute( 'edition_contentobject_id' ) ), $limit );
         $sendResult = array();
         OWScriptLogger::logNotice( count( $sendingItemList ) . " items in the mailqueue", 'prepare_sending' );
-        foreach ( $sendingItemList as $sendingIndex => $sendingItem ) {
+        foreach( $sendingItemList as $sendingIndex => $sendingItem ) {
             $sendingItem->sync();
             $newsletterUser = $sendingItem->attribute( 'newsletter_user' );
             $receiverEmail = $newsletterUser->attribute( 'email' );
-            if ( $sendingItem->attribute( 'status' ) == OWNewsletterSendingItem::STATUS_NEW ) {
+            if( $sendingItem->attribute( 'status' ) == OWNewsletterSendingItem::STATUS_NEW ) {
                 // Assign newsletter user to tracking
-                if ( $tracker ) {
+                if( $tracker ) {
                     $tracker->setNewsletterUser( $newsletterUser );
                 }
                 $receiverName = $newsletterUser->attribute( 'email_name' );
@@ -237,22 +237,22 @@ class OWNewsletterMail {
                 $plainTextBody = $originalPlainTextBody;
 
 
-                if ( $tracker ) {
+                if( $tracker ) {
                     $HTMLBody = $tracker->insertMarkers( $HTMLBody );
                     $plainTextBody = $tracker->insertMarkers( $plainTextBody );
                 }
 
-                if ( !empty( $mailPersonalizations ) ) {
-                    foreach ( $mailPersonalizations as $mailPersonalization ) {
-                        if ( $newsletterINI->hasVariable( "$mailPersonalization-MailPersonalizationSettings", 'Class' ) ) {
+                if( !empty( $mailPersonalizations ) ) {
+                    foreach( $mailPersonalizations as $mailPersonalization ) {
+                        if( $newsletterINI->hasVariable( "$mailPersonalization-MailPersonalizationSettings", 'Class' ) ) {
                             $mailPersonalizationClass = $newsletterINI->variable( "$mailPersonalization-MailPersonalizationSettings", 'Class' );
-                            if ( is_callable( "$mailPersonalizationClass::applyOnSubject" ) ) {
+                            if( is_callable( "$mailPersonalizationClass::applyOnSubject" ) ) {
                                 $subject = call_user_func_array( "$mailPersonalizationClass::applyOnSubject", array( $subject, $newsletterUser, $newsletterSending ) );
                             }
-                            if ( is_callable( "$mailPersonalizationClass::applyOnHTMLBody" ) ) {
+                            if( is_callable( "$mailPersonalizationClass::applyOnHTMLBody" ) ) {
                                 $HTMLBody = call_user_func_array( "$mailPersonalizationClass::applyOnHTMLBody", array( $HTMLBody, $newsletterUser, $newsletterSending ) );
                             }
-                            if ( is_callable( "$mailPersonalizationClass::applyOnPlainTextBody" ) ) {
+                            if( is_callable( "$mailPersonalizationClass::applyOnPlainTextBody" ) ) {
                                 $plainTextBody = call_user_func_array( "$mailPersonalizationClass::applyOnPlainTextBody", array( $plainTextBody, $newsletterUser, $newsletterSending ) );
                             }
                         }
@@ -267,7 +267,7 @@ class OWNewsletterMail {
                 $this->setExtraMailHeadersByNewsletterSendItem( $sendingItem );
 
                 $sendResult[$sendingIndex] = $this->sendEmail( $receiverEmail, $receiverName );
-                if ( $sendResult[$sendingIndex]['send_result'] == false ) {
+                if( $sendResult[$sendingIndex]['send_result'] == false ) {
                     $sendingItem->setAttribute( 'status', OWNewsletterSendingItem::STATUS_ABORT );
                     OWScriptLogger::logError( "Sending the newsletter to $receiverEmail failed", 'process_sending' );
                 } else {
@@ -292,7 +292,7 @@ class OWNewsletterMail {
      */
     public function sendEmail( $emailReceiver, $emailReceiverName = 'NL Test Receiver', $emailCharset = 'utf-8' ) {
         $transportMethod = $this->transportMethod;
-        if ( ezcMailTools::validateEmailAddress( $emailReceiver ) ) {
+        if( ezcMailTools::validateEmailAddress( $emailReceiver ) ) {
             //$mail = new ezcMailComposer();
             $mail = new OWNewsletterMailComposer();
             $mail->charset = $emailCharset;
@@ -305,10 +305,10 @@ class OWNewsletterMail {
             $mail->addTo( new ezcMailAddress( trim( $emailReceiver ), $emailReceiverName ) );
 
             $mail->subject = $this->subject;
-            if ( !empty( $this->HTMLBody ) ) {
+            if( !empty( $this->HTMLBody ) ) {
                 $mail->htmlText = $this->HTMLBody;
             }
-            if ( !empty( $this->plainTextBody ) ) {
+            if( !empty( $this->plainTextBody ) ) {
                 $mail->plainText = $this->plainTextBody;
             }
 
@@ -322,7 +322,7 @@ class OWNewsletterMail {
             ezcMailTools::setLineBreak( $this->HeaderLineEnding );
 
             // set 'x-ownl-' mailheader
-            foreach ( $this->ExtraEmailHeaderItemArray as $key => $value ) {
+            foreach( $this->ExtraEmailHeaderItemArray as $key => $value ) {
                 $mail->setHeader( $key, $value );
             }
 
@@ -396,7 +396,7 @@ class OWNewsletterMail {
         $newsletterINI = eZINI::instance( 'newsletter.ini' );
         $headerLineEndingIni = $newsletterINI->variable( 'NewsletterMailSettings', 'HeaderLineEnding' );
 
-        switch ( $headerLineEndingIni ) {
+        switch( $headerLineEndingIni ) {
             case 'CRLF':
                 $this->HeaderLineEnding = self::HEADER_LINE_ENDING_CRLF;
                 break;

@@ -18,36 +18,38 @@
 	 visibility     = 'Visible'
 	 isRootNode     = false() }
 
-	{default classIconsSize = ezini( 'TreeMenu', 'ClassIconsSize', 'contentstructuremenu.ini' )
+{default classIconsSize = ezini( 'TreeMenu', 'ClassIconsSize', 'contentstructuremenu.ini' )
 			 last_item      = false() }
 
-	{if is_set($class_icons_size)}
-		{set classIconsSize=$class_icons_size}
-	{/if}
+{if is_set($class_icons_size)}
+    {set classIconsSize=$class_icons_size}
+{/if}
 
-	{if is_set($is_root_node)}
-		{set isRootNode=$is_root_node}
-	{/if}
+{if is_set($is_root_node)}
+    {set isRootNode=$is_root_node}
+{/if}
 
-	<li id="n0_{$newsletter_root_node_id}" {cond( $:last_item, 'class="lastli"', '' )}>
-		{* Fold/Unfold/Empty: [-]/[+]/[ ] *}
-			   <a class="openclose" href="#" title="{'Fold/Unfold'|i18n('newsletter/contentstructuremenu')}"
-				  onclick="ezpopmenu_hideAll(); ezcst_onFoldClicked( this.parentNode ); return false;"></a>
+<li id="n0_{$newsletter_root_node_id}" {cond( $:last_item, 'class="lastli"', '' )}>
+    {* Fold/Unfold/Empty: [-]/[+]/[ ] *}
+    <a class="openclose" href="#" title="{'Fold/Unfold'|i18n('newsletter/contentstructuremenu')}"
+       onclick="ezpopmenu_hideAll();
+               ezcst_onFoldClicked(this.parentNode);
+               return false;"></a>
 
-		{* Label *}
-				{set toolTip = ''}
+    {* Label *}
+    {set toolTip = ''}
 
-			{* Text *}
-			<span class="node-name-normal">{'Newsletter systems'|i18n( 'newsletter/contentstructuremenu' )}</span>
+    {* Text *}
+    <span class="node-name-normal">{'Newsletter systems'|i18n( 'newsletter/contentstructuremenu' )}</span>
 
-			{* Show children *}
-			{if $:haveChildren}
-				<ul>
-					{foreach $:children as $:child}
-						{include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/3_newsletter_system.tpl" newsletter_system_node=$:child csm_menu_item_click_action=$:csm_menu_item_click_action last_item=eq( $child.number, $:numChildren ) ui_context=$ui_context}
-					{/foreach}
-				</ul>
-			{/if}
-	</li>
-	{/default}
+    {* Show children *}
+    {if $:haveChildren}
+        <ul>
+            {foreach $:children as $:child}
+                {include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/3_newsletter_system.tpl" newsletter_system_node=$:child csm_menu_item_click_action=$:csm_menu_item_click_action last_item=eq( $child.number, $:numChildren ) ui_context=$ui_context}
+            {/foreach}
+        </ul>
+    {/if}
+</li>
+{/default}
 {/let}

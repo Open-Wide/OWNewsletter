@@ -6,17 +6,17 @@ $http = eZHTTPTool::instance();
 
 /* Retrieval of cancel and success redirect URLs */
 $redirectUrlCancel = $redirectUrlSuccess = 'newsletter/subscribe';
-if ( $module->hasActionParameter( 'RedirectUrlActionCancel' ) ) {
+if( $module->hasActionParameter( 'RedirectUrlActionCancel' ) ) {
     $redirectUrlCancel = $module->actionParameter( 'RedirectUrlActionCancel' );
 }
-if ( $module->hasActionParameter( 'RedirectUrlActionSuccess' ) ) {
+if( $module->hasActionParameter( 'RedirectUrlActionSuccess' ) ) {
     $redirectUrlSuccess = $module->actionParameter( 'RedirectUrlActionSuccess' );
 }
 $tpl->setVariable( 'redirect_url_action_cancel', $redirectUrlCancel );
 $tpl->setVariable( 'redirect_url_action_success', $redirectUrlSuccess );
 
 /* If press Cancel button */
-if ( $module->isCurrentAction( 'Cancel' ) ) {
+if( $module->isCurrentAction( 'Cancel' ) ) {
     $module->redirectTo( $redirectUrlCancel );
 }
 
@@ -40,36 +40,36 @@ $template = 'design:newsletter/subscribe/form.tpl';
 $attributeWarningList = array();
 $warningList = array();
 
-if ( $module->isCurrentAction( 'Subscribe' ) ) {
-    if ( $module->hasActionParameter( 'NewsletterUser' ) ) {
+if( $module->isCurrentAction( 'Subscribe' ) ) {
+    if( $module->hasActionParameter( 'NewsletterUser' ) ) {
         $newsletterUserRow = array_merge( $newsletterUserRow, $module->actionParameter( 'NewsletterUser' ) );
 
-        foreach ( $requiredFields as $requiredField ) {
-            if ( !isset( $newsletterUserRow[$requiredField] ) || empty( $newsletterUserRow[$requiredField] ) ) {
+        foreach( $requiredFields as $requiredField ) {
+            if( !isset( $newsletterUserRow[$requiredField] ) || empty( $newsletterUserRow[$requiredField] ) ) {
                 $attributeWarningList[] = $requiredField;
                 $warningList[] = 'Some fields are in error, please correct.';
             }
         }
-        if ( empty( $newsletterUserRow['email'] ) ) {
+        if( empty( $newsletterUserRow['email'] ) ) {
             $attributeWarningList[] = 'email';
             $warningList[] = 'Some fields are in error, please correct.';
         }
-        if ( empty( $newsletterUserRow['subscription_list'] ) ) {
+        if( empty( $newsletterUserRow['subscription_list'] ) ) {
             $attributeWarningList[] = 'subscription_list';
             $warningList[] = 'You must select at least one newsletter.';
         }
         $validateAdditionalData = $tmpUser->validateAdditionalData( $newsletterUserRow['additional_data'] );
-        if ( $validateAdditionalData !== false ) {
+        if( $validateAdditionalData !== false ) {
             $attributeWarningList = array_merge( $attributeWarningList, $validateAdditionalData['warning_field'] );
             $warningList = array_merge( $warningList, $validateAdditionalData['warning_message'] );
         }
         $newsletterUser = OWNewsletterUser::fetchByEmail( $newsletterUserRow['email'] );
-        if ( $newsletterUser instanceof OWNewsletterUser ) {
+        if( $newsletterUser instanceof OWNewsletterUser ) {
             $tpl->setVariable( 'existing_newsletter_user', $newsletterUser );
-        } elseif ( empty( $warningList ) && !$newsletterUser ) {
+        } elseif( empty( $warningList ) && !$newsletterUser ) {
             $newsletterUser = OWNewsletterUser::createOrUpdate( $newsletterUserRow, 'subscribe' );
             $newsletterUser->setAdditionalData( $newsletterUserRow['additional_data'] );
-            foreach ( $newsletterUserRow['subscription_list'] as $subscription ) {
+            foreach( $newsletterUserRow['subscription_list'] as $subscription ) {
                 $newsletterUser->subscribeTo( $subscription, OWNewsletterSubscription::STATUS_PENDING, 'subscribe' );
             }
             $newsletterUser->sendConfirmationMail();

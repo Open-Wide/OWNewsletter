@@ -582,6 +582,10 @@
 			<source>Additional data</source>
 			<translation>Données supplémentaires</translation>
 		</message>
+		<message>
+			<source>Inactived</source>
+			<translation>Désactivé</translation>
+		</message>                 
 	</context>
 	<context>
 		<name>newsletter/blacklist</name>
@@ -784,7 +788,7 @@
 		</message>
 		<message>
 			<source>You are already subscribed to our newsletter.</source>
-			<translation>Vous ètes déjà abonné à une de nos newsletter</translation>
+			<translation>Vous êtes déjà abonné à une de nos newsletters.</translation>
 		</message>
 		<message>
 			<source>To change your subscription</source>
@@ -822,6 +826,17 @@
 			<translation>ce lien</translation>
 		</message>
 	</context>
+	<context>
+		<name>newsletter/confirmation</name>
+		<message>
+			<source>Your subscription has been confirmed.</source>
+			<translation>Votre abonnement a bien été confirmé.</translation>
+		</message>
+		<message>
+			<source>Your subscription has been already confirmed.</source>
+			<translation>Votre abonnement a déjà été confirmé.</translation>
+		</message>
+	</context>        
 	<context>
 		<name>newsletter/configure</name>
 		<message>
@@ -1169,7 +1184,7 @@
 		</message>
 		<message>
 			<source>Cancel</source>
-			<translation>Anuuler</translation>
+			<translation>Annuler</translation>
 		</message>
 		<message>
 			<source>Export subscriptions.</source>
@@ -1315,6 +1330,10 @@
 			<source>Removed by admin</source>
 			<translation>Supprimé par un administrateur</translation>
 		</message>
+		<message>
+			<source>Inactived</source>
+			<translation>Désactivé</translation>
+		</message>                
 		<message>
 			<source>Bounced soft</source>
 			<translation type="unfinished"></translation>

@@ -26,47 +26,47 @@
 			 last_item      = false() }
 
 {if is_set($class_icons_size)}
-	{set classIconsSize=$class_icons_size}
+    {set classIconsSize=$class_icons_size}
 {/if}
 
 {if is_set($is_root_node)}
-	{set isRootNode=$is_root_node}
+    {set isRootNode=$is_root_node}
 {/if}
 
 <li id="n0_{$newsletter_system_node.node_id}" {cond( $:last_item, 'class="lastli"', '' )}>
 
-	{* Fold/Unfold/Empty: [-]/[+]/[ ] *}
-	<a class="openclose" href="#" title="{'Fold/Unfold'|i18n('newsletter/contentstructuremenu')}"
-	   onclick="ezpopmenu_hideAll();
-						  ezcst_onFoldClicked(this.parentNode);
-						  return false;"></a>
+    {* Fold/Unfold/Empty: [-]/[+]/[ ] *}
+    <a class="openclose" href="#" title="{'Fold/Unfold'|i18n('newsletter/contentstructuremenu')}"
+       onclick="ezpopmenu_hideAll();
+               ezcst_onFoldClicked(this.parentNode);
+               return false;"></a>
 
-	{* Label *}
-	{set toolTip = ''}
+    {* Label *}
+    {set toolTip = ''}
 
-	{* Text *}
+    {* Text *}
 
-	{* icon *}
-	{*<img src={'/share/icons/crystal-admin/16x16_indexed/filesystems/folder_txt.png'|ezroot}>*}
-	{'newsletter_system'|class_icon( small )}
+    {* icon *}
+    {*<img src={'/share/icons/crystal-admin/16x16_indexed/filesystems/folder_txt.png'|ezroot}>*}
+    {'newsletter_system'|class_icon( small )}
 
-	{if or( eq($ui_context, 'browse')|not(), eq($:parentNode.object.is_container, true()))}
-		<a class="nodetext" href={$newsletter_system_node.url_alias|ezurl} title="{$:toolTip}"><span class="node-name-normal">{$newsletter_system_node.name}</span></a>
-		{else}
-		<span class="node-name-normal">{$newsletter_system_node.name|wash}</span>
-	{/if}
+    {if or( eq($ui_context, 'browse')|not(), eq($:parentNode.object.is_container, true()))}
+        <a class="nodetext" href={$newsletter_system_node.url_alias|ezurl} title="{$:toolTip}"><span class="node-name-normal">{$newsletter_system_node.name}</span></a>
+        {else}
+        <span class="node-name-normal">{$newsletter_system_node.name|wash}</span>
+    {/if}
 
-	{* Show children *}
-	{if $:haveChildren}
-		<ul>
-			{foreach $:mailingListChildren as $:child}
-				{include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/4_newsletter_mailing_list_collection.tpl" newsletter_mailing_list_collection_node=$:child csm_menu_item_click_action=$:csm_menu_item_click_action last_item=eq( $child.number, $:numChildren ) ui_context=$ui_context}
-			{/foreach}
-			{foreach $:newsletterChildren as $:child}
-				{include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/4_newsletter.tpl" newsletter_node=$:child csm_menu_item_click_action=$:csm_menu_item_click_action last_item=eq( $child.number, $:numChildren ) ui_context=$ui_context}
-			{/foreach}
-		</ul>
-	{/if}
+    {* Show children *}
+    {if $:haveChildren}
+        <ul>
+            {foreach $:mailingListChildren as $:child}
+                {include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/4_newsletter_mailing_list_collection.tpl" newsletter_mailing_list_collection_node=$:child csm_menu_item_click_action=$:csm_menu_item_click_action last_item=eq( $child.number, $:numChildren ) ui_context=$ui_context}
+            {/foreach}
+            {foreach $:newsletterChildren as $:child}
+                {include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/4_newsletter.tpl" newsletter_node=$:child csm_menu_item_click_action=$:csm_menu_item_click_action last_item=eq( $child.number, $:numChildren ) ui_context=$ui_context}
+            {/foreach}
+        </ul>
+    {/if}
 </li>
 {/default}
 {/let}
