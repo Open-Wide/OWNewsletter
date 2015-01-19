@@ -316,6 +316,7 @@ class OWNewsletterType extends eZDataType {
         $contentObject->setAttribute( 'contentobject_attribute_id', $contentObjectAttribute->attribute( 'id' ) );
         $contentObject->setAttribute( 'contentobject_attribute_version', $contentObjectAttribute->attribute( 'version' ) );
         $contentObject->setAttribute( 'contentobject_id', $contentObjectAttribute->attribute( 'contentobject_id' ) );
+        $contentObject->setAttribute( 'contentclass_id', $contentObjectAttribute->attribute( 'contentclass_attribute' )->attribute('contentclass_id') );
         $contentObject->store();
         return $contentObjectAttribute->setAttribute( 'content', $contentObject );
     }
