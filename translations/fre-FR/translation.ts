@@ -483,6 +483,10 @@
 			<translation>Supprimé</translation>
 		</message>
 		<message>
+			<source>Deactivated</source>
+			<translation>Désactivé</translation>
+		</message>
+		<message>
 			<source>Edit by admin</source>
 			<translation>Éditer par admin</translation>
 		</message>

@@ -225,13 +225,10 @@
                                                 {'Modified'|i18n( 'newsletter/user' )}
                                             </th>
                                             <th>
-                                                {'Confirmed'|i18n( 'newsletter/user' )}
-                                            </th>
-                                            <th>
                                                 {'Approved'|i18n( 'newsletter/user' )}
                                             </th>
                                             <th>
-                                                {'Removed'|i18n( 'newsletter/user' )}
+                                                {'Deactivated'|i18n( 'newsletter/user' )}
                                             </th>
                                             <th>
                                                 {* actions *}
@@ -252,13 +249,10 @@
                                                     {cond( $subscription.modified|gt(0), $subscription.modified|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}
                                                 </td>
                                                 <td>
-                                                    {cond( $subscription.confirmed|gt(0), $subscription.confirmed|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}
-                                                </td>
-                                                <td>
                                                     {cond( $subscription.approved|gt(0), $subscription.approved|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}
                                                 </td>
                                                 <td>
-                                                    {cond( $subscription.removed|gt(0), $subscription.removed|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}
+                                                    {cond( $subscription.inactived|gt(0), $subscription.inactived|l10n( shortdatetime ), 'n/a'|i18n( 'newsletter/user' ) )}
                                                 </td>
                                                 <td class="tight" style="white-space: nowrap;">
                                                     <form class="inline" action={concat('newsletter/user/', $subscription.id )|ezurl()} method="post">
