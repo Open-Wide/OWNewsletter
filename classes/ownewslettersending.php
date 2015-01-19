@@ -285,6 +285,17 @@ class OWNewsletterSending extends eZPersistentObject {
         return $objectList;
     }
 
+    /**
+     * Count all sendings with custom conditions
+     *
+     * @param array $conds
+     * @return interger
+     */
+    static function countList( $conds = array() ) {
+        $objectList = eZPersistentObject::count( self::definition(), $conds );
+        return $objectList;
+    }
+
     /*     * **********************
      * OBJECT METHODS
      * ********************** */
