@@ -2,7 +2,7 @@
     <script language="JavaScript" type="text/javascript">
         <!--
         document.write("<style type='text/css'>div#contentstructure ul#content_tree_menu ul li { padding-left: 0px; }div#contentstructure ul#content_tree_menu ul ul { margin-left: 20px; }<\/style>");
-        -- ></script>
+        --></script>
     {/literal}
 
 <script language="JavaScript" type="text/javascript" src={"javascript/lib/ezjslibcookiesupport.js"|ezdesign}></script>
