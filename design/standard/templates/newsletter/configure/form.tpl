@@ -99,7 +99,7 @@
 														{if $newsletter_mailing_list_list_count|eq(1)}
 															<input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}" checked="checked" title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
 														{else}
-															<input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}"{if $newsletter_user.active_mailing_list_ids|contains( $newsletter_mailing_list_id )} checked="checked"{/if} title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
+															<input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}"{if $newsletter_user.active_mailing_list_contentobject_ids|contains( $newsletter_mailing_list_id )} checked="checked"{/if} title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
 														{/if}
 													</td>
 												</tr>
