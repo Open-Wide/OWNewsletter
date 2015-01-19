@@ -13,10 +13,10 @@ switch( $newsletterUser->attribute( 'status' ) ) {
     case OWNewsletterUser::STATUS_REMOVED_ADMIN :
     case OWNewsletterUser::STATUS_REMOVED_SELF :
         return $module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel' );
-    case OWNewsletterUser::STATUS_PENDING:
-        $redirectUrlConfirmation = 'newsletter/confirmation/' . $Params['Hash'];
-        $module->redirectTo( $redirectUrlConfirmation );
-        break;
+    //case OWNewsletterUser::STATUS_PENDING:
+    //    $redirectUrlConfirmation = 'newsletter/confirmation/' . $Params['Hash'];
+    //    $module->redirectTo( $redirectUrlConfirmation );
+    //    break;
 }
 
 /* if the status progresses from Pending to confirm then displays the validation page */
@@ -71,7 +71,7 @@ if( $module->isCurrentAction( 'Configure' ) && $module->hasActionParameter( 'New
             );
         }
         if( !empty( $newsletterUserRow['subscription_list'] ) ) {
-            $unsubscribeList = array_diff( $newsletterUserRow['mailing_list'], $newsletterUserRow['subscription_list'] );
+            $unsubscribeList = array_diff( $newsletterUser->attribute('active_mailing_list_contentobject_ids'), $newsletterUserRow['subscription_list'] );
             foreach( $unsubscribeList as $unsubscribe ) {
                 try {
                     $newsletterUser->unsubscribeFrom( $unsubscribe );
