@@ -482,22 +482,38 @@ class OWNewsletterSubscription extends eZPersistentObject {
             $newStatus = $dataArray['status'];
             unset( $dataArray['status'] );
         }
-        $newsletterUserId = $dataArray['newsletter_user_id'];
         $row = array_merge( array(
             'modified' => time(),
             'modifier_contentobject_id' => eZUser::currentUserID() ), $dataArray );
 
-        $object = new OWNewsletterSubscription( $row );
-        if( $object->attribute( 'created' ) == 0 ) {
+        $object = static::fetch($dataArray['newsletter_user_id'], $dataArray['mailing_list_contentobject_id'] );
+        if( $object ) {
+            foreach( $row as $attributeIdentifier => $attributeValue) {
+                if( $object->hasAttribute($attributeIdentifier)) {
+                    $object->setAttribute($attributeIdentifier, $attributeValue);
+                }
+            }
+        } else {
+            $object = new OWNewsletterSubscription( $row );
+            $object->setAttribute( 'status', $newStatus );
             $object->setAttribute( 'created', time() );
             $object->setAttribute( 'creator_contentobject_id', eZUser::currentUserID() );
-            $object->setAttribute( 'hash', OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ) );
-            $object->setAttribute( 'remote_id', 'ownl:' . $context . ':' . OWNewsletterUtils::generateUniqueMd5Hash( $newsletterUserId ) );
-        }
+            $object->setAttribute( 'hash', OWNewsletterUtils::generateUniqueMd5Hash( $object->attribute('newsletter_user_id') ) );
+            $object->setAttribute( 'remote_id', 'ownl:'.$context.':' . OWNewsletterUtils::generateUniqueMd5Hash( $object->attribute('newsletter_user_id') ) );
 
-        $object->setAttribute( 'status', $newStatus );
+
+        }
         $object->store();
         return $object;
+    }
+
+    /**
+     * Store persistent object
+     * @param null $fieldFilters
+     */
+    public function store( $fieldFilters = null )
+    {
+        eZPersistentObject::storeObject( $this, $fieldFilters );
     }
 
     /**
