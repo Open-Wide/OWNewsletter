@@ -259,7 +259,13 @@ class OWNewsletterEditionType extends eZDataType {
      * @see kernel/classes/eZDataType#fromString($objectAttribute, $string)
      */
     function fromString( $contentObjectAttribute, $string ) {
-        return $contentObjectAttribute->setAttribute( 'content', unserialize( $string ) );
+        $contentObject = unserialize( $string );
+        $contentObject->setAttribute( 'contentobject_attribute_id', $contentObjectAttribute->attribute( 'id' ) );
+        $contentObject->setAttribute( 'contentobject_attribute_version', $contentObjectAttribute->attribute( 'version' ) );
+        $contentObject->setAttribute( 'contentobject_id', $contentObjectAttribute->attribute( 'contentobject_id' ) );
+        $contentObject->setAttribute( 'contentclass_id', $contentObjectAttribute->attribute( 'contentclass_attribute' )->attribute('contentclass_id') );
+        $contentObject->store();
+        return $contentObjectAttribute->setAttribute( 'content', $contentObject );
     }
 
 }
