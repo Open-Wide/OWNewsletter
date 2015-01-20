@@ -40,7 +40,8 @@
     {* subscription_list *}
     {def $subcriptions_count = 0}
     {set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
-								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id
+								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
+                                'user_status', 'confirmed'
 							) )}
     {if or( eq($ui_context, 'browse')|not(), eq($:parentNode.object.is_container, true()))}
         <a class="nodetext" href={$newsletter_mailing_list_node.url_alias|ezurl} title="{$:toolTip}"><span class="node-name-normal">{$:newsletter_mailing_list_node.name|wash} ({$subcriptions_count})</span></a>
@@ -54,7 +55,8 @@
 
         {set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'filter_status', 'pending'
+								'filter_status', 'pending',
+                                'user_status', 'confirmed'
 							) )}
         <li id="n{$newsletter_mailing_list_node_id}_pending_subscription_list">
             <span class="openclose"></span>
@@ -66,19 +68,8 @@
 
         {set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'filter_status', 'confirmed'
-							) )}
-        <li id="n{$newsletter_mailing_list_node_id}_confirmed_subscription_list">
-            <span class="openclose"></span>
-            <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_confirmed" />
-            <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/confirmed')|ezurl}>
-                <span class="node-name-normal">{'Confirmed'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
-            </a>
-        </li>
-
-        {set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
-								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'filter_status', 'approved'
+								'filter_status', 'approved',
+                                'user_status', 'confirmed'
 							) )}
         <li id="n{$newsletter_mailing_list_node_id}_approved_subscription_list">
             <span class="openclose"></span>
@@ -89,52 +80,14 @@
         </li>
         {set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
 								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'filter_status', 'inactived'
+								'filter_status', 'inactived',
+                                'user_status', 'confirmed'
 							) )}
         <li id="n{$newsletter_mailing_list_node_id}_inactived_subscription_list">
             <span class="openclose"></span>
             <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_inactived" />
             <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/inactived')|ezurl}>
                 <span class="node-name-normal">{'Inactived'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
-            </a>
-        </li>
-
-        {set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
-								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'filter_status', 'bounced'
-							) )}
-        <li id="n{$newsletter_mailing_list_node_id}_bounced_subscription_list">
-            <span class="openclose"></span>
-            <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_bounced" />
-            <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/bounced')|ezurl}>
-                <span class="node-name-normal">{'Bounced'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
-            </a>
-        </li>
-
-
-
-        {set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
-								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'filter_status', 'removed'
-							) )}
-        <li id="n{$newsletter_mailing_list_node_id}_removed_subscription_list">
-            <span class="openclose"></span>
-            <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_removed" />
-            <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/removed')|ezurl}>
-                <span class="node-name-normal">{'Removed'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
-            </a>
-        </li>                
-
-
-        {set $subcriptions_count = fetch( 'newsletter', 'subscription_count', hash(
-								'mailing_list_contentobject_id', $newsletter_mailing_list_node.contentobject_id,
-								'filter_status', 'blacklisted'
-							) )}
-        <li id="n{$newsletter_mailing_list_node_id}_blacklisted_subscription_list">
-            <span class="openclose"></span>
-            <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_blacklisted" />
-            <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/blacklisted')|ezurl}>
-                <span class="node-name-normal">{'Blacklisted'|i18n('newsletter/subscription/status')} ({$subcriptions_count})</span>
             </a>
         </li>
         {undef}

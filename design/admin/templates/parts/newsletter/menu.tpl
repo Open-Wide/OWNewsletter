@@ -24,7 +24,62 @@
                                 <ul>
                                     {if fetch( 'user', 'has_access_to', hash( 'module', 'newsletter', 'function', 'user' ) ) }
                                         <li>
-                                            <a href={'/newsletter/user'|ezurl}>{'Users'|i18n( 'newsletter/menu' )}</a>
+                                            <a href={'/newsletter/user'|ezurl}>{'Users'|i18n( 'newsletter/menu' )} ({fetch( 'newsletter', 'user_count' )})</a>
+                                            <ul>
+                                                <li id="pending_user_list">
+                                                    <span class="openclose"></span>
+                                                    <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_pending" />
+                                                    <a class="nodetext" href={'/newsletter/user/(status)/pending' )|ezurl}>
+                                                        <span class="node-name-normal">{'Pending'|i18n('newsletter/user/status')} ({fetch( 'newsletter', 'user_count', hash(
+                                                            'user_status', 'pending'
+                                                        ) )})</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li id="confirmed_user_list">
+                                                    <span class="openclose"></span>
+                                                    <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_confirmed" />
+                                                    <a class="nodetext" href={'/newsletter/user/(status)/confirmed' )|ezurl}>
+                                                        <span class="node-name-normal">{'Confirmed'|i18n('newsletter/user/status')} ({fetch( 'newsletter', 'user_count', hash(
+                                                            'user_status', 'confirmed'
+                                                        ) )})</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li id="bounced_user_list">
+                                                    <span class="openclose"></span>
+                                                    <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_bounced" />
+                                                    <a class="nodetext" href={'/newsletter/user/(status)/bounced' )|ezurl}>
+                                                        <span class="node-name-normal">{'Bounced'|i18n('newsletter/user/status')} ({fetch( 'newsletter', 'user_count', hash(
+                                                            'user_status', 'bounced'
+                                                        ) )})</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li id="removed_user_list">
+                                                    <span class="openclose"></span>
+                                                    <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_removed" />
+                                                    <a class="nodetext" href={'/newsletter/user/(status)/removed' )|ezurl}>
+                                                        <span class="node-name-normal">{'Removed'|i18n('newsletter/user/status')} ({fetch( 'newsletter', 'user_count', hash(
+                                                            'user_status', 'removed'
+                                                        ) )})</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li id="blacklisted_user_list">
+                                                    <span class="openclose"></span>
+                                                    <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_blacklisted" />
+                                                    <a class="nodetext" href={'/newsletter/user/(status)/blacklisted' )|ezurl}>
+                                                        <span class="node-name-normal">{'Blacklisted'|i18n('newsletter/user/status')} ({fetch( 'newsletter', 'user_count', hash(
+                                                            'user_status', 'blacklisted'
+                                                        ) )})</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </li>
                                     {else}
                                         <li class="disabled-no-access">

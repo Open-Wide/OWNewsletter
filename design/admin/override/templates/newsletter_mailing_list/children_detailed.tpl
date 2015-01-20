@@ -62,7 +62,8 @@
 									'mailing_list_contentobject_id', $node.contentobject_id,
 									'filter_status', $view_parameters.status,
 									'limit', $limit,
-									'offset', $view_parameters.offset
+									'offset', $view_parameters.offset,
+                                    'user_status', 'confirmed'
 								) )}
                             <div class="content-navigation-childlist overflow-table">
 

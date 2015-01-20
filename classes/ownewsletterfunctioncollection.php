@@ -158,33 +158,25 @@ class OWNewsletterFunctionCollection {
      * @param integer $offset
      * @return array of OWNewsletterSubscription
      */
-    static function fetchSubscriptions( $mailing_list_contentobject_id, $filter_status, $limit, $offset ) {
+    static function fetchSubscriptions( $mailing_list_contentobject_id, $filter_status, $user_status, $limit, $offset ) {
         $conds = array();
         if( $mailing_list_contentobject_id !== FALSE ) {
             $conds['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
         }
+        
+        if( $user_status !== false ) {
+            $conds['user']['status'] = self::getUserStatus( $user_status );
+        }
+        
         if( is_string( $filter_status ) ) {
-
             switch( $filter_status ) {
                 case 'pending':
-                    $conds['user']['status'] = OWNewsletterUser::STATUS_PENDING;
-                    break;
-                case 'bounced':
-                case 'removed':
-                case 'blacklisted':
-                    $userStatus = self::getUserStatus( $filter_status );
-                    $conds['user']['status'] = is_array( $userStatus ) ? array( $userStatus ) : (int) $userStatus;
-                    break;
-                case 'confirmed':
-                    $conds['user']['status'] = OWNewsletterUser::STATUS_CONFIRMED;
                     $conds['status'] = OWNewsletterSubscription::STATUS_PENDING;
                     break;
                 case 'approved':
-                    $conds['user']['status'] = OWNewsletterUser::STATUS_CONFIRMED;
                     $conds['status'] = OWNewsletterSubscription::STATUS_APPROVED;
                     break;
                 case 'inactived':
-                    $conds['user']['status'] = OWNewsletterUser::STATUS_CONFIRMED;
                     $conds['status'] = OWNewsletterSubscription::STATUS_INACTIVED;
                     break;
             }
@@ -201,33 +193,24 @@ class OWNewsletterFunctionCollection {
      * @param string $status
      * @return integer
      */
-    static function countSubscriptions( $mailing_list_contentobject_id, $filter_status ) {
+    static function countSubscriptions( $mailing_list_contentobject_id, $filter_status, $user_status ) {
         $conds = array();
         if( $mailing_list_contentobject_id !== FALSE ) {
             $conds['subscription']['mailing_list_contentobject_id'] = (int) $mailing_list_contentobject_id;
+        }
+        if( $user_status !== false ) {
+            $conds['ownl_user.status'] = self::getUserStatus( $user_status );
         }
         if( is_string( $filter_status ) ) {
 
             switch( $filter_status ) {
                 case 'pending':
-                    $conds['ownl_user.status'] = OWNewsletterUser::STATUS_PENDING;
-                    break;
-                case 'bounced':
-                case 'removed':
-                case 'blacklisted':
-                    $userStatus = self::getUserStatus( $filter_status );
-                    $conds['ownl_user.status'] = is_array( $userStatus ) ? array( $userStatus ) : (int) $userStatus;
-                    break;
-                case 'confirmed':
-                    $conds['ownl_user.status'] = OWNewsletterUser::STATUS_CONFIRMED;
                     $conds['subscription']['status'] = OWNewsletterSubscription::STATUS_PENDING;
                     break;
                 case 'approved':
-                    $conds['ownl_user.status'] = OWNewsletterUser::STATUS_CONFIRMED;
                     $conds['subscription']['status'] = OWNewsletterSubscription::STATUS_APPROVED;
                     break;
                 case 'inactived':
-                    $conds['ownl_user.status'] = OWNewsletterUser::STATUS_CONFIRMED;
                     $conds['subscription']['status'] = OWNewsletterSubscription::STATUS_INACTIVED;
                     break;
             }

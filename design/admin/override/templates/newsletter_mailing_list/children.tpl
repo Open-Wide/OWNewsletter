@@ -11,11 +11,13 @@
      $current_path = first_set( $node.path_array[1], 1 )
      $admin_children_viewmode = ezpreference( 'admin_children_viewmode' )
      $all_children_count = fetch( 'newsletter', 'subscription_count', hash(
-			'mailing_list_contentobject_id', $node.contentobject_id
+			'mailing_list_contentobject_id', $node.contentobject_id,
+            'user_status', 'confirmed'
 		) )
      $children_count = fetch( 'newsletter', 'subscription_count', hash(
 			'mailing_list_contentobject_id', $node.contentobject_id,
-			'filter_status', $view_parameters.status
+			'filter_status', $view_parameters.status,
+            'user_status', 'confirmed'
 		) )
      $priority    = and( eq( $node.sort_array[0][0], 'priority' ), $node.can_edit, $children_count )
 	 $subscription_status = $view_parameters.status}
@@ -81,16 +83,7 @@
                                 <img src={'1x1.gif'|ezimage} alt="{'Pending'|i18n('newsletter/subscription/status')}" title="{'Pending'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_pending" /> {'Pending'|i18n('newsletter/subscription/status')}
                             </a>
                         {/if}
-
-                        {if $subscription_status|eq('confirmed')}
-                            <span class="current">
-                                <img src={'1x1.gif'|ezimage} alt="{'Confirmed'|i18n('newsletter/subscription/status')}" title="{'Confirmed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_confirmed" /> {'Confirmed'|i18n('newsletter/subscription/status')}
-                            </span>
-                        {else}
-                            <a href={concat($node.url_alias, '/(status)/confirmed' )|ezurl}>
-                                <img src={'1x1.gif'|ezimage} alt="{'Confirmed'|i18n('newsletter/subscription/status')}" title="{'Confirmed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_confirmed" /> {'Confirmed'|i18n('newsletter/subscription/status')}
-                            </a>
-                        {/if}
+                        
                         {if $subscription_status|eq('approved')}
                             <span class="current">
                                 <img src={'1x1.gif'|ezimage} alt="{'Approved'|i18n('newsletter/subscription/status')}" title="{'Approved'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_approved" /> {'Approved'|i18n('newsletter/subscription/status')}
@@ -107,33 +100,6 @@
                         {else}
                             <a href={concat($node.url_alias, '/(status)/inactived' )|ezurl}>
                                 <img src={'1x1.gif'|ezimage} alt="{'Inactived'|i18n('newsletter/subscription/status')}" title="{'Inactived'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_inactived" /> {'Inactived'|i18n('newsletter/subscription/status')}
-                            </a>
-                        {/if}                                                
-                        {if $subscription_status|eq('bounced')}
-                            <span class="current">
-                                <img src={'1x1.gif'|ezimage} alt="{'Bounced'|i18n('newsletter/subscription/status')}" title="{'Bounced'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_bounced" /> {'Bounced'|i18n('newsletter/subscription/status')}
-                            </span>
-                        {else}
-                            <a href={concat($node.url_alias, '/(status)/bounced' )|ezurl}>
-                                <img src={'1x1.gif'|ezimage} alt="{'Bounced'|i18n('newsletter/subscription/status')}" title="{'Bounced'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_bounced" /> {'Bounced'|i18n('newsletter/subscription/status')}
-                            </a>
-                        {/if}
-                        {if $subscription_status|eq('removed')}
-                            <span class="current">
-                                <img src={'1x1.gif'|ezimage} alt="{'Removed'|i18n('newsletter/subscription/status')}" title="{'Removed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_removed" /> {'Removed'|i18n('newsletter/subscription/status')}
-                            </span>
-                        {else}
-                            <a href={concat($node.url_alias, '/(status)/removed' )|ezurl}>
-                                <img src={'1x1.gif'|ezimage} alt="{'Removed'|i18n('newsletter/subscription/status')}" title="{'Removed'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_removed" /> {'Removed'|i18n('newsletter/subscription/status')}
-                            </a>
-                        {/if}
-                        {if $subscription_status|eq('blacklisted')}
-                            <span class="current">
-                                <img src={'1x1.gif'|ezimage} alt="{'Blacklisted'|i18n('newsletter/subscription/status')}" title="{'Blacklisted'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_blacklisted" /> {'Blacklisted'|i18n('newsletter/subscription/status')}
-                            </span>
-                        {else}
-                            <a href={concat($node.url_alias, '/(status)/blacklisted' )|ezurl}>
-                                <img src={'1x1.gif'|ezimage} alt="{'Blacklisted'|i18n('newsletter/subscription/status')}" title="{'Blacklisted'|i18n('newsletter/subscription/status')}" class="icon12 icon_s_blacklisted" /> {'Blacklisted'|i18n('newsletter/subscription/status')}
                             </a>
                         {/if}
                     </p>

@@ -134,6 +134,11 @@ $FunctionList['subscription_list'] = array(
             'required' => false,
             'default' => false ),
         array(
+            'name' => 'user_status',
+            'type' => 'string',
+            'required' => false,
+            'default' => false ),
+        array(
             'name' => 'limit',
             'type' => 'integer',
             'required' => false,
@@ -162,7 +167,12 @@ $FunctionList['subscription_count'] = array(
             'name' => 'filter_status',
             'type' => 'string',
             'required' => false,
-            'default' => false ), )
+            'default' => false ),
+        array(
+            'name' => 'user_status',
+            'type' => 'string',
+            'required' => false,
+            'default' => false ) )
 );
 
 $FunctionList['available_subscription_status'] = array(
