@@ -5,23 +5,23 @@
             <div class="border-mr">
                 <div class="border-mc float-break">
                     {def $newsletter_root_node_id = ezini( 'NewsletterSettings', 'RootFolderNodeId', 'newsletter.ini' )
-						 $newsletter_system_list = fetch( 'content', 'tree', hash( 
-								'parent_node_id', $newsletter_root_node_id,
-								'class_filter_type', 'include',
-								'class_filter_array', array( 'newsletter_system' ),
-								'sort_by', array( 'name', true() ),
-								'limitation', hash( )
-							) )
-						 $newsletter_mailing_list_count = fetch( 'content', 'tree_count', hash(
-								'parent_node_id', $newsletter_root_node_id,
-								'extended_attribute_filter', hash( 
-									'id', 'newsletter_mailing_list_filter',
-									'params', hash( 'siteaccess', array( 'current_siteaccess' ) ) 
-								),
-								'class_filter_type', 'include',
-								'class_filter_array', array('newsletter_mailing_list'),
-								'limitation', hash() 
-							) )}
+                         $newsletter_system_list = fetch( 'content', 'tree', hash(
+                            'parent_node_id', $newsletter_root_node_id,
+                            'class_filter_type', 'include',
+                            'class_filter_array', array( 'newsletter_system' ),
+                            'sort_by', array( 'name', true() ),
+                            'limitation', hash( )
+                          ) )
+                         $newsletter_mailing_list_count = fetch( 'content', 'tree_count', hash(
+                            'parent_node_id', $newsletter_root_node_id,
+                            'extended_attribute_filter', hash(
+                              'id', 'newsletter_mailing_list_filter',
+                              'params', hash( 'siteaccess', array( 'current_siteaccess' ) )
+                            ),
+                            'class_filter_type', 'include',
+                            'class_filter_array', array('newsletter_mailing_list'),
+                            'limitation', hash()
+                          ) )}
                     <h1>{'Subscribe'|i18n( 'newsletter/subscribe' )}</h1>
                     {if or( $newsletter_system_list|count()|eq(0), $newsletter_mailing_list_count|eq(0) )}
                         <div class="block">
@@ -86,14 +86,14 @@
                                 <div class="block {if $attribute_warning_array|contains('subscription_list')}nl-error{/if}">
                                     {foreach $newsletter_system_list as $newsletter_system}
                                         {def $newsletter_mailing_list_list = fetch( 'content', 'tree', hash(
-											'parent_node_id', $newsletter_system.node_id,
-											'extended_attribute_filter', hash( 
-												'id', 'newsletter_mailing_list_filter',
-												'params', hash( 'siteaccess', array( 'current_siteaccess' ) ) ),
-											'class_filter_type', 'include',
-											'class_filter_array', array('newsletter_mailing_list'),
-											'limitation', hash() 
-										) )}
+                                              'parent_node_id', $newsletter_system.node_id,
+                                              'extended_attribute_filter', hash(
+                                                'id', 'newsletter_mailing_list_filter',
+                                                'params', hash( 'siteaccess', array( 'current_siteaccess' ) ) ),
+                                              'class_filter_type', 'include',
+                                              'class_filter_array', array('newsletter_mailing_list'),
+                                              'limitation', hash()
+                                            ) )}
                                         {if $newsletter_mailing_list_list|count()|gt(0)}
                                             <h2>{attribute_view_gui attribute=$newsletter_system.data_map.title}</h2>
                                             <table border="0" width="100%">
