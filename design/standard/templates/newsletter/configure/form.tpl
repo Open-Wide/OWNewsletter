@@ -4,7 +4,7 @@
         <div class="border-ml"><div class="border-mr"><div class="border-mc float-break">
 
                     {def $newsletter_root_node_id = ezini( 'NewsletterSettings', 'RootFolderNodeId', 'newsletter.ini' )
-						 $newsletter_system_list = fetch( 'content', 'tree', hash( 
+						 $newsletter_system_list = fetch( 'content', 'tree', hash(
 								'parent_node_id', $newsletter_root_node_id,
 								'class_filter_type', 'include',
 								'class_filter_array', array( 'newsletter_system' ),
@@ -13,13 +13,13 @@
 							) )
 						 $newsletter_mailing_list_count = fetch( 'content', 'tree_count', hash(
 								'parent_node_id', $newsletter_root_node_id,
-								'extended_attribute_filter', hash( 
+								'extended_attribute_filter', hash(
 									'id', 'newsletter_mailing_list_filter',
-									'params', hash( 'siteaccess', array( 'current_siteaccess' ) ) 
+									'params', hash( 'siteaccess', array( 'current_siteaccess' ) )
 								),
 								'class_filter_type', 'include',
 								'class_filter_array', array('newsletter_mailing_list'),
-								'limitation', hash() 
+								'limitation', hash()
 							) )}
 
                     <h1>{'Configure'|i18n( 'newsletter/configure' )}</h1>
@@ -81,30 +81,31 @@
                             <div class="block">
                                 {foreach $newsletter_system_list as $newsletter_system}
                                     {def $newsletter_mailing_list_list = fetch( 'content', 'tree', hash(
-											'parent_node_id', $newsletter_system.node_id,
-											'extended_attribute_filter', hash( 
-												'id', 'newsletter_mailing_list_filter',
-												'params', hash( 'siteaccess', array( 'current_siteaccess' ) ) ),
-											'class_filter_type', 'include',
-											'class_filter_array', array('newsletter_mailing_list'),
-											'limitation', hash() 
-										) )}
+                                              'parent_node_id', $newsletter_system.node_id,
+                                              'extended_attribute_filter', hash(
+                                                'id', 'newsletter_mailing_list_filter',
+                                                'params', hash( 'siteaccess', array( 'current_siteaccess' ) ) ),
+                                              'class_filter_type', 'include',
+                                              'class_filter_array', array('newsletter_mailing_list'),
+                                              'limitation', hash()
+                                            ) )}
+
                                     {if $newsletter_mailing_list_list|count()|gt(0)}
                                         <h2>{attribute_view_gui attribute=$newsletter_system.data_map.title}</h2>
-                                        <table bo	rder="0" width="100%">
-                                            {foreach $newsletter_mailing_list_list as $newsletter_mailing_list sequence array( 'bglight', 'bgdark' ) as $style}
-                                                {def $newsletter_mailing_list_id = $newsletter_mailing_list.contentobject_id}
-                                                <tr>
-                                                    <td valign="top" class="newsletter-list">
-                                                        {if $newsletter_mailing_list_list_count|eq(1)}
-                                                            <input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}" checked="checked" title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
-                                                        {else}
-                                                            <input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}"{if $newsletter_user.active_mailing_list_ids|contains( $newsletter_mailing_list_id )} checked="checked"{/if} title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
-                                                        {/if}
-                                                    </td>
-                                                </tr>
-                                                {undef $newsletter_mailing_list_id }
-                                            {/foreach}
+                                        <table border="0" width="100%">
+                                        {foreach $newsletter_mailing_list_list as $newsletter_mailing_list sequence array( 'bglight', 'bgdark' ) as $style}
+                                            {def $newsletter_mailing_list_id = $newsletter_mailing_list.contentobject_id}
+                                            <tr>
+                                                <td valign="top" class="newsletter-list">
+                                                    {if $newsletter_mailing_list_list_count|eq(1)}
+                                                        <input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}" checked="checked" title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
+                                                    {else}
+                                                        <input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}"{if $newsletter_user.active_mailing_list_contentobject_ids|contains( $newsletter_mailing_list_id )} checked="checked"{/if} title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
+                                                    {/if}
+                                                </td>
+                                            </tr>
+                                            {undef $newsletter_mailing_list_id }
+                                        {/foreach}
                                         </table>
                                     {/if}
                                     {undef $newsletter_mailing_list_list}
