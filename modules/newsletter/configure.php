@@ -70,6 +70,12 @@ if( $module->isCurrentAction( 'Configure' ) && $module->hasActionParameter( 'New
                 'message' => ezpI18n::tr( 'newsletter/warning_message', $e->getMessage() )
             );
         }
+        $validateAdditionalData = $newsletterUser->validateAdditionalData( $newsletterUserRow['additional_data'] );
+        if( $validateAdditionalData !== false ) {
+            $attributeWarningList = array_merge( $attributeWarningList, $validateAdditionalData['warning_field'] );
+            $warningMessages = array_merge( $warningList, $validateAdditionalData['warning_message'] );
+        }
+        $newsletterUser->setAdditionalData( $newsletterUserRow['additional_data'] );
         if( !empty( $newsletterUserRow['subscription_list'] ) ) {
             $unsubscribeList = array_diff( $newsletterUser->attribute('active_mailing_list_contentobject_ids'), $newsletterUserRow['subscription_list'] );
             foreach( $unsubscribeList as $unsubscribe ) {
