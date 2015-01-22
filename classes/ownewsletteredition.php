@@ -105,7 +105,13 @@ class OWNewsletterEdition extends eZPersistentObject {
      */
     public function getNewsletter() {
         $contentObject = eZContentObject::fetch( $this->attribute( 'contentobject_id' ) );
+        if( !$contentObject ) {
+            return;
+        }
         $currentContentObject = $contentObject->attribute( 'current' );
+        if( !$currentContentObject ) {
+            return;
+        }
         $contentObjectNewsletterEditionNode = $currentContentObject->attribute( 'temp_main_node' );
         if( $contentObjectNewsletterEditionNode instanceof eZContentObjectTreeNode ) {
             $contentObjectNewsletterNode = $contentObjectNewsletterEditionNode->attribute( 'parent' );
