@@ -204,7 +204,10 @@ class OWNewsletterMail {
             $this->contentType = $output['content_type'];
         }
         $this->setTransportMethodCronjobFromIni();
-        $sendingItemList = OWNewsletterSendingItem::fetchList( array( 'edition_contentobject_id' => $this->newsletterSending->attribute( 'edition_contentobject_id' ) ), $limit );
+        $sendingItemList = OWNewsletterSendingItem::fetchList( array( 
+            'edition_contentobject_id' => $this->newsletterSending->attribute( 'edition_contentobject_id' ),
+            'status' => OWNewsletterSendingItem::STATUS_NEW
+            ), $limit );
         $sendResult = array();
         OWScriptLogger::logNotice( count( $sendingItemList ) . " items in the mailqueue", 'prepare_sending' );
         foreach( $sendingItemList as $sendingIndex => $sendingItem ) {
