@@ -56,7 +56,7 @@
                                 <p>{'* mandatory fields'|i18n( 'newsletter/subscribe' )}</p>
                                 <div class="block {if $attribute_warning_array|contains('email')}nl-error{/if}">
                                     <label for="Subscription_Email">{"E-mail"|i18n( 'newsletter/subscribe' )} *:</label>
-                                    <input class="halfbox" id="Subscription_Email" type="text" name="NewsletterUser[email]" value="{$newsletter_user.email|email}" title="{'Your e-mail.'|i18n( 'newsletter/subscribe' )}" />
+                                    <input class="halfbox" id="Subscription_Email" type="text" name="NewsletterUser[email]" value="{$newsletter_user.email|wash()}" title="{'Your e-mail.'|i18n( 'newsletter/subscribe' )}" />
                                 </div>
 
                                 {* salutation *}
