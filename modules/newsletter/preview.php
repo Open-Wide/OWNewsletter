@@ -6,7 +6,7 @@ $http = eZHTTPTool::instance();
 $editionContentobjectId = $Params['EditionContentobjectId'];
 $newsletterEdition = OWNewsletterEdition::fetchLastVersion( $editionContentobjectId );
 if( !$newsletterEdition ) {
-    return $Module->handleError( eZError::KERNEL_NOT_FOUND, 'kernel' );
+    return $module->handleError( eZError::KERNEL_NOT_FOUND, 'kernel' );
 }
 if( $newsletterEdition->attribute( 'status' ) == OWNewsletterEdition::STATUS_DRAFT ) {
     $sending = OWNewsletterSending::create( $newsletterEdition );
