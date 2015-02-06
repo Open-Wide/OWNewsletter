@@ -2,12 +2,14 @@
 	 mailingListChildren       = fetch( 'content', 'tree', hash(
 				'parent_node_id', $newsletter_root_node_id,
 				'class_filter_type', 'include',
-				'class_filter_array', array( 'newsletter_mailing_list_collection' ) 
+				'class_filter_array', array( 'newsletter_mailing_list_collection' ),
+                'sort_by', $newsletter_system_node.sort_array
 			) )
 	 newsletterChildren       = fetch( 'content', 'tree', hash(
 				'parent_node_id', $newsletter_root_node_id,
 				'class_filter_type', 'include',
-				'class_filter_array', array( 'newsletter' ) 
+				'class_filter_array', array( 'newsletter' ) ,
+                'sort_by', $newsletter_system_node.sort_array
 			) )
 	 numChildren    = fetch( 'content', 'tree_count', hash(
 				'parent_node_id', $newsletter_root_node_id,
