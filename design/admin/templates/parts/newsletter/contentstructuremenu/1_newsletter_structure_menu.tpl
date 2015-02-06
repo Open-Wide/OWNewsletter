@@ -1,57 +1,56 @@
 {literal}
-    <script language="JavaScript" type="text/javascript">
-        <!--
-        document.write("<style type='text/css'>div#contentstructure ul#content_tree_menu ul li { padding-left: 0px; }div#contentstructure ul#content_tree_menu ul ul { margin-left: 20px; }<\/style>");
-        --></script>
-    {/literal}
+    <style type='text/css'>
+        div#contentstructure ul#content_tree_menu ul li { padding-left: 0px; }div#contentstructure ul#content_tree_menu ul ul { margin-left: 20px; }
+    </style>
+{/literal}
 
 <script language="JavaScript" type="text/javascript" src={"javascript/lib/ezjslibcookiesupport.js"|ezdesign}></script>
 <script language="JavaScript" type="text/javascript" src={"javascript/lib/ezjslibdomsupport.js"|ezdesign}></script>
 <script language="JavaScript" type="text/javascript" src={"javascript/lib/ezjslibimagepreloader.js"|ezdesign}></script>
 <script language="JavaScript" type="text/javascript" src={"javascript/contentstructuremenu/contentstructuremenu.js"|ezdesign}></script>
 
-{let rootNodeID             = 1
-     classFilter            = ezini( 'TreeMenu', 'ShowClasses'      , 'contentstructuremenu.ini' )
-     maxDepth               = ezini( 'TreeMenu', 'MaxDepth'         , 'contentstructuremenu.ini' )
-     maxNodes               = ezini( 'TreeMenu', 'MaxNodes'         , 'contentstructuremenu.ini' )
-     sortBy                 = ezini( 'TreeMenu', 'SortBy'           , 'contentstructuremenu.ini' )
-     fetchHidden            = ezini( 'SiteAccessSettings', 'ShowHiddenNodes', 'site.ini'         )
-     itemClickAction        = ezini( 'TreeMenu', 'ItemClickAction'  , 'contentstructuremenu.ini' )
-     classIconsSize         = ezini( 'TreeMenu', 'ClassIconsSize'   , 'contentstructuremenu.ini' )
-     preloadClassIcons      = ezini( 'TreeMenu', 'PreloadClassIcons', 'contentstructuremenu.ini' )
-     autoopenCurrentNode    = ezini( 'TreeMenu', 'AutoopenCurrentNode', 'contentstructuremenu.ini' )
-     contentStructureTree   = false()
-     menuID                 = "content_tree_menu"
-     isDepthUnlimited       = eq($:maxDepth, 0)
-     rootNode               = false }
+{def $root_node_id             = 1
+     $class_filter            = ezini( 'TreeMenu', 'ShowClasses'      , 'contentstructuremenu.ini' )
+     $max_depth               = ezini( 'TreeMenu', 'MaxDepth'         , 'contentstructuremenu.ini' )
+     $max_nodes               = ezini( 'TreeMenu', 'MaxNodes'         , 'contentstructuremenu.ini' )
+     $sortBy                 = ezini( 'TreeMenu', 'SortBy'           , 'contentstructuremenu.ini' )
+     $fetch_hidden            = ezini( 'SiteAccessSettings', 'ShowHiddenNodes', 'site.ini'         )
+     $item_click_action        = ezini( 'TreeMenu', 'ItemClickAction'  , 'contentstructuremenu.ini' )
+     $class_icons_size         = ezini( 'TreeMenu', 'ClassIconsSize'   , 'contentstructuremenu.ini' )
+     $preload_class_icons      = ezini( 'TreeMenu', 'PreloadClassIcons', 'contentstructuremenu.ini' )
+     $autoopen_current_node    = ezini( 'TreeMenu', 'AutoopenCurrentNode', 'contentstructuremenu.ini' )
+     $content_structure_tree   = false()
+     $menu_id                 = "content_tree_menu"
+     $is_depth_unlimited       = eq($max_depth, 0)
+     $root_node               = false()}
 
 {* check size of icons *}
-{if is_set($:class_icons_size)}
-    {set classIconsSize=$:class_icons_size}
+{if is_set($class_icons_size)}
+    {set $class_icons_size=$class_icons_size}
 {/if}
 
-{* load icons if preloadClassIcons is enabled *}
-{if eq( $:preloadClassIcons, "enabled" )}
-    {let iconInfo           = icon_info( class )
-             iconsThemePath     = $:iconInfo.theme_path
-             iconsList          = $:iconInfo.icons
-             defaultIcon        = $:iconInfo.default
-             iconSizePath       = $:iconInfo.size_path_list[$:classIconsSize] }
+{* load icons if preload_class_icons is enabled *}
+{if eq( $preload_class_icons, "enabled" )}
+    {def $icon_info           = icon_info( class )
+         $icons_theme_path    = $icon_info.theme_path
+         $icons_list          = $icon_info.icons
+         $default_icon        = $icon_info.default
+         $icon_size_path      = $icon_info.size_path_list[$class_icons_size] }
 
     <script language="JavaScript" type="text/javascript"><!--
 
-                var iconsList = new Array();
-                var wwwDirPrefix = "{ezsys('wwwdir')}";
+        var iconsList = new Array();
+        var wwwDirPrefix = "{ezsys('wwwdir')}";
         var iconPath = "";
 
         // oridinary icons.
-        {section var=icon loop=$:iconsList}
-        iconPath = wwwDirPrefix + "/" + "{$:iconsThemePath}" + "/" + "{$:iconSizePath}" + "/" + "{$:icon}";
+        {foreach $icons_list as $icon}
+        iconPath = wwwDirPrefix + "/" + "{$icons_theme_path}" + "/" + "{$icon_size_path}" + "/" + "{$icon}";
         iconsList.push(iconPath);
-        {/section}
+        {/foreach}
 
         // default icon.
-        iconPath = wwwDirPrefix + "/" + "{$:iconsThemePath}" + "/" + "{$:iconSizePath}" + "/" + "{$:defaultIcon}";
+        iconPath = wwwDirPrefix + "/" + "{$icons_theme_path}" + "/" + "{$icon_size_path}" + "/" + "{$default_icon}";
         iconsList.push(iconPath);
 
         // load them all!!
@@ -59,30 +58,30 @@
 
         // -->
     </script>
-    {/let}
+    {undef $icon_info $icons_theme_path $icons_list $default_icon $icon_size_path}
 {/if}
 
 {* check custom_root_node *}
 {if is_set( $custom_root_node_id )}
-    {set rootNodeID=$custom_root_node_id}
+    {set $root_node_id=$custom_root_node_id}
 {/if}
 
-{set rootNode=fetch( 'content', 'node', hash( node_id, $:rootNodeID ) )}
+{set $root_node=fetch( 'content', 'node', hash( node_id, $root_node_id ) )}
 
 {* check custom action when clicking on menu item *}
-{if and( is_set( $csm_menu_item_click_action ), eq( $itemClickAction, '' ) )}
-    {set itemClickAction=$csm_menu_item_click_action}
+{if and( is_set( $csm_menu_item_click_action ), eq( $item_click_action, '' ) )}
+    {set $item_click_action=$csm_menu_item_click_action}
 {/if}
 
 {* if menu action is set translate it to url *}
-{if eq( $itemClickAction, '' )|not()}
-    {set itemClickAction = $:itemClickAction|ezurl(no)}
+{if eq( $item_click_action, '' )|not()}
+    {set $item_click_action = $item_click_action|ezurl(no)}
 {/if}
 
 {* create menu *}
 {* Show menu tree. All container nodes are unfolded. *}
-<ul id="{$:menuID}">
-    {include uri="design:parts/newsletter/contentstructuremenu/2_newsletter_system_tree.tpl" class_icons_size=$:classIconsSize csm_menu_item_click_action=$:itemClickAction ui_context=$ui_context is_root_node=true()}
+<ul id="{$menu_id}">
+    {include uri="design:parts/newsletter/contentstructuremenu/2_newsletter_system_tree.tpl" class_icons_size=$class_icons_size csm_menu_item_click_action=$item_click_action ui_context=$ui_context is_root_node=true()}
 </ul>
 
 {* initialize menu *}
@@ -91,17 +90,17 @@
     {* get path to current node which consists of nodes ids *}
     var nodesList = new Array();
 
-    {foreach $module_result.path as $:path}
-        {if and(is_set($:path.node_id), or($:isDepthUnlimited, $:maxDepth|gt(0)))}
-    nodesList.push("n{$:path.node_id}");
-            {set maxDepth = dec($:maxDepth)}
+    {foreach $module_result.path as $path}
+        {if and(is_set($path.node_id), or($is_depth_unlimited, $max_depth|gt(0)))}
+    nodesList.push("n{$path.node_id}");
+            {set $max_depth = dec($max_depth)}
         {/if}
     {/foreach}
 
 
     ezcst_setFoldUnfoldIcons({"images/content_tree-open.gif"|ezdesign}, {"images/content_tree-close.gif"|ezdesign}, {"images/1x1.gif"|ezdesign});
-    ezcst_initializeMenuState(nodesList, "{$:menuID}", "{$:autoopenCurrentNode}");
+    ezcst_initializeMenuState(nodesList, "{$menu_id}", "{$autoopen_current_node}");
     // -->
 </script>
-{/let}
+{undef}
 

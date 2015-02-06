@@ -17,7 +17,7 @@
 {/if}
 
 {if is_set($is_root_node)}
-    {set isRootNode=false}
+    {set isRootNode=false()}
 {/if}
 
 <li id="nt{$newsletter_mailing_list_node_id}" {if $:last_item} class="lastli"{/if}>
@@ -83,7 +83,7 @@
 								'filter_status', 'inactived',
                                 'user_status', 'confirmed'
 							) )}
-        <li id="n{$newsletter_mailing_list_node_id}_inactived_subscription_list">
+        <li id="n{$newsletter_mailing_list_node_id}_inactived_subscription_list" class="lastli">
             <span class="openclose"></span>
             <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_inactived" />
             <a class="nodetext" href={concat($newsletter_mailing_list_node.url_alias,'/(status)/inactived')|ezurl}>
