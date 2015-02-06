@@ -147,15 +147,12 @@
 												$available_subscription_status_list = fetch( 'newsletter', 'available_subscription_status' )
 												$status_id_array_enabled =  array()}
                                             {* set available status id for status selection list *}
-                                            {if $newsletter_user.status|eq( 8 )}
-                                                {set $status_id_array_enabled = array()}
-                                            {else}
-                                                {* as admin only allow set subscription status approved, remove by admin *}
-                                                {set $status_id_array_enabled = array( 2, 4 )}
+                                            {if $newsletter_user.status|ne( 0 )}
+                                                {set $status_id_array_enabled = array( 2, 5 )}
                                             {/if}
 
                                             {foreach $newsletter_system_node_list as $system_node}
-                                                {def $mailing_list_node_list = fetch( 'content', 'tree', hash(
+                                                {def $mailing_list_node_list = fetch( 'content', 'list', hash(
 															'parent_node_id', $system_node.node_id,
 															'class_filter_type', 'include',
 															'class_filter_array', array( 'newsletter_mailing_list' ),
