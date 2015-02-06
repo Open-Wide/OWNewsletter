@@ -162,7 +162,7 @@
 															'limitation', hash( ) 
 														) )}
                                                 <div class="newsletter-system-design">
-                                                    <h2>{$system_node.data_map.title.content|wash}</h2>
+                                                    <h2>{$system_node.name|wash}</h2>
                                                     <table border="0" width="100%" class="list {if $attribute_warning_array|contains('subscription')}nl-error{/if}">
                                                         {foreach $mailing_list_node_list as $index => $mailing_list_node sequence array( bglight, bgdark ) as $style}
                                                             <tr class="{$style}">
@@ -192,7 +192,7 @@
                                                                 {/if}
                                                                 <td width="300">
                                                                     <input type="hidden" name="NewsletterUser[subscription_list][{$index}][mailing_list_contentobject_id]" value="{$mailing_list_id}" title="" />
-                                                                    {$mailing_list_node.data_map.title.content|wash}
+                                                                    {$mailing_list_node.name|wash}
                                                                 </td>
                                                                 <td>
                                                                     <select name="NewsletterUser[subscription_list][{$index}][status]">
