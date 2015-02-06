@@ -1,11 +1,11 @@
 {let $newsletter_root_node_id = $newsletter_mailing_list_collection_node.node_id
-	 children       = fetch( 'content', 'tree', hash(
+	 children       = fetch( 'content', 'list', hash(
 				'parent_node_id', $newsletter_root_node_id,
 				'class_filter_type', 'include',
 				'class_filter_array',
 				array( 'newsletter_mailing_list' ) 
 			) )
-	 numChildren    = fetch( 'content', 'tree_count', hash(
+	 numChildren    = fetch( 'content', 'list_count', hash(
 				'parent_node_id', $newsletter_root_node_id,
 				'class_filter_type', 'include',
 				'class_filter_array',

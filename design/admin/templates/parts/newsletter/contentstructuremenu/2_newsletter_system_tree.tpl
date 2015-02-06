@@ -1,11 +1,11 @@
 {let $newsletter_root_node_id = ezini( 'NewsletterSettings', 'RootFolderNodeId', 'newsletter.ini' )
-	 children       = fetch( 'content', 'tree', hash(
+	 children       = fetch( 'content', 'list', hash(
 				'parent_node_id', $newsletter_root_node_id,
 				'class_filter_type', 'include',
 				'class_filter_array', array('newsletter_system'),
 				'sort_by', array( 'name', true() )
 			) )
-	 numChildren    = fetch( 'content', 'tree_count', hash(
+	 numChildren    = fetch( 'content', 'list_count', hash(
 			'parent_node_id', $newsletter_root_node_id,
 			'class_filter_type', 'include',
 			'class_filter_array',
