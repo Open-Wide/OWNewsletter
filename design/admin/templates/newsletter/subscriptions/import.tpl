@@ -113,14 +113,12 @@ user4@example.com;Max;Mustermann;1</pre>
                                     <div class="box-bl">
                                         <div class="box-br">
                                             <div class="left">
-                                                <input type="hidden" name="RedirectUrlActionCancel" value="{$redirect_url_action_cancel}" />
                                                 <input type="hidden" name="RedirectUrlActionSuccess" value="{$redirect_url_action_success}" />
                                                 {if $preview}
                                                     <input class="button" type="submit" name="ImportButton" value="{'Run import'|i18n( 'newsletter/subscription/import' )}" title="{'Import subscriptions.'|i18n( 'newsletter/subscription/import' )}" />
                                                 {else}
                                                     <input class="button" type="submit" name="PreviewButton" value="{'Import'|i18n( 'newsletter/subscription/import' )}" title="{'Import subscriptions.'|i18n( 'newsletter/subscription/import' )}" />
                                                 {/if}
-                                                <input class="button" type="submit" name="CancelButton" value="{'Cancel'|i18n( 'newsletter/subscription/import' )}" title="{'Cancel subscription import.'|i18n( 'newsletter/subscription/import' )}" />
                                             </div>
                                         </div>
                                     </div>

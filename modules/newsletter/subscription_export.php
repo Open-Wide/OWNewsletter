@@ -13,9 +13,6 @@ $Result['path'] = array(
         'url' => false,
         'text' => ezpI18n::tr( 'design/admin/parts/ownewsletter/menu', 'Export subscriptions' ) ) );
 
-
-$redirectUrlCancel = $redirectUrlSuccess = 'newsletter/subscription_export';
-
 $subscriptionStatus = array( 'pending' );
 $userStatus = array( 'confirmed' );
 
@@ -32,7 +29,7 @@ if( empty( $mailingListID ) ) {
         $Result['path'][] = array(
             'url' => false,
             'text' => $node->attribute( 'name' ) );
-        $redirectUrlCancel = $redirectUrlSuccess = 'newsletter/subscription_export/' . $mailingListID;
+        $redirectUrlSuccess = 'newsletter/subscription_export/' . $mailingListID;
         if( $module->isCurrentAction( 'Export' ) ) {
 
             $exportConds['subscription']['mailing_list_contentobject_id'] = $mailingListID;
@@ -162,13 +159,9 @@ if( empty( $mailingListID ) ) {
     }
 }
 /* Retrieval of cancal and success redirect URLs */
-if( $module->hasActionParameter( 'RedirectUrlActionCancel' ) ) {
-    $redirectUrlCancel = $module->actionParameter( 'RedirectUrlActionCancel' );
-}
 if( $module->hasActionParameter( 'RedirectUrlActionSuccess' ) ) {
     $redirectUrlSuccess = $module->actionParameter( 'RedirectUrlActionSuccess' );
 }
-$tpl->setVariable( 'redirect_url_action_cancel', $redirectUrlCancel );
 $tpl->setVariable( 'redirect_url_action_success', $redirectUrlSuccess );
 
 $userDefinition = OWNewsletterUser::definition();

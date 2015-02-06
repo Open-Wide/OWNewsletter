@@ -72,10 +72,8 @@
                                     <div class="box-bl">
                                         <div class="box-br">
                                             <div class="left">
-                                                <input type="hidden" name="RedirectUrlActionCancel" value="{$redirect_url_action_cancel}" />
                                                 <input type="hidden" name="RedirectUrlActionSuccess" value="{$redirect_url_action_success}" />
                                                 <input class="button" type="submit" name="ExportButton" value="{'Export'|i18n( 'newsletter/subscription/export' )}" title="{'Export subscriptions.'|i18n( 'newsletter/subscription/export' )}" />
-                                                <input class="button" type="submit" name="CancelButton" value="{'Cancel'|i18n( 'newsletter/subscription/export' )}" title="{'Cancel subscription export.'|i18n( 'newsletter/subscription/export' )}" />
                                             </div>
                                         </div>
                                     </div>
