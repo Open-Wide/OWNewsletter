@@ -488,6 +488,7 @@ class OWNewsletterSubscription extends eZPersistentObject {
 
         $object = static::fetch($dataArray['newsletter_user_id'], $dataArray['mailing_list_contentobject_id'] );
         if( $object ) {
+            $object->setAttribute( 'status', $newStatus );
             foreach( $row as $attributeIdentifier => $attributeValue) {
                 if( $object->hasAttribute($attributeIdentifier)) {
                     $object->setAttribute($attributeIdentifier, $attributeValue);
