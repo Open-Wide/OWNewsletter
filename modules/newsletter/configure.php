@@ -12,11 +12,12 @@ switch( $newsletterUser->attribute( 'status' ) ) {
     case OWNewsletterUser::STATUS_BLACKLISTED :
     case OWNewsletterUser::STATUS_REMOVED_ADMIN :
     case OWNewsletterUser::STATUS_REMOVED_SELF :
+    case OWNewsletterUser::STATUS_PENDING : 
         return $module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel' );
-    //case OWNewsletterUser::STATUS_PENDING:
-    //    $redirectUrlConfirmation = 'newsletter/confirmation/' . $Params['Hash'];
-    //    $module->redirectTo( $redirectUrlConfirmation );
-    //    break;
+    /*case OWNewsletterUser::STATUS_PENDING:
+        $redirectUrlConfirmation = 'newsletter/confirmation/' . $Params['Hash'];
+        $module->redirectTo( $redirectUrlConfirmation );
+        break;*/
 }
 
 /* if the status progresses from Pending to confirm then displays the validation page */
@@ -45,7 +46,6 @@ if( $module->isCurrentAction( 'Configure' ) && $module->hasActionParameter( 'New
         'salutation' => '',
         'first_name' => '',
         'last_name' => '',
-        'status' => OWNewsletterUser::STATUS_PENDING,
         'subscription_list' => array(),
         'mailing_list' => array()
     );
