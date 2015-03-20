@@ -915,6 +915,10 @@
 			<source>* mandatory fields</source>
 			<translation>* champs obligatoires</translation>
 		</message>
+        <message>
+            <source>Your changes have been saved.</source>
+            <translation>Les modifications ont bien été prises en compte.</translation>
+        </message>
 	</context>
 	<context>
 		<name>newsletter/preview</name>

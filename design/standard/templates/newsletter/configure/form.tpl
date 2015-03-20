@@ -42,6 +42,12 @@
                         </div>
                     {/if}
 
+                    {if is_set( $success_message )}
+                        <div class="block">
+                            <div class="message-success">{$success_message}</div>
+                        </div>
+                    {/if}
+
                     <div class="block header">
                         <p><b>{'Configure your subscription to our newsletter.'|i18n( 'newsletter/configure' )}</b></p>
                     </div>
