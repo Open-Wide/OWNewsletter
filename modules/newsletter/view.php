@@ -15,7 +15,7 @@ if( $newsletterEdition->attribute( 'status' ) != OWNewsletterEdition::STATUS_ARC
 $sending = OWNewsletterSending::fetch( $editionContentobjectId );
 
 $newsletterContent = '';
-$output = $sending->attribute( 'output' );
+$output = $sending->applyAnonymousPersonnalizations();
 
 if( $output['content_type'] == 'text/html' ) {
     $newsletterContent .= $output['body']['html'];
