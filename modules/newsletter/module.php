@@ -179,13 +179,21 @@ $ViewList['confirmation'] = array(
     'params' => array( 'Hash' )
 );
 
-$ViewList['preview'] = array(
-    'script' => 'preview.php',
-    'functions' => array( 'preview' ),
-    'default_navigation_part' => 'eznewsletternavigationpart',
+$ViewList['view'] = array(
+    'script' => 'view.php',
+    'functions' => array( 'view' ),
     'params' => array(
-        'EditionContentobjectId'
+      'EditionContentobjectId'
     )
+);
+
+$ViewList['preview'] = array(
+  'script' => 'preview.php',
+  'functions' => array( 'preview' ),
+  'default_navigation_part' => 'eznewsletternavigationpart',
+  'params' => array(
+    'EditionContentobjectId'
+  )
 );
 
 $ViewList['mailbox'] = array(
@@ -293,6 +301,7 @@ $FunctionList['configure'] = array();
 $FunctionList['unsubscribe'] = array();
 $FunctionList['subscription'] = array();
 $FunctionList['user'] = array();
+$FunctionList['view'] = array();
 $FunctionList['preview'] = array();
 $FunctionList['archive'] = array();
 $FunctionList['index'] = array();
