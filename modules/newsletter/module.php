@@ -183,7 +183,8 @@ $ViewList['view'] = array(
     'script' => 'view.php',
     'functions' => array( 'view' ),
     'params' => array(
-      'EditionContentobjectId'
+      'EditionContentobjectId',
+      'Hash'
     )
 );
 
