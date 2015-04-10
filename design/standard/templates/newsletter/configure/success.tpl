@@ -4,7 +4,7 @@
         <div class="border-ml">
             <div class="border-mr">
                 <div class="border-mc float-break">
-                    <h1>{'Subscribe'|i18n( 'newsletter/subscribe' )}</h1>
+                    <h1 class="colored">{'Subscribe'|i18n( 'newsletter/subscribe' )}</h1>
                     <div class="block">
                         <p>{'Your subscription has been taken into account.'|i18n( 'newsletter/subscribe' )} </p>
                         <p>{'You will soon receive an e-mail to confirm your e-mail address.'|i18n( 'newsletter/subscribe' )} </p>
