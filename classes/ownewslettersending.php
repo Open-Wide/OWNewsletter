@@ -530,4 +530,68 @@ class OWNewsletterSending extends eZPersistentObject {
         return $newsletterContentArrayNew;
     }
 
+    /**
+     * User personnalization if necessary (for Anonymous User)
+     */
+
+    public function applyAnonymousPersonnalizations() {
+
+        $mailPersonalizations = $this->attribute( 'mail_personalizations' );
+
+        $output = $this->attribute( 'output' );
+
+        if( !empty( $mailPersonalizations ) ) {
+            $newsletterINI = eZINI::instance( 'newsletter.ini' );
+
+            foreach( $mailPersonalizations as $mailPersonalization ) {
+                if( $newsletterINI->hasVariable( "$mailPersonalization-MailPersonalizationSettings", 'Class' ) ) {
+                    $mailPersonalizationClass = $newsletterINI->variable( "$mailPersonalization-MailPersonalizationSettings", 'Class' );
+
+                    if( is_callable( "$mailPersonalizationClass::applyOnSubjectAnonymous" ) ) {
+                        $output['subject'] = call_user_func_array( "$mailPersonalizationClass::applyOnSubjectAnonymous", array( $output['subject'], $this ) );
+                    }
+                    if( is_callable( "$mailPersonalizationClass::applyOnHTMLBodyAnonymous" ) ) {
+                        $output['body']['html'] = call_user_func_array( "$mailPersonalizationClass::applyOnHTMLBodyAnonymous", array( $output['body']['html'], $this ) );
+                    }
+                    if( is_callable( "$mailPersonalizationClass::applyOnPlainTextBodyAnonymous" ) ) {
+                        $output['body']['text'] = call_user_func_array( "$mailPersonalizationClass::applyOnPlainTextBodyAnonymous", array( $output['body']['text'], $this ) );
+                    }
+                }
+            }
+        }
+        return $output;
+    }
+
+    /**
+     * User personnalization if necessary (for a subscriber)
+     * @param OWNewsletterUser $newsletterUser
+     */
+
+    public function applySubscriberPersonnalizations($newsletterUser) {
+
+        $mailPersonalizations = $this->attribute( 'mail_personalizations' );
+
+        $output = $this->attribute( 'output' );
+
+        if( !empty( $mailPersonalizations ) ) {
+            $newsletterINI = eZINI::instance( 'newsletter.ini' );
+
+            foreach( $mailPersonalizations as $mailPersonalization ) {
+                if( $newsletterINI->hasVariable( "$mailPersonalization-MailPersonalizationSettings", 'Class' ) ) {
+                    $mailPersonalizationClass = $newsletterINI->variable( "$mailPersonalization-MailPersonalizationSettings", 'Class' );
+                    if( is_callable( "$mailPersonalizationClass::applyOnSubject" ) ) {
+                        $output['subject'] = call_user_func_array( "$mailPersonalizationClass::applyOnSubject", array( $output['subject'], $newsletterUser, $this ) );
+                    }
+                    if( is_callable( "$mailPersonalizationClass::applyOnHTMLBody" ) ) {
+                        $output['body']['html'] = call_user_func_array( "$mailPersonalizationClass::applyOnHTMLBody", array( $output['body']['html'], $newsletterUser, $this ) );
+                    }
+                    if( is_callable( "$mailPersonalizationClass::applyOnPlainTextBody" ) ) {
+                        $output['body']['text'] = call_user_func_array( "$mailPersonalizationClass::applyOnPlainTextBody", array( $output['body']['text'], $newsletterUser, $this ) );
+                    }
+                }
+            }
+        }
+        return $output;
+    }
+
 }

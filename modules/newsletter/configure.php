@@ -51,6 +51,7 @@ if( $module->isCurrentAction( 'Configure' ) && $module->hasActionParameter( 'New
     );
     $newsletterUserRow = array_merge( $newsletterUserRow, $module->actionParameter( 'NewsletterUser' ) );
     $warningMessages = array();
+    $successMessage = '';
     if( empty( $newsletterUserRow['email'] ) ) {
         $warningMessages[] = array(
             'field_key' => ezpI18n::tr( 'newsletter/configure', 'E-mail' ),
@@ -103,10 +104,17 @@ if( $module->isCurrentAction( 'Configure' ) && $module->hasActionParameter( 'New
                 'field_key' => ezpI18n::tr( 'newsletter/subscribe', 'Newsletter' ),
                 'message' => ezpI18n::tr( 'newsletter/warning_message', 'You must select at least one newsletter.' ) );
         }
+
+        if (empty($successMessage)) {
+            $successMessage = ezpI18n::tr( 'newsletter/configure', 'Your changes have been saved.' );
+        }
     }
 }
 if( !empty( $warningMessages ) ) {
     $tpl->setVariable( 'warning_array', $warningMessages );
+}
+if( !empty( $successMessage ) ) {
+    $tpl->setVariable( 'success_message', $successMessage );
 }
 $tpl->setVariable( 'newsletter_user', $newsletterUser );
 $tpl->setVariable( 'available_salutation_array', OWNewsletterUser::getAvailablesSalutationsFromIni() );

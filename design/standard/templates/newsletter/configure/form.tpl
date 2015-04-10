@@ -42,6 +42,12 @@
                         </div>
                     {/if}
 
+                    {if is_set( $success_message )}
+                        <div class="block">
+                            <div class="message-success">{$success_message}</div>
+                        </div>
+                    {/if}
+
                     <div class="block header">
                         <p><b>{'Configure your subscription to our newsletter.'|i18n( 'newsletter/configure' )}</b></p>
                     </div>
@@ -91,16 +97,16 @@
                                     ) )}
 
                             {if $newsletter_mailing_list_list|count()|gt(0)}
-                                <h2>{attribute_view_gui attribute=$newsletter_system.data_map.title}</h2>
+                                <h2>{$newsletter_system.name}</h2>
                                 <table border="0" width="100%">
                                 {foreach $newsletter_mailing_list_list as $newsletter_mailing_list sequence array( 'bglight', 'bgdark' ) as $style}
                                     {def $newsletter_mailing_list_id = $newsletter_mailing_list.contentobject_id}
                                     <tr>
                                         <td valign="top" class="newsletter-list">
                                             {if $newsletter_mailing_list_list_count|eq(1)}
-                                                <input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}" checked="checked" title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
+                                                <input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}" checked="checked" title="{$newsletter_mailing_list.name|wash}" /> {$newsletter_mailing_list.name|wash}
                                             {else}
-                                                <input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}"{if $newsletter_user.active_mailing_list_contentobject_ids|contains( $newsletter_mailing_list_id )} checked="checked"{/if} title="{$newsletter_mailing_list.data_map.title.content|wash}" /> {$newsletter_mailing_list.data_map.title.content|wash}
+                                                <input type="checkbox" name="NewsletterUser[subscription_list][]" value="{$newsletter_mailing_list_id}"{if $newsletter_user.active_mailing_list_contentobject_ids|contains( $newsletter_mailing_list_id )} checked="checked"{/if} title="{$newsletter_mailing_list.name|wash}" /> {$newsletter_mailing_list.name|wash}
                                             {/if}
                                         </td>
                                     </tr>
