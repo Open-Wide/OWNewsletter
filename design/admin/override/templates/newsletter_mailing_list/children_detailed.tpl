@@ -34,7 +34,10 @@
 </div>
 <div id="content-sub-items-list" class="content-navigation-childlist">
     <div class="newsletter newsletter-user_list">
-        {def $limit = 50}
+        {def
+            $limit = 50
+            $subscription_list_count = 0
+        }
         {if ezpreference( 'admin_user_list_limit' )}
             {switch match=ezpreference( 'admin_user_list_limit' )}
             {case match=1}
@@ -58,13 +61,21 @@
                         <div class="break float-break">
                         </div>
                         {if $children_count|gt(0)}
-                            {def $subscription_list = fetch( 'newsletter', 'subscription_list', hash(
+                            {def
+                                $subscription_list_all = fetch( 'newsletter', 'subscription_list', hash(
+                                    'mailing_list_contentobject_id', $node.contentobject_id,
+                                    'filter_status', $view_parameters.status,
+                                    'user_status', 'confirmed'
+                                ) )
+                                $subscription_list = fetch( 'newsletter', 'subscription_list', hash(
 									'mailing_list_contentobject_id', $node.contentobject_id,
 									'filter_status', $view_parameters.status,
 									'limit', $limit,
 									'offset', $view_parameters.offset,
                                     'user_status', 'confirmed'
-								) )}
+								) )
+                            }
+                            {set $subscription_list_count = $subscription_list_all|count}
                             <div class="content-navigation-childlist overflow-table">
 
                                 <table class="list" cellspacing="0">
@@ -127,7 +138,7 @@
                             <div class="context-toolbar subitems-context-toolbar">
                                 {include name='Navigator'
                              uri='design:navigator/google.tpl'
-                             page_uri=$page_uri
+                             page_uri=$base_uri
                              item_count=$subscription_list_count
                              view_parameters=$view_parameters
                              item_limit=$limit}
