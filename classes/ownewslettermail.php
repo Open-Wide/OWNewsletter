@@ -179,6 +179,29 @@ class OWNewsletterMail {
      * @param array $emailReceivers
      * @return array
      */
+    function sendConfigureLinkMail( OWNewsletterUser $newsletterUser ) {
+        $ini = eZINI::instance();
+        $newsletterIni = eZINI::instance( 'newsletter.ini' );
+        $this->senderEmail = $newsletterIni->hasVariable( 'NewsletterMailSettings', 'SenderEmail' ) ? $newsletterIni->variable( 'NewsletterMailSettings', 'SenderEmail' ) : $ini->variable( 'MailSettings', 'AdminEmail' );
+        $this->senderName = $newsletterIni->hasVariable( 'NewsletterMailSettings', 'SenderName' ) ? $newsletterIni->variable( 'NewsletterMailSettings', 'SenderName' ) : $ini->variable( 'MailSettings', 'AdminName' );
+        $this->subject = $newsletterIni->hasVariable( 'NewsletterMailSettings', 'EmailSubjectPrefix' ) ? $newsletterIni->variable( 'NewsletterMailSettings', 'EmailSubjectPrefix' ) . ' ' : '';
+        $this->subject .= ezpI18n::tr( 'newsletter/resendconfigurelink/mail', 'Your newsletters' );
+        $tpl = eZTemplate::factory();
+        $tpl->setVariable( 'newsletter_user', $newsletterUser );
+        $this->HTMLBody = $tpl->fetch( 'design:newsletter/resendconfigurelinkmail/html.tpl' );
+        $this->plainTextBody = $tpl->fetch( 'design:newsletter/resendconfigurelinkmail/text.tpl' );
+        $this->contentType = 'multipart/alternative';
+        $this->setTransportMethodDirectlyFromIni();
+        return $this->sendEmail( $newsletterUser->attribute( 'email' ), $newsletterUser->attribute( 'name' ) );
+    }
+
+    /**
+     * Send test newsletter to tester email addresses
+     *
+     * @param OWNewsletterSending $editonContentObjectVersion
+     * @param array $emailReceivers
+     * @return array
+     */
     function sendNewsletter( OWNewsletterSending $newsletterSending, $limit = false, $tracker = false ) {
         // generate all newsletter versions
         $newsletterINI = eZINI::instance( 'newsletter.ini' );

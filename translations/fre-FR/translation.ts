@@ -810,6 +810,14 @@
 			<source>You will soon receive an e-mail to confirm your e-mail address.</source>
 			<translation>Vous recevrez bientôt un e-mail pour confirmer votre adresse e-mail.</translation>
 		</message>
+        <message>
+            <source>Resend email</source>
+            <translation>Renvoyer l'email</translation>
+        </message>
+        <message>
+            <source>Please click on the button below to receive the link to access your account configuration page.</source>
+            <translation>Veuillez cliquer sur le lien suivant pour recevoir à nouveau le lien de configuration de votre compte par email.</translation>
+        </message>
 	</context>
 	<context>
 		<name>newsletter/confirmation/mail</name>
@@ -830,6 +838,32 @@
 			<translation>ce lien</translation>
 		</message>
 	</context>
+    <context>
+        <name>newsletter/resendconfigurelink/mail</name>
+        <message>
+            <source>Your newsletters</source>
+            <translation>Vos lettres d'information</translation>
+        </message>
+        <message>
+            <source>Hello %name</source>
+            <translation>Bonjour %name</translation>
+        </message>
+        <message>
+            <source>To edit your subscription, please visit</source>
+            <translation>Pour modifier votre profil, veuillez suivre</translation>
+        </message>
+        <message>
+            <source>this link</source>
+            <translation>ce lien</translation>
+        </message>
+    </context>
+    <context>
+        <name>newsletter/resendconfigurelink</name>
+        <message>
+            <source>You will soon receive an e-mail with your profile's link.</source>
+            <translation>Vous recevrez bientôt un email contenant le lien de modification de votre profil.</translation>
+        </message>
+    </context>
 	<context>
 		<name>newsletter/confirmation</name>
 		<message>

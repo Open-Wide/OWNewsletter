@@ -143,6 +143,21 @@ $ViewList['subscribe'] = array(
     )
 );
 
+$ViewList['resendconfigurelink'] = array(
+  'script' => 'resendconfigurelink.php',
+  'functions' => array( 'subscribe' ),
+  'single_post_actions' => array(
+    'ResendConfigureLinkButton' => 'ResendConfigureLink',
+  ),
+  'post_action_parameters' => array(
+    'ResendConfigureLink' => array(
+      'Email' => 'Email',
+      'RedirectUrlActionCancel' => 'RedirectUrlActionCancel',
+      'RedirectUrlActionSuccess' => 'RedirectUrlActionSuccess'
+    )
+  )
+);
+
 $ViewList['unsubscribe'] = array(
     'script' => 'unsubscribe.php',
     'functions' => array( 'unsubscribe' ),

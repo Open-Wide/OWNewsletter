@@ -1160,6 +1160,11 @@ class OWNewsletterUser extends eZPersistentObject {
         $mail->sendConfirmationMail( $this );
     }
 
+    public function sendConfigureLinkMail() {
+        $mail = new OWNewsletterMail();
+        $mail->sendConfigureLinkMail( $this );
+    }
+
     /*     * **********************
      * PERSISTENT METHODS
      * ********************** */
