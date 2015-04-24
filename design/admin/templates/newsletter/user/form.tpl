@@ -1,3 +1,6 @@
+{if $attribute_warning_array|is_set()|not()}
+    {def $attribute_warning_array=array()}
+{/if}
 <div class="newsletter newsletter-user_edit">
     {if and( is_set( $message_feedback ), $message_feedback|ne( '' ) )}
         <div class="block">
