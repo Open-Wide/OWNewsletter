@@ -1715,4 +1715,23 @@
 			<translation>se désabonner</translation>
 		</message>
 	</context>
+    <context>
+        <name>newsletter/additional_fields</name>
+        <message>
+            <source>email</source>
+            <translation>Email</translation>
+        </message>
+        <message>
+            <source>first_name</source>
+            <translation>Prénom</translation>
+        </message>
+        <message>
+            <source>last_name</source>
+            <translation>Nom</translation>
+        </message>
+        <message>
+            <source>salutation</source>
+            <translation>Civilité</translation>
+        </message>
+    </context>
 </TS>

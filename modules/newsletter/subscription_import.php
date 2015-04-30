@@ -21,6 +21,7 @@ $mailingListID = $Params['mailingListID'];
 if( empty( $mailingListID ) ) {
     $tpl->setVariable( 'warning', ezpI18n::tr( 'newsletter/warning_message', 'Mailing list is missing.' ) );
 } else {
+    $ini  = eZINI::instance( 'newsletter.ini' );
     $contentObject = eZContentObject::fetch( $mailingListID );
     if( $contentObject instanceof eZContentObject ) {
         $tpl->setVariable( 'mailing_list', $contentObject );
@@ -33,12 +34,27 @@ if( empty( $mailingListID ) ) {
             $columnDelimiter = $module->actionParameter( 'ColumnDelimiter' );
         }
         $tpl->setVariable( 'column_delimiter', $columnDelimiter );
+        $defaultFields = array( 'email', 'first_name', 'last_name', 'salutation');
+        $additionalFields = array();
+        $additionalFieldsOptions = array();
+        if($ini->hasVariable('NewsletterUserSettings', 'AdditionalFields')) {
+            $additionalFields = $ini->variable('NewsletterUserSettings', 'AdditionalFields');
+            $tpl->setVariable( 'additional_fields', $additionalFields );
+            foreach($additionalFields as $fieldIdentifier) {
+                if($ini->hasVariable('AdditionalField_' . $fieldIdentifier, 'SelectOptions')) {
+                    $additionalFieldsOptions[$fieldIdentifier] = $ini->variable('AdditionalField_' . $fieldIdentifier, 'SelectOptions');
+                }
+            }
+        }
+        $allFields = array_merge($defaultFields, $additionalFields);
+        $tpl->setVariable( 'default_fields', $defaultFields );
         if( !$module->hasActionParameter( 'FirstLineIsColumnHeadings' ) ) {
-            $fileHeaders = array( 'email', 'first_name', 'last_name', 'salutation' );
+            $fileHeaders = $allFields;
             $tpl->setVariable( 'first_line_is_column_headings', false );
         } else {
             $tpl->setVariable( 'first_line_is_column_headings', true );
         }
+        $tpl->setVariable( 'all_fields', $allFields );
         if( $module->isCurrentAction( 'Preview' ) ) {
             if( eZHTTPFile::canFetch( 'UploadFile' ) ) {
                 $binaryFile = eZHTTPFile::fetch( 'UploadFile' );
@@ -56,20 +72,14 @@ if( empty( $mailingListID ) ) {
                         $rowCount++;
                         $rowPreview = array(
                             'row_number' => $rowCount,
-                            'email' => false,
-                            'first_name' => false,
-                            'last_name' => false,
-                            'salutation' => false,
                         );
+                        foreach($allFields as $fields) {
+                            $rowPreview[$fields] = false;
+                        }
                         foreach( $row as $index => $field ) {
                             $fieldIdentifier = $fileHeaders[$index];
-                            switch( $fieldIdentifier ) {
-                                case 'email':
-                                case 'first_name':
-                                case 'last_name':
-                                case 'salutation':
-                                    $rowPreview[$fieldIdentifier] = $field;
-                                    break;
+                            if(in_array($fieldIdentifier, $allFields)) {
+                                $rowPreview[$fieldIdentifier] = $field;
                             }
                         }
                         $preview[] = $rowPreview;
@@ -94,21 +104,35 @@ if( empty( $mailingListID ) ) {
                     } else {
                         $rowCount++;
                         $userInfo = array( 'status' => OWNewsletterUser::STATUS_CONFIRMED );
+                        $userAdditionalFields = array();
                         foreach( $row as $index => $field ) {
                             $fieldIdentifier = $fileHeaders[$index];
-                            switch( $fieldIdentifier ) {
-                                case 'email':
-                                case 'first_name':
-                                case 'last_name':
-                                case 'salutation':
-                                    $userInfo[$fieldIdentifier] = $field;
-                                    break;
+                            if(in_array($fieldIdentifier, $defaultFields)) {
+                                $userInfo[$fieldIdentifier] = $field;
+                            } elseif(in_array($fieldIdentifier, $additionalFields)) {
+                                if(array_key_exists($fieldIdentifier, $additionalFieldsOptions)) {
+                                    if(( $key = array_search($field, $additionalFieldsOptions[$fieldIdentifier])) !== false) {
+                                        $userAdditionalFields[$fieldIdentifier] = $key;
+                                    } elseif(isset($additionalFieldsOptions[$fieldIdentifier][$field])) {
+                                        $userAdditionalFields[$fieldIdentifier] = $field;
+                                    }
+                                } else {
+                                    $userAdditionalFields[$fieldIdentifier] = $field;
+                                }
                             }
                         }
                         if( isset( $userInfo['email'] ) && !empty( $userInfo['email'] ) && ezcMailTools::validateEmailAddress( $userInfo['email'] ) ) {
                             $user = OWNewsletterUser::fetchByEmail( $userInfo['email'] );
                             if( !$user instanceof OWNewsletterUser ) {
                                 $user = OWNewsletterUser::createOrUpdate( $userInfo, 'import' );
+                                if(count($userAdditionalFields) > 0) {
+                                    $result = $user->validateAdditionalData($userAdditionalFields);
+                                    if($result !== false) {
+                                        OWScriptLogger::logError( "Row #$rowCount : failed to import in additional fields, " . implode($result['warning_message'], ' '), 'process_row' );
+                                    }
+                                    $user->setAttribute( 'serialized_data', serialize( $userAdditionalFields ) );
+                                    $user->store();
+                                }
                                 OWScriptLogger::logNotice( "Row #$rowCount : user created (" . $userInfo['email'] . ")", 'process_row' );
                                 $createdCount++;
                             }

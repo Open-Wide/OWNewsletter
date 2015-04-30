@@ -51,9 +51,34 @@
                                 <p><a href="/{$upload_file}">{$upload_file}</a></p>
                                 {else}
                                 <p>{'Expected file format:'|i18n( 'newsletter/subscription/import' )}</p>
-                                <pre>email;first_name;last_name;salutation
-user3@example.com;Julia;Mustermann;2
-user4@example.com;Max;Mustermann;1</pre>
+                                {def $data_filed = ""
+                                     $i=0}
+                                <div></div>
+                                <pre style="white-space:nowrap;">
+                                    {foreach $all_fields as $field}
+                                        {set $i=inc( $i )}
+                                        {$field}{if ne($i, count($all_fields))};{/if}
+                                    {/foreach}
+                                    <br>
+                                    {for 0 to 1 as $count}
+                                        {set $i = 0}
+                                        {if eq($count, 0)}user3@example.com;Julia;Mustermann;2{else}user4@example.com;Max;Mustermann;1{/if}{if $additional_fields};
+                                        {foreach $additional_fields as $field}
+                                            {set $i=inc( $i )}
+                                            {if ezini_hasvariable(concat('AdditionalField_', $field), 'SelectOptions', 'newsletter.ini')}
+                                                {set $data_filed = ezini(concat('AdditionalField_', $field), 'SelectOptions', 'newsletter.ini')}
+                                                {foreach $data_filed as $key => $data offset $count max 1}
+                                                    {if eq($count, 0)}{$data}{else}{$key}{/if}{if ne($i, count($additional_fields))};{/if}
+                                                {/foreach}
+                                            {else}
+                                                XXXXXX{if ne($i, count($additional_fields))};{/if}
+                                            {/if}
+
+                                        {/foreach}
+                                    {/if}
+                                        {delimiter}<br>{/delimiter}
+                                    {/for}
+                                </pre>
                                 {/if}
                         </div>
                         <div class="block">
@@ -81,20 +106,18 @@ user4@example.com;Max;Mustermann;1</pre>
                                     <thead>
                                         <tr>
                                             <th>{'Row number'|i18n( 'newsletter/subscription/import' )}</th>
-                                            <th>{'Email'|i18n( 'newsletter/subscription/import' )}</th>
-                                            <th>{'First name'|i18n( 'newsletter/subscription/import' )}</th>
-                                            <th>{'Last name'|i18n( 'newsletter/subscription/import' )}</th>
-                                            <th>{'Salutation'|i18n( 'newsletter/subscription/import' )}</th>
+                                            {foreach $all_fields as $field}
+                                                <th>{$field|i18n( 'newsletter/additional_fields' )}</th>
+                                            {/foreach}
                                         </tr>
                                     </thead>
                                     <tboby>
                                         {foreach $preview as $row}
                                             <tr>
                                                 <td>{$row.row_number}</td>
-                                                <td>{$row.email}</td>
-                                                <td>{$row.first_name}</td>
-                                                <td>{$row.last_name}</td>
-                                                <td>{$row.salutation}</td>
+                                                {foreach $all_fields as $field}
+                                                    <td>{$row.$field}</td>
+                                                {/foreach}
                                             </tr>
                                         {/foreach}
                                     </tboby>
