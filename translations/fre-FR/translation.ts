@@ -75,7 +75,7 @@
 		<name>newsletter/menu</name>
 		<message>
 			<source>Administer</source>
-			<translation>Administrer</translation>
+			<translation>Les abonnés</translation>
 		</message>
 		<message>
 			<source>Users</source>
