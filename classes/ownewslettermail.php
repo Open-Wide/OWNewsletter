@@ -78,9 +78,7 @@ class OWNewsletterMail {
         $output = $this->newsletterSending->attribute( 'output' );
         $this->senderEmail = trim( $this->newsletterSending->attribute( 'sender_email' ) );
         $this->senderName = $this->newsletterSending->attribute( 'sender_name' );
-        
-        
-        print "TEST"; exit();
+
         if( isset( $output['subject'] ) ) {
             $originalSubject = "[TEST] ".$output['subject'];
         }
