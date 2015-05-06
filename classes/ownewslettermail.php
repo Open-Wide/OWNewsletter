@@ -78,8 +78,11 @@ class OWNewsletterMail {
         $output = $this->newsletterSending->attribute( 'output' );
         $this->senderEmail = trim( $this->newsletterSending->attribute( 'sender_email' ) );
         $this->senderName = $this->newsletterSending->attribute( 'sender_name' );
+        
+        
+        print "TEST"; exit();
         if( isset( $output['subject'] ) ) {
-            $originalSubject = $output['subject'];
+            $originalSubject = "[TEST] ".$output['subject'];
         }
         if( isset( $output['body'] ) && isset( $output['body']['html'] ) ) {
             $originalHTMLBody = $output['body']['html'];
@@ -140,7 +143,9 @@ class OWNewsletterMail {
             $this->HTMLBody = $originalHTMLBody;
             $this->plainTextBody = $originalPlainTextBody;
         }
-
+        
+        $this->subject = "[TEST] ".$this->subject;
+        
         $this->setTransportMethodPreviewFromIni();
         $sendResult = array();
         foreach( $emailReceivers as $emailReceiver ) {
