@@ -1451,7 +1451,7 @@
 		<name>newsletter/user/salutation</name>
 		<message>
 			<source>Mr</source>
-			<translation>Mr</translation>
+			<translation>M.</translation>
 		</message>
 		<message>
 			<source>Mrs</source>
