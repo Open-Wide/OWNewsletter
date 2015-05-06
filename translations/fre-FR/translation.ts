@@ -1008,7 +1008,7 @@
 		</message>
 		<message>
 			<source>Create mailbox</source>
-			<translation>Ajouter un boîte de réception</translation>
+			<translation>Ajouter une boîte de réception</translation>
 		</message>
 		<message>
 			<source>E-mail</source>
