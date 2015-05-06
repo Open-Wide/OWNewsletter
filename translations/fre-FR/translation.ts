@@ -1289,7 +1289,7 @@
 		</message>
 		<message>
 			<source>The first line is the column headings</source>
-			<translation>La première ligne est les titres de colonne</translation>
+			<translation>La première ligne contient les titres des colonnes.</translation>
 		</message>
 		<message>
 			<source>Preview</source>

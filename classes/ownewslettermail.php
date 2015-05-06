@@ -80,7 +80,7 @@ class OWNewsletterMail {
         $this->senderName = $this->newsletterSending->attribute( 'sender_name' );
 
         if( isset( $output['subject'] ) ) {
-            $originalSubject = "[TEST] ".$output['subject'];
+            $originalSubject = $output['subject'];
         }
         if( isset( $output['body'] ) && isset( $output['body']['html'] ) ) {
             $originalHTMLBody = $output['body']['html'];
