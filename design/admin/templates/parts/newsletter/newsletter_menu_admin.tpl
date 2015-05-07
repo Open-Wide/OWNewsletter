@@ -24,17 +24,17 @@
                         <div class="box-content">
                             <ul>
                                 {if fetch( 'user', 'has_access_to', hash( 'module', 'newsletter', 'function', 'mailbox' ) ) }
-                                    <li><a href={'/newsletter/mailbox'|ezurl()}>{'E-mail accounts'|i18n( 'newsletter/menu' )}</a></li>
+                                    <li {if eq($current_uri_string,'newsletter/mailbox')}class="activenode"{/if}><a href={'/newsletter/mailbox'|ezurl()}>{'E-mail accounts'|i18n( 'newsletter/menu' )}</a></li>
                                 {else}
                                     <li class="disabled-no-access"><div><span class="disabled">{'E-mail accounts'|i18n( 'newsletter/menu' )}</span></div></li>
                                 {/if}
                                 {if fetch( 'user', 'has_access_to', hash( 'module', 'newsletter', 'function', 'subscribe' ) ) }
-                                    <li><a href={'/newsletter/subscribe'|ezurl()}>{'Subscription form'|i18n( 'newsletter/menu' )}</a></li>
+                                    <li {if eq($current_uri_string,'newsletter/subscribe')}class="activenode"{/if}><a href={'/newsletter/subscribe'|ezurl()}>{'Subscription form'|i18n( 'newsletter/menu' )}</a></li>
                                 {else}
                                     <li class="disabled-no-access"><div><span class="disabled">{'Subscription form'|i18n( 'newsletter/menu' )}</span></div></li>
                                 {/if}
                                 {if fetch( 'user', 'has_access_to', hash( 'module', 'newsletter', 'function', 'settings' ) ) }
-                                    <li><a href={'/newsletter/settings'|ezurl()}>{'INI Settings'|i18n( 'newsletter/menu' )}</a></li>
+                                    <li {if eq($current_uri_string,'newsletter/settings')}class="activenode"{/if}><a href={'/newsletter/settings'|ezurl()}>{'INI Settings'|i18n( 'newsletter/menu' )}</a></li>
                                 {else}
                                     <li class="disabled-no-access"><div><span class="disabled">{'INI Settings'|i18n( 'newsletter/menu' )}</span></div></li>
                                 {/if}

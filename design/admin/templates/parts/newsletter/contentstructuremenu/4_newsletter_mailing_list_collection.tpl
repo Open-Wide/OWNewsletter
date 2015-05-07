@@ -26,7 +26,7 @@
     {set $is_root_node=$is_root_node}
 {/if}
 
-<li id="n0_{$newsletter_mailing_list_collection_node.node_id}" {cond( $last_item, 'class="lastli"', '' )}>
+<li id="n0_{$newsletter_mailing_list_collection_node.node_id}"  {cond( $last_item,  cond(eq($current_uri_string,$newsletter_mailing_list_collection_node.url_alias),'class="lastli activenode"','class="lastli"') ,cond(eq($current_uri_string,$newsletter_mailing_list_collection_node.url_alias),'class="activenode"','') )}  >
 
     {* Fold/Unfold/Empty: [-]/[+]/[ ] *}
     <a class="openclose" href="#" title="{'Fold/Unfold'|i18n('newsletter/contentstructuremenu')}"
@@ -57,7 +57,7 @@
                 {if $children_last_index|eq($child_index)}
                     {set $last_item = true()}
                 {/if}
-                {include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/5_newsletter_mailing_list.tpl" newsletter_mailing_list_node=$child csm_menu_item_click_action=$csm_menu_item_click_action last_item=$last_item ui_context=$ui_context}
+                {include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/5_newsletter_mailing_list.tpl" newsletter_mailing_list_node=$child csm_menu_item_click_action=$csm_menu_item_click_action last_item=$last_item current_uri_string=$current_uri_string ui_context=$ui_context}
             {/foreach}
         </ul>
     {/if}

@@ -20,7 +20,7 @@
     {set isRootNode=false()}
 {/if}
 
-<li id="nt{$newsletter_mailing_list_node_id}" {if $:last_item} class="lastli"{/if}>
+<li id="nt{$newsletter_mailing_list_node_id}" {cond( $last_item,  cond(eq($current_uri_string,$newsletter_mailing_list_node.url_alias),'class="lastli activenode"','class="lastli"') ,cond(eq($current_uri_string,$newsletter_mailing_list_node.url_alias),'class="activenode"','') )} >
 
     {* Fold/Unfold/Empty: [-]/[+]/[ ] *}
     <a class="openclose" href="#" title="{'Fold/Unfold'|i18n('newsletter/contentstructuremenu')}"

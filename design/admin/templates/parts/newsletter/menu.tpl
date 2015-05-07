@@ -1,4 +1,11 @@
 {* Newsletter related stuff *}
+{if $requested_uri_string}
+    {def $current_uri_string = $requested_uri_string}
+{else}
+    {def $current_uri_string = ""}
+{/if}
+
+
 <div id="newsletter-menu">
     {if $module_result.ui_context|ne('edit')}
         {include uri='design:parts/newsletter/newsletter_menu.tpl'}
@@ -21,12 +28,12 @@
                     <div class="box-bl">
                         <div class="box-br">
                             <div class="box-content">
-                                <ul>
+                                <ul class="leftmenu-items">
                                     {if fetch( 'user', 'has_access_to', hash( 'module', 'newsletter', 'function', 'user' ) ) }
-                                        <li>
-                                            <a href={'/newsletter/user'|ezurl}>{'Users'|i18n( 'newsletter/menu' )} ({fetch( 'newsletter', 'user_count' )})</a>
+                                        <li {if eq($current_uri_string,'newsletter/user')}class="activenode"{/if}>
+                                            <a href={'/newsletter/user'|ezurl} >{'Users'|i18n( 'newsletter/menu' )} ({fetch( 'newsletter', 'user_count' )})</a>
                                             <ul>
-                                                <li id="pending_user_list">
+                                                <li id="pending_user_list" >
                                                     <span class="openclose"></span>
                                                     <img src={'1x1.gif'|ezimage} alt="" title="" class="icon12 icon_s_pending" />
                                                     <a class="nodetext" href={'/newsletter/user/(status)/pending'|ezurl}>
@@ -87,7 +94,7 @@
                                         </li>
                                     {/if}
                                     {if fetch( 'user', 'has_access_to', hash( 'module', 'newsletter', 'function', 'admin' ) ) }
-                                        <li>
+                                        <li {if eq($current_uri_string,'newsletter/blacklist')}class="activenode"{/if}>
                                             <a href={'/newsletter/blacklist'|ezurl}>{'Blacklists'|i18n( 'newsletter/menu' )}</a>
                                         </li>
                                     {else}
@@ -96,7 +103,7 @@
                                         </li>
                                     {/if}
                                     {if fetch( 'user', 'has_access_to', hash( 'module', 'newsletter', 'function', 'mailbox' ) ) }
-                                        <li>
+                                        <li {if eq($current_uri_string,'newsletter/bounce')}class="activenode"{/if}>
                                             <a href={'/newsletter/bounce'|ezurl}>{'Bounces'|i18n( 'newsletter/menu' )}</a>
                                         </li>
                                     {else}

@@ -126,3 +126,11 @@ table.list .nl-error {
 table.list .nl-error th {
     background-color: #F55575;
 }
+
+.activenode  > a{
+    color: #e24602;
+    font-weight: normal;
+}
+
+
+

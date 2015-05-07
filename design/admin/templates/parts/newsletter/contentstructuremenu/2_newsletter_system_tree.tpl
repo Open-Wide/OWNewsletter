@@ -48,7 +48,7 @@
                 {if $children_last_index|eq($child_index)}
                     {set $last_item = true()}
                 {/if}
-                {include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/3_newsletter_system.tpl" newsletter_system_node=$child csm_menu_item_click_action=$csm_menu_item_click_action ui_context=$ui_context last_item=$last_item}
+                {include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/3_newsletter_system.tpl" newsletter_system_node=$child csm_menu_item_click_action=$csm_menu_item_click_action ui_context=$ui_context last_item=$last_item current_uri_string=$current_uri_string}
             {/foreach}
         </ul>
     {/if}

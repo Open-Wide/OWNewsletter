@@ -32,7 +32,7 @@
     {set $is_root_node=$is_root_node}
 {/if}
 
-<li id="n0_{$newsletter_system_node.node_id}" {cond( $last_item, 'class="lastli"', '' )}>
+<li id="n0_{$newsletter_system_node.node_id}" {cond( $last_item,  cond(eq($current_uri_string,$newsletter_system_node.url_alias),'class="lastli activenode"','class="lastli"') ,cond(eq($current_uri_string,$newsletter_system_node.url_alias),'class="activenode"','') )}  >
 
     {* Fold/Unfold/Empty: [-]/[+]/[ ] *}
     <a class="openclose" href="#" title="{'Fold/Unfold'|i18n('newsletter/contentstructuremenu')}"
@@ -65,13 +65,13 @@
                 {if and( $newsletter_children|count()|eq(0), $mailing_list_children_last_index|eq($child_index) )}
                     {set $last_item = true()}
                 {/if}
-                {include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/4_newsletter_mailing_list_collection.tpl" newsletter_mailing_list_collection_node=$child csm_menu_item_click_action=$csm_menu_item_click_action last_item=$last_item ui_context=$ui_context}
+                {include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/4_newsletter_mailing_list_collection.tpl" newsletter_mailing_list_collection_node=$child csm_menu_item_click_action=$csm_menu_item_click_action last_item=$last_item current_uri_string=$current_uri_string ui_context=$ui_context}
             {/foreach}
             {foreach $newsletter_children as $child_index => $child}
                 {if $newsletter_children_last_index|eq($child_index)}
                     {set $last_item = true()}
                 {/if}
-                {include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/4_newsletter.tpl" newsletter_node=$child csm_menu_item_click_action=$csm_menu_item_click_action ui_context=$ui_context last_item=$last_item}
+                {include name=SubMenu uri="design:parts/newsletter/contentstructuremenu/4_newsletter.tpl" newsletter_node=$child csm_menu_item_click_action=$csm_menu_item_click_action ui_context=$ui_context last_item=$last_item current_uri_string=$current_uri_string}
             {/foreach}
         </ul>
     {/if}
