@@ -139,6 +139,7 @@ class OWNewsletterMail {
             $this->plainTextBody = str_replace( $searchArray, $replaceArray, $plainTextBody );
         } else {
             $this->subject = $originalSubject;
+            $this->subject = "[TEST] ".$this->subject;
             $this->HTMLBody = $originalHTMLBody;
             $this->plainTextBody = $originalPlainTextBody;
         }
