@@ -134,6 +134,7 @@ class OWNewsletterMail {
             }
 
             $this->subject = str_replace( $searchArray, $replaceArray, $subject );
+            $this->subject = "[TEST] ".$this->subject;
             $this->HTMLBody = str_replace( $searchArray, $replaceArray, $HTMLBody );
             $this->plainTextBody = str_replace( $searchArray, $replaceArray, $plainTextBody );
         } else {
@@ -141,8 +142,6 @@ class OWNewsletterMail {
             $this->HTMLBody = $originalHTMLBody;
             $this->plainTextBody = $originalPlainTextBody;
         }
-        
-        $this->subject = "[TEST] ".$this->subject;
         
         $this->setTransportMethodPreviewFromIni();
         $sendResult = array();
