@@ -55,7 +55,7 @@ class OWNewsletterTracking {
      * @param OWNewsletterUser $newsletterUserObject
      * @return boolean
      */
-    public function setNewsletterUserObject( $newsletterUserObject ) {
+    public function setNewsletterUser( $newsletterUserObject ) {
         if( $newsletterUserObject instanceof OWNewsletterUser ) {
             $this->newsletterUserObject = $newsletterUserObject;
             return true;
