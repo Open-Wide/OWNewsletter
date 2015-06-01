@@ -71,7 +71,7 @@ class OWNewsletterTracking {
      * @param integer $editionContentObjectID
      * @return boolean
      */
-    public function setEditionContentObject( $editionContentObjectID ) {
+    public function setEditionContentObjectId( $editionContentObjectID ) {
         if( $editionContentObjectID ) {
             $editionContentObject = eZFunctionHandler::execute( 'content', 'object', array( 'object_id' => $editionContentObjectID ) );
             if( $editionContentObject instanceof eZContentObject ) {
