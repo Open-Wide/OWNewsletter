@@ -6,24 +6,23 @@
 
 $listImport = OWNewsletterImport::fetchByProcessed();
 
-
 $actions = eZPendingActions::fetchByAction('ownewsletter_import');
 /* $var $action eZPendingActions */
 foreach ($actions as $action) {
 
-
     OWScriptLogger::startLog('subscription_import');    
     $params = unserialize($action->attribute('param'));
-   
 
     // On test si le data existe sionon on le créé
     $eZSiteData = eZSiteData::fetchByName('ownewsletter');  
     
-    return ;
+    
     if (!$eZSiteData){
         
+        OWScriptLogger::logNotice("Start import : " . $binaryFile, 'process_row');
         $eZSiteData = new eZSiteData(array('name'=>'ownewsletter', 'value'=> serialize( array( time() , $params )  )   ));
-        
+        $eZSiteData->store();
+
         $binaryFile = $params['file'];
         $mailingListID = $params['mailing_list_id'];
         $columnDelimiter = $params['column_delimiter'];
@@ -44,9 +43,6 @@ foreach ($actions as $action) {
         } else {
             $log = ImportBinaryFile($binaryFile, $mailingListID, $columnDelimiter, $fileHeaders);
         }
-
-        // On supprime le data actif
-        // On supprime le pending action
         $action->remove();
         $eZSiteData->remove();
         
