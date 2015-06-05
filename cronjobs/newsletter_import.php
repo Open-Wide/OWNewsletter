@@ -1,86 +1,93 @@
 <?php
 
 /**
- * Cronjob newsletter_mailqueue_create.php
+ * Cronjob newsletter_import.php
  */
-// Get all wait for process sending
-// On requête pour voir les fichiers à importer.
-// On boucle sur la liste.
-// On charge le fichier.
-// On boucle sur le fichier.
-// Si erreur on recup les erreurs.
-// On marque l'import comme fait et on précise les erreurs si erreur il y a. 
-
 
 $listImport = OWNewsletterImport::fetchByProcessed();
 
-foreach ($listImport as $importAsk) {
 
-    /* @var $importAsk OWNewsletterImport */
-    $binaryFile =  $importAsk->attribute('file');
-    $mailingListID = $importAsk->attribute('mailing_list_id');
-    $columnDelimiter = $importAsk->attribute('column_delimiter');
-    $fileHeaders = $importAsk->attribute('file_header');
+$actions = eZPendingActions::fetchByAction('ownewsletter_import');
+/* $var $action eZPendingActions */
+foreach ($actions as $action) {
+
+
+    OWScriptLogger::startLog('subscription_import');    
+    $params = unserialize($action->attribute('param'));
+   
+
+    // On test si le data existe sionon on le créé
+    $eZSiteData = eZSiteData::fetchByName('ownewsletter');  
     
-    $error = null;
-    $log = "";
+    return ;
+    if (!$eZSiteData){
+        
+        $eZSiteData = new eZSiteData(array('name'=>'ownewsletter', 'value'=> serialize( array( time() , $params )  )   ));
+        
+        $binaryFile = $params['file'];
+        $mailingListID = $params['mailing_list_id'];
+        $columnDelimiter = $params['column_delimiter'];
+        $fileHeaders = $params['file_header'];
 
-    if(!is_file($binaryFile)){
-        $error = "Le fichier $binaryFile n'existe pas";
-    }elseif(empty($mailingListID) || intval($mailingListID)==0 ){
-        $error = "La mailing list n'est pas renseignée";
-    }elseif(($mailingList = OWNewsletterMailingList::fetchLastVersion( $mailingListID ))){
-        $error = "La mailing list $mailingListID n'existe pas";
+        $error = false;
+        $log = "";
+        
+        if (!is_file($binaryFile)) {
+            OWScriptLogger::logError("The file does not exist : " . $binaryFile, 'process_row');
+            $error = true;
+        } elseif (empty($mailingListID) || intval($mailingListID) == 0) {
+            OWScriptLogger::logError("The mailing list id is not defined : " . $mailingListID, 'process_row');
+            $error = true;
+        } elseif (!($mailingList = OWNewsletterMailingList::fetchLastVersion($mailingListID))) {
+            OWScriptLogger::logError("The mailing list does not exist : ", 'process_row');
+            $error = true;
+        } else {
+            $log = ImportBinaryFile($binaryFile, $mailingListID, $columnDelimiter, $fileHeaders);
+        }
+
+        // On supprime le data actif
+        // On supprime le pending action
+        $action->remove();
+        $eZSiteData->remove();
+        
     }else{
-        $log = ImportBinaryFile($binaryFile, $mailingListID, $columnDelimiter, $fileHeaders);
-    }
-
-    $importAsk->setProcessed();
-    
-    if($error){
-        $importAsk->setError(1,$error);
-    }else{
-        $importAsk->setError(0,$log);
+        OWScriptLogger::logError("A process is already active.", 'process_active');
     }
     
-    // envoie de mail
-    
-    $mailingList->attribute()
-    
-    
-
 }
 
-function isMailingList($mailingListID){
-    $mailingList = OWNewsletterMailingList::fetchLastVersion( $mailingListID );
-    if(is_object($mailingList)){
-        return true;
-    }else{
-        return false;
-    }
-}
+function ImportBinaryFile($binaryFile, $mailingListID, $columnDelimiter, $isFileHeaders) {
 
-function ImportFile($binaryFile, $mailingListID,$columnDelimiter,$fileHeaders) {
-
-
+    $ini = eZINI::instance('newsletter.ini');
     ini_set('auto_detect_line_endings', TRUE);
     $handle = fopen($binaryFile, 'r');
-    OWScriptLogger::startLog('subscription_import');
+
     $rowCount = 0;
     $createdCount = 0;
     $subscriptionCount = 0;
-    
+
+    $defaultFields = array('email', 'first_name', 'last_name', 'salutation');
+    $additionalFields = array();
     $additionalFieldsOptions = array();
-    if($ini->hasVariable('NewsletterUserSettings', 'AdditionalFields')) {
+
+    if ($ini->hasVariable('NewsletterUserSettings', 'AdditionalFields')) {
         $additionalFields = $ini->variable('NewsletterUserSettings', 'AdditionalFields');
-        $tpl->setVariable( 'additional_fields', $additionalFields );
-        foreach($additionalFields as $fieldIdentifier) {
-            if($ini->hasVariable('AdditionalField_' . $fieldIdentifier, 'SelectOptions')) {
+        foreach ($additionalFields as $fieldIdentifier) {
+            if ($ini->hasVariable('AdditionalField_' . $fieldIdentifier, 'SelectOptions')) {
                 $additionalFieldsOptions[$fieldIdentifier] = $ini->variable('AdditionalField_' . $fieldIdentifier, 'SelectOptions');
             }
         }
-    }    
-    
+    }
+
+
+    if (!$isFileHeaders) {
+        $fileHeaders = array_merge($defaultFields, $additionalFields);
+        ;
+    } else {
+        $hasFileHeaders = true;
+    }
+
+
     while (($row = fgetcsv($handle, 0, $columnDelimiter) ) !== FALSE) {
         if (!isset($fileHeaders)) {
             $fileHeaders = $row;
@@ -123,7 +130,7 @@ function ImportFile($binaryFile, $mailingListID,$columnDelimiter,$fileHeaders) {
                 OWScriptLogger::logNotice("Row #$rowCount : user subscribe to the mailing list", 'process_row');
                 $subscriptionCount++;
             } else {
-                OWScriptLogger::logError("Row #$rowCount : failed to import, e-mail is missing or invalid", 'process_row');
+                OWScriptLogger::logError("Row #$rowCount : failed to import, e-mail is missing or invalid (" . $userInfo['email'] . ")", 'process_row');
             }
         }
     }
@@ -131,6 +138,6 @@ function ImportFile($binaryFile, $mailingListID,$columnDelimiter,$fileHeaders) {
     $logger = OWScriptLogger::instance();
 
     ini_set('auto_detect_line_endings', FALSE);
-    
-    return 'owscriptlogger/logs/' . $logger->attribute( 'id' );
+
+    return 'owscriptlogger/logs/' . $logger->attribute('id');
 }

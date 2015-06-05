@@ -105,68 +105,17 @@ if( empty( $mailingListID ) ) {
                             'mailing_list_id'=>$mailingListID,
                             );
 
-
-                $import = OWNewsletterImport::createOrUpdate($dataImport);
-                $tpl->setVariable( 'log_cron', 1 );               
                 
-                /*
-                ini_set( 'auto_detect_line_endings', TRUE );
-                $handle = fopen( $binaryFile, 'r' );
-                OWScriptLogger::startLog( 'subscription_import' );
-                $rowCount = 0;
-                $createdCount = 0;
-                $subscriptionCount = 0;
-                while( ($row = fgetcsv( $handle, 0, $columnDelimiter ) ) !== FALSE ) {
-                    if( !isset( $fileHeaders ) ) {
-                        $fileHeaders = $row;
-                    } else {
-                        $rowCount++;
-                        $userInfo = array( 'status' => OWNewsletterUser::STATUS_CONFIRMED );
-                        $userAdditionalFields = array();
-                        foreach( $row as $index => $field ) {
-                            $fieldIdentifier = $fileHeaders[$index];
-                            if(in_array($fieldIdentifier, $defaultFields)) {
-                                $userInfo[$fieldIdentifier] = $field;
-                            } elseif(in_array($fieldIdentifier, $additionalFields)) {
-                                if(array_key_exists($fieldIdentifier, $additionalFieldsOptions)) {
-                                    if(( $key = array_search($field, $additionalFieldsOptions[$fieldIdentifier])) !== false) {
-                                        $userAdditionalFields[$fieldIdentifier] = $key;
-                                    } elseif(isset($additionalFieldsOptions[$fieldIdentifier][$field])) {
-                                        $userAdditionalFields[$fieldIdentifier] = $field;
-                                    }
-                                } else {
-                                    $userAdditionalFields[$fieldIdentifier] = $field;
-                                }
-                            }
-                        }
-                        if( isset( $userInfo['email'] ) && !empty( $userInfo['email'] ) && ezcMailTools::validateEmailAddress( $userInfo['email'] ) ) {
-                            $user = OWNewsletterUser::fetchByEmail( $userInfo['email'] );
-                            if( !$user instanceof OWNewsletterUser ) {
-                                $user = OWNewsletterUser::createOrUpdate( $userInfo, 'import' );
-                                if(count($userAdditionalFields) > 0) {
-                                    $result = $user->validateAdditionalData($userAdditionalFields);
-                                    if($result !== false) {
-                                        OWScriptLogger::logError( "Row #$rowCount : failed to import in additional fields, " . implode($result['warning_message'], ' '), 'process_row' );
-                                    }
-                                    $user->setAttribute( 'serialized_data', serialize( $userAdditionalFields ) );
-                                    $user->store();
-                                }
-                                OWScriptLogger::logNotice( "Row #$rowCount : user created (" . $userInfo['email'] . ")", 'process_row' );
-                                $createdCount++;
-                            }
-                            $user->subscribeTo( $mailingListID, OWNewsletterSubscription::STATUS_APPROVED, 'import' );
-                            OWScriptLogger::logNotice( "Row #$rowCount : user subscribe to the mailing list", 'process_row' );
-                            $subscriptionCount++;
-                        } else {
-                            OWScriptLogger::logError( "Row #$rowCount : failed to import, e-mail is missing or invalid", 'process_row' );
-                        }
-                    }
-                }
-                OWScriptLogger::logNotice( "$rowCount rows processed" . PHP_EOL . "$subscriptionCount subscriptions created or updated" . PHP_EOL . "$createdCount users created", 'treatment_completed' );
-                $logger = OWScriptLogger::instance();
-                $tpl->setVariable( 'log_url', 'owscriptlogger/logs/' . $logger->attribute( 'id' ) );
-                ini_set( 'auto_detect_line_endings', FALSE );
-                */
+                $rowPending = array(
+                    'action'        => "ownewsletter_import",
+                    'created'       => time(),
+                    'param'         => serialize($dataImport)
+                );
+
+                $pendingItem = new eZPendingActions( $rowPending );
+                $pendingItem->store();
+
+                $tpl->setVariable( 'log_cron', 1 );               
                  
             }
         }
