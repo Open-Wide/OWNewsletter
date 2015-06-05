@@ -1277,7 +1277,7 @@
 		</message>
 		<message>
 			<source>For more imformation</source>
-			<translation>Pour plus d'imformation</translation>
+			<translation>Pour plus d'information</translation>
 		</message>
 		<message>
 			<source>follow this link.</source>
@@ -1315,6 +1315,12 @@
 			<source>Salutation</source>
 			<translation>Civilité</translation>
 		</message>
+		<message>
+			<source>The import will be launched in a few minutes.</source>
+			<translation>L'import sera lancé d'ici quelques minutes.</translation>
+		</message>                
+                
+                
 	</context>
 	<context>
 		<name>newsletter/mailbox/status</name>

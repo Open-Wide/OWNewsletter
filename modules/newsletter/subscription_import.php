@@ -18,6 +18,8 @@ $subscriptionStatus = array( OWNewsletterSubscription::STATUS_APPROVED );
 $subscriptionFields = array( "email" );
 $columnDelimiter = ";";
 $mailingListID = $Params['mailingListID'];
+
+
 if( empty( $mailingListID ) ) {
     $tpl->setVariable( 'warning', ezpI18n::tr( 'newsletter/warning_message', 'Mailing list is missing.' ) );
 } else {
@@ -52,6 +54,7 @@ if( empty( $mailingListID ) ) {
             $fileHeaders = $allFields;
             $tpl->setVariable( 'first_line_is_column_headings', false );
         } else {
+            $hasFileHeaders = true;
             $tpl->setVariable( 'first_line_is_column_headings', true );
         }
         $tpl->setVariable( 'all_fields', $allFields );
@@ -91,7 +94,22 @@ if( empty( $mailingListID ) ) {
             }
         } elseif( $module->isCurrentAction( 'Import' ) ) {
             if( $module->hasActionParameter( 'UploadFile' ) ) {
+                
                 $binaryFile = $module->actionParameter( 'UploadFile' );
+               
+                /* add import line for cron tab */
+                $dataImport =   array(
+                            'file'=>$binaryFile,
+                            'column_delimiter'=> $columnDelimiter,
+                            'file_header' => isset($hasFileHeaders)?1:0,
+                            'mailing_list_id'=>$mailingListID,
+                            );
+
+
+                $import = OWNewsletterImport::createOrUpdate($dataImport);
+                $tpl->setVariable( 'log_cron', 1 );               
+                
+                /*
                 ini_set( 'auto_detect_line_endings', TRUE );
                 $handle = fopen( $binaryFile, 'r' );
                 OWScriptLogger::startLog( 'subscription_import' );
@@ -148,6 +166,8 @@ if( empty( $mailingListID ) ) {
                 $logger = OWScriptLogger::instance();
                 $tpl->setVariable( 'log_url', 'owscriptlogger/logs/' . $logger->attribute( 'id' ) );
                 ini_set( 'auto_detect_line_endings', FALSE );
+                */
+                 
             }
         }
     } else {

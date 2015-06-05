@@ -25,6 +25,15 @@
                                             </h2>
                                         </div>
                                     {/if}
+                                    {if is_set($log_cron)}
+                                        <div class="message-notice">
+                                            <h2>
+                                                {"The import will be launched in a few minutes."|i18n( 'newsletter/subscription/import' )}
+                                            </h2>
+                                        </div>
+                                    {/if}                                    
+                                    
+                                    
                                 </div>
                             </div>
                         </div>

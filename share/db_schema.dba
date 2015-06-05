@@ -826,4 +826,69 @@ $schema = array(
 	'_info' => array(
 		'format' => 'generic',
 	),
+	'ownl_import' => array(
+		'name' => 'ownl_import',
+		'fields' => array(
+			'id' => array(
+				'type' => 'auto_increment',
+				'default' => false,
+			),
+			'created' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),
+			'creator_contentobject_id' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => 0,
+			),                       
+			'processed' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),    
+			'mailing_list_id' => array(
+				'length' => 11,
+				'type' => 'int',
+				'default' => NULL,
+			),                     
+			'has_processed' => array(
+				'length' => 1,
+				'type' => 'tinyint',
+				'default' => '0',
+			),                           
+			'file' => array(
+				'length' => 100,
+				'type' => 'varchar',
+				'default' => NULL,
+			),                    
+			'column_delimiter' => array(
+				'length' => 2,
+				'type' => 'varchar',
+				'default' => NULL,
+			),                    
+			'file_header' => array(
+				'length' => 1,
+				'type' => 'tinyint',
+				'default' => '0',
+			),                     
+			'has_error' => array(
+				'length' => 1,
+				'type' => 'tinyint',
+				'default' => '0',
+			),            
+			'message_error' => array(
+				'length' => 255,
+				'type' => 'varchar',
+				'default' => NULL,
+			),                    
+		),
+		'indexes' => array(
+			'PRIMARY' => array(
+				'type' => 'primary',
+				'fields' => array( 'id' ),
+			),
+		),
+	),    
 );
