@@ -3,24 +3,24 @@
 /**
  * Cronjob newsletter_import.php
  */
-
-$listImport = OWNewsletterImport::fetchByProcessed();
-
 $actions = eZPendingActions::fetchByAction('ownewsletter_import');
 /* $var $action eZPendingActions */
 foreach ($actions as $action) {
 
-    OWScriptLogger::startLog('subscription_import');    
+    OWScriptLogger::startLog('subscription_import');
     $params = unserialize($action->attribute('param'));
 
     // On test si le data existe sionon on le créé
-    $eZSiteData = eZSiteData::fetchByName('ownewsletter');  
-    
-    
-    if (!$eZSiteData){
-        
+    $eZSiteData = eZSiteData::fetchByName('ownewsletter');
+
+
+    if (!$eZSiteData) {
+
         OWScriptLogger::logNotice("Start import : " . $binaryFile, 'process_row');
-        $eZSiteData = new eZSiteData(array('name'=>'ownewsletter', 'value'=> serialize( array( time() , $params )  )   ));
+
+        $params['start'] = time();
+
+        $eZSiteData = new eZSiteData(array('name' => 'ownewsletter', 'value' => serialize($params)));
         $eZSiteData->store();
 
         $binaryFile = $params['file'];
@@ -30,7 +30,7 @@ foreach ($actions as $action) {
 
         $error = false;
         $log = "";
-        
+
         if (!is_file($binaryFile)) {
             OWScriptLogger::logError("The file does not exist : " . $binaryFile, 'process_row');
             $error = true;
@@ -45,11 +45,9 @@ foreach ($actions as $action) {
         }
         $action->remove();
         $eZSiteData->remove();
-        
-    }else{
+    } else {
         OWScriptLogger::logError("A process is already active.", 'process_active');
     }
-    
 }
 
 function ImportBinaryFile($binaryFile, $mailingListID, $columnDelimiter, $isFileHeaders) {
