@@ -11,7 +11,14 @@ $sendingList = OWNewsletterSending::fetchList( array(
     ) );
 
 // Create newsletterTracking object
-$newsletterTracking = OWNewsletterTracking::create();
+$ini = eZINI::instance( 'newsletter.ini' );
+if( $ini->hasVariable( 'NewsletterTracking', 'TrackingClass' ) ) {
+	if ($ini->variable( 'NewsletterTracking', 'TrackingClass' ) == 'OWNewsletterTracking') {
+		$newsletterTracking = OWNewsletterTracking::create();
+	} else if ($ini->variable( 'NewsletterTracking', 'TrackingClass' ) == 'OWNewsletterTrackingGoogle') {
+		$newsletterTracking = OWNewsletterTrackingGoogle::create();
+	}
+}
 
 OWScriptLogger::startLog( 'mailqueue_process' );
 
