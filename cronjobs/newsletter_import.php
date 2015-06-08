@@ -16,7 +16,7 @@ foreach ($actions as $action) {
 
     if (!$eZSiteData) {
 
-        OWScriptLogger::logNotice("Start import : " . $binaryFile, 'process_row');
+        
 
         $params['start'] = time();
 
@@ -27,6 +27,8 @@ foreach ($actions as $action) {
         $mailingListID = $params['mailing_list_id'];
         $columnDelimiter = $params['column_delimiter'];
         $fileHeaders = $params['file_header'];
+        
+        OWScriptLogger::logNotice("Start import : " . $binaryFile, 'process_row');
 
         $error = false;
         $log = "";
