@@ -4,11 +4,12 @@
         
     </head>
     <body>
-        <h1>Fin de l'import</h1>
         <p>
+            Bonjour,
+            <br/><br/>
             L'import commandé est terminé.
             <br/><br/>
-            Vous pouvez voir les logs de l'import dans la partie "Scriplogger" de votre site d'administration.
+            Vous pouvez voir les logs de l'import dans la partie "Scriptlogger" de votre site d'administration.
             <br/><br/>
             <a href="{$log}">{$log}</a>
             <br/><br/>
