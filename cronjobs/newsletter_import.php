@@ -63,7 +63,7 @@ foreach ($actions as $action) {
             $senderEmail = $newsletterINI->variable('NewsletterMailSettings', 'SenderEmail');
             $senderName = $newsletterINI->variable('NewsletterMailSettings', 'SenderName');
 
-            $mail = new eZMail();
+            
             $logger = OWScriptLogger::instance();
 
             $Tpl = eZTemplate::factory();
@@ -73,25 +73,33 @@ foreach ($actions as $action) {
 
             $subject = ezpI18n::tr('email/import', "End of your email import.");
 
-            if (!empty($senderName)) {
-                $mail->setSender($senderEmail, $senderName);
-            } else {
-                $mail->setSender($senderEmail);
-            }
 
             $tabMail = explode(';', $importEmail);
             foreach ($tabMail as $receiver) {
-                if (!empty($receiver)  &&  filter_var($receiver, FILTER_VALIDATE_EMAIL)) {
+                $receiver = trim($receiver);
+                if (!empty(trim($receiver))  &&  filter_var($receiver, FILTER_VALIDATE_EMAIL)) {
+                    
+                    $mail = new eZMail();
+                    
+                    if (!empty($senderName)) {
+                        $mail->setSender($senderEmail, $senderName);
+                    } else {
+                        $mail->setSender($senderEmail);
+                    }
+                    
                     OWScriptLogger::logNotice("Send email : ".$receiver, 'process_row');
-                    $mail->addReceiver($receiver);
+                    $mail->setReceiver($receiver);
+                    
+                    $mail->setSubject($subject);
+                    $mail->setBody($templateResult);
+                    $mail->setContentType('text/html');
+
+                    $mailResult = eZMailTransport::send($mail);                    
+                    
                 }
             }
 
-            $mail->setSubject($subject);
-            $mail->setBody($templateResult);
-            $mail->setContentType('text/html');
 
-            $mailResult = eZMailTransport::send($mail);
         } catch (Exception $ex) {
             OWScriptLogger::logError("The mailing of end import is failed.", 'process_row');
         }
