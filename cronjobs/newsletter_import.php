@@ -77,7 +77,7 @@ foreach ($actions as $action) {
             $tabMail = explode(';', $importEmail);
             foreach ($tabMail as $receiver) {
                 $receiver = trim($receiver);
-                if (!empty(trim($receiver))  &&  filter_var($receiver, FILTER_VALIDATE_EMAIL)) {
+                if (!empty($receiver)  &&  filter_var($receiver, FILTER_VALIDATE_EMAIL)) {
                     
                     $mail = new eZMail();
                     
