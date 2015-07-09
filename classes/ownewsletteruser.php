@@ -812,7 +812,7 @@ class OWNewsletterUser extends eZPersistentObject {
         $def = self::definition();
         $custom_fields = array_keys( $def['fields'] );
         foreach( $custom_fields as $index => $field ) {
-            $custom_fields[$index] = "ownl_user.$field as $field";
+            $custom_fields[$index] = ($index == 0 ? 'distinct ' : '' ) . "ownl_user.$field as $field";
         }
         $custom_tables = null;
         $custom_conds = null;
