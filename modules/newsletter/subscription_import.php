@@ -106,21 +106,29 @@ if( empty( $mailingListID ) ) {
                         $userInfo = array( 'status' => OWNewsletterUser::STATUS_CONFIRMED );
                         $userAdditionalFields = array();
                         foreach( $row as $index => $field ) {
+                            $field = trim($field);
                             $fieldIdentifier = $fileHeaders[$index];
+
                             if(in_array($fieldIdentifier, $defaultFields)) {
                                 $userInfo[$fieldIdentifier] = $field;
-                            } elseif(in_array($fieldIdentifier, $additionalFields)) {
+                            } 
+                            elseif(in_array($fieldIdentifier, $additionalFields)) {
+                                // Additionnal Field with value list (select or radio)
                                 if(array_key_exists($fieldIdentifier, $additionalFieldsOptions)) {
+                                    // Match on option text
                                     if(( $key = array_search($field, $additionalFieldsOptions[$fieldIdentifier])) !== false) {
                                         $userAdditionalFields[$fieldIdentifier] = $key;
-                                    } elseif(isset($additionalFieldsOptions[$fieldIdentifier][$field])) {
+                                    } 
+                                    elseif(isset($additionalFieldsOptions[$fieldIdentifier][$field])) { // Match on option value
                                         $userAdditionalFields[$fieldIdentifier] = $field;
                                     }
-                                } else {
+                                } 
+                                else { // Additionnal Field with free list (text)
                                     $userAdditionalFields[$fieldIdentifier] = $field;
                                 }
                             }
                         }
+                        
                         if( isset( $userInfo['email'] ) && !empty( $userInfo['email'] ) && ezcMailTools::validateEmailAddress( $userInfo['email'] ) ) {
                             $user = OWNewsletterUser::fetchByEmail( $userInfo['email'] );
                             if( !$user instanceof OWNewsletterUser ) {
