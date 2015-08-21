@@ -201,11 +201,11 @@
                                                                             $status_id_array_enabled = $status_id_array_enabled|append( $status )|unique}
                                                                     {/if}
                                                                     <td width="300">
-                                                                        <input type="hidden" name="NewsletterUser[subscription_list][{$index}][mailing_list_contentobject_id]" value="{$mailing_list_id}" title="" />
+                                                                        <input type="hidden" name="NewsletterUser[subscription_list][{$mailing_list_id}][mailing_list_contentobject_id]" value="{$mailing_list_id}" title="" />
                                                                         {$mailing_list_node.name|wash}
                                                                     </td>
                                                                     <td>
-                                                                        <select name="NewsletterUser[subscription_list][{$index}][status]">
+                                                                        <select name="NewsletterUser[subscription_list][{$mailing_list_id}][status]">
                                                                             {if $status|eq(-1)}<option value="-1">-</option>{/if}
                                                                             {def $status_already_selected = false()}
                                                                             {foreach $available_subscription_status_list as $status_id => $status_name}
