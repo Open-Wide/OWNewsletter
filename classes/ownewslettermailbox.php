@@ -346,7 +346,7 @@ class OWNewsletterMailbox extends eZPersistentObject {
                 $counter = 0;
 
                 foreach( $messageNumberArray as $messageId => $messageIdentifier ) {
-                    if( $counter >= $fetchLimit ) {
+                    if( $counter >= $fetchLimit && $fetchLimit != 'all') {
                         break;
                     } else {
                         // create mailobject from message id
