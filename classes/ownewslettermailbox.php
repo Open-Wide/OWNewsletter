@@ -156,12 +156,13 @@ class OWNewsletterMailbox extends eZPersistentObject {
      * OTHER METHODS
      * ********************** */
 
-    /**
-     * connect to all mailboxes which are activated and store all mails in our db
-     *
-     * @return array
-     */
-    public static function collectMailsFromActiveMailboxes() {
+   /**
+    * connect to all mailboxes which are activated and store all mails in our db
+    *
+    * @param int $fetchLimit
+    * @return array|bool
+    */
+    public static function collectMailsFromActiveMailboxes($fetchLimit = 50) {
         $mailboxesProcessArray = array();
         $mailboxes = self::fetchList( array( 'is_activated' => true ) );
 
@@ -172,7 +173,7 @@ class OWNewsletterMailbox extends eZPersistentObject {
                         $connectResult = $mailbox->connect();
                         if( is_object( $connectResult ) ) {
                             try {
-                                $mailboxesProcessArray[$mailbox->attribute( 'id' )] = $mailbox->fetchMails();
+                                $mailboxesProcessArray[$mailbox->attribute( 'id' )] = $mailbox->fetchMails($fetchLimit);
                                 $mailbox->disconnect();
                             } catch( Exception $e ) {
                                 return $e->getMessage();
@@ -286,12 +287,13 @@ class OWNewsletterMailbox extends eZPersistentObject {
         }
     }
 
-    /**
-     * fetch mails to parse and/or store
-     *
-     * @return void
-     */
-    public function fetchMails() {
+   /**
+    * fetch mails to parse and/or store
+    *
+    * @param int $fetchLimit
+    * @return array
+    */
+    public function fetchMails($fetchLimit = 50) {
         $statusArray = array( 'added' => array(),
             'exists' => array(),
             'failed' => array() );
@@ -341,7 +343,6 @@ class OWNewsletterMailbox extends eZPersistentObject {
             if( count( $messageNumberArray ) > 0 ) {
                 // only fetch x item at once to avoid script timeout ... if call from admin frontend
                 // the cronjob may be has other settings
-                $fetchLimit = 50;
                 $counter = 0;
 
                 foreach( $messageNumberArray as $messageId => $messageIdentifier ) {

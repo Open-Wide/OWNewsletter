@@ -6,6 +6,7 @@
 # php runcronjobs.php -s siteaccess newsletter_mailqueue_process
 # php runcronjobs.php -s siteaccess newsletter_users_clean_pending
 # php runcronjobs.php -s siteaccess newsletter_import
+# php runcronjobs.php -s siteaccess newsletter_bounce
 
 [CronjobSettings]
 ExtensionDirectories[]=ownewsletter
@@ -28,6 +29,9 @@ Scripts[]=newsletter_users_clean_pending.php
 
 [CronjobPart-newsletter_import]
 Scripts[]=newsletter_import.php
+
+[CronjobPart-newsletter_bounce]
+Scripts[]=newsletter_bounce_process.php
 
 # execution toutes les 15 min
 #[CronjobPart-frequent]
