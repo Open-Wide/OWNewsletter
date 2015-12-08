@@ -113,85 +113,86 @@ foreach ($actions as $action) {
 function ImportBinaryFile($binaryFile, $mailingListID, $columnDelimiter, $isFileHeaders) {
 
     $ini = eZINI::instance('newsletter.ini');
-    ini_set('auto_detect_line_endings', TRUE);
-    $handle = fopen($binaryFile, 'r');
 
+    ini_set( 'auto_detect_line_endings', TRUE );
+    $handle = fopen( $binaryFile, 'r' );
+    OWScriptLogger::startLog( 'subscription_import' );
     $rowCount = 0;
     $createdCount = 0;
     $subscriptionCount = 0;
 
-    $defaultFields = array('email', 'first_name', 'last_name', 'salutation');
+    $defaultFields = array( 'email', 'first_name', 'last_name', 'salutation');
     $additionalFields = array();
     $additionalFieldsOptions = array();
-
-    if ($ini->hasVariable('NewsletterUserSettings', 'AdditionalFields')) {
+    if($ini->hasVariable('NewsletterUserSettings', 'AdditionalFields')) {
         $additionalFields = $ini->variable('NewsletterUserSettings', 'AdditionalFields');
-        foreach ($additionalFields as $fieldIdentifier) {
-            if ($ini->hasVariable('AdditionalField_' . $fieldIdentifier, 'SelectOptions')) {
+        foreach($additionalFields as $fieldIdentifier) {
+            if($ini->hasVariable('AdditionalField_' . $fieldIdentifier, 'SelectOptions')) {
                 $additionalFieldsOptions[$fieldIdentifier] = $ini->variable('AdditionalField_' . $fieldIdentifier, 'SelectOptions');
             }
         }
     }
 
-
     if (!$isFileHeaders) {
         $fileHeaders = array_merge($defaultFields, $additionalFields);
-        ;
-    } else {
-        $hasFileHeaders = true;
     }
 
-
-    while (($row = fgetcsv($handle, 0, $columnDelimiter) ) !== FALSE) {
-        if (!isset($fileHeaders)) {
+    while( ($row = fgetcsv( $handle, 0, $columnDelimiter ) ) !== FALSE ) {
+        if( !isset( $fileHeaders ) ) {
             $fileHeaders = $row;
         } else {
             $rowCount++;
-            $userInfo = array('status' => OWNewsletterUser::STATUS_CONFIRMED);
+            $userInfo = array( 'status' => OWNewsletterUser::STATUS_CONFIRMED );
             $userAdditionalFields = array();
-            foreach ($row as $index => $field) {
+            foreach( $row as $index => $field ) {
+                $field = trim($field);
                 $fieldIdentifier = $fileHeaders[$index];
-                if (in_array($fieldIdentifier, $defaultFields)) {
+                if(in_array($fieldIdentifier, $defaultFields)) {
                     $userInfo[$fieldIdentifier] = $field;
-                } elseif (in_array($fieldIdentifier, $additionalFields)) {
-                    if (array_key_exists($fieldIdentifier, $additionalFieldsOptions)) {
-                        if (( $key = array_search($field, $additionalFieldsOptions[$fieldIdentifier])) !== false) {
+                }
+                elseif(in_array($fieldIdentifier, $additionalFields)) {
+                    // Additionnal Field with value list (select or radio)
+                    if(array_key_exists($fieldIdentifier, $additionalFieldsOptions)) {
+                        // Match on option text
+                        if(( $key = array_search($field, $additionalFieldsOptions[$fieldIdentifier])) !== false) {
                             $userAdditionalFields[$fieldIdentifier] = $key;
-                        } elseif (isset($additionalFieldsOptions[$fieldIdentifier][$field])) {
+                        }
+                        elseif(isset($additionalFieldsOptions[$fieldIdentifier][$field])) { // Match on option value
                             $userAdditionalFields[$fieldIdentifier] = $field;
                         }
-                    } else {
+                    }
+                    else { // Additionnal Field with free list (text)
                         $userAdditionalFields[$fieldIdentifier] = $field;
                     }
                 }
             }
-            if (isset($userInfo['email']) && !empty($userInfo['email']) && ezcMailTools::validateEmailAddress($userInfo['email'])) {
-                $user = OWNewsletterUser::fetchByEmail($userInfo['email']);
-                if (!$user instanceof OWNewsletterUser) {
-                    $user = OWNewsletterUser::createOrUpdate($userInfo, 'import');
-                    if (count($userAdditionalFields) > 0) {
+
+            if( isset( $userInfo['email'] ) && !empty( $userInfo['email'] ) && ezcMailTools::validateEmailAddress( $userInfo['email'] ) ) {
+                $user = OWNewsletterUser::fetchByEmail( $userInfo['email'] );
+                if( !$user instanceof OWNewsletterUser ) {
+                    $user = OWNewsletterUser::createOrUpdate( $userInfo, 'import' );
+                    if(count($userAdditionalFields) > 0) {
                         $result = $user->validateAdditionalData($userAdditionalFields);
-                        if ($result !== false) {
-                            OWScriptLogger::logError("Row #$rowCount : failed to import in additional fields, " . implode($result['warning_message'], ' '), 'process_row');
+                        if($result !== false) {
+                            OWScriptLogger::logError( "Row #$rowCount : failed to import in additional fields, " . implode($result['warning_message'], ' '), 'process_row' );
                         }
-                        $user->setAttribute('serialized_data', serialize($userAdditionalFields));
+                        $user->setAttribute( 'serialized_data', serialize( $userAdditionalFields ) );
                         $user->store();
                     }
-                    OWScriptLogger::logNotice("Row #$rowCount : user created (" . $userInfo['email'] . ")", 'process_row');
+                    OWScriptLogger::logNotice( "Row #$rowCount : user created (" . $userInfo['email'] . ")", 'process_row' );
                     $createdCount++;
                 }
-                $user->subscribeTo($mailingListID, OWNewsletterSubscription::STATUS_APPROVED, 'import');
-                OWScriptLogger::logNotice("Row #$rowCount : user subscribe to the mailing list", 'process_row');
+                $user->subscribeTo( $mailingListID, OWNewsletterSubscription::STATUS_APPROVED, 'import' );
+                OWScriptLogger::logNotice( "Row #$rowCount : user subscribe to the mailing list", 'process_row' );
                 $subscriptionCount++;
             } else {
-                OWScriptLogger::logError("Row #$rowCount : failed to import, e-mail is missing or invalid (" . $userInfo['email'] . ")", 'process_row');
+                OWScriptLogger::logError( "Row #$rowCount : failed to import, e-mail is missing or invalid", 'process_row' );
             }
         }
     }
-    OWScriptLogger::logNotice("$rowCount rows processed" . PHP_EOL . "$subscriptionCount subscriptions created or updated" . PHP_EOL . "$createdCount users created", 'treatment_completed');
+    OWScriptLogger::logNotice( "$rowCount rows processed" . PHP_EOL . "$subscriptionCount subscriptions created or updated" . PHP_EOL . "$createdCount users created", 'treatment_completed' );
     $logger = OWScriptLogger::instance();
-
-    ini_set('auto_detect_line_endings', FALSE);
+    ini_set( 'auto_detect_line_endings', FALSE );
 
     return 'owscriptlogger/logs/' . $logger->attribute('id');
 }

@@ -116,7 +116,7 @@ if( empty( $mailingListID ) ) {
                 $pendingItem->store();
 
                 $tpl->setVariable( 'log_cron', 1 );               
-                 
+
             }
         }
     } else {

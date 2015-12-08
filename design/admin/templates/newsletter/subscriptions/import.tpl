@@ -77,7 +77,7 @@
                                             {if ezini_hasvariable(concat('AdditionalField_', $field), 'SelectOptions', 'newsletter.ini')}
                                                 {set $data_filed = ezini(concat('AdditionalField_', $field), 'SelectOptions', 'newsletter.ini')}
                                                 {foreach $data_filed as $key => $data offset $count max 1}
-                                                    {if eq($count, 0)}{$data}{else}{$key}{/if}{if ne($i, count($additional_fields))};{/if}
+                                                    {$key}{if ne($i, count($additional_fields))};{/if}
                                                 {/foreach}
                                             {else}
                                                 XXXXXX{if ne($i, count($additional_fields))};{/if}

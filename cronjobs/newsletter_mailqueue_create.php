@@ -12,16 +12,16 @@ $newsletterSendingWaitForProcessList = OWNewsletterSending::fetchList( array(
 $newsletterINI = eZINI::instance( 'newsletter.ini' );
 $developmentMode = false;
 if( $newsletterINI->hasVariable( 'NewsletterSettings', 'DevelopmentMode' ) && $newsletterINI->variable( 'NewsletterSettings', 'DevelopmentMode' ) == 'enabled' ) {
-    $authorizedDomainNameList = $newsletterINI->hasVariable( 'NewsletterSettings', 'DevelopmentAuthorizedDomainName' ) ? $newsletterINI->variable( 'NewsletterSettings', 'DevelopmentAuthorizedDomainName' ) : array();
     $developmentMode = true;
 }
 foreach( $newsletterSendingWaitForProcessList as $newsletterSending ) {
     $sendingTimestamp = $newsletterSending->attribute( 'send_date' );
     if( $sendingTimestamp < time() ) {
         // Get all user with at least one approved subscription to on of the mailing list of the sending
+        $newsletterUserList = array();
         $mailingListsIDs = $newsletterSending->attribute( 'mailing_lists_ids' );
         if( $developmentMode ) {
-            $newsletterUserList = array();
+            $authorizedDomainNameList = $newsletterINI->hasVariable( 'NewsletterSettings', 'DevelopmentAuthorizedDomainName' ) ? $newsletterINI->variable( 'NewsletterSettings', 'DevelopmentAuthorizedDomainName' ) : array();
             foreach( $authorizedDomainNameList as $authorizedDomainName ) {
                 $newsletterUserList = array_merge( $newsletterUserList, OWNewsletterUser::fetchListWithSubscription( array(
                         'email' => array( 'like', "%@$authorizedDomainName" ),
