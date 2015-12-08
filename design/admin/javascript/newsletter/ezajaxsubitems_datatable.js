@@ -445,9 +445,10 @@ var sortableSubitems = function() {
 			createGroups = groups;
 			createOptions = options;
 			shownColumns = getCookieSubMultiValue(confObj.navigationPart);
-			if (shownColumns == null)
+			if (shownColumns == null){
 				confObj.defaultShownColumns[confObj.navigationPart].push( "emails" );
-				shownColumns = confObj.defaultShownColumns[confObj.navigationPart]
+				shownColumns = confObj.defaultShownColumns[confObj.navigationPart];
+			}
 			dataTable = initDataTable();
 		}
 	};
