@@ -5,19 +5,15 @@
  */
 $actions = eZPendingActions::fetchByAction('ownewsletter_import');
 /* $var $action eZPendingActions */
-foreach ($actions as $action) {
 
+foreach ($actions as $action) {
     OWScriptLogger::startLog('subscription_import');
     $params = unserialize($action->attribute('param'));
 
     // On test si le data existe sionon on le créé
     $eZSiteData = eZSiteData::fetchByName('ownewsletter');
 
-
     if (!$eZSiteData) {
-
-
-
         $params['start'] = time();
         
         $eZSiteData = new eZSiteData(array('name' => 'ownewsletter', 'value' => serialize($params)));
@@ -47,22 +43,18 @@ foreach ($actions as $action) {
         }
         $action->remove();
         $eZSiteData->remove();
-        
 
         // ENVOIE MAIL
         // creation contenu mail
-
-
         $newsletterINI = eZINI::instance('newsletter.ini');
         $INI = eZINI::instance();
 
         OWScriptLogger::logNotice("Start send email import.", 'process_row');
-        try {
 
+        try {
             $importEmail = $newsletterINI->variable('NewsletterMailSettings', 'ImportEmail');
             $senderEmail = $newsletterINI->variable('NewsletterMailSettings', 'SenderEmail');
             $senderName = $newsletterINI->variable('NewsletterMailSettings', 'SenderName');
-
             
             $logger = OWScriptLogger::instance();
 
@@ -73,10 +65,10 @@ foreach ($actions as $action) {
 
             $subject = ezpI18n::tr('email/import', "End of your email import.");
 
-
             $tabMail = explode(';', $importEmail);
             foreach ($tabMail as $receiver) {
                 $receiver = trim($receiver);
+
                 if (!empty($receiver)  &&  filter_var($receiver, FILTER_VALIDATE_EMAIL)) {
                     
                     $mail = new eZMail();
@@ -94,12 +86,9 @@ foreach ($actions as $action) {
                     $mail->setBody($templateResult);
                     $mail->setContentType('text/html');
 
-                    $mailResult = eZMailTransport::send($mail);                    
-                    
+                    $mailResult = eZMailTransport::send($mail);
                 }
             }
-
-
         } catch (Exception $ex) {
             OWScriptLogger::logError("The mailing of end import is failed.", 'process_row');
         }
@@ -116,7 +105,7 @@ function ImportBinaryFile($binaryFile, $mailingListID, $columnDelimiter, $isFile
 
     ini_set( 'auto_detect_line_endings', TRUE );
     $handle = fopen( $binaryFile, 'r' );
-    OWScriptLogger::startLog( 'subscription_import' );
+
     $rowCount = 0;
     $createdCount = 0;
     $subscriptionCount = 0;
@@ -124,8 +113,10 @@ function ImportBinaryFile($binaryFile, $mailingListID, $columnDelimiter, $isFile
     $defaultFields = array( 'email', 'first_name', 'last_name', 'salutation');
     $additionalFields = array();
     $additionalFieldsOptions = array();
+
     if($ini->hasVariable('NewsletterUserSettings', 'AdditionalFields')) {
         $additionalFields = $ini->variable('NewsletterUserSettings', 'AdditionalFields');
+
         foreach($additionalFields as $fieldIdentifier) {
             if($ini->hasVariable('AdditionalField_' . $fieldIdentifier, 'SelectOptions')) {
                 $additionalFieldsOptions[$fieldIdentifier] = $ini->variable('AdditionalField_' . $fieldIdentifier, 'SelectOptions');
@@ -144,9 +135,11 @@ function ImportBinaryFile($binaryFile, $mailingListID, $columnDelimiter, $isFile
             $rowCount++;
             $userInfo = array( 'status' => OWNewsletterUser::STATUS_CONFIRMED );
             $userAdditionalFields = array();
+
             foreach( $row as $index => $field ) {
                 $field = trim($field);
                 $fieldIdentifier = $fileHeaders[$index];
+
                 if(in_array($fieldIdentifier, $defaultFields)) {
                     $userInfo[$fieldIdentifier] = $field;
                 }
@@ -169,6 +162,7 @@ function ImportBinaryFile($binaryFile, $mailingListID, $columnDelimiter, $isFile
 
             if( isset( $userInfo['email'] ) && !empty( $userInfo['email'] ) && ezcMailTools::validateEmailAddress( $userInfo['email'] ) ) {
                 $user = OWNewsletterUser::fetchByEmail( $userInfo['email'] );
+
                 if( !$user instanceof OWNewsletterUser ) {
                     $user = OWNewsletterUser::createOrUpdate( $userInfo, 'import' );
                     if(count($userAdditionalFields) > 0) {
@@ -182,6 +176,7 @@ function ImportBinaryFile($binaryFile, $mailingListID, $columnDelimiter, $isFile
                     OWScriptLogger::logNotice( "Row #$rowCount : user created (" . $userInfo['email'] . ")", 'process_row' );
                     $createdCount++;
                 }
+
                 $user->subscribeTo( $mailingListID, OWNewsletterSubscription::STATUS_APPROVED, 'import' );
                 OWScriptLogger::logNotice( "Row #$rowCount : user subscribe to the mailing list", 'process_row' );
                 $subscriptionCount++;
